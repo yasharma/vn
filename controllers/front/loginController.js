@@ -25,13 +25,13 @@ exports.login           = (request, response) => {
 
 	users.findOne({email : email}, function (err, res) {
         if( err ){
-            data =  {errors: {message: 'Authentication failed', success: false } };
+            data =  {result: {message: 'Error: Authentication failed.', success: false } };
         } else {
-           
-             if(res.comparePassword(config.salt, password)){
+
+            if(res.comparePassword(config.salt, password)){
                 data = {result:{user:res, token:token, success: true } };
             } else {
-                data =  {errors: {message: 'Password incorrect', success: false } };
+                data =  {result: {message: 'Error: Password incorrect.', success: false } };
             }
             
 

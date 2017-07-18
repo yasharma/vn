@@ -5,9 +5,11 @@
     <form name="adminLoginForm" ng-submit="loginUser(adminLoginForm.$valid)" novalidate>
       <input type="email" placeholder="Email Address" data-ng-model="email"  ng-required="true"/>
       <input type="password" placeholder="Password"  data-ng-model="password" ng-required="true"/>     
-      <button type="submit" class="">Login</button>      
+      <button type="submit" class="">Login</button> 
+      <div class="result">{{result.message}}  </div>     
     </form>
   </div>
+
   <div class="cta"><a href="/register">Register</a></div> 
  
 </div>

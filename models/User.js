@@ -1,5 +1,5 @@
-var mongoose      = require('mongoose')
-  ,Schema         = mongoose.Schema,
+var mongoose      = require('mongoose'),
+  Schema          = mongoose.Schema,
   path 			      = require('path'),
   uniqueValidator = require('mongoose-unique-validator'),
   config 			    = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
@@ -39,9 +39,9 @@ UserSchema.methods.hashPassword = function(salt, password) {
 
 /* To check a password */
 UserSchema.methods.comparePassword = function(salt, password) {
-
     return this.password === this.hashPassword(salt, password);
 };
+
 UserSchema.set('autoIndex', config.db.autoIndex);
 UserSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'

@@ -8,10 +8,8 @@ app.config(['$httpProvider', function($httpProvider){
 		/* Get the application storage type default (localstorage) */
 		return {
 			request: function (config) {
-                //console.log($rootScope);
-				config.headers = config.headers || {};
+                config.headers = config.headers || {};
 				var token = localStorageService.get('token');
-
 				if (token) {
 					config.headers.Authorization = 'Bearer '+ token;
 					AuthSrv.isLogged = 1;
@@ -29,14 +27,6 @@ app.config(['$httpProvider', function($httpProvider){
 
             // Revoke client authentication if 400 is received
             responseError: function (rejection) {
-            	// if(rejection.status === 401 && rejection.data.errors.code !== undefined){
-            	// 	$rootScope.$broadcast( 'TokenExpiredError', { message: 'Session has been expired, please login again.' } );
-            	// 	localStorageService.remove('token');
-            	// 	localStorageService.remove('admin');
-            	// 	delete $rootScope.admin;
-            	// 	AuthSrv.isLogged = false;
-            	// 	$location.path("/");
-            	// }
             	return $q.reject(rejection);
             }
         };
@@ -51,9 +41,6 @@ app.config(['$httpProvider', function($httpProvider){
         case 'localhost':
             prefix = 'admin_local';
             break;
-        // case 'localhost': // for qa server
-        //     prefix = 'admin_local'
-        //     break;
         default:
             prefix = 'default';
    }    
@@ -71,7 +58,7 @@ app.config(['$httpProvider', function($httpProvider){
            	}else {
                 console.log('else if');
                 var token = localStorageService.get('token');
-                if(($location.path() === '/' || $location.path() === '/login') && token ){           
+                if(($location.path() === '/login' || $location.path() === '/') && token ){           
                    $location.path("/dashboard");
                 }
             }
@@ -80,11 +67,11 @@ app.config(['$httpProvider', function($httpProvider){
     	
     	/* This will logout the user from the application */
     	$rootScope.clearToken = function () {
-            // localStorageService.remove('token');
-            // localStorageService.remove('admin');
-            // delete $rootScope.admin;
-            // AuthSrv.isLogged = false;
-            // $location.path('/login');
+            localStorageService.remove('token');
+            localStorageService.remove('user');
+            delete $rootScope.user;
+            AuthSrv.isLogged = false;
+            $location.path('/login');
         };
 
         // $rootScope.$on( 'TokenExpiredError', function( event, eventData ) {

@@ -11,7 +11,7 @@ const 	express 	= require('express'),
 		mongoose 	= require('mongoose'),
 		config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 		
-
+//app.set('view engine', 'ejs');
 mongoose.connect(config.db.URL);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

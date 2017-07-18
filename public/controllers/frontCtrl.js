@@ -40,17 +40,17 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 
 	         $http.post('/api/login', dataObj
 				).then(function(response){		
-						var data = response.data;
-						//response.data.user
-						//response.data.token
-						//localStorageService.set('admin', response.data.user);
-						//localStorageService.set('token', response.data.token);
-						// if(data.authenticated == 'yes')
-						// {
-						// 	$timeout(function() {								
-						//       $location.path('/dashboard');
-						//     }, 5000);
-						// }	
+						var data = response.data;				
+						
+
+						if(data.success && response.data.token)
+						{
+							localStorageService.set('user', response.data.user);
+							localStorageService.set('token', response.data.token);
+							$timeout(function() {								
+						      $location.path('/dashboard');
+						    }, 1000);
+						}	
 						$scope.result = data.result;	
 
 				});
