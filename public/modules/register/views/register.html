@@ -1,0 +1,13 @@
+<div class="module form-module">  
+  <div class="form" data-ng-controller="registerController">
+    <h2>Create an account</h2>
+    <form name="signUpform">
+      <input type="text" placeholder="Username" data-ng-model="name" ng-required="true" />     
+      <input type="email" placeholder="Email Address" data-ng-model="email" ng-required="true" />
+      <input type="password" placeholder="Password" data-ng-model="password" ng-required="true" />
+      <button data-ng-click="signUpform.$valid && registerUser()">Register</button>
+       <div class="result">{{result}}</div>      
+    </form>
+  </div>
+ <div class="cta"><a href="/login">Login</a></div> 
+</div>

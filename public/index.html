@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="hoteljotApp">
+   <head>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+    <title ng-bind="pageInfo.title"> Hotel Jot</title>
+    <base href="/">
+    <link rel="stylesheet" href="/css/main-style.css">
+   </head>
+   <body class="body"> 
+   <div ng-include="'/modules/partials/header.html'" class="header"></div>
+      <ng-view class="view"> </ng-view>
+    <div ng-include="'/modules/partials/footer.html'"></div>
+    <script src="/js/vendor.js"></script>    
+    <script src="/js/main.js"></script>
+   </body>
+</html>
+
