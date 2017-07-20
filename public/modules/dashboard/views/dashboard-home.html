@@ -1,4 +1,5 @@
 <div class="dash-main-con">
+
 <!-- header -->
 <div class="dash_home_header clearfix">
 	<duv class="dash_home_header_logo pull-left">
@@ -18,9 +19,9 @@
 		          </md-button>
 		          <md-menu-content width="3" >
 		            <md-menu-item ng-repeat="item in [1]">
-		              <md-button ng-click="ctrl.announceClick($index)">
-		                  <div layout="row" flex>
-		                    <p flex ng-click="clearToken()">Logout</p>
+		              <md-button ng-click="clearToken(); announceClick($index)">
+		                  <div layout="row">
+		                    <p>Logout</p>
 		                    <md-icon md-menu-align-target md-svg-icon="call:portable-wifi-off" style="margin: auto 3px auto 0;"></md-icon>
 		                  </div>
 		              </md-button>

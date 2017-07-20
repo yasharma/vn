@@ -11,7 +11,7 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 		/*
 		* Function
 		*
-		* Close popup to add new hotel.
+		* Close popup of new hotel add.
 		*
 		*/
 
