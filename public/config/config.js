@@ -71,7 +71,7 @@ app.config(['$httpProvider', function($httpProvider){
             localStorageService.remove('user');
             delete $rootScope.user;
             AuthSrv.isLogged = false;
-            $location.path('/login');
+            $location.path('/');
         };
 
         // $rootScope.$on( 'TokenExpiredError', function( event, eventData ) {

@@ -4,31 +4,59 @@
 * Login controller
 **************************************/
 
-app.controller('loginController', ['$scope','$http','$location','$timeout','localStorageService',
-	function($scope,$http,$location,$timeout, localStorageService) {
+
+app.controller('loginController', ['$scope','$http','$location','$timeout','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog',
+	function($scope,$http,$location,$timeout, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog) {	
+
+
+		$scope.login = function(){
+			$mdDialog.show({
+				controller: "loginController",
+				templateUrl: '/modules/login/views/login.tpl.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+			})
+			.then(function(answer) {			
+			}, function() {			
+			});
+		};
+
+
+		$scope.close = function(){
+			 $mdDialog.cancel();
+		};
+
+
 		
 		$scope.loginUser = function (obj) {
 		
 	        var dataObj = {
 					email : $scope.email,
 					password : $scope.password
-			};		
-			
-	         $http.post('/api/login', dataObj ).then(function(response){
-						var data = response.data;
-						if(data.result.success)
-						{
-							localStorageService.set('user', data.result.user);
-							localStorageService.set('token', data.result.token);
+			};	
 
-							// console.log(response);
-							$location.path('/dashboard');
-						}	
-						$scope.result = data.result;	
+			loginFactory.login('/api/login',dataObj).then(function(response){				
+				if(response.errors){
+					//toastService.alert({message: response.errors.message, class: 'error'});
+				} else {
+					if(response.success)
+					{
+						localStorageService.set('token', response.token);
+						localStorageService.set('user', response.user);
+						AuthSrv.isLogged = true;
+						$location.path('/dashboard');
+					}
+					$scope.result = response.message;				
+				}
+			});				
+	               
+		};
 
-				});       
-	};
-}]);
 
 
-
+		$scope.openSignupForm = function (obj) {	
+	        			
+	           $location.path('/register');    
+		};
+	}
+]);

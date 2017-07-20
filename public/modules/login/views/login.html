@@ -1,15 +1,23 @@
-<div class="module form-module">
 
-  <div class="form">
-    <h2>Login to your account</h2>
-    <form name="adminLoginForm" ng-submit="loginUser(adminLoginForm.$valid)" novalidate>
-      <input type="email" placeholder="Email Address" data-ng-model="email"  ng-required="true"/>
-      <input type="password" placeholder="Password"  data-ng-model="password" ng-required="true"/>     
-      <button type="submit" class="">Login</button> 
-      <div class="result">{{result.message}}  </div>     
-    </form>
-  </div>
+<md-button class="md-primary" ng-click="login()" aria-label="login">
+	Login
+</md-button>
 
-  <div class="cta"><a href="/register">Register</a></div> 
- 
-</div>
+<!-- 
+<div class="panel col-sm-3">
+ -->
+<!-- <bx-slider data="lists"  config="config"></bx-slider> -->
+<!-- <bx-slider data="lists1"  config="{ mode: 'slide', captions: true}"></bx-slider> -->
+
+<!-- <ul bx-slider config="config">
+	<li bx-item ng-repeat="item in lists1">{{item}}</li>
+</ul> -->
+<!-- 	<data-owl-carousel class="owl-carousel" data-options="config">
+
+	  <div owl-carousel-item ng-repeat="item in ::lists1" class="item">
+	    <p>{{::item}}</p>
+	  </div>
+	</data-owl-carousel> -->
+<!-- </div> -->
+<!-- <div class="clearfix"></div>
+<div id="customNav"></div> -->

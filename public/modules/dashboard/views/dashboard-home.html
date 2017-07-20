@@ -1,0 +1,202 @@
+<div class="dash-main-con">
+<!-- header -->
+<div class="dash_home_header clearfix">
+	<duv class="dash_home_header_logo pull-left">
+		<a href="javascript:;"><img src="assets/images/dash-logo.png"></a>
+	</duv>
+	<duv class="dash_home_header_menu pull-right">
+		<ul class="dash_home_header_menu_list">
+			<li class="noti_icon positionrel">
+				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
+				<small class="notification-badge">5</small>
+			</li>
+			<li class="usermenu">
+				<md-menu md-position-mode="target-right target" >
+		          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
+		          	<i class="user_dp_header"><img src="assets/images/user_dp_header.png"></i>
+		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
+		          </md-button>
+		          <md-menu-content width="3" >
+		            <md-menu-item ng-repeat="item in [1]">
+		              <md-button ng-click="ctrl.announceClick($index)">
+		                  <div layout="row" flex>
+		                    <p flex ng-click="clearToken()">Logout</p>
+		                    <md-icon md-menu-align-target md-svg-icon="call:portable-wifi-off" style="margin: auto 3px auto 0;"></md-icon>
+		                  </div>
+		              </md-button>
+		            </md-menu-item>
+		          </md-menu-content>
+		        </md-menu>
+			</li>
+		</ul>
+	</duv>
+</div>
+<!--End header -->
+<!--middle panel -->
+<section class="dashrightsection">
+	<div class="left_side_menu">
+		<div class="toogle_menu">
+			<!-- <span>dashboard</span> -->
+			<ng-md-icon icon="menu" class="cursor" style="fill:white" size="24"></ng-md-icon> 
+		</div>
+		<div class="toogle_menu_list">
+			<ul>
+				<li>
+					<ng-md-icon icon="email" class="cursor" style="fill:#a3a3a3" size="24"></ng-md-icon> 
+					<span></span>
+				</li>
+				<li>
+					<ng-md-icon icon="insert_drive_file" class="cursor" style="fill:#a3a3a3" size="24"></ng-md-icon> 
+					<span></span>
+				</li>
+				<li>
+					<ng-md-icon icon="business" class="cursor" style="fill:#a3a3a3" size="24"></ng-md-icon> 
+					<span></span>
+				</li>
+				<li>
+					<ng-md-icon icon="settings" class="cursor" style="fill:#a3a3a3" size="24"></ng-md-icon> 
+					<span></span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="dash_hd">Dashboard</div>
+	<div class="clearfix row">
+		<div class="col-lg-3 col-md-6">
+			<div class="dash_hotel_top">
+				<h4><a href="javascript:;"> Hotel 1</a></h4>
+				<i>Lorem Ipsum is simply dummy text...</i>
+			</div>
+			<div class="dash_hotel_bot">
+				<div class="status_info">
+					<ul class="clearfix">
+						<li class="bgyellow">Open (13)</li>
+						<li class="bggreen">Completed (09)</li>
+					</ul>
+				</div>
+				<div class="job_priorty">
+					<span>Jot Priority</span>
+					<ul class="clearfix">
+						<li>Urgent (04)</li>
+						<li>High (04)</li>
+						<li>Medium (05)</li>
+						<li>Low (02)</li>
+					</ul>
+				</div>
+				<div class="job_priorty_bot">
+					<ul class="clearfix">
+						<li> <ng-md-icon icon="warning" style="fill: #7a7a7a" size="13"></ng-md-icon>  Issue (12) </li>                  
+						<li><ng-md-icon icon="format_list_bulleted" style="fill: #7a7a7a" size="14"></ng-md-icon>Task (02)</li>
+						<li><ng-md-icon icon="insert_drive_file" style="fill: #7a7a7a" size="14"></ng-md-icon>Note (10)</li>
+						<li><ng-md-icon icon="email" style="fill: #7a7a7a" size="14"></ng-md-icon>Message (06)</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6">
+			<div class="dash_hotel_top">
+				<h4><a href="javascript:;"> Hotel 2</a></h4>
+				<i>Lorem Ipsum is simply dummy text...</i>
+			</div>
+			<div class="dash_hotel_bot">
+				<div class="status_info">
+					<ul class="clearfix">
+						<li class="bgyellow">Open (13)</li>
+						<li class="bggreen">Completed (09)</li>
+					</ul>
+				</div>
+				<div class="job_priorty">
+					<span>Jot Priority</span>
+					<ul class="clearfix">
+						<li>Urgent (04)</li>
+						<li>High (04)</li>
+						<li>Medium (05)</li>
+						<li>Low (02)</li>
+					</ul>
+				</div>
+				<div class="job_priorty_bot">
+					<ul class="clearfix">
+						<li> <ng-md-icon icon="warning" style="fill: #7a7a7a" size="13"></ng-md-icon>  Issue (12) </li>                  
+						<li><ng-md-icon icon="format_list_bulleted" style="fill: #7a7a7a" size="14"></ng-md-icon>Task (02)</li>
+						<li><ng-md-icon icon="insert_drive_file" style="fill: #7a7a7a" size="14"></ng-md-icon>Note (10)</li>
+						<li><ng-md-icon icon="email" style="fill: #7a7a7a" size="14"></ng-md-icon>Message (06)</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6">
+			<div class="dash_hotel_top">
+				<h4><a href="javascript:;"> Hotel 3</a></h4>
+				<i>Lorem Ipsum is simply dummy text...</i>
+			</div>
+			<div class="dash_hotel_bot">
+				<div class="status_info">
+					<ul class="clearfix">
+						<li class="bgyellow">Open (13)</li>
+						<li class="bggreen">Completed (09)</li>
+					</ul>
+				</div>
+				<div class="job_priorty">
+					<span>Jot Priority</span>
+					<ul class="clearfix">
+						<li>Urgent (04)</li>
+						<li>High (04)</li>
+						<li>Medium (05)</li>
+						<li>Low (02)</li>
+					</ul>
+				</div>
+				<div class="job_priorty_bot">
+					<ul class="clearfix">
+						<li> <ng-md-icon icon="warning" style="fill: #7a7a7a" size="13"></ng-md-icon>  Issue (12) </li>                  
+						<li><ng-md-icon icon="format_list_bulleted" style="fill: #7a7a7a" size="14"></ng-md-icon>Task (02)</li>
+						<li><ng-md-icon icon="insert_drive_file" style="fill: #7a7a7a" size="14"></ng-md-icon>Note (10)</li>
+						<li><ng-md-icon icon="email" style="fill: #7a7a7a" size="14"></ng-md-icon>Message (06)</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-6">
+			<div class="dash_hotel_top">
+				<h4><a href="javascript:;"> Hotel 4</a></h4>
+				<i>Lorem Ipsum is simply dummy text...</i>
+			</div>
+			<div class="dash_hotel_bot">
+				<div class="status_info">
+					<ul class="clearfix">
+						<li class="bgyellow">Open (13)</li>
+						<li class="bggreen">Completed (09)</li>
+					</ul>
+				</div>
+				<div class="job_priorty">
+					<span>Jot Priority</span>
+					<ul class="clearfix">
+						<li>Urgent (04)</li>
+						<li>High (04)</li>
+						<li>Medium (05)</li>
+						<li>Low (02)</li>
+					</ul>
+				</div>
+				<div class="job_priorty_bot">
+					<ul class="clearfix">
+						<li> <ng-md-icon icon="warning" style="fill: #7a7a7a" size="13"></ng-md-icon>  Issue (12) </li>                  
+						<li><ng-md-icon icon="format_list_bulleted" style="fill: #7a7a7a" size="14"></ng-md-icon>Task (02)</li>
+						<li><ng-md-icon icon="insert_drive_file" style="fill: #7a7a7a" size="14"></ng-md-icon>Note (10)</li>
+						<li><ng-md-icon icon="email" style="fill: #7a7a7a" size="14"></ng-md-icon>Message (06)</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix row">
+		<div class="col-lg-3 col-md-6">
+			<div class="dash_hotel_top_new">
+				<a href="javascript:;" ng-click="openAddHotelPopup()">
+					<h3 class="text-center">+</h3>
+					<h2 class="text-center">Add a new hotel</h2>
+				</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+</div>

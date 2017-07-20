@@ -1,0 +1,43 @@
+.dash-main-con{background: #f4f8f9; min-height: 100%; position: relative;}
+.dash_home_header{width: 100%; background: #4ebdf6; position: relative; z-index: 10; position: fixed; left: 0; top:0; right: 0;}
+.dash_home_header_logo{padding: 11px 20px; display: block;}
+.dash_home_header_logo a{display: block;}
+.dash_home_header_menu_list > li {float: left; height: 58px;}
+.user_dp_header{width: 30px; display: inline-block; height: 30px; border-radius: 50%; -webkit-border-radius: 50%;}
+.dash_home_header_menu_list > li.noti_icon{padding: 12px 18px 0 15px; border-left: 1px solid #71caf8;}
+.notification-badge {width: 20px;top: 6px;left: 36px; height: 20px; line-height: 11px; text-align: center; position: absolute;color: #ffffff;background-color: #F06;margin: 0 -.8em;border-radius: 50%;padding: 4px 5px;}
+.dash_home_header_menu_list > li.usermenu{padding: 0px 0 0px 10px; background: #4288ae;}
+.dash_home_header_menu_list > li.usermenu i{position: absolute; left: 10px;top: 13px; }
+.dash_home_header_menu_list > li.usermenu .md-button.md-icon-button{width: 88px;height: 58px; padding: 0; padding-left: 30px; margin: 0}
+.dashrightsection {margin-left: 65px; padding: 90px 30px 30px 30px;  background: #f4f8f9; width: auto;-webkit-transition: all 0.1s ease-in-out;-moz-transition: all 0.1s ease-in-out;-o-transition: all 0.1s ease-in-out;-ms-transition: all 0.1s ease-in-out;transition: all 0.1s ease-in-out;}
+.dash_hd{font-size: 20px; color: #4b4c4d; font-weight: 800; margin-bottom: 20px;}
+.dash_hotel_top{padding: 15px; background: #edf0f2;}
+.dash_hotel_top_new{background: #c8c8c8; cursor: pointer; padding: 15px; margin-bottom: 20px;}
+.dash_hotel_top_new:hover{ background: #4ebdf6;}
+.dash_hotel_top h4 a{font-size: 22px; color: #4b4c4d; font-weight: 800; margin: 0 0 10px 0;}
+.dash_hotel_top h4 a:hover{text-decoration: none;}
+.dash_hotel_top_new a{text-decoration: none;}
+.dash_hotel_top_new h2 {font-size: 22px; color: #fff; font-weight: 600; margin: 0 0 15px 0;}
+.dash_hotel_top_new h3{font-size: 50px; color: #fff; font-weight: 600;  margin: 0; line-height: 50px;}
+.dash_hotel_top i{color: #9c9e9f; min-height: 70px; display: block;}
+.dash_hotel_bot{padding: 15px; background: #fff; margin-bottom: 20px;}
+.status_info{margin-bottom: 10px;}
+.status_info ul > li{float: left; font-size: 12px; margin-right: 5px; margin-bottom: 5px; color: #fff; padding: 3px 8px;}
+.bgyellow{background: #ffbb42;}
+.bggreen{background: #61bd4f;}
+.job_priorty{margin-bottom: 15px;}
+.job_priorty ul > li{float: left; background: #df2910; font-size: 12px; margin-right: 5px; margin-bottom: 5px; color: #fff; padding: 3px 8px;}
+.job_priorty ul > li:nth-child(2){background: #de4a35;}
+.job_priorty ul > li:nth-child(3){background: #fd7461;}
+.job_priorty ul > li:last-child{background: rgba(253, 116, 97, 0.8);}
+.job_priorty span{display: block; font-size: 12px; margin-bottom: 3px; color: #7a7a7a;}
+.job_priorty_bot ul > li{float: left; font-size: 12px; color: #7a7a7a; margin-right: 10px; margin-bottom: 5px;}
+.job_priorty_bot ul > li ng-md-icon{width: 12px;height: 15px; margin-right: 3px;}
+/********************************left side menu***************************/
+.left_side_menu{width: 65px;z-index: 9;height: 100%; position: fixed; top:0; left: 0; bottom: 0; background: #313942; padding-top: 58px;}
+.toogle_menu{padding: 30px 20px; border-bottom: 1px solid #292f37; cursor: pointer;}
+.cursor{cursor: pointer;}
+.toogle_menu_list{padding: 15px 0;}
+.toogle_menu_list ul > li{display: block; padding: 15px 20px;  }
+
+

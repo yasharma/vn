@@ -4,9 +4,13 @@
 app.config(['$routeProvider','$locationProvider',function($routeProvider, $locationProvider){
     $routeProvider
     .when('/',  {
-        templateUrl : "/modules/home/home.html",
+       templateUrl : "/modules/login/views/login.tpl.html",
         controller: "loginController",
+        access: {
+            requiredLogin: false
+        }
     })
+
     .when("/login", {
         templateUrl : "/modules/login/views/login.html",
         controller: "loginController",
@@ -15,14 +19,15 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
     .when("/register", {
-        templateUrl : "/modules/register/views/register.html",
-        controller  :  "registerController" ,
+        templateUrl : "/modules/register/views/register.tpl.html",
+        controller  :  "registerController",
         access: {
             requiredLogin: false
         }
     })
     .when("/dashboard", {
-        templateUrl : "/modules/dashboard/dashboard.html",
+        templateUrl : "/modules/dashboard/views/dashboard-home.html",
+        controller  :  "dashboardController",
         access: {
             requiredLogin: true
         }

@@ -1,0 +1,180 @@
+<md-dialog class="newhotel_dialog">
+
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Add a new hotel</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="close()">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+    <form name="addHotelForm" ng-submit="addNewHotel(addHotelForm.$valid)" novalidate>
+    	<div class="newhotel_dialog_form">
+    		<div class="row">
+    			<div class="clearfix">
+    				<div class="col-md-6">
+    					<label class="labeltxt">Hotel Name</label>
+    					<md-input-container class="md-block">
+				            <input required type="text" name="hotelname"  ng-model="hotelname" placeholder="Paradise sun" ng-required="true">
+                            <div ng-messages="hotelname.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+				         </md-input-container>
+                         
+    				</div>
+    				<div class="col-md-6">
+    					<label class="labeltxt">Owner Name</label>
+    					<md-input-container class="md-block">
+				            <input type="text"  ng-model="ownername" placeholder="Jon Thomas" ng-required="true">
+                            <div ng-messages="ownername.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+				        </md-input-container>
+    				</div>
+    			</div>
+    			<div class="clearfix">
+    				<div class="col-md-6">
+    					<label class="labeltxt">Phone Number</label>
+    					<md-input-container md-no-float class="md-block">
+				            <input type="tel"  ng-model="phone" placeholder="8475925162">
+				        </md-input-container>
+    				</div>
+    				<div class="col-md-6">
+    					<label class="labeltxt">Email Address</label>
+    					<md-input-container class="md-block">
+				            <input type="email"  ng-model="email" placeholder="Jon Thomas023@gmail.com" ng-required="true">
+                            <div ng-messages="email.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+				        </md-input-container>
+    				</div>
+    			</div>
+    			<div class="clearfix">
+    				<div class="col-md-12">
+    					<label class="labeltxt">Address  </label>
+    					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="address" placeholder="Address">
+				        </md-input-container>
+    				</div>
+    			</div>	
+    			
+                    <div class="clearfix">
+                     <div class="col-md-6">
+                        <label class="labeltxt">City</label>
+                        <md-input-container md-no-float class="md-block">
+                            <input  ng-model="city" placeholder="City">
+                        </md-input-container>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labeltxt">Zip Code</label>
+                        <md-input-container md-no-float class="md-block">
+                            <input  ng-model="zipcode" placeholder="Zip Code">
+                        </md-input-container>
+                    </div>
+                </div>
+                <div class="clearfix">
+                <div class="col-md-6">
+                        <label class="labeltxt">State</label>
+                        <md-input-container md-no-float class="md-block">
+                            <md-select ng-model="state" placeholder="State">
+                              <md-option>
+                                India
+                              </md-option>
+                              <md-option>
+                                India
+                              </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                   
+    				<div class="col-md-6">
+    					<label class="labeltxt">Country</label>
+    					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="country" placeholder="Country">
+				        </md-input-container>
+    				</div>
+    			</div>
+    			
+    			<div class="clearfix">
+    				<div class="col-md-6">
+    					<label class="labeltxt">No. of Guest Rooms in Hotel</label>
+    					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="no_of_guestrooms" placeholder="04">
+				        </md-input-container>
+    				</div>
+    				<div class="col-md-6">
+    					<label class="labeltxt">Enter Room Number</label>
+    					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="room_no" placeholder="Room">
+				        </md-input-container>
+    				</div>
+    			</div>
+    			<div class="clearfix">
+    				<div class="col-md-6">
+    					<label class="labeltxt">Vending Area </label>
+    					<md-input-container md-no-float class="md-block">
+				            <md-select ng-model="vending_area" placeholder="Vending Area">
+				              <md-option>
+				              	India
+				              </md-option>
+				              <md-option>
+				              	India
+				              </md-option>
+				            </md-select>
+				        </md-input-container>
+    				</div>
+    				<div class="col-md-6">
+    					<label class="labeltxt">No. of Employee</label>
+    					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="no_of_employee" placeholder="Zip Code">
+				        </md-input-container>
+    				</div>
+    			</div>
+
+
+                <div class="clearfix">
+                    <div class="col-md-6">
+                        <label class="labeltxt">Number of Meeting Rooms </label>
+
+                        <md-input-container md-no-float class="md-block">
+                            <input  ng-model="no_of_meetingrooms" placeholder="Number of Meeting Rooms">
+                        </md-input-container>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labeltxt">No. of Floors</label>
+                        <md-input-container md-no-float class="md-block">
+                            <input  ng-model="no_of_floors" placeholder="No. of Floors">
+                        </md-input-container>
+                    </div>
+                </div>
+
+    			<div class="clearfix">
+    				<div class="col-md-12">
+    					<label class="labeltxt">Arrangement Types  </label>
+    					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="arrangement_type" placeholder="Loream Ipsum">
+				        </md-input-container>
+    				</div>
+    			</div>
+    			<div class="clearfix">
+    				<div class="col-md-12">
+				        <md-checkbox ng-model="terms" aria-label="Checkbox 1">
+				            I accept the terms and conditions
+				         </md-checkbox>
+			        </div>
+			    </div> 
+			    <div class="clearfix">
+    				<div class="col-md-2">
+				    <md-button class="md-primary getsartbtn" type="submit">SUBMIT</md-button>  
+				    </div>
+			    </div>  	
+
+    		</div>
+    	</div>
+        </form>
+    </md-dialog-content>
+ 
+</md-dialog>    

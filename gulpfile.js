@@ -9,12 +9,6 @@ const gulp      = require('gulp'),
     fs          = require('fs'),
     nodemon     = require('gulp-nodemon');
 
-let watchFiles = [
-    './public/app.js',
-    './public/config/*.js',
-    './public/assets/appjs/*.js',
-    './public/modules/*/controllers/*.js', 
-];
 
 gulp.task('nodemon', function () {
   nodemon({
@@ -24,6 +18,16 @@ gulp.task('nodemon', function () {
   })
 });
 
+/********************************************************************************************************************************************************************************************************************************************************/
+
+let watchFiles = [
+    './public/app.js',
+    './public/config/*.js',
+    './public/assets/appjs/*.js',
+    './public/modules/global-services/*.js',
+    './public/modules/*/*/*.js', 
+];
+
 
 gulp.task('jshint', ['uglify:front-js'], (cb) => {
     return gulp.src(watchFiles)
@@ -31,9 +35,6 @@ gulp.task('jshint', ['uglify:front-js'], (cb) => {
         .pipe(jshint.reporter(stylish));
 });
 
-/**
-Concat all frontend angular js files
-*/
 gulp.task('uglify:front-js', (cb) => {
     pump([
         gulp.src(watchFiles),
@@ -43,13 +44,21 @@ gulp.task('uglify:front-js', (cb) => {
 
 });
 
+
+/********************************************************************************************************************************************************************************************************************************************************/
+
 gulp.task('vendor:js', (cb) => {
     pump([
         gulp.src([
-            './public/assets/vendorjs/jquery.min.js',
+            './bower_components/dist/jquery.min.js',
             './bower_components/angular/angular.min.js',
             './bower_components/angular-route/angular-route.min.js',
-            './bower_components/angular-local-storage/dist/angular-local-storage.min.js'
+            './bower_components/angular-local-storage/dist/angular-local-storage.min.js',
+            './bower_components/angular-animate/angular-animate.min.js',
+            './bower_components/angular-aria/angular-aria.min.js',
+            './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+            './bower_components/angular-material/angular-material.min.js',
+            './bower_components/angular-material-icons/angular-material-icons.min.js',
         ]),
         concat('vendor.js'),
         uglify(),
@@ -59,17 +68,42 @@ gulp.task('vendor:js', (cb) => {
 });
 
 
-gulp.task('css', (cb) => {
+
+/********************************************************************************************************************************************************************************************************************************************************/
+
+let watchCssFiles = [
+     './public/assets/css/*.css'
+];
+
+
+gulp.task('uglify:css', (cb) => {
     pump([
-        gulp.src([
-            './public/assets/css/*.css'
-        ]),
+        gulp.src(watchCssFiles),
          concat('main-style.css'),
         /*uglify(),*/
         gulp.dest('./public/css')
     ],cb);
 
 });
+
+
+/********************************************************************************************************************************************************************************************************************************************************/
+
+gulp.task('vendor:theme-css', (cb) => {
+    pump([
+        gulp.src([
+            './bower_components/bootstrap/dist/css/bootstrap.min.css',
+            './bower_components/angular-material/angular-material.min.css',
+            './bower_components/angular-material-icons/angular-material-icons.css'
+        ]),
+         concat('vendor-theme-css.css'),
+        /*uglify(),*/
+        gulp.dest('./public/css')
+    ],cb);
+});
+
+
+/********************************************************************************************************************************************************************************************************************************************************/
 
 
 gulp.task('check:env', () => {
@@ -87,7 +121,18 @@ gulp.task('check:env', () => {
     });
 });
 
-gulp.task('default',['vendor:js','uglify:front-js','css','jshint','check:env','nodemon'],function(){
-// gulp.task('default',['vendor:js','uglify:front-js','css','nodemon'],function(){
+
+/***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+gulp.task('default',
+    [
+    'vendor:js',
+    'uglify:front-js',
+    'vendor:theme-css',
+    'uglify:css',
+    'jshint',
+    'check:env',
+    'nodemon'
+    ],function(){
     console.log('Gulp finish');
 });

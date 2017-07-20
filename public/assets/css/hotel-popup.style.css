@@ -1,0 +1,11 @@
+.newhotel_dialog{width: 1070px; background: #edeff0; padding: 0!important;}
+.newhotel_dialog md-toolbar.md-default-theme:not(.md-menu-toolbar), .newhotel_dialog md-toolbar:not(.md-menu-toolbar){background: #e1e3e4!important;}
+.newhotel_dialog .md-toolbar-tools h2{font-size: 18px; color: #4d4d4d; font-weight: 600;}
+.newhotel_dialog .md-toolbar-tools{padding: 0 30px;}
+.newhotel_dialog_form{padding: 30px;}
+.newhotel_dialog_form label.labeltxt{font-size: 16px; color: #4d4d4d;}
+.newhotel_dialog_form md-input-container{margin: 0 0 10px 0;}
+.newhotel_dialog_form md-input-container .md-input{padding: 15px; font-size: 15px; border: 0; background: #fff; height: 48px;}
+.newhotel_dialog_form md-input-container md-select-value{padding: 0 15px; font-size: 15px; border: 0; background: #fff; height: 48px;}
+.newhotel_dialog_form md-input-container md-select .md-select-value{padding: 0 15px; color: #222222;}
+.newhotel_dialog_form md-input-container md-select:not([disabled]):focus .md-select-value{border: 0; color: #222222;}

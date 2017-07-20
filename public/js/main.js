@@ -1,10 +1,24 @@
-'use strict';
+// 'use strict';
 
-var app = angular.module("hoteljotApp", [
-	"ngRoute",
-	"LocalStorageModule"
+
+var app = angular.module('hoteljotApp',[
+			'ngAnimate',
+			'ngMaterial',
+			'ngRoute',
+			'LocalStorageModule',
+			'ngMdIcons'	
+			])
+
+.config(['localStorageServiceProvider',
+	function (localStorageServiceProvider) {
+	  	localStorageServiceProvider
+	    .setPrefix('hoteljotApp');
+	}
 ]);
 
+app.run(['$log',function($log){
+	$log.info("Application is running");
+}]);
 'use strict';
 
 app.factory('AuthSrv', function () {
@@ -86,7 +100,7 @@ app.config(['$httpProvider', function($httpProvider){
             localStorageService.remove('user');
             delete $rootScope.user;
             AuthSrv.isLogged = false;
-            $location.path('/login');
+            $location.path('/');
         };
 
         // $rootScope.$on( 'TokenExpiredError', function( event, eventData ) {
@@ -106,9 +120,13 @@ app.config(['$httpProvider', function($httpProvider){
 app.config(['$routeProvider','$locationProvider',function($routeProvider, $locationProvider){
     $routeProvider
     .when('/',  {
-        templateUrl : "/modules/home/home.html",
+       templateUrl : "/modules/login/views/login.tpl.html",
         controller: "loginController",
+        access: {
+            requiredLogin: false
+        }
     })
+
     .when("/login", {
         templateUrl : "/modules/login/views/login.html",
         controller: "loginController",
@@ -117,14 +135,15 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
     .when("/register", {
-        templateUrl : "/modules/register/views/register.html",
-        controller  :  "registerController" ,
+        templateUrl : "/modules/register/views/register.tpl.html",
+        controller  :  "registerController",
         access: {
             requiredLogin: false
         }
     })
     .when("/dashboard", {
-        templateUrl : "/modules/dashboard/dashboard.html",
+        templateUrl : "/modules/dashboard/views/dashboard-home.html",
+        controller  :  "dashboardController",
         access: {
             requiredLogin: true
         }
@@ -133,63 +152,275 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
     $locationProvider.html5Mode(true);     
 }]);
 
+'use strict';
+
+app.factory('toastService', ['$mdToast','$timeout', function ($mdToast, $timeout) {
+	return{
+		alert: function(opt){
+			$mdToast.hide();	
+			$timeout(function(){
+				var toast = $mdToast.simple()
+				.textContent(opt.message)
+				.position('bottom right')
+				// .toastClass('fixed '+ opt.class)
+				.action('x')
+				.hideDelay(3000);
+				
+
+				$mdToast.show(toast).then(function(response) {
+				    if ( response == 'ok' ) {
+				    	$mdToast.hide();
+				    }
+				});
+			},1000);
+		}
+	};
+}]);
 "use strict";
 
 /**************************************
 * Login controller
 **************************************/
 
-app.controller('loginController', ['$scope','$http','$location','$timeout','localStorageService',
-	function($scope,$http,$location,$timeout, localStorageService) {
-		
-		$scope.loginUser = function (obj) {
-		
-	        var dataObj = {
-					email : $scope.email,
-					password : $scope.password
-			};		
-			
-	         $http.post('/api/login', dataObj ).then(function(response){
-						var data = response.data;
-						if(data.result.success)
-						{
-							localStorageService.set('user', data.result.user);
-							localStorageService.set('token', data.result.token);
 
-							// console.log(response);
-							$location.path('/dashboard');
-						}	
-						$scope.result = data.result;	
+app.controller('dashboardController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','AuthSrv','$mdDialog',
+	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,AuthSrv,$mdDialog) {	
 
-				});       
-	};
-}]);
+		/*
+		* Function
+		*
+		* Open popup to add new hotel.
+		*
+		*/
 
+		$scope.openAddHotelPopup = function(){
+			$mdDialog.show({
+				controller:'dashboardPopupController',	          
+				templateUrl: '/modules/dashboard/views/add-new-hotel.tpl.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,
+				bindToController: true
+			})
+			.then(function(answer) {
+			}, function() {
+
+			});
+
+		};
+	}
+]);
 
 
 
 "use strict";
 
 /**************************************
-* Register controller
+* Login controller
 **************************************/
 
-app.controller('registerController', function($scope,$http) {
-	$scope.registerUser = function (obj) {
-		var error = false;
-		
 
+app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','AuthSrv','$mdDialog',
+	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,AuthSrv,$mdDialog) {	
+
+		/*
+		* Function
+		*
+		* Close popup to add new hotel.
+		*
+		*/
+
+		$scope.close = function(){
+			 $mdDialog.cancel();
+		};
+
+		/*
+		* Factory method
+		*
+		* Add new hotel data
+		*
+		*/
+
+		var hotelDataObj  =  $scope;
+
+		dashboardFactory.addNewHotel('/api/add_hotel',hotelDataObj).then(function(response){
+			console.log(response);
+			if(response.error){
+
+			} else {
+
+			}
+
+		});
+
+
+		/*
+		* Factory method
+		*
+		* Display hotels
+		*
+		*/
+
+		dashboardFactory.hotelView('/api/display_hotel','').then(function(response){
+			if(response.error){
+
+			} else {
+
+			}
+
+		});
+	}
+]);
+
+
+
+'use strict';
+
+app.factory('dashboardFactory', ['$http', function ($http) {
+	return{		
+		addNewHotel: function(apiUrl, data){
+			return $http.post(apiUrl, data).then(function(response){
+				return response.data.result;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		},
+
+		hotelView: function(apiUrl, data){
+			return $http.get(apiUrl, data).then(function(response){
+				return response.data.result;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		}			
+	};
+}]);
+"use strict";
+
+/**************************************
+* Login controller
+**************************************/
+
+
+app.controller('loginController', ['$scope','$http','$location','$timeout','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog',
+	function($scope,$http,$location,$timeout, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog) {	
+
+
+		$scope.login = function(){
+			$mdDialog.show({
+				controller: "loginController",
+				templateUrl: '/modules/login/views/login.tpl.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+			})
+			.then(function(answer) {			
+			}, function() {			
+			});
+		};
+
+
+		$scope.close = function(){
+			 $mdDialog.cancel();
+		};
+
+
+		
+		$scope.loginUser = function (obj) {
+		
 	        var dataObj = {
-					name : $scope.name,
 					email : $scope.email,
 					password : $scope.password
 			};	
 
-         $http.post('/api/register', dataObj
-			).then(function(respnse){			
-					$scope.result = respnse.data;				
+			loginFactory.login('/api/login',dataObj).then(function(response){				
+				if(response.errors){
+					//toastService.alert({message: response.errors.message, class: 'error'});
+				} else {
+					if(response.success)
+					{
+						localStorageService.set('token', response.token);
+						localStorageService.set('user', response.user);
+						AuthSrv.isLogged = true;
+						$location.path('/dashboard');
+					}
+					$scope.result = response.message;				
+				}
+			});				
+	               
+		};
+
+
+
+		$scope.openSignupForm = function (obj) {	
+	        			
+	           $location.path('/register');    
+		};
+	}
+]);
+
+'use strict';
+
+app.factory('loginFactory', ['$http', function ($http) {
+	return{		
+		login: function(apiUrl, data){
+			return $http.post(apiUrl, data).then(function(response){
+				return response.data.result;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
 			});
-		
-       
+		}			
 	};
-});
+}]);
+"use strict";
+
+/**************************************
+* Register controller
+**************************************/
+
+
+app.controller('registerController', ['$scope','registerFactory','$location',
+	function($scope,registerFactory,$location) {
+
+		$scope.registerUser = function (obj) {
+
+		        var dataObj = {
+						name : $scope.name,
+						email : $scope.email,
+						password : $scope.password
+				};	
+
+				registerFactory.register('/api/register',dataObj).then(function(response){
+					$scope.result = response.result;
+					
+				});       
+		};	
+
+
+		$scope.openLoginForm = function (obj) {		
+	        			
+	           $location.path('/');    
+		};	
+
+		
+	}
+]);
+
+
+'use strict';
+
+app.factory('registerFactory', ['$http', function ($http) {
+	return{		
+		register: function(apiUrl, data){
+			return $http.post(apiUrl, data)
+			 .then(function(response){
+				return  response.data;	
+			});
+		}			
+	};
+}]);

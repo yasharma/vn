@@ -1,0 +1,51 @@
+<!-- <md-dialog class="login_dialog" aria-label="login">
+  
+  <md-button class="md-icon-button login_close" arai-label="close" ng-click="close()">
+  		<ng-md-icon icon="close" style="fill:black" size="24"></ng-md-icon>
+  </md-button>
+    <md-dialog-content> -->
+    <form name="adminLoginForm" ng-submit="loginUser(adminLoginForm.$valid)" novalidate>
+      <div class="md-dialog-content login_content">
+      	<div class="pull-right rightlogin ">
+        	<div class="loginHd">Login<p>Lorem ipsum dolor sit amet, consectetur</p></div>
+            <div class="form">
+            	<md-input-container class="md-block">
+			        <label>User ID / Mobile Number / Email Address </label>
+			        <input required name="email" data-ng-model="email" ng-required="true">
+			        <ng-md-icon icon="person" class="login_icon" style="fill:gray" size="20"></ng-md-icon>
+			        <div ng-messages="email.$error">
+			            <div ng-message="required">This is required.</div>
+			        </div>
+		        </md-input-container>
+		        <md-input-container class="md-block">
+		          	<label>Password</label>
+		          	<input required type="password" name="password" data-ng-model="password" ng-required="true">
+				 	<ng-md-icon icon="lock" class="login_icon" style="fill:gray" size="20"></ng-md-icon>
+		          	<div ng-messages="password.$error">
+		            	<div ng-message="required">This is required.</div>
+		          	</div>
+		        </md-input-container>	
+		        <div class="md-block">
+			        <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+			            Remember Me 
+			         </md-checkbox>
+			         <a class="pull-right theme-color forgottxt" href="javascript:;">Forgot Password?</a>
+	            </div>
+                <div class="md-block"> 
+                 	<md-button type="submit" class="md-primary getloginbtn" aria-label="signup" >Login</md-button>
+                </div>                 
+            </div>
+            <div class="result">{{result}}  </div> 
+        </div>
+       	<div class="leftlogbg pull-left" style="background:url(assets/images/login_bg.jpg) top center no-repeat; background-size:cover; ">
+        	<div class="hellotxt">Hotel JOT</div>
+            <div class="hellosubtxt">LoLorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
+            <div class="hellobottxt">
+            	<p>Create an Account for Hotel?</p>
+            	<md-button class="md-primary getsartbtn" ng-click="openSignupForm()" aria-label="signup" >GET STARTED</md-button>
+            </div>
+        </div>
+      </div>
+       </form>
+    <!-- </md-dialog-content> 
+</md-dialog> -->

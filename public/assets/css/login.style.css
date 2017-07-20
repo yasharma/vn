@@ -1,0 +1,21 @@
+.login_content{width: 785px; background: #fff; padding: 0!important;}
+.login_close{position: absolute; right: 0;}
+.leftlogbg{width: 40%;height: 425px; padding: 50px 40px;}
+.leftlogbg .hellotxt {font-size: 56px;color: #fff;line-height: 60px;margin-bottom: 20px; font-weight: 800;}
+.hellosubtxt {font-size: 15px;color: #fff; margin-bottom: 40px;}
+.hellobottxt p {color: #fff;font-size: 17px;margin-bottom: 5px;}
+.getsartbtn{margin: 0; width: 100%; display: block; background: #ffbb42; font-weight: 600!important; color: #fff!important; text-transform: uppercase; font-size: 15px; border-radius: 0; -webkit-border-radius: 0; margin-top:10px; padding: 4px;}
+.getsartbtn:hover{background: #ffbb42!important;}
+.getloginbtn{margin: 0; width: 100%; display: block; border: 1px solid #c0c0c0; background: transparent; font-weight: 600!important; color: #484e64!important; text-transform: uppercase; font-size: 20px; border-radius: 0; -webkit-border-radius: 0; margin-top:10px; padding: 4px;}
+.getloginbtn:hover{background: #4ebdf6!important; color: #FFF!important; border: 1px solid #4ebdf6;}
+.rightlogin {width: 60%; padding: 50px; height: 425px; background: #edeff0;}
+.loginHd {font-size: 32px;color: #373737;margin-bottom: 20px; font-weight: 800;}
+.forgotPass {font-size: 16px;color: #5f3695;text-decoration: none;}
+.loginHd p {font-size: 17px;color: #7b7b7b;font-weight: 400;}
+.login_content md-input-container{margin: 8px 0 0 0 ;}
+.login_content md-input-container .md-input{border: 0!important; height: 56px!important; padding: 10px 10px 10px 40px; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.1); font-size: 15px;}
+.login_content md-input-container label {display: block;font-size: 13px;font-weight: 400 !important;padding-left: 40px !important;padding-top: 0;bottom: 81% !important;}
+.login_content md-input-container.md-input-focused label{left: 0px!important; top:-20px;}
+.login_content md-input-container > ng-md-icon.login_icon{left: 15px; top:18px;}
+.login_content md-input-container .md-errors-spacer {float: right;min-height: 16px;min-width: 1px;font-size: 12px;}
+.login_content md-input-container .md-input-messages-animation{font-size: 12px;}
