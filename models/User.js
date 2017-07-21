@@ -1,9 +1,9 @@
 var mongoose      = require('mongoose'),
   Schema          = mongoose.Schema,
-  path            = require('path'),
+  path 			      = require('path'),
   uniqueValidator = require('mongoose-unique-validator'),
-  config          = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
-  crypto          = require('crypto');
+  config 			    = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
+  crypto 			    = require('crypto');
 
 
 
@@ -26,7 +26,7 @@ var UserSchema  = new Schema({
 
   name: {
     type: String,
-    maxlength: [12, 'username cannot be more then {MAXLENGTH} characters.']
+    required: 'Name can not be empty.'   
   },
   
   role: {
@@ -39,7 +39,7 @@ var UserSchema  = new Schema({
     trim: true,
     unique: 'The Email address you have entered already exists.',
     uniqueCaseInsensitive:true,
-    required: 'Not a valid Email address',
+    required: 'Email address can not be empty.',
     validate: {
       validator: function(email) {
         return /^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
@@ -50,7 +50,7 @@ var UserSchema  = new Schema({
   
   password: {
     type: String,
-    required: 'Password is required',
+    required: 'Password is required.',
     minlength: [6, 'Password must be atleast 6 characters long.']
   },
   

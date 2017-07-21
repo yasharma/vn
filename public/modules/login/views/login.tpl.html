@@ -13,17 +13,17 @@
 			        <label>User ID / Mobile Number / Email Address </label>
 			        <input required name="email" data-ng-model="email" ng-required="true">
 			        <ng-md-icon icon="person" class="login_icon" style="fill:gray" size="20"></ng-md-icon>
-			        <div ng-messages="email.$error">
+			       <!--  <div ng-messages="email.$error">
 			            <div ng-message="required">This is required.</div>
-			        </div>
+			        </div> -->
 		        </md-input-container>
 		        <md-input-container class="md-block">
 		          	<label>Password</label>
 		          	<input required type="password" name="password" data-ng-model="password" ng-required="true">
 				 	<ng-md-icon icon="lock" class="login_icon" style="fill:gray" size="20"></ng-md-icon>
-		          	<div ng-messages="password.$error">
+		          	<!-- <div ng-messages="password.$error">
 		            	<div ng-message="required">This is required.</div>
-		          	</div>
+		          	</div> -->
 		        </md-input-container>	
 		        <div class="md-block">
 			        <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">

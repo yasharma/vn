@@ -22,7 +22,6 @@ app.controller('dashboardController', ['$scope','$http','$location','$timeout','
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
 				clickOutsideToClose:true,
-				bindToController: true
 			})
 			.then(function(answer) {
 			}, function() {
@@ -30,6 +29,22 @@ app.controller('dashboardController', ['$scope','$http','$location','$timeout','
 			});
 
 		};
+
+
+
+		/*
+		* Factory method
+		*
+		* Display hotels
+		*
+		*/
+		
+		dashboardFactory.get('/api/get_hotels','').then(function(response){
+			if(response.error){
+			} else {				
+				$rootScope.hotels = response.data;
+			}
+		});
 	}
 ]);
 

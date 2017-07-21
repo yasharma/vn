@@ -17,8 +17,8 @@ const    jwt         = require('jsonwebtoken'),
    
 exports.login           = (request, response) => {
 
-    var email           = request.body.email;
-    var password        = request.body.password;
+	var email           = request.body.email;
+	var password        = request.body.password;
     let token           = jwt.sign(request.body, config.secret, {expiresIn: '1 day'});
     var data            = {};
 
@@ -27,7 +27,7 @@ exports.login           = (request, response) => {
         response.json(data);
     }else{
 
-        User.findOne({email : email}, function (err, res) {
+    	User.findOne({email : email}, function (err, res) {
             if( err ){
                 data =  {result: {message: 'Authentication failed.', success: false,class: 'Autherror' } };
             } else {
@@ -48,7 +48,7 @@ exports.login           = (request, response) => {
 
         });
     }
-    
+	
 };
 
 /*****************************************

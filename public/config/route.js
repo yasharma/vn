@@ -31,6 +31,13 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         access: {
             requiredLogin: true
         }
+    })
+    .when("/dashboard/jot", {
+        templateUrl : "/modules/jot/views/dashboard-jot.html",
+        controller  :  "jotController",
+        access: {
+            requiredLogin: true
+        }
     });
    
     $locationProvider.html5Mode(true);     

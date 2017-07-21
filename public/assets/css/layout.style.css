@@ -8,6 +8,7 @@ ul {padding:0; margin:0; list-style:none;}
 .positionrel{position: relative;}
 .theme-color{color: #4ebdf6;}
 .theme-color:hover{color: #4ebdf6;}
+.mar-bot20{margin-bottom: 20px}
 md-input-container .md-errors-spacer{min-height: 17px;}
 .bx-slider-loader {
 	position: absolute;

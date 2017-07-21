@@ -14,33 +14,36 @@ const    jwt         = require('jsonwebtoken'),
 * Register controller
 ******************************************/
 
-exports.register       = (request, response) => {   
-    var name           = request.body.name;
-    var email          = request.body.email;
-    var password       = request.body.password;
+exports.register       = (request, response) => {	
+	var name           = request.body.name;
+	var email          = request.body.email;
+	var password       = request.body.password;
     var data           = {};
     
 
-    users.find({email : email}, function (err, res) {
+	users.find({email : email}, function (err, res) {
        
         var usersave = new users(request.body);
-        usersave.save(function (err, resp) {
+		usersave.save(function (err, resp) {
+            
                 var issaved   = false;
                 var message1  = '';
                 var classmsg  = '';
-                var completeerror = '';
+                var completeerror = [];
+
                 if(err){
 
                     if(err.errors.name){
-                        completeerror += err.errors.name.message+"\n";
-                    }
-                     
-                    if(err.errors.password){
-                        completeerror += err.errors.password.message+"\n";
-                    }
+                        completeerror.push(err.errors.name.message);
+                    }                   
+                    
 
                     if(err.errors.email){
-                        completeerror += err.errors.email.message;
+                        completeerror.push(err.errors.email.message);
+                    }
+
+                    if(err.errors.password){
+                        completeerror.push(err.errors.password.message);
                     }
                    
                     issaved   = false;
@@ -57,8 +60,12 @@ exports.register       = (request, response) => {
                     data = {result: {message: message1, success: issaved,class: classmsg } };
                 }
                 
-                response.json(data);
-        });
+            	response.json(data);
+		});
     });
-    
+	
 };
+
+
+
+

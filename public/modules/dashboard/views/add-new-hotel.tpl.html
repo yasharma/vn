@@ -10,6 +10,7 @@
       </div>
     </md-toolbar>
     <md-dialog-content>
+    
     <form name="addHotelForm" ng-submit="addNewHotel(addHotelForm.$valid)" novalidate>
     	<div class="newhotel_dialog_form">
     		<div class="row">
@@ -27,10 +28,7 @@
     				<div class="col-md-6">
     					<label class="labeltxt">Owner Name</label>
     					<md-input-container class="md-block">
-				            <input type="text"  ng-model="ownername" placeholder="Jon Thomas" ng-required="true">
-                            <div ng-messages="ownername.$error">
-                                <div ng-message="required">This is required.</div>
-                            </div>
+				            <input type="text"  ng-model="ownername" placeholder="Jon Thomas">                            
 				        </md-input-container>
     				</div>
     			</div>
@@ -54,8 +52,11 @@
     			<div class="clearfix">
     				<div class="col-md-12">
     					<label class="labeltxt">Address  </label>
-    					<md-input-container md-no-float class="md-block">
-				            <input  ng-model="address" placeholder="Address">
+    					<md-input-container class="md-block">
+				            <input ng-required="true" ng-model="address" placeholder="Address">
+                            <div ng-messages="address.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
 				        </md-input-container>
     				</div>
     			</div>	
@@ -161,9 +162,9 @@
     			</div>
     			<div class="clearfix">
     				<div class="col-md-12">
-				        <md-checkbox ng-model="terms" aria-label="Checkbox 1">
-				            I accept the terms and conditions
-				         </md-checkbox>
+                    <input type="checkbox" ng-model="terms" name="terms">
+				         I accept the terms and conditions
+                         <div class="validation-message {{validateclass}}">{{message}}</div>
 			        </div>
 			    </div> 
 			    <div class="clearfix">

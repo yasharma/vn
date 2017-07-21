@@ -39,6 +39,55 @@
 .cursor{cursor: pointer;}
 .toogle_menu_list{padding: 15px 0;}
 .toogle_menu_list ul > li{display: block; padding: 15px 20px;  }
+/**********************************hotel page*********************************/
+.add_hotel_top{background: #fff; padding: 15px;}
+.add_hotel_top .add_hotel_icon{font-size: 18px;margin: 0 0px 10px 0; color: #4b4c4d; font-weight: 600;display: -webkit-flex; display:flex;}
+.add_hotel_top .add_hotel_icon ng-md-icon, .room_change ng-md-icon, .hotel_drop ng-md-icon{margin: 0; cursor: pointer;}
+.add_hotel_top .add_hotel_room{background: #edf0f2; border: 1px solid #ddd;  }
+.add_hotel_top .add_hotel_room .add_hotel_room_inner{padding: 15px 15px 10px 15px;}
+.room_change{display: -webkit-flex; display:flex; align-items: flex-start; font-size: 15px; color: #4d4d4d;margin: 0 0px 10px 0; }
+.taginglist{margin-bottom: 10px;}
+.taginglist > li{float: left; margin: 0 5px 5px 0; background: #c0c0c0; padding: 5px 7px; font-size: 12px; color: #fff;}
+.tim_list > li{float: left; margin: 0 15px 0px 0; font-size: 12px;align-items: flex-start; color: #7a7a7a; display: flex; display: -webkit-flex;}
+.housekepping_list{  margin-top: 10px;  align-items: center; display: -webkit-flex; display:flex; }
+.housekepping_list i{margin-left: 4px;color: #7a7a7a; font-size: 12px;}
+.add_hotel_room_proty span{width: 84px; padding: 5px; text-align: center; color: #fff;}
+.add_hotel_room_proty span.highttag{background: #de4a35;}
+.add_hotel_room_proty span.yellowtag{background: #ffbb42;}
+.add_hotel_room_proty span.mediumtag{background: #fd7461;}
+.add_hotel_room_proty span.greentag{background: #61bd4f;}
+.add_hotel_room_proty span.urgenttag{background: #df2910;}
+.add_hotel_room_proty span.lowtag{    background: rgba(253,116,97,.8);}
+.cretejot_hotel a{font-size: 14px; color: #4ebdf6; display: block; margin-top: 10px; text-transform: uppercase;}
+.dash_hd_txt{}
+.rightfilter md-input-container{margin: 0;}
+.rightfilter md-input-container md-select-value{padding: 0 15px; margin-bottom: 20px; font-size: 15px; border: 1px solid #ddd; background: #fff; height: 35px;}
+.rightfilter md-input-container md-select .md-select-value{padding: 0 15px; color: #222222;}
+.rightfilter md-input-container md-select:not([disabled]):focus .md-select-value{border: 1px solid #ddd;  color: #222222;}
+.dash_hd_hotel{background: #fff; padding: 60px 30px 30px;margin: -30px -30px 20px -30px; box-shadow: 0 0 10px rgba(0,0,0,0.2);}
+.dash_hd_hotel span{color: #4b4c4d; font-size: 20px; font-weight: 800;}
+.dash_extra_menu{display: inline-block; color: #313942; padding: 10px 10px; background: #eaebec; font-size: 12px; text-transform: uppercase;}
+.dash_extra_menu:hover, .dash_extra_menu:focus{text-decoration: none; color: #313942;}
+.dash_home_header_logo_center{position: absolute; width: 114px; height: 114px; margin: auto; left: 0; right: 0; top:0;}
+.dash_hotel_menu_list > li{float: left; margin: 0 10px;}
+.dash_hotel_menu_list > li > a{line-height: 58px; display: inline-block; position: relative; color: #fff; text-transform: uppercase;}
+.dash_hotel_menu_list > li > a:after{content: '';-webkit-transition: all 0.3s ease-in-out;-moz-transition: all 0.3s ease-in-out;-o-transition: all 0.3s ease-in-out;-ms-transition: all 0.3s ease-in-out;transition: all 0.3s ease-in-out; width: 0%; height: 3px; background: #fff; top:0; left: 50%; position: absolute;}
+.dash_hotel_menu_list > li > a:hover, .dash_hotel_menu_list > li > a:focus{text-decoration: none;}
+.dash_hotel_menu_list > li > a:hover:after{width: 100%; left: 0;}
+.hotel_drop{width: 230px; padding: 0 20px; background: #4288ae; font-size: 22px; font-weight: 800; line-height: 58px; color: #fff;}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -63,6 +112,7 @@ ul {padding:0; margin:0; list-style:none;}
 .positionrel{position: relative;}
 .theme-color{color: #4ebdf6;}
 .theme-color:hover{color: #4ebdf6;}
+.mar-bot20{margin-bottom: 20px}
 md-input-container .md-errors-spacer{min-height: 17px;}
 .bx-slider-loader {
 	position: absolute;
@@ -154,10 +204,45 @@ h2.hotel_header {
 
 .Autherror {
   color: #ff0000;
+  opacity: 0.8;
 }
 .Authsuccess {
   color: #228B22;
 }
 div.white-space-pre-line {
     white-space: pre-line;
+}
+
+.validation-message {
+    color: red !important;
+    padding: 10px 0 0 0;
+}
+
+.validation-message.Authsuccess {
+    color: green !important
+}
+
+.noresult {
+  color: green;
+  font-size: 22px;
+  text-align: center;
+}
+
+.login_content md-input-container.md-input-focused label {
+  padding-left: 0 !important;
+}
+
+.md-input-has-value label.md-required {
+  bottom: 97% !important;
+  padding-left: 0 !important;
+}
+
+.result.Autherror li {
+  list-style: outside none disc;
+  margin-left: 13px;
+  vertical-align: top;
+}
+
+.result.Autherror ul {
+  margin-top: 5px;
 }

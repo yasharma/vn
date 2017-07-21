@@ -16,7 +16,11 @@ fs.readdirSync(path.resolve('./controllers/front')).forEach(file => {
 
 module.exports = {
   	routes: [
-  	{ url: '/register', method: ctrls.registerController.register, type: 'POST' },
-  	{ url: '/login', method: ctrls.loginController.login, type: 'POST' },
+	  	{ url: '/register', 	method: ctrls.registerController.register, 	type: 'POST' },
+	  	{ url: '/login', 		method: ctrls.loginController.login, 		type: 'POST' },
+	  	{ url: '/add_hotels', 	method: ctrls.hotelController.addHotel, 	type: 'POST' },
+	  	{ url: '/get_hotels', 	method: ctrls.hotelController.listHotel, 	type: 'POST' },
+	  	{ url: '/create_jot', 	method: ctrls.jotController.addJot, 		type: 'POST' },
+	  	{ url: '/get_jot', 		method: ctrls.jotController.listJot, 		type: 'POST' }
 	]
 };

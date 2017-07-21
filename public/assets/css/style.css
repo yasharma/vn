@@ -33,10 +33,45 @@ h2.hotel_header {
 
 .Autherror {
   color: #ff0000;
+  opacity: 0.8;
 }
 .Authsuccess {
   color: #228B22;
 }
 div.white-space-pre-line {
     white-space: pre-line;
+}
+
+.validation-message {
+    color: red !important;
+    padding: 10px 0 0 0;
+}
+
+.validation-message.Authsuccess {
+    color: green !important
+}
+
+.noresult {
+  color: green;
+  font-size: 22px;
+  text-align: center;
+}
+
+.login_content md-input-container.md-input-focused label {
+  padding-left: 0 !important;
+}
+
+.md-input-has-value label.md-required {
+  bottom: 97% !important;
+  padding-left: 0 !important;
+}
+
+.result.Autherror li {
+  list-style: outside none disc;
+  margin-left: 13px;
+  vertical-align: top;
+}
+
+.result.Autherror ul {
+  margin-top: 5px;
 }
