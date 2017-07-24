@@ -20,45 +20,127 @@ exports.addHotel = (request, response) => {
 	    var data            = {};
         var Hotelsave       = new Hotel(request.body);
 
-        Hotelsave.save(function (err, resp) {
+        Hotelsave.save(function (err, result) {
                 
-                var issaved         = false;
-                var message1        = '';
-                var classmsg        = '';
-                var completeerror   = '';
+                var completeerror   = [];
 
                 if(err){
 
                     if(err.errors.hotelname){
-                        completeerror += err.errors.hotelname.message+"\n";
-                    }
-                     
-                    if(err.errors.ownername){
-                        completeerror += err.errors.ownername.message+"\n";
+                        completeerror.push(err.errors.hotelname.message);
                     }
 
+                    if(err.errors.ownername){
+                        completeerror.push(err.errors.ownername.message);
+                    }                   
+                
                     if(err.errors.email){
-                        completeerror += err.errors.email.message;
+                        completeerror.push(err.errors.email.message);
                     }
                     
                     console.log('Error in Hotel Saved');
-                    issaved   = false;
-                    message1  = completeerror;
-                    classmsg  = 'Autherror';
-                    data      = {result: {message: message1, success: issaved,class: classmsg } };
+                    data      = {
+                    				result: {
+                    							message: completeerror,
+                    							success: false,
+                    							class: 'Autherror',
+                    							result: err
+                    				} 
+                    			};
 
                 }else{
 
                     console.log('Hotel Saved');
-                    issaved   = true;
-                    message1  = 'Hotel Successfully Added';
-                    classmsg  = 'Authsuccess';
-                    data      = {result: {message: message1, success: issaved,class: classmsg } };
+                    data      = {
+                    				result: {
+                    							message: 'Hotel Successfully Added',
+                    							success: true,
+                    							class: 'Authsuccess',
+                    							result: result
+                    				} 
+                    			};
                 }
-                
-                response.json(data);
+            response.json(data);
         });
 
+};
+
+
+/******************************************
+**** Function to Update Existing Hotel ****
+*******************************************/
+exports.updateHotel = (request, response) => {
+
+	    var data            	= {};
+        var hotelid         	= request.body.hotel_id;
+
+        Hotel.findByIdAndUpdate(hotelid,{$set:request.body}, {new: true}, function(err, result) {
+			if(err){
+	            console.log("Error in Hotel update");
+	            data = {
+	        				result: {
+	        						message: "Error in Hotel update",
+	        						success: false,
+	        						class: 'Autherror',
+	        						result: err
+	        						
+	        				}
+	        	};
+	        }else{
+	        	console.log("Hotel Updated successfully");
+	        	data = {
+	        				result: {
+	        						message: "Hotel Updated successfully",
+	        						success: true,
+	        						class: 'Authsuccess',
+	        						result: result
+	        						
+	        				}
+	        	};
+	        	response.json(data);
+	        }
+	        
+		});
+};
+
+/******************************************
+**** Function to Delete Existing Hotel ****
+*******************************************/
+
+exports.deleteHotel = (request, response) => {
+
+	    var data            	= {};
+        var hotelid         	= request.body.hotel_id;
+
+        Hotel.findByIdAndRemove(hotelid, function(err, result) {
+			if(err){
+
+	            console.log("Error in Hotel deletion");
+	            data = {
+	        				result: {
+	        						message: "Error in Hotel deletion",
+	        						success: false,
+	        						class: 'Autherror',
+	        						result: err
+	        						
+	        				}
+	        	};
+	        }else{
+
+	        	console.log("Hotel Deleted successfully");
+	        	data = {
+	        				result: {
+	        						message: "Hotel Deleted successfully",
+	        						success: true,
+	        						class: 'Authsuccess',
+	        						result: result
+	        						
+	        				}
+	        	};
+	        	response.json(data);
+	        }
+	        
+		});
 };
 
 /********************************
@@ -68,27 +150,31 @@ exports.addHotel = (request, response) => {
 exports.listHotel = (request, response) => {
 
         var data            = {};
-        Hotel.find({}, function (err, resp) {
+        Hotel.find({}, function (err, result) {
                 
-                var issaved         = false;
-                var message1        = '';
-                var classmsg        = '';
-                var completeerror   = '';
-
                 if(err){
-
-                    issaved   = false;
-                    message1  = 'Error: Something went wrong.';
-                    classmsg  = 'Autherror';
-                    data      = {result: {message: 'No Data found.', success: issaved,class: classmsg } };
+                	console.log('Error: No data found.');
+                    data      = {
+                    				result: {
+                    							message: 'No Data found.',
+                    							success: false,
+                    							class: 'Autherror'
+                    				} 
+                    			};
 
                 }else{
 
                     console.log('Get all Hotels');
-                    data      = resp;
+                    data      = {
+                    				result: {
+                    							message: 'Hotels Data found',
+                    							success: true,
+                    							class: 'Authsuccess',
+                    							result: result
+                    				} 
+                    			};
                 }
-                
-                response.json(data);
+            response.json(data);
         });
 
 };

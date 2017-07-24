@@ -14,7 +14,7 @@ app.factory('jotFactory', ['$http', function ($http) {
 
 		post: function(apiUrl, data){
 			return $http.post(apiUrl, data).then(function(response){
-				return response.data;
+				return response.data.result;
 			}, function(response){
 				return {
 					errors: response.data.errors

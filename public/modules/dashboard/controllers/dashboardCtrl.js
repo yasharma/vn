@@ -39,27 +39,13 @@ app.controller('dashboardController', ['$scope','$http','$location','$timeout','
 		*
 		*/
 		
-		dashboardFactory.get(GET_HOTELS_API_URL,'').then(function(response){
+		dashboardFactory.get('/api/get_hotels','').then(function(response){
 			if(response.error){
 			} else {				
 				$rootScope.hotels = response.data;
 			}
 		});
-
-
-		/*
-		* Function
-		*
-		* Set hotel id in local storage and redirect to jot related to selected hotel
-		*
-		*/
-		
-
-		$scope.redirectToJot = function(){
-			
-			$location.path('/dashboard/jot');
-		};
-
-
 	}
 ]);
+
+

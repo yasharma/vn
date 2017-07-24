@@ -2,7 +2,7 @@
 <!-- header -->
 <div class="dash_home_header clearfix">
 	<duv class="dash_home_header_logo_center">
-		<a href="javascript:;" ng-click="quickTaskPopup()"><img src="assets/images/circle-logo.png"></a>
+		<a href="javascript:;"><img src="assets/images/circle-logo.png"></a>
 	</duv>
 	<div class="pull-left">
 		<div class="clearfix">
@@ -104,16 +104,15 @@
 	</div>
 	<div class="clearfix row">
 
-		
+		<div  ng-if="jots==''">
+		  <div class="noresult">There is not jot available.</div>
+		</div>
 
 		<div class="col-lg-3 col-md-6" ng-repeat = 'jot in jots'>
 			<div class="add_hotel_top" md-whiteframe="6">
 				<div class="add_hotel_icon">
 					<ng-md-icon icon="email" style="fill:#a3a3a3" size="24"></ng-md-icon>
-					<label ng-if="jot._id">
-					
-					{{jot._id != 'false' && jot._id || 'Notype' }}
-					<label>
+					{{jot._id}}
 				</div>
 
 				<div class="add_hotel_room mar-bot20" ng-repeat = 'jotMessage in jot.jot_data'>
@@ -148,9 +147,7 @@
 				<div class="cretejot_hotel"><a href="javascript:;"> Create a Jot </a></div>
 			</div>
 		</div>
-		<!-- <div  ng-if="jots==''">
-		  <div class="noresult">There is not jot available.</div>
-		</div> -->
+
 
 	
 		

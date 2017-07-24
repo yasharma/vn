@@ -75,10 +75,3 @@ div.white-space-pre-line {
 .result.Autherror ul {
   margin-top: 5px;
 }
-
-md-toast.success .md-toast-content {
-    background: #61bd4f none repeat scroll 0 0;
-}
-.newhotel_dialog_form md-input-container {
-  margin: 13px 0 11px;
-}

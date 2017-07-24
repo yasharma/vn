@@ -12,7 +12,7 @@ const    jwt         = require('jsonwebtoken'),
 
 
 /********************************
-*** Function to add new Jot ***
+*** Function to add new Jot *****
 *********************************/
    
 exports.addJot = (request, response) => {
@@ -20,7 +20,7 @@ exports.addJot = (request, response) => {
 	    var data            = {};
         var Jotsave         = new Jot(request.body);
 
-        Jotsave.save(function (err, resp) {
+        Jotsave.save(function (err, result) {
                 
                 var issaved         = false;
                 var message1        = '';
@@ -34,23 +34,109 @@ exports.addJot = (request, response) => {
                     }
                      
                     console.log('Error in Jot Saved');
-                    issaved   = false;
-                    message1  = completeerror;
-                    classmsg  = 'Autherror';
-                    data      = {result: {message: message1, success: issaved,class: classmsg } };
+                    data      = {
+                    				result: {
+	                    						message: 'Error in Jot Saved',
+	                    						success: true,
+	                    						class: 'Autherror',
+	                    						result:  err
+	                    						
+                    				} 
+                    			};
 
                 }else{
 
-                    console.log('Jot Saved');
-                    issaved   = true;
-                    message1  = 'Jot Successfully Added';
-                    classmsg  = 'Authsuccess';
-                    data      = {result: {message: message1, success: issaved,class: classmsg } };
+                    console.log('Jot Saved Successfully');
+                    data      = {
+                    				result: {
+	                    						message: 'Jot Successfully Added',
+	                    						success: true,
+	                    						class: 'Authsuccess',
+	                    						result:  result
+	                    						
+                    				} 
+                    			};
                 }
                 
                 response.json(data);
         });
 
+};
+
+/****************************************
+**** Function to Update Existing Jot ****
+*****************************************/
+exports.updateJot = (request, response) => {
+
+	    var data            = {};
+        var Jotid         	= request.body.jot_id;
+
+        Jot.findByIdAndUpdate(Jotid,{$set:request.body}, {new: true}, function(err, result) {
+			if(err){
+	            console.log("Error in jot update");
+	            data = {
+	        				result: {
+	        						message: "Error in jot update",
+	        						success: false,
+	        						class: 'Autherror',
+	        						result: err
+	        						
+	        				}
+	        	};
+	        }else{
+	        	console.log("Jot Updated successfully");
+	        	data = {
+	        				result: {
+	        						message: "Jot Updated successfully",
+	        						success: true,
+	        						class: 'Authsuccess',
+	        						result: result
+	        						
+	        				}
+	        	};
+	        	response.json(data);
+	        }
+	        
+		});
+};
+
+/****************************************
+**** Function to Delete Existing Jot ****
+*****************************************/
+exports.deleteJot = (request, response) => {
+
+	    var data            = {};
+        var Jotid         	= request.body.jot_id;
+
+        Jot.findByIdAndRemove(Jotid, function(err, result) {
+			if(err){
+
+	            console.log("Error in jot deletion");
+	            data = {
+	        				result: {
+	        						message: "Error in jot deletion",
+	        						success: false,
+	        						class: 'Autherror',
+	        						result: err
+	        						
+	        				}
+	        	};
+	        }else{
+
+	        	console.log("Jot Deleted successfully");
+	        	data = {
+	        				result: {
+	        						message: "Jot Deleted successfully",
+	        						success: true,
+	        						class: 'Authsuccess',
+	        						result: result
+	        						
+	        				}
+	        	};
+	        	response.json(data);
+	        }
+	        
+		});
 };
 
 /********************************
@@ -70,30 +156,39 @@ exports.listJot = (request, response) => {
                                 jot_data: {
                                     $push: {
                                         jot_title: '$jot_title',
-                                        priprity: '$priority',
+                                        priority: '$priority',
                                         status: '$status'
                                     }
                                 } 
                             } 
                         }
-                    ], function (err, resp) {
+                    ], function (err, ressult) {
                 
-                var issaved         = false;
-                var message1        = '';
-                var classmsg        = '';
-                var completeerror   = '';
-
                 if(err){
 
-                    issaved   = false;
-                    message1  = 'Error: Something went wrong.';
-                    classmsg  = 'Autherror';
-                    data      = {result: {message: 'No Data found.', success: issaved,class: classmsg } };
+                   console.log("Error: No data found");
+                    data      = {
+                    				result: {
+		                    				message: 'Error: Something went wrong.',
+		                    				success: false,
+		                    				class: 'Autherror',
+		                    				result: err
+		                    				
+		                    		} 
+                    			};
 
                 }else{
 
                     console.log('Get all Jots');
-                    data      = resp;
+                   data      = {
+                    				result: {
+		                    				message: 'data found related to condition.',
+		                    				success: true,
+		                    				class: 'Authsuccess',
+		                    				result: ressult
+		                    				
+		                    		} 
+                    			};
                 }
                 
                 response.json(data);

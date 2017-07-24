@@ -11,9 +11,9 @@ const    jwt         = require('jsonwebtoken'),
 
 
 
-/*****************************************
-* Login controller
-******************************************/
+/************************************************
+***Function to check login credentials of user***
+*************************************************/
    
 exports.login           = (request, response) => {
 
@@ -23,28 +23,64 @@ exports.login           = (request, response) => {
     var data            = {};
 
     if(!email || !password) {
-        data =  {result: {message: 'Email and password are required', success: false,class: 'Autherror' } };
+        console.log("Email/Password not found.");
+        data =  {
+                    result: {
+                                message: 'Email and password are required',
+                                success: false,
+                                class: 'Autherror'
+                    } 
+                };
+
         response.json(data);
+
     }else{
 
     	User.findOne({email : email}, function (err, res) {
             if( err ){
-                data =  {result: {message: 'Authentication failed.', success: false,class: 'Autherror' } };
+                console.log("Email address not found.");
+                data =  {
+                            result: {
+                                        message: 'Authentication failed.',
+                                        success: false,
+                                        class: 'Autherror'
+                            }
+                        };
             } else {
                 if(res){
-                    if(res.comparePassword(config.salt, password)){
-                        data = {result:{user:res, token:token, success: true,class: 'Authsuccess' } };
+                    // Check for valid password and email address
+                    if(res.comparePassword(config.salt, password)){ // check for valid password
+                        console.log("Login Successfull");
+                        data = {
+                                    result:{
+                                                user:res,
+                                                token:token,
+                                                success: true,
+                                                class: 'Authsuccess'
+                                    } 
+                                };
                     } else {
-                        data =  {result: {message: 'Authentication failed. Wrong password.', success: false,class: 'Autherror' } };
+                        console.log("Password doesn't matched.");
+                        data =  {
+                                    result: {
+                                                message: 'Authentication failed. Wrong password.',
+                                                success: false,
+                                                class: 'Autherror'
+                                    } 
+                                };
                     }
-                }else{
-                    data =  {result: {message: 'Authentication failed. You are not registered with HotelJot.', success: false,class: 'Autherror' } };
+                }else{ // Email address and password combination not found in DB
+                    console.log("User not found with this information.");
+                    data =  {
+                                result: {
+                                            message: 'Authentication failed. You are not registered with HotelJot.',
+                                            success: false,
+                                            class: 'Autherror'
+                                } 
+                            };
                 }
-                
-
             }
-
-            response.json(data);
+        response.json(data);
 
         });
     }
@@ -56,7 +92,7 @@ exports.login           = (request, response) => {
 * Function to verify email address by user.
 ******************************************
 ******************************************/
-exports.verifyEmail = (req, res, next) => {
+/*exports.verifyEmail = (req, res, next) => {
     User.findOneAndUpdate(
         { "salt": req.params.salt, "email_verified": false },
         { "email_verified": true, "salt": null, "status": true },
@@ -77,14 +113,14 @@ exports.verifyEmail = (req, res, next) => {
             }
         }
     );
-};
+};*/
 
 /*****************************************
 ******************************************
 * Function to find user By id.
 ******************************************
 ******************************************/
-exports.profileById = function (req, res, next) {
+/*exports.profileById = function (req, res, next) {
     let userid = '596ddc14eca457246c49bc1c';
     User.findById(userid,'-reset_password -salt -auth -i -password -last_edited_by',(error, profileUser) => {
         if(profileUser){
@@ -102,4 +138,4 @@ exports.profileById = function (req, res, next) {
         }
         console.log(profileUser); 
     });
-};
+};*/

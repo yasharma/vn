@@ -24,11 +24,8 @@ exports.register       = (request, response) => {
 	users.find({email : email}, function (err, res) {
        
         var usersave = new users(request.body);
-		usersave.save(function (err, resp) {
+		usersave.save(function (err, result) {
             
-                var issaved   = false;
-                var message1  = '';
-                var classmsg  = '';
                 var completeerror = [];
 
                 if(err){
@@ -36,8 +33,7 @@ exports.register       = (request, response) => {
                     if(err.errors.name){
                         completeerror.push(err.errors.name.message);
                     }                   
-                    
-
+                
                     if(err.errors.email){
                         completeerror.push(err.errors.email.message);
                     }
@@ -46,21 +42,31 @@ exports.register       = (request, response) => {
                         completeerror.push(err.errors.password.message);
                     }
                    
-                    issaved   = false;
+                    
                     message1  = completeerror;
-                    classmsg  = 'Autherror';
-                    data = {result: {message: message1, success: issaved,class: classmsg } };
+                    data = {
+                    				result: {
+	                    					message: message1,
+	                    					success: false,
+	                    					class: 'Autherror',
+	                    					result: err
+                    				} 
+                    		};
 
                 }else{
 
-                    console.log('Saved');
-                    issaved  = true;
-                    message1  = 'Successfully registered';
-                    classmsg = 'Authsuccess';
-                    data = {result: {message: message1, success: issaved,class: classmsg } };
+                    console.log('User registered successfully.');
+                    data = {
+                    			result: {
+                    						message: 'User Successfully registered.',
+                    						success: true,
+                    						class: 'Authsuccess',
+                    						result: result
+                    					} 
+                    		};
                 }
                 
-            	response.json(data);
+            response.json(data);
 		});
     });
 	

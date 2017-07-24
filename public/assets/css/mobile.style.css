@@ -18,11 +18,4 @@
 .hellosubtxt{margin-bottom: 20px;}
 .dashrightsection{padding: 15px;}
 .dash_home_header_logo{padding: 11px 10px;}
-.addyellobtn_noflot{width: 100%; float: none!important; margin-bottom: 10px;}
-.newhotel_dialog .md-toolbar-tools{padding: 0 15px;}
-.newhotel_dialog_form, .Quick_jot_list{padding: 15px;}
-.Quick_jot_list ul > li{width: 32%; margin-bottom: 5px;}
-.Quick_jot_list ul > li > a{padding-bottom: 5px;}
-.newhotel_dialog_form .date_due md-input-container .md-input{width: 100%;}
-.date_due{width: 100%; float: none!important; }
 }
