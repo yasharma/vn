@@ -70,12 +70,34 @@
 .dash_extra_menu:hover, .dash_extra_menu:focus{text-decoration: none; color: #313942;}
 .dash_home_header_logo_center{position: absolute; width: 114px; height: 114px; margin: auto; left: 0; right: 0; top:0;}
 .dash_hotel_menu_list > li{float: left; margin: 0 10px;}
-.dash_hotel_menu_list > li > a{line-height: 58px; display: inline-block; position: relative; color: #fff; text-transform: uppercase;}
+.dash_hotel_menu_list > li > a{line-height: 58px; display: inline-block; position: relative; color: #caebfc; text-transform: uppercase;}
 .dash_hotel_menu_list > li > a:after{content: '';-webkit-transition: all 0.3s ease-in-out;-moz-transition: all 0.3s ease-in-out;-o-transition: all 0.3s ease-in-out;-ms-transition: all 0.3s ease-in-out;transition: all 0.3s ease-in-out; width: 0%; height: 3px; background: #fff; top:0; left: 50%; position: absolute;}
-.dash_hotel_menu_list > li > a:hover, .dash_hotel_menu_list > li > a:focus{text-decoration: none;}
+.dash_hotel_menu_list > li > a:hover, .dash_hotel_menu_list > li > a:focus{text-decoration: none; color: #fff;}
 .dash_hotel_menu_list > li > a:hover:after{width: 100%; left: 0;}
 .hotel_drop{width: 230px; padding: 0 20px; background: #4288ae; font-size: 22px; font-weight: 800; line-height: 58px; color: #fff;}
-
+/************************************quick jot form**********************/
+.Quick_jot_list{padding: 15px 0 0 0; border-bottom: 1px solid #dadddd;}
+.Quick_jot_list ul{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+.Quick_jot_list ul > li > a{text-align: center; font-weight: 600; display: block; position: relative; padding-bottom: 15px;}
+.Quick_jot_list ul > li > a:after{content: '';-webkit-transition: all 0.3s ease-in-out;-moz-transition: all 0.3s ease-in-out;-o-transition: all 0.3s ease-in-out;-ms-transition: all 0.3s ease-in-out;transition: all 0.3s ease-in-out; width: 0%; height: 3px; background: #4ebdf6; top:100%; left: 50%; position: absolute;}
+.Quick_jot_list ul > li > a.active span, .Quick_jot_list ul > li > a:hover span{color: #000;}
+.Quick_jot_list ul > li > a.active:after, .Quick_jot_list ul > li > a:hover:after{left: 0; width: 100%;}
+.Quick_jot_list ul > li > a:hover{text-decoration: none;}
+.Quick_jot_list ul > li > a span{font-size: 14px; margin-top: 5px; display: block; text-transform: uppercase; color: #4f4f4f; }
+.jot_prity > li{float: left; margin-right: 5px;}
+.jot_prity > li > a{display: block; padding: 5px 10px; border: 1px solid #ddd; background: #fff; color: #7b7b7b; font-size: 12px;}
+.jot_prity > li > a:hover, .jot_prity > li > a.active{text-decoration:none; background: #de4a35; border-color: #de4a35; color: #fff;}
+.jot_prity_txt{line-height: 29px; margin-right: 10px;}
+.newhotel_dialog_form .date_due md-input-container label{bottom: 94%;left: 10px; font-size:13px;}
+.newhotel_dialog_form .date_due md-input-container .md-input{height: auto; width: 179px; padding: 2px 10px;background: #fff;}
+.tag_room_list > li{float: left; padding: 5px 10px; margin: 0 5px 5px 0; background: #c0c0c0; font-size: 12px; color: #fff;}
+.Jot_type > li{float: left; margin: 0 5px 5px 0; }
+.Jot_type > li > a{background: #fff;display: block; padding: 5px 15px; border: 1px solid #ddd;font-size: 12px; color: #7b7b7b; }
+.Jot_type > li > a:hover, .Jot_type > li > a.active{ text-decoration: none; background: #2aaae0; color: #fff; border-color: #2aaae0;}
+.addyellobtn {margin: 0;width: 100%; display: block;font-weight: 600!important;color: #fff!important;text-transform: uppercase;font-size: 15px;border-radius: 0;-webkit-border-radius: 0; padding: 0px 15px;}
+.addyellobtn.yellowbtn, .addyellobtn.yellowbtn:hover{background: #ffbb42;}
+.addyellobtn.bluebtn, .addyellobtn.bluebtn:hover{background: #2aaae0;}
+.addyellobtn.graybtn, .addyellobtn.graybtn:hover{background: #9d9d9d;}
 
 
 
@@ -168,6 +190,13 @@ bx-slider{
 .hellosubtxt{margin-bottom: 20px;}
 .dashrightsection{padding: 15px;}
 .dash_home_header_logo{padding: 11px 10px;}
+.addyellobtn_noflot{width: 100%; float: none!important; margin-bottom: 10px;}
+.newhotel_dialog .md-toolbar-tools{padding: 0 15px;}
+.newhotel_dialog_form, .Quick_jot_list{padding: 15px;}
+.Quick_jot_list ul > li{width: 32%; margin-bottom: 5px;}
+.Quick_jot_list ul > li > a{padding-bottom: 5px;}
+.newhotel_dialog_form .date_due md-input-container .md-input{width: 100%;}
+.date_due{width: 100%; float: none!important; }
 }
 body {
   background: #4ebdf6 none repeat scroll 0 0;
@@ -245,4 +274,11 @@ div.white-space-pre-line {
 
 .result.Autherror ul {
   margin-top: 5px;
+}
+
+md-toast.success .md-toast-content {
+    background: #61bd4f none repeat scroll 0 0;
+}
+.newhotel_dialog_form md-input-container {
+  margin: 13px 0 11px;
 }

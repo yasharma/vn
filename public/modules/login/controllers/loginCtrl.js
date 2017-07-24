@@ -35,7 +35,7 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 					password : $scope.password
 			};	
 
-			loginFactory.login('/api/login',dataObj).then(function(response){				
+			loginFactory.login(LOGIN_API_URL,dataObj).then(function(response){				
 				if(response.errors){
 					//toastService.alert({message: response.errors.message, class: 'error'});
 				} else {

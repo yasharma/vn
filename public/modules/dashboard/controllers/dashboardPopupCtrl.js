@@ -5,8 +5,8 @@
 **************************************/
 
 
-app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route',
-	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route) {	
+app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route','toastService',
+	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route,toastService) {	
 
 		/*
 		* Function
@@ -52,19 +52,22 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 						arrangement_type   : $scope.arrangement_t
 				};
 
-				dashboardFactory.post('/api/add_hotel',hotelDataObj).then(function(response){				
+				dashboardFactory.post(ADD_HOTEL_API_URL,hotelDataObj).then(function(response){				
 					$scope.message = response.data.result.message;
 					$scope.validateclass = response.data.result.class;
 					if(response.data.result.success)
 					{
 						$rootScope.hotels.push(hotelDataObj);
 						$mdDialog.cancel();
+						var popup = {"message":"Hotel sccessfully added.","class":"success"};
+						toastService.alert(popup);
+
 					}				
 
 				});
 
 			} else {
-				$scope.message = 'Please accept  terms and conditions.';
+				$scope.message = 'Please accept terms and conditions.';
 			}	
 			
 		};
