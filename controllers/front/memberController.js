@@ -40,23 +40,19 @@ exports.addMember = (request, response) => {
                     }
                     
                     data      = {
-                    				result: {
-                    							message: completeerror,
-                    							success: false,
-                    							class: 'Autherror',
-                    							result: err
-                    				} 
+                    				message: completeerror,
+        							success: false,
+        							class: 'Autherror',
+        							result: err
                     			};
 
                 }else{
 
                     data      = {
-                    				result: {
-                    							message: 'Member Successfully Added.',
-                    							success: true,
-                    							class: 'Authsuccess',
-                    							result: result
-                    				} 
+                    				message: 'Member Successfully Added.',
+        							success: true,
+        							class: 'Authsuccess',
+        							result: result
                     			};
                 }
             response.json(data);
@@ -77,22 +73,20 @@ exports.updateMember = (request, response) => {
 			if(err){
 	            
 	            data = {
-	        				result: {
-	        						message: "Error in Member update.",
-	        						success: false,
-	        						class: 'Autherror',
-	        						result: err
-	        				}
+	        				message: "Error in Member update.",
+    						success: false,
+    						class: 'Autherror',
+    						result: err
+	        				
 	        	};
 	        }else{
 	        	
 	        	data = {
-	        				result: {
-	        						message: "Member Updated successfully.",
-	        						success: true,
-	        						class: 'Authsuccess',
-	        						result: result
-	        				}
+	        				message: "Member Updated successfully.",
+    						success: true,
+    						class: 'Authsuccess',
+    						result: result
+	        			
 	        	};
 	        	response.json(data);
 	        }
@@ -113,24 +107,20 @@ exports.deleteMember = (request, response) => {
 			if(err){
 
 	            data = {
-	        				result: {
-
-	        						message: "Error in Member deletion.",
-	        						success: false,
-	        						class: 'Autherror',
-	        						result: err
-	        				}
+	        				message: "Error in Member deletion.",
+    						success: false,
+    						class: 'Autherror',
+    						result: err
+	        			
 	        	};
 	        }else{
 
 	        	data = {
-	        				result: {
-	        					
-	        						message: "Member Deleted successfully.",
-	        						success: true,
-	        						class: 'Authsuccess',
-	        						result: result
-	        				}
+	        				message: "Member Deleted successfully.",
+    						success: true,
+    						class: 'Authsuccess',
+    						result: result
+	        			
 	        	};
 	        	response.json(data);
 	        }
@@ -150,22 +140,20 @@ exports.listMember = (request, response) => {
                 if(err){
                 	
                     data      = {
-                    				result: {
-                    							message: 'No Data found.',
-                    							success: false,
-                    							class: 'Autherror'
-                    				} 
+                    				
+        							message: 'No Data found.',
+        							success: false,
+        							class: 'Autherror',
+                                    result: err
                     			};
 
                 }else{
 
                     data      = {
-                    				result: {
-                    							message: 'Members Data found',
-                    							success: true,
-                    							class: 'Authsuccess',
-                    							result: result
-                    				} 
+                    				message: 'Members Data found',
+        							success: true,
+        							class: 'Authsuccess',
+        							result: result
                     			};
                 }
             response.json(data);

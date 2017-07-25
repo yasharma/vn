@@ -39,23 +39,21 @@ exports.addHotel = (request, response) => {
                     }
                     
                     data      = {
-                    				result: {
-                    							message: completeerror,
-                    							success: false,
-                    							class: 'Autherror',
-                    							result: err
-                    				} 
+                    				message: completeerror,
+        							success: false,
+        							class: 'Autherror',
+        							result: err
+                    				
                     			};
 
                 }else{
                     
                     data      = {
-                    				result: {
-                    							message: 'Hotel Successfully Added.',
-                    							success: true,
-                    							class: 'Authsuccess',
-                    							result: result
-                    				} 
+                    				
+        							message: 'Hotel Successfully Added.',
+        							success: true,
+        							class: 'Authsuccess',
+        							result: result
                     			};
                 }
             response.json(data);
@@ -76,22 +74,22 @@ exports.updateHotel = (request, response) => {
 			if(err){
 	            
 	            data = {
-	        				result: {
-	        						message: "Error in Hotel update.",
-	        						success: false,
-	        						class: 'Autherror',
-	        						result: err
-	        				}
+	        				
+    						message: "Error in Hotel update.",
+    						success: false,
+    						class: 'Autherror',
+    						result: err
+	        				
 	        	};
 	        }else{
 	        	
 	        	data = {
-	        				result: {
-	        						message: "Hotel Updated successfully.",
-	        						success: true,
-	        						class: 'Authsuccess',
-	        						result: result
-	        				}
+	        				
+    						message: "Hotel Updated successfully.",
+    						success: true,
+    						class: 'Authsuccess',
+    						result: result
+	        				
 	        	};
 	        	response.json(data);
 	        }
@@ -112,24 +110,20 @@ exports.deleteHotel = (request, response) => {
 			if(err){
 	            
 	            data = {
-	        				result: {
-
-	        						message: "Error in Hotel deletion.",
-	        						success: false,
-	        						class: 'Autherror',
-	        						result: err
-	        				}
+	        				message: "Error in Hotel deletion.",
+    						success: false,
+    						class: 'Autherror',
+    						result: err
+	        				
 	        	};
 	        }else{
 	        	
 	        	data = {
-	        				result: {
-	        					
-	        						message: "Hotel Deleted successfully.",
-	        						success: true,
-	        						class: 'Authsuccess',
-	        						result: result
-	        				}
+	        				
+    						message: "Hotel Deleted successfully.",
+    						success: true,
+    						class: 'Authsuccess',
+    						result: result
 	        	};
 	        	response.json(data);
 	        }
@@ -149,22 +143,20 @@ exports.listHotel = (request, response) => {
                 if(err){
                 	
                     data      = {
-                    				result: {
-                    							message: 'No Data found.',
-                    							success: false,
-                    							class: 'Autherror'
-                    				} 
+                    				message: 'No Data found.',
+        							success: false,
+        							class: 'Autherror',
+        							result: err
                     			};
 
                 }else{
 
                     data      = {
-                    				result: {
-                    							message: 'Hotels Data found',
-                    							success: true,
-                    							class: 'Authsuccess',
-                    							result: result
-                    				} 
+                    				
+        							message: 'Hotels Data found',
+        							success: true,
+        							class: 'Authsuccess',
+        							result: result
                     			};
                 }
             response.json(data);

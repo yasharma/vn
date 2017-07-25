@@ -29,7 +29,7 @@ exports.addJot = (request, response) => {
 			}
 		*/
 
-		
+
 
         Jotsave.save(function (err, result) {
                 
@@ -41,26 +41,22 @@ exports.addJot = (request, response) => {
                         completeerror.push(err.errors.jot_title.message);
                     }
                     data      = {
-                    				result: {
-	                    						message: 'Error in Jot Saved',
-	                    						success: true,
-	                    						class: 'Autherror',
-	                    						result:  err
+            						message: 'Error in Jot Saved',
+            						success: true,
+            						class: 'Autherror',
+            						result:  err
 	                    						
-                    				} 
+                    				
                     			};
 
                 }else{
 
                     data      = {
-                    				result: {
-	                    						message: 'Jot Successfully Added',
-	                    						success: true,
-	                    						class: 'Authsuccess',
-	                    						result:  result
-	                    						
-                    				} 
-                    			};
+            						message: 'Jot Successfully Added',
+            						success: true,
+            						class: 'Authsuccess',
+            						result:  result
+	                    		};
                 }
                 
                 response.json(data);
@@ -80,23 +76,20 @@ exports.updateJot = (request, response) => {
 			if(err){
 	            
 	            data = {
-	        				result: {
-	        						message: "Error in jot update",
-	        						success: false,
-	        						class: 'Autherror',
-	        						result: err
-	        				}
+    						message: "Error in jot update",
+    						success: false,
+    						class: 'Autherror',
+    						result: err
+	        			
 	        	};
 	        }else{
 	        	
 	        	data = {
-	        				result: {
-	        						message: "Jot Updated successfully",
-	        						success: true,
-	        						class: 'Authsuccess',
-	        						result: result
-	        						
-	        				}
+    						message: "Jot Updated successfully",
+    						success: true,
+    						class: 'Authsuccess',
+    						result: result
+	        		
 	        	};
 	        	response.json(data);
 	        }
@@ -118,24 +111,21 @@ exports.deleteJot = (request, response) => {
 
 	            
 	            data = {
-	        				result: {
-	        						message: "Error in jot deletion",
-	        						success: false,
-	        						class: 'Autherror',
-	        						result: err
-	        						
-	        				}
+    						message: "Error in jot deletion",
+    						success: false,
+    						class: 'Autherror',
+    						result: err
+	        		
 	        	};
 	        }else{
 
 	        	
 	        	data = {
-	        				result: {
-	        						message: "Jot Deleted successfully",
-	        						success: true,
-	        						class: 'Authsuccess',
-	        						result: result
-	        				}
+    						message: "Jot Deleted successfully",
+    						success: true,
+    						class: 'Authsuccess',
+    						result: result
+	        				
 	        	};
 	        	response.json(data);
 	        }
@@ -171,27 +161,21 @@ exports.listJot = (request, response) => {
 
                    
                     data      = {
-                    				result: {
-		                    				message: 'Error: Something went wrong.',
-		                    				success: false,
-		                    				class: 'Autherror',
-		                    				result: err
-		                    				
-		                    		} 
-                    			};
+                    				message: 'Error: Something went wrong.',
+                    				success: false,
+                    				class: 'Autherror',
+                    				result: err
+		                    	};
 
                 }else{
 
                     
                    data      = {
-                    				result: {
-		                    				message: 'data found related to condition.',
-		                    				success: true,
-		                    				class: 'Authsuccess',
-		                    				result: ressult
-		                    				
-		                    		} 
-                    			};
+                    				message: 'data found related to condition.',
+                    				success: true,
+                    				class: 'Authsuccess',
+                    				result: ressult.result
+		                    	};
                 }
                 
                 response.json(data);
