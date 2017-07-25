@@ -7,6 +7,7 @@ const    jwt         = require('jsonwebtoken'),
          mongoose    = require('mongoose'),
          bodyParser  = require('body-parser'),
          Hotel       = require(path.resolve('models/Hotel')),
+         ObjectId    = mongoose.Types.ObjectId,
          config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));         
 
 
@@ -138,7 +139,9 @@ exports.deleteHotel = (request, response) => {
 exports.listHotel = (request, response) => {
 
         var data            = {};
-        Hotel.find({}, function (err, result) {
+        var user_id 		= request.body.user_id;
+
+        Hotel.find({user_id: ObjectId(user_id)}, function (err, result) {
                 
                 if(err){
                 	

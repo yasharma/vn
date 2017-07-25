@@ -48,7 +48,7 @@ var MemberSchema  = new Schema({
       validator: function(email) {
         return /^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
       },
-      message: '{VALUE} is not a valid email address'
+      message: '{VALUE} is not a valid email address.'
     }
   },
   phone: {

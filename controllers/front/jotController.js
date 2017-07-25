@@ -8,7 +8,7 @@ const    jwt         = require('jsonwebtoken'),
          bodyParser  = require('body-parser'),
          Jot         = require(path.resolve('models/Jot')),
          config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));         
-
+         
 
 
 /********************************

@@ -22,7 +22,7 @@ var HotelSchema  = new Schema({
     }
   },
   user_id: {
-    type: Number,
+    type: String,
     default: false
   },
   hotelname: {
