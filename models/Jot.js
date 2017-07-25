@@ -1,28 +1,40 @@
 var mongoose      = require('mongoose'),
   Schema          = mongoose.Schema,
   path 			      = require('path'),
-  uniqueValidator = require('mongoose-unique-validator'),
   config 			    = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
   crypto 			    = require('crypto');
 
 var JotSchema  = new Schema({
-  
+  image:{
+    name: {
+      type: String,
+      default: 'no-image.jpg'
+    },
+    path: {
+      type: String,
+      default: 'images/'
+    },
+    original_name:  {
+      type: String,
+      default: 'no-image.jpg'
+    }
+  },
   jot_title: {
     type: String,
     trim: true,
-    required: 'Not a valid Jot Title',
+    required: 'Jot Title can not be empty.',
   },
   due_date: {
-    type: Date, 
-    default: Date.now 
+    type: Number, 
+    default: false 
   },
   start_date: {
-    type: Date, 
-    default: Date.now 
+    type: Number, 
+    default: false 
   },
   end_date: {
-    type: Date, 
-    default: Date.now 
+    type: Number, 
+    default: false 
   },
   priority: {
     type: String,
@@ -53,7 +65,7 @@ var JotSchema  = new Schema({
     default: false
   },
   hotel_id: {
-    type: Number,
+    type: String,
     default: false
   },
   recurring: {
@@ -64,12 +76,15 @@ var JotSchema  = new Schema({
     type: Boolean,
     default: false
   }
+},{
+    timestamps: {
+        createdAt: 'created',
+        updatedAt: 'updated'
+    }
 });
 
 JotSchema.set('autoIndex', config.db.autoIndex);
-JotSchema.plugin(uniqueValidator, {
-    type: 'mongoose-unique-validator'
-});
+
 
 var jotCollection   = mongoose.model('jot', JotSchema);
 module.exports      = jotCollection;

@@ -20,20 +20,26 @@ exports.addJot = (request, response) => {
 	    var data            = {};
         var Jotsave         = new Jot(request.body);
 
+        
+        /*
+        	var s = "#Hello, this is a test @john@doe @chintesh_kumar";
+			var re = /(?:^|)@([a-zA-Z_]+)/g, match, matches = [];
+			while (match = re.exec(s)) {
+		  		matches.push(match[1]);
+			}
+		*/
+
+		
+
         Jotsave.save(function (err, result) {
                 
-                var issaved         = false;
-                var message1        = '';
-                var classmsg        = '';
-                var completeerror   = '';
+                var completeerror   = [];
 
                 if(err){
 
                     if(err.errors.jot_title){
-                        completeerror += err.errors.jot_title.message+"\n";
+                        completeerror.push(err.errors.jot_title.message);
                     }
-                     
-                    console.log('Error in Jot Saved');
                     data      = {
                     				result: {
 	                    						message: 'Error in Jot Saved',
@@ -46,7 +52,6 @@ exports.addJot = (request, response) => {
 
                 }else{
 
-                    console.log('Jot Saved Successfully');
                     data      = {
                     				result: {
 	                    						message: 'Jot Successfully Added',
@@ -73,18 +78,17 @@ exports.updateJot = (request, response) => {
 
         Jot.findByIdAndUpdate(Jotid,{$set:request.body}, {new: true}, function(err, result) {
 			if(err){
-	            console.log("Error in jot update");
+	            
 	            data = {
 	        				result: {
 	        						message: "Error in jot update",
 	        						success: false,
 	        						class: 'Autherror',
 	        						result: err
-	        						
 	        				}
 	        	};
 	        }else{
-	        	console.log("Jot Updated successfully");
+	        	
 	        	data = {
 	        				result: {
 	        						message: "Jot Updated successfully",
@@ -103,6 +107,7 @@ exports.updateJot = (request, response) => {
 /****************************************
 **** Function to Delete Existing Jot ****
 *****************************************/
+
 exports.deleteJot = (request, response) => {
 
 	    var data            = {};
@@ -111,7 +116,7 @@ exports.deleteJot = (request, response) => {
         Jot.findByIdAndRemove(Jotid, function(err, result) {
 			if(err){
 
-	            console.log("Error in jot deletion");
+	            
 	            data = {
 	        				result: {
 	        						message: "Error in jot deletion",
@@ -123,14 +128,13 @@ exports.deleteJot = (request, response) => {
 	        	};
 	        }else{
 
-	        	console.log("Jot Deleted successfully");
+	        	
 	        	data = {
 	        				result: {
 	        						message: "Jot Deleted successfully",
 	        						success: true,
 	        						class: 'Authsuccess',
 	        						result: result
-	        						
 	        				}
 	        	};
 	        	response.json(data);
@@ -149,8 +153,7 @@ exports.listJot = (request, response) => {
         var hotel_id        = request.body.hotel_id;
         
         Jot.aggregate([
-                        /*{ $match: {'hotel_id': hotel_id,} 
-                        },*/
+                        { $match: {'hotel_id': hotel_id}},
                         { $group: 
                             { _id: '$jot_type',
                                 jot_data: {
@@ -166,7 +169,7 @@ exports.listJot = (request, response) => {
                 
                 if(err){
 
-                   console.log("Error: No data found");
+                   
                     data      = {
                     				result: {
 		                    				message: 'Error: Something went wrong.',
@@ -179,7 +182,7 @@ exports.listJot = (request, response) => {
 
                 }else{
 
-                    console.log('Get all Jots');
+                    
                    data      = {
                     				result: {
 		                    				message: 'data found related to condition.',

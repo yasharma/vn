@@ -60,6 +60,11 @@ var UserSchema  = new Schema({
   },
   
   salt: { type: String }
+},{
+    timestamps: {
+        createdAt: 'created',
+        updatedAt: 'updated'
+    }
 });
 
 /* Mongoose beforeSave Hook : To hash a password */

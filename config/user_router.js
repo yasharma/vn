@@ -27,6 +27,9 @@ module.exports = {
 	  	{ url: '/create_jot', 	method: ctrls.jotController.addJot, 		type: 'POST' },
 	  	{ url: '/update_jot', 	method: ctrls.jotController.updateJot, 		type: 'POST' },
 	  	{ url: '/delete_jot', 	method: ctrls.jotController.deleteJot, 		type: 'POST' },
-	  	{ url: '/get_jot', 		method: ctrls.jotController.listJot, 		type: 'POST' }
+	  	{ url: '/get_jot', 		method: ctrls.jotController.listJot, 		type: 'POST' },
+	  	
+	  	{ url: '/add_member', 		method: ctrls.memberController.addMember, 		type: 'POST' }
+	  	
 	]
 };

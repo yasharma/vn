@@ -55,7 +55,6 @@ exports.register       = (request, response) => {
 
                 }else{
 
-                    console.log('User registered successfully.');
                     data = {
                     			result: {
                     						message: 'User Successfully registered.',

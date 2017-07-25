@@ -5,7 +5,7 @@ var mongoose      = require('mongoose'),
   config 			    = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
   crypto 			    = require('crypto');
 
-var HotelSchema  = new Schema({
+var MemberSchema  = new Schema({
   
   image:{
     name: {
@@ -21,49 +21,22 @@ var HotelSchema  = new Schema({
       default: 'no-image.jpg'
     }
   },
-  user_id: {
-    type: Number,
-    default: false
-  },
-  hotelname: {
+  first_name: {
     type: String,
     trim: true,
-    required: 'Hotel name can not be empty.',
-    unique: 'The Hotel Name you have entered already exists.',
+    required: 'First name can not be empty.',
   },
-
-  ownername: {
+  last_name: {
     type: String,
     trim: true,
-    required: 'Owner name can not be empty.',
+    required: 'Last name can not be empty.',
   },
-
-  address: {
+  user_name: {
     type: String,
     trim: true,
-    default: false
+    required: 'User name can not be empty.',
+    unique: 'The User Name you have entered already exists.',
   },
-
-  city: {
-    type: String,
-    default: false
-  },
-
-  state: {
-    type: String,
-    default: false
-  },
-
-  country: {
-    type: String,
-    default: false
-  },
-
-  zipcode: {
-    type: Number,
-    default: false
-  },
-
   email: {
     type: String,
     lowercase: true,
@@ -78,47 +51,25 @@ var HotelSchema  = new Schema({
       message: '{VALUE} is not a valid email address'
     }
   },
-
   phone: {
     type: Number,
     default: false
   },
-
-  no_of_guestrooms: {
-    type: Number,
+  department: {
+    type: String,
+    trim: true,
     default: false
   },
-
-  room_no: {
-    type: Number,
+  designation: {
+    type: String,
+    trim: true,
     default: false
   },
-
-  no_of_meetingrooms: {
-    type: Number,
+  role: {
+    type: String,
+    trim: true,
     default: false
   },
-
-  no_of_floors: {
-    type: Number,
-    default: false
-  },
-
-  no_of_employee: {
-    type: Number,
-    default: false
-  },
-
-  vending_area: {
-    type: Boolean,
-    default: false
-  },
-
-  arrangement_type: {
-    type: Boolean,
-    default: false
-  },
-
   status: {
     type: Boolean,
     default: false
@@ -131,10 +82,10 @@ var HotelSchema  = new Schema({
 });
 
 
-HotelSchema.set('autoIndex', config.db.autoIndex);
-HotelSchema.plugin(uniqueValidator, {
+MemberSchema.set('autoIndex', config.db.autoIndex);
+MemberSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'
 });
 
-var hotelCollection = mongoose.model('hotel', HotelSchema);
-module.exports      = hotelCollection;
+var memberCollection = mongoose.model('member', MemberSchema);
+module.exports       = memberCollection;

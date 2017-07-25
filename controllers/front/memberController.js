@@ -6,34 +6,35 @@ const    jwt         = require('jsonwebtoken'),
          path        = require('path'),
          mongoose    = require('mongoose'),
          bodyParser  = require('body-parser'),
-         Hotel       = require(path.resolve('models/Hotel')),
+         Member      = require(path.resolve('models/Member')),
          config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));         
 
 
 
 /********************************
-*** Function to add new hotel ***
+*** Function to add new Member ***
 *********************************/
    
-exports.addHotel = (request, response) => {
+exports.addMember = (request, response) => {
 
 	    var data            = {};
-        var Hotelsave       = new Hotel(request.body);
+        var Membersave       = new Member(request.body);
 
-        Hotelsave.save(function (err, result) {
+        Membersave.save(function (err, result) {
                 
                 var completeerror   = [];
 
                 if(err){
 
-                    if(err.errors.hotelname){
-                        completeerror.push(err.errors.hotelname.message);
+                    if(err.errors.first_name){
+                        completeerror.push(err.errors.first_name.message);
                     }
-
-                    if(err.errors.ownername){
-                        completeerror.push(err.errors.ownername.message);
-                    }                   
-                
+                    if(err.errors.last_name){
+                        completeerror.push(err.errors.last_name.message);
+                    }
+                    if(err.errors.user_name){
+                        completeerror.push(err.errors.user_name.message);
+                    }
                     if(err.errors.email){
                         completeerror.push(err.errors.email.message);
                     }
@@ -48,10 +49,10 @@ exports.addHotel = (request, response) => {
                     			};
 
                 }else{
-                    
+
                     data      = {
                     				result: {
-                    							message: 'Hotel Successfully Added.',
+                    							message: 'Member Successfully Added.',
                     							success: true,
                     							class: 'Authsuccess',
                     							result: result
@@ -65,19 +66,19 @@ exports.addHotel = (request, response) => {
 
 
 /******************************************
-**** Function to Update Existing Hotel ****
+**** Function to Update Existing Member ****
 *******************************************/
-exports.updateHotel = (request, response) => {
+exports.updateMember = (request, response) => {
 
 	    var data            	= {};
-        var hotelid         	= request.body.hotel_id;
+        var Memberid         	= request.body.member_id;
 
-        Hotel.findByIdAndUpdate(hotelid,{$set:request.body}, {new: true}, function(err, result) {
+        Member.findByIdAndUpdate(Memberid,{$set:request.body}, {new: true}, function(err, result) {
 			if(err){
 	            
 	            data = {
 	        				result: {
-	        						message: "Error in Hotel update.",
+	        						message: "Error in Member update.",
 	        						success: false,
 	        						class: 'Autherror',
 	        						result: err
@@ -87,7 +88,7 @@ exports.updateHotel = (request, response) => {
 	        	
 	        	data = {
 	        				result: {
-	        						message: "Hotel Updated successfully.",
+	        						message: "Member Updated successfully.",
 	        						success: true,
 	        						class: 'Authsuccess',
 	        						result: result
@@ -100,32 +101,32 @@ exports.updateHotel = (request, response) => {
 };
 
 /******************************************
-**** Function to Delete Existing Hotel ****
+**** Function to Delete Existing Member ****
 *******************************************/
 
-exports.deleteHotel = (request, response) => {
+exports.deleteMember = (request, response) => {
 
 	    var data            	= {};
-        var hotelid         	= request.body.hotel_id;
+        var Memberid         	= request.body.member_id;
 
-        Hotel.findByIdAndRemove(hotelid, function(err, result) {
+        Member.findByIdAndRemove(Memberid, function(err, result) {
 			if(err){
-	            
+
 	            data = {
 	        				result: {
 
-	        						message: "Error in Hotel deletion.",
+	        						message: "Error in Member deletion.",
 	        						success: false,
 	        						class: 'Autherror',
 	        						result: err
 	        				}
 	        	};
 	        }else{
-	        	
+
 	        	data = {
 	        				result: {
 	        					
-	        						message: "Hotel Deleted successfully.",
+	        						message: "Member Deleted successfully.",
 	        						success: true,
 	        						class: 'Authsuccess',
 	        						result: result
@@ -138,13 +139,13 @@ exports.deleteHotel = (request, response) => {
 };
 
 /********************************
-** Function to list all hotels **
+** Function to list all Members **
 *********************************/
 
-exports.listHotel = (request, response) => {
+exports.listMember = (request, response) => {
 
         var data            = {};
-        Hotel.find({}, function (err, result) {
+        Member.find({}, function (err, result) {
                 
                 if(err){
                 	
@@ -160,7 +161,7 @@ exports.listHotel = (request, response) => {
 
                     data      = {
                     				result: {
-                    							message: 'Hotels Data found',
+                    							message: 'Members Data found',
                     							success: true,
                     							class: 'Authsuccess',
                     							result: result

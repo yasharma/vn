@@ -23,7 +23,7 @@ exports.login           = (request, response) => {
     var data            = {};
 
     if(!email || !password) {
-        console.log("Email/Password not found.");
+        
         data =  {
                     result: {
                                 message: 'Email and password are required',
@@ -38,7 +38,7 @@ exports.login           = (request, response) => {
 
     	User.findOne({email : email}, function (err, res) {
             if( err ){
-                console.log("Email address not found.");
+                
                 data =  {
                             result: {
                                         message: 'Authentication failed.',
@@ -50,7 +50,8 @@ exports.login           = (request, response) => {
                 if(res){
                     // Check for valid password and email address
                     if(res.comparePassword(config.salt, password)){ // check for valid password
-                        console.log("Login Successfull");
+                        
+                        res.password = '';
                         data = {
                                     result:{
                                                 user:res,
@@ -60,7 +61,7 @@ exports.login           = (request, response) => {
                                     } 
                                 };
                     } else {
-                        console.log("Password doesn't matched.");
+                        
                         data =  {
                                     result: {
                                                 message: 'Authentication failed. Wrong password.',
@@ -70,7 +71,7 @@ exports.login           = (request, response) => {
                                 };
                     }
                 }else{ // Email address and password combination not found in DB
-                    console.log("User not found with this information.");
+                    
                     data =  {
                                 result: {
                                             message: 'Authentication failed. You are not registered with HotelJot.',
