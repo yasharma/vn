@@ -5,8 +5,8 @@
 **************************************/
 
 
-app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route',
-	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route) {	
+app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route','toastService',
+	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route,toastService) {	
 
 		/*
 		* Function
@@ -33,7 +33,7 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 				$scope.message = ' ';		
 
 				 var hotelDataObj = {
-				 		user_id     	   : '',
+				 		user_id     	   : localStorageService.get('user')._id,
 						hotelname          : $scope.hotelname,
 						ownername          : $scope.ownername,
 						email              : $scope.email,
@@ -52,19 +52,31 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 						arrangement_type   : $scope.arrangement_t
 				};
 
-				dashboardFactory.post('/api/add_hotel',hotelDataObj).then(function(response){				
-					$scope.message = response.data.result.message;
-					$scope.validateclass = response.data.result.class;
-					if(response.data.result.success)
+				var request={
+						url:window.__API_PATH.ADD_HOTEL,
+						method:"POST",
+						data:hotelDataObj
+					};
+
+				dashboardFactory.hotelCRUD(request).then(function(response){			
+						
+					$scope.message 		 = response.message;
+					$scope.validateclass = response.class;
+					$scope.success 		 = response.success;
+					if(response.success)
 					{
 						$rootScope.hotels.push(hotelDataObj);
 						$mdDialog.cancel();
+						var popup = {"message":response.message,"class":"success"};
+						toastService.alert(popup);
+
 					}				
 
 				});
 
 			} else {
-				$scope.message = 'Please accept  terms and conditions.';
+				$scope.validateclass = 'Autherror';
+				$scope.message = ['Please accept terms and conditions.'];
 			}	
 			
 		};

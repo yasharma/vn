@@ -17,8 +17,11 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-      <body>
-        <header ng-include="'/modules/partials/header.html'"> </header>
+      <body style="height: auto;">
+        <header ng-if="isAuth"><!--@header template--> </header>
+
+        <div class="left_side_menu
+        " ng-class="{'leftopen':leftopen}"   ng-include="'/modules/partials/sidebar.html'"></div>
         <ng-view class="view"> </ng-view>
 
         

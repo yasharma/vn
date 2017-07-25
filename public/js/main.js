@@ -20,6 +20,51 @@ app.run(['$log',function($log){
 	$log.info("Application is running");
 }]);
 
+
+
+
+
+/********************************************************************
+* Global variable and api url
+********************************************************************/
+
+window.__API_PATH={};
+
+__API_PATH.jotList = '/api/get_jot';
+
+/*
+* Login 
+*/
+
+__API_PATH.LOGIN   = '/api/login';
+
+
+/*
+* Register 
+*/
+
+__API_PATH.REGISTER  = '/api/register';
+
+/*
+* Hotels 
+*/
+__API_PATH.GET_HOTELS  = '/api/get_hotels';
+__API_PATH.ADD_HOTEL   = '/api/add_hotel';
+
+/*
+* Jot 
+*/
+
+__API_PATH.JOT_TYPES 	   = [{name:'issue',class:'active',icon:'warning'},{name:'message',class:'',icon:'email'},{name:'task',class:'',icon:'format_list_bulleted'},{name:'note',class:'',icon:'email'},{name:'lost & found',class:'',icon:'call_missed'},{name:'meeting room',class:'',icon:'room'},{name:'vending',class:'',icon:'shopping_cart'}]; 
+
+__API_PATH.JOT_PRIORITY   = [{name:'urgent',class:'urgent orange'},{name:'high',class:'high red'},{name:'medium',class:'medium yellow'},{name:'low',class:'low green'}]; 
+
+__API_PATH.CREATE_JOT = '/api/create_jot';
+__API_PATH.GET_JOT       = '/api/get_jot';
+
+__API_PATH.delete_hotel = '/api/delete_hotel';
+
+
 'use strict';
 
 app.factory('AuthSrv', function () {
@@ -77,22 +122,37 @@ app.config(['$httpProvider', function($httpProvider){
   localStorageServiceProvider.setPrefix(prefix);
 }])
 .run(['$location','$rootScope','localStorageService','AuthSrv',
-	function($location, $rootScope,localStorageService,AuthSrv){
-    	$rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
-            
-    		if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
-    		    console.log('inside if');
+	function($location, $rootScope,localStorageService,AuthSrv){   	
+
+
+        $rootScope.$on("$routeChangeStart", 
+            function (event, nextRoute, currentRoute) {           
+
+            if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
+              
                 AuthSrv.isLogged = 0;
-                console.log(AuthSrv);
-    		    $location.path("/");
-           	}else {
-                console.log('else if');
+              
+                $location.path("/");
+            }else {
+               
                 var token = localStorageService.get('token');
                 if(($location.path() === '/login' || $location.path() === '/') && token ){           
                    $location.path("/dashboard");
                 }
             }
-    	});
+        });
+
+
+        $rootScope.$on("$routeChangeSuccess", 
+            function (event, nextRoute, currentRoute) {
+
+           if(nextRoute.$$route){
+                if(nextRoute.$$route.access){
+                    $rootScope.isAuth= nextRoute.$$route.access;
+               } 
+           }
+            
+        });
     	
     	
     	/* This will logout the user from the application */
@@ -146,14 +206,16 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         templateUrl : "/modules/dashboard/views/dashboard-home.html",
         controller  :  "dashboardController",
         access: {
-            requiredLogin: true
+            requiredLogin: true, 
+            headerType:'hotel_header'
         }
     })
     .when("/dashboard/jot", {
         templateUrl : "/modules/jot/views/dashboard-jot.html",
         controller  :  "jotController",
         access: {
-            requiredLogin: true
+            requiredLogin: true,
+            headerType:'dashboard_header'
         }
     });
    
@@ -170,10 +232,9 @@ app.factory('toastService', ['$mdToast','$timeout', function ($mdToast, $timeout
 				var toast = $mdToast.simple()
 				.textContent(opt.message)
 				.position('bottom right')
-				// .toastClass('fixed '+ opt.class)
+				.toastClass(opt.class)
 				.action('x')
 				.hideDelay(3000);
-				
 
 				$mdToast.show(toast).then(function(response) {
 				    if ( response == 'ok' ) {
@@ -191,62 +252,412 @@ app.factory('toastService', ['$mdToast','$timeout', function ($mdToast, $timeout
 **************************************/
 
 
-app.controller('jotController', ['$scope','$http','$location','$timeout','localStorageService','jotFactory','$rootScope','AuthSrv','$mdDialog',
-	function($scope,$http,$location,$timeout, localStorageService,jotFactory,$rootScope,AuthSrv,$mdDialog) {
+app.controller('dashboardController', ['$scope','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','toastService',
+	function($scope,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,toastService) {	
+
+		/*
+		* Function
+		*
+		* Open popup to add new hotel.
+		*
+		*/
+
+		$scope.openAddHotelPopup = function(){
+			$mdDialog.show({
+				controller:'dashboardPopupController',	          
+				templateUrl: '/modules/dashboard/views/add-new-hotel.tpl.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,
+			})
+			.then(function(answer) {
+			}, function() {
+
+			});
+
+		};
 
 
 
-		/**************************************
-		* Get jot
-		**************************************/
+		/*
+		* Factory method
+		*
+		* Display hotels
+		*
+		*/
 
-		jotFactory.get('/api/get_jot','').then(function(response){
-				
-				$rootScope.jots = response.data;	
-		});	
+		/*var data = {
+				"user_id":localStorageService.get('user')._id
+			};
+		var request={
+				url:window.__API_PATH.GET_HOTELS,
+				method:"POST",
+				data:data
+			};
+		
+		dashboardFactory.hotelCRUD(request).then(function(response){
+			if(response.error){
+			} else {				
+				$rootScope.hotels = response.result;
+			}
+		});*/
 
-		/**************************************
-		* Cteate jot
-		**************************************/	
+
+		/*
+		* Function
+		*
+		* Set hotel id in local storage and redirect to jot related to selected hotel
+		*
+		*/
+		
+
+		$scope.redirectToJot = function(hotelID,hotelName){
+
+			var hotelData  = {
+					'hotel_id'   :hotelID,
+					'hotel_name' :hotelName
+				}
+			localStorageService.set('hotel', hotelData);			
+			$location.path('/dashboard/jot');
+		};
+
+
+		/*
+		* Function
+		*
+		* Delete hotels
+		*
+		*/
+		
+		
+		$scope.deleteHotel = function(event,hotelID){
+
+			var storedHotelID = localStorageService.get('hotel');		
+			if(storedHotelID && storedHotelID.hotel_id == hotelID)
+			{
+				localStorageService.remove('hotel');
+			}	
+
+			var data = {
+				"hotel_id":hotelID
+			};
+			var request={
+					url:window.__API_PATH.delete_hotel,
+					method:"POST",
+					data:data
+				};
+			
+			/*dashboardFactory.hotelCRUD(request).then(function(response){
+				if(response.error){
+				} else {				
+					if(response.success)
+					{
+						var popup = {"message":response.message,"class":"success"};
+						toastService.alert(popup);
+					}
+				}
+			});*/		
+		};
+
+
+	}
+]);
+
+"use strict";
+
+/**************************************
+* Login controller
+**************************************/
+
+
+app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route','toastService',
+	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route,toastService) {	
+
+		/*
+		* Function
+		*
+		* Close popup of new hotel add.
+		*
+		*/
+
+		$scope.close = function(){
+			 $mdDialog.cancel();
+		};
+
+		/*
+		* Factory method
+		*
+		* Add new hotel data
+		*
+		*/
+
+		$scope.addNewHotel = function(){
+			var acceptTerm = $scope.terms;	
+			if(acceptTerm)
+			{
+				$scope.message = ' ';		
+
+				 var hotelDataObj = {
+				 		user_id     	   : localStorageService.get('user')._id,
+						hotelname          : $scope.hotelname,
+						ownername          : $scope.ownername,
+						email              : $scope.email,
+						phone              : $scope.phone,
+						address            : $scope.address,
+						city               : $scope.city,
+						zipcode            : $scope.zipcode,
+						state              : $scope.state,
+						country            : $scope.country,
+						no_of_guestrooms   : $scope.no_of_guestrooms,
+						room_no            : $scope.room_no,
+						vending_area       : $scope.vending_area,
+						no_of_employee     : $scope.no_of_employee,
+						no_of_meetingrooms : $scope.no_of_meetingrooms,
+						no_of_floors       : $scope.no_of_floors,
+						arrangement_type   : $scope.arrangement_t
+				};
+
+				var request={
+						url:window.__API_PATH.ADD_HOTEL,
+						method:"POST",
+						data:hotelDataObj
+					};
+
+				dashboardFactory.hotelCRUD(request).then(function(response){			
+						
+					$scope.message 		 = response.message;
+					$scope.validateclass = response.class;
+					$scope.success 		 = response.success;
+					if(response.success)
+					{
+						$rootScope.hotels.push(hotelDataObj);
+						$mdDialog.cancel();
+						var popup = {"message":response.message,"class":"success"};
+						toastService.alert(popup);
+
+					}				
+
+				});
+
+			} else {
+				$scope.validateclass = 'Autherror';
+				$scope.message = ['Please accept terms and conditions.'];
+			}	
+			
+		};
+		
+	}
+]);
+
+
+
+'use strict';
+
+app.factory('dashboardFactory', ['$http', function ($http) {
+	return{		
+		
+		hotelCRUD: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		},			
+	};
+}]);
+"use strict";
+
+app.controller('createJotCtrl', ['$scope','$location','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','$filter',
+	function($scope,$location, localStorageService,jotFactory,$rootScope,$mdDialog,toastService,$filter) {	
+
+
+		/*
+		* Function
+		*
+		* Cteate jot.
+		*
+		*/
 		$scope.createJot = function(){
+
+			$scope.message = ' ';	
+
+
+			var hotelID = localStorageService.get('hotel');
+
+			var jotDataArray = {
+					jot_title          : $scope.jot_title,
+					priority           : $scope.jot_priority,
+					hotel_id		   : hotelID.hotel_id,
+					jot_type           : $scope.jot_type,
+					due_date   		   : new Date($scope.due_date).getTime(),
+					department		   : $scope.department,
+					assigned_to 	   : $scope.assigned_to		
+			};
+
+			var request={
+				url:window.__API_PATH.CREATE_JOT,
+				method:"POST",
+				data:jotDataArray
+			};
+			
+			jotFactory.jotCRUD(request).then(function(response){
+
+				if(response.success)
+				{
+
+					$mdDialog.cancel();
+					var popup = {"message":response.message,"class":"success"};
+					toastService.alert(popup);
+					
+
+					/******************************************************
+					* Jot object iteration
+					****************************************************/
+
+					var keyFoundInObj = false;
+
+					angular.forEach($rootScope.jots,function(value,index){
+						
+
+						/******************************************************
+						* Check jot type(message,issue etc.) is new or already in object 
+						****************************************************/
+		                if(value._id == $scope.jot_type)
+		                {                	
+		                	value.jot_data.push(jotDataArray);
+		                	keyFoundInObj = true;
+		                }		                
+		            });
+					
+
+		            /******************************************************
+					* Push new jot data if  jot type(message,issue etc.) is not in jot object
+					****************************************************/
+					
+					if(!keyFoundInObj)
+					{
+						var jotDataArrayInObj = [jotDataArray];
+			            var newcreatedJot = {
+				                				"_id"	  :$scope.jot_type,
+				                				"jot_data": jotDataArrayInObj
+						                	};
+			            		                	
+			            $rootScope.jots.push(newcreatedJot);
+		            
+			        }
+
+				}
+			});
+
+		};
+
+		/*
+		* Function
+		*
+		* Close popup of new hotel add.
+		*
+		*/
+
+		$scope.close = function(){
+			 $mdDialog.cancel();
+		};
+
+
+		/*
+		* Function
+		*
+		* Set default jot type when popup open
+		*
+		*/
+
+		$scope.jotList        = window.__API_PATH.JOT_TYPES;
+		$scope.jot_type       = $scope.jotList[0].name;	
+
+		/*
+		* Function
+		*
+		* Set jot type on click
+		*
+		*/
+
+		$scope.jotSelect = function(event,value){
+				
+			$scope.jot_type = value;
+		};
+
+		/*
+		* Function
+		*
+		* Set default jot priority when popup open
+		*
+		*/
+
+		$scope.jotPriorityList 	= window.__API_PATH.JOT_PRIORITY;
+		$scope.jot_priority 	= $scope.jotPriorityList[0].name;
+
+		/*
+		* Function
+		*
+		* Set jot priority type on click
+		*
+		*/
+
+		$scope.selectPriority = function(event,value){
+			 $scope.jot_priority = value;
 		};
 
 	}
 ]);
 
+"use strict";
+
+app.controller('jotController', ['$scope','$location','jotFactory','$rootScope','$mdDialog','localStorageService',
+	function($scope,$location,jotFactory,$rootScope,$mdDialog,localStorageService) {
+
+
+		/**************************************
+		* Get jot list
+		**************************************/
+		var hotel = localStorageService.get('hotel');
+
+		if(!hotel || hotel == ""){
+			$location.path('/dashboard');
+		}
+
+		
+				
+		var request= {
+			url:window.__API_PATH.GET_JOT,
+			method:"post",
+			data:{hotel_id :hotel.hotel_id}
+		};	
+
+		jotFactory.jotCRUD(request)
+		.then(function(response){
+			$rootScope.jots = response.result;
+		});
+
+		
+	}
+]);
+
+
 'use strict';
 
 app.factory('jotFactory', ['$http', function ($http) {
 	return{		
-		get: function(apiUrl, data){
-			return $http.post(apiUrl, data).then(function(response){
-				return response;
+		
+		jotCRUD: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
 			}, function(response){
 				return {
 					errors: response.data.errors
 				};
 			});
-		},
-
-		post: function(apiUrl, data){
-			return $http.post(apiUrl, data).then(function(response){
-				return response.data.result;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		},
-
-		put: function(apiUrl, data){
-			return $http.put(apiUrl, data).then(function(response){
-				return response.data.result;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		}			
+		},					
 	};
 }]);
 "use strict";
@@ -286,7 +697,13 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 					password : $scope.password
 			};	
 
-			loginFactory.login('/api/login',dataObj).then(function(response){				
+			var request={
+					url:window.__API_PATH.LOGIN,
+					method:"POST",
+					data:dataObj
+				};
+
+			loginFactory.login(request).then(function(response){				
 				if(response.errors){
 					//toastService.alert({message: response.errors.message, class: 'error'});
 				} else {
@@ -305,8 +722,7 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 
 
 
-		$scope.openSignupForm = function (obj) {	
-	        			
+		$scope.openSignupForm = function (obj) {
 	           $location.path('/register');    
 		};
 	}
@@ -316,15 +732,113 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 
 app.factory('loginFactory', ['$http', function ($http) {
 	return{		
-		login: function(apiUrl, data){
-			return $http.post(apiUrl, data).then(function(response){
+		
+		login: function(obj){
+			return $http(obj).then(function(response){
 				return response.data.result;
 			}, function(response){
 				return {
 					errors: response.data.errors
 				};
 			});
-		}			
+		},		
+	};
+}]);
+"use strict";
+
+app.controller('headerController', ['$scope','$location','localStorageService','headerFactory','$rootScope','$mdDialog','$route',
+	function($scope,$location,localStorageService,headerFactory,$rootScope,$mdDialog,$route) {	
+
+
+		/*
+		* Factory method
+		*
+		* Display hotels
+		*
+		*/
+		
+		var data = {
+				"user_id":localStorageService.get('user')._id
+			};
+		var request={
+				url:window.__API_PATH.GET_HOTELS,
+				method:"POST",
+				data:data
+			};
+		
+		
+
+		headerFactory.get(request).then(function(response){
+			if(response.error){
+			} else {				
+				$rootScope.hotels = response.result;				
+			}
+		});
+
+
+		/*
+		* Function
+		*
+		* Set hotel id in local storage and redirect to jot related to selected hotel
+		*
+		*/
+		$scope.hotel = localStorageService.get('hotel');
+		$scope.changeJotView = function(hotelID,hotelName){
+			var hotelData  = {
+				'hotel_id':hotelID,
+				'hotel_name':hotelName
+			};
+			localStorageService.set('hotel', hotelData);
+			$scope.hotel = hotelData;
+			$route.reload();
+		};
+
+
+
+
+		/**************************************
+		* Open jot popup
+		**************************************/
+
+		$scope.quickTaskPopup = function(){
+			$mdDialog.show({
+				controller: 'createJotCtrl',
+				templateUrl: '/modules/jot/views/hotel-quick-task.tpl.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
+	}
+]);
+
+"use strict";
+
+app.directive('header',['$rootScope',function($rootScope){
+	return{
+		templateUrl:'/modules/partials/header.html',
+		link: function(scope,ele){}
+	
+	};
+}]);
+
+
+
+app.factory('headerFactory', ['$http', function ($http) {
+	return{	
+		
+		get: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		},			
 	};
 }]);
 "use strict";
@@ -339,21 +853,25 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 
 		$scope.registerUser = function (obj) {
 
-		        var dataObj = {
-						name : $scope.name,
-						email : $scope.email,
-						password : $scope.password
-				};	
+	        var dataObj = {
+					name     : $scope.name,
+					email    : $scope.email,
+					password : $scope.password
+			};
 
-				registerFactory.register('/api/register',dataObj).then(function(response){
-					$scope.result = response.result;
-					
-				});       
+			var request={
+					url:window.__API_PATH.REGISTER,
+					method:"POST",
+					data:dataObj
+				};
+
+			registerFactory.register(request).then(function(response){
+				$scope.result = response.result;
+			});       
 		};	
 
 
-		$scope.openLoginForm = function (obj) {		
-	        			
+		$scope.openLoginForm = function (obj) {	
 	           $location.path('/');    
 		};	
 
@@ -366,164 +884,15 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 
 app.factory('registerFactory', ['$http', function ($http) {
 	return{		
-		register: function(apiUrl, data){
-			return $http.post(apiUrl, data)
-			 .then(function(response){
-				return  response.data;	
-			});
-		}			
-	};
-}]);
-"use strict";
-
-/**************************************
-* Login controller
-**************************************/
-
-
-app.controller('dashboardController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','AuthSrv','$mdDialog',
-	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,AuthSrv,$mdDialog) {	
-
-		/*
-		* Function
-		*
-		* Open popup to add new hotel.
-		*
-		*/
-
-		$scope.openAddHotelPopup = function(){
-			$mdDialog.show({
-				controller:'dashboardPopupController',	          
-				templateUrl: '/modules/dashboard/views/add-new-hotel.tpl.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				clickOutsideToClose:true,
-			})
-			.then(function(answer) {
-			}, function() {
-
-			});
-
-		};
-
-
-
-		/*
-		* Factory method
-		*
-		* Display hotels
-		*
-		*/
-		
-		dashboardFactory.get('/api/get_hotels','').then(function(response){
-			if(response.error){
-			} else {				
-				$rootScope.hotels = response.data;
-			}
-		});
-	}
-]);
-
-
-
-"use strict";
-
-/**************************************
-* Login controller
-**************************************/
-
-
-app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route',
-	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route) {	
-
-		/*
-		* Function
-		*
-		* Close popup of new hotel add.
-		*
-		*/
-
-		$scope.close = function(){
-			 $mdDialog.cancel();
-		};
-
-		/*
-		* Factory method
-		*
-		* Add new hotel data
-		*
-		*/
-
-		$scope.addNewHotel = function(){
-			var acceptTerm = $scope.terms;	
-			if(acceptTerm)
-			{
-				$scope.message = ' ';		
-
-				 var hotelDataObj = {
-				 		user_id     	   : '',
-						hotelname          : $scope.hotelname,
-						ownername          : $scope.ownername,
-						email              : $scope.email,
-						phone              : $scope.phone,
-						address            : $scope.address,
-						city               : $scope.city,
-						zipcode            : $scope.zipcode,
-						state              : $scope.state,
-						country            : $scope.country,
-						no_of_guestrooms   : $scope.no_of_guestrooms,
-						room_no            : $scope.room_no,
-						vending_area       : $scope.vending_area,
-						no_of_employee     : $scope.no_of_employee,
-						no_of_meetingrooms : $scope.no_of_meetingrooms,
-						no_of_floors       : $scope.no_of_floors,
-						arrangement_type   : $scope.arrangement_t
-				};
-
-				dashboardFactory.post('/api/add_hotel',hotelDataObj).then(function(response){				
-					$scope.message = response.data.result.message;
-					$scope.validateclass = response.data.result.class;
-					if(response.data.result.success)
-					{
-						$rootScope.hotels.push(hotelDataObj);
-						$mdDialog.cancel();
-					}				
-
-				});
-
-			} else {
-				$scope.message = 'Please accept  terms and conditions.';
-			}	
-			
-		};
-		
-	}
-]);
-
-
-
-'use strict';
-
-app.factory('dashboardFactory', ['$http', function ($http) {
-	return{		
-		post: function(apiUrl, data){
-			return $http.post(apiUrl, data).then(function(response){
-				return response;
+	
+		register: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
 			}, function(response){
 				return {
 					errors: response.data.errors
 				};
 			});
-		},
-
-		get: function(apiUrl, data){			
-			return $http.post(apiUrl, data).then(function(response){
-				return response;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		}			
+		},		
 	};
 }]);

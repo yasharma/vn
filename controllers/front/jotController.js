@@ -150,12 +150,13 @@ exports.listJot = (request, response) => {
                                     $push: {
                                         jot_title: '$jot_title',
                                         priority: '$priority',
-                                        status: '$status'
+                                        status: '$status',
+                                        due_date: '$due_date'
                                     }
                                 } 
                             } 
                         }
-                    ], function (err, ressult) {
+                    ], function (err, result) {
                 
                 if(err){
 
@@ -171,10 +172,10 @@ exports.listJot = (request, response) => {
 
                     
                    data      = {
-                    				message: 'data found related to condition.',
+                    				message: 'Data found related to condition.',
                     				success: true,
                     				class: 'Authsuccess',
-                    				result: ressult.result
+                    				result: result
 		                    	};
                 }
                 

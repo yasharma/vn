@@ -19,3 +19,7 @@ var app = angular.module('hoteljotApp',[
 app.run(['$log',function($log){
 	$log.info("Application is running");
 }]);
+
+
+
+

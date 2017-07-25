@@ -1,29 +1,32 @@
 "use strict";
 
-/**************************************
-* Login controller
-**************************************/
-
-
-app.controller('jotController', ['$scope','$http','$location','$timeout','localStorageService','jotFactory','$rootScope','AuthSrv','$mdDialog',
-	function($scope,$http,$location,$timeout, localStorageService,jotFactory,$rootScope,AuthSrv,$mdDialog) {
-
+app.controller('jotController', ['$scope','$location','jotFactory','$rootScope','$mdDialog','localStorageService',
+	function($scope,$location,jotFactory,$rootScope,$mdDialog,localStorageService) {
 
 
 		/**************************************
-		* Get jot
+		* Get jot list
 		**************************************/
+		var hotel = localStorageService.get('hotel');
 
-		jotFactory.get('/api/get_jot','').then(function(response){
+		if(!hotel || hotel == ""){
+			$location.path('/dashboard');
+		}
+
+		
 				
-				$rootScope.jots = response.data;	
-		});	
+		var request= {
+			url:window.__API_PATH.GET_JOT,
+			method:"post",
+			data:{hotel_id :hotel.hotel_id}
+		};	
 
-		/**************************************
-		* Cteate jot
-		**************************************/	
-		$scope.createJot = function(){
-		};
+		jotFactory.jotCRUD(request)
+		.then(function(response){
+			$rootScope.jots = response.result;
+		});
 
+		
 	}
 ]);
+

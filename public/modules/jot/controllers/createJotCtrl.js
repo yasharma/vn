@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('createJotCtrl', ['$scope','$http','$location','$timeout','localStorageService','jotFactory','$rootScope','AuthSrv','$mdDialog','toastService',
-	function($scope,$http,$location,$timeout, localStorageService,jotFactory,$rootScope,AuthSrv,$mdDialog,toastService) {	
+app.controller('createJotCtrl', ['$scope','$location','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','$filter',
+	function($scope,$location, localStorageService,jotFactory,$rootScope,$mdDialog,toastService,$filter) {	
 
 
 		/*
@@ -12,24 +12,37 @@ app.controller('createJotCtrl', ['$scope','$http','$location','$timeout','localS
 		*/
 		$scope.createJot = function(){
 
-			$scope.message = ' ';		
+			$scope.message = ' ';	
+
+
+			var hotelID = localStorageService.get('hotel');
 
 			var jotDataArray = {
 					jot_title          : $scope.jot_title,
-					priority           : 'high',
-					jot_type           : $scope.jot_type				
+					priority           : $scope.jot_priority,
+					hotel_id		   : hotelID.hotel_id,
+					jot_type           : $scope.jot_type,
+					due_date   		   : new Date($scope.due_date).getTime(),
+					department		   : $scope.department,
+					assigned_to 	   : $scope.assigned_to		
 			};
 
-			jotFactory.post(CREATE_JOT_API_URL,jotDataArray).then(function(response){
+			var request={
+				url:window.__API_PATH.CREATE_JOT,
+				method:"POST",
+				data:jotDataArray
+			};
+			
+			jotFactory.jotCRUD(request).then(function(response){
 
-				if(response.result.success)
+				if(response.success)
 				{
 
 					$mdDialog.cancel();
-					var popup = {"message":response.result.message,"class":"success"};
+					var popup = {"message":response.message,"class":"success"};
 					toastService.alert(popup);
 					
-					
+
 					/******************************************************
 					* Jot object iteration
 					****************************************************/
@@ -51,8 +64,7 @@ app.controller('createJotCtrl', ['$scope','$http','$location','$timeout','localS
 					
 
 		            /******************************************************
-					* Push new jot data if  jot type(message,issue etc.) is not in jot 
-					  object
+					* Push new jot data if  jot type(message,issue etc.) is not in jot object
 					****************************************************/
 					
 					if(!keyFoundInObj)
@@ -91,8 +103,8 @@ app.controller('createJotCtrl', ['$scope','$http','$location','$timeout','localS
 		*
 		*/
 
-		$scope.jotList = JOT_TYPES;
-		$scope.jot_type = $scope.jotList[0].name;
+		$scope.jotList        = window.__API_PATH.JOT_TYPES;
+		$scope.jot_type       = $scope.jotList[0].name;	
 
 		/*
 		* Function
@@ -102,7 +114,29 @@ app.controller('createJotCtrl', ['$scope','$http','$location','$timeout','localS
 		*/
 
 		$scope.jotSelect = function(event,value){
-			 $scope.jot_type = value;
+				
+			$scope.jot_type = value;
+		};
+
+		/*
+		* Function
+		*
+		* Set default jot priority when popup open
+		*
+		*/
+
+		$scope.jotPriorityList 	= window.__API_PATH.JOT_PRIORITY;
+		$scope.jot_priority 	= $scope.jotPriorityList[0].name;
+
+		/*
+		* Function
+		*
+		* Set jot priority type on click
+		*
+		*/
+
+		$scope.selectPriority = function(event,value){
+			 $scope.jot_priority = value;
 		};
 
 	}

@@ -19,7 +19,7 @@ module.exports = {
 	  	{ url: '/register', 	method: ctrls.registerController.register, 	type: 'POST' },
 	  	{ url: '/login', 		method: ctrls.loginController.login, 		type: 'POST' },
 	  	
-	  	{ url: '/add_hotels', 	method: ctrls.hotelController.addHotel, 	type: 'POST' },
+	  	{ url: '/add_hotel', 	method: ctrls.hotelController.addHotel, 	type: 'POST' },
 	  	{ url: '/update_hotel', method: ctrls.hotelController.updateHotel, 	type: 'POST' },
 	  	{ url: '/delete_hotel', method: ctrls.hotelController.deleteHotel, 	type: 'POST' },
 	  	{ url: '/get_hotels', 	method: ctrls.hotelController.listHotel, 	type: 'POST' },

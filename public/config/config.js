@@ -47,22 +47,37 @@ app.config(['$httpProvider', function($httpProvider){
   localStorageServiceProvider.setPrefix(prefix);
 }])
 .run(['$location','$rootScope','localStorageService','AuthSrv',
-	function($location, $rootScope,localStorageService,AuthSrv){
-    	$rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
-            
-    		if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
-    		    console.log('inside if');
+	function($location, $rootScope,localStorageService,AuthSrv){   	
+
+
+        $rootScope.$on("$routeChangeStart", 
+            function (event, nextRoute, currentRoute) {           
+
+            if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
+              
                 AuthSrv.isLogged = 0;
-                console.log(AuthSrv);
-    		    $location.path("/");
-           	}else {
-                console.log('else if');
+              
+                $location.path("/");
+            }else {
+               
                 var token = localStorageService.get('token');
                 if(($location.path() === '/login' || $location.path() === '/') && token ){           
                    $location.path("/dashboard");
                 }
             }
-    	});
+        });
+
+
+        $rootScope.$on("$routeChangeSuccess", 
+            function (event, nextRoute, currentRoute) {
+
+           if(nextRoute.$$route){
+                if(nextRoute.$$route.access){
+                    $rootScope.isAuth= nextRoute.$$route.access;
+               } 
+           }
+            
+        });
     	
     	
     	/* This will logout the user from the application */

@@ -35,7 +35,13 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 					password : $scope.password
 			};	
 
-			loginFactory.login('/api/login',dataObj).then(function(response){				
+			var request={
+					url:window.__API_PATH.LOGIN,
+					method:"POST",
+					data:dataObj
+				};
+
+			loginFactory.login(request).then(function(response){				
 				if(response.errors){
 					//toastService.alert({message: response.errors.message, class: 'error'});
 				} else {
@@ -54,8 +60,7 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 
 
 
-		$scope.openSignupForm = function (obj) {	
-	        			
+		$scope.openSignupForm = function (obj) {
 	           $location.path('/register');    
 		};
 	}

@@ -8,10 +8,9 @@ app.factory('toastService', ['$mdToast','$timeout', function ($mdToast, $timeout
 				var toast = $mdToast.simple()
 				.textContent(opt.message)
 				.position('bottom right')
-				// .toastClass('fixed '+ opt.class)
+				.toastClass(opt.class)
 				.action('x')
 				.hideDelay(3000);
-				
 
 				$mdToast.show(toast).then(function(response) {
 				    if ( response == 'ok' ) {

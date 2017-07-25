@@ -29,14 +29,16 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         templateUrl : "/modules/dashboard/views/dashboard-home.html",
         controller  :  "dashboardController",
         access: {
-            requiredLogin: true
+            requiredLogin: true, 
+            headerType:'hotel_header'
         }
     })
     .when("/dashboard/jot", {
         templateUrl : "/modules/jot/views/dashboard-jot.html",
         controller  :  "jotController",
         access: {
-            requiredLogin: true
+            requiredLogin: true,
+            headerType:'dashboard_header'
         }
     });
    

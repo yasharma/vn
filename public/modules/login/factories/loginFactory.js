@@ -2,14 +2,15 @@
 
 app.factory('loginFactory', ['$http', function ($http) {
 	return{		
-		login: function(apiUrl, data){
-			return $http.post(apiUrl, data).then(function(response){
+		
+		login: function(obj){
+			return $http(obj).then(function(response){
 				return response.data.result;
 			}, function(response){
 				return {
 					errors: response.data.errors
 				};
 			});
-		}			
+		},		
 	};
 }]);

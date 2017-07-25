@@ -2,11 +2,15 @@
 
 app.factory('registerFactory', ['$http', function ($http) {
 	return{		
-		register: function(apiUrl, data){
-			return $http.post(apiUrl, data)
-			 .then(function(response){
-				return  response.data;	
+	
+		register: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
 			});
-		}			
+		},		
 	};
 }]);

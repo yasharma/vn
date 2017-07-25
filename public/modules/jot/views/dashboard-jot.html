@@ -1,86 +1,8 @@
 <div class="dash-main-con">
-<!-- header -->
-<div class="dash_home_header clearfix">
-	<duv class="dash_home_header_logo_center">
-		<a href="javascript:;"><img src="assets/images/circle-logo.png"></a>
-	</duv>
-	<div class="pull-left">
-		<div class="clearfix">
-			<div class="hotel_drop" layout="row" layout-align="space-between center">Hotel 1 
-				<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
-			</div>
-			<div class="heder_srch">
-			</div>
-		</div>
-	</div>
-	<duv class="dash_home_header_menu pull-right">
-		<div class="clearfix">
-		<ul class="dash_hotel_menu_list pull-left">
-			<li><a href="javascript:;">Dashboard</a></li>
-			<li><a href="javascript:;">Meeting Room</a></li>
-			<li><a href="javascript:;">Vending</a></li>
-			<li><a href="javascript:;">Lost &amp; Found</a></li>
-		</ul>                         
-		<ul class="dash_home_header_menu_list pull-left">
-			<li class="noti_icon positionrel">
-				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
-				<small class="notification-badge">5</small>
-			</li>
-			<li class="usermenu">
-				<md-menu md-position-mode="target-right target " md-offset="0 80" >
-		          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
-		          	<i class="user_dp_header"><img src="assets/images/user_dp_header.png"></i>
-		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
-		          </md-button>
-		          <md-menu-content width="3" >
-		            <md-menu-item ng-repeat="item in [1]">
-		              <md-button ng-click="clearToken(); announceClick($index)">
-		                  <div layout="row">
-		                    <p>Logout</p>
-		                    <md-icon md-menu-align-target md-svg-icon="call:portable-wifi-off" style="margin: auto 3px auto 0;"></md-icon>
-		                  </div>
-		              </md-button>
-		            </md-menu-item>
-		          </md-menu-content>
-		        </md-menu>
-			</li>
-		</ul>
-		</div>
-	</duv>
-</div>
 
-
-
-
-<!--End header -->
 <!--middle panel -->
 <section class="dashrightsection">
-	<div class="left_side_menu">
-		<div class="toogle_menu">
-			<!-- <span>dashboard</span> -->
-			<ng-md-icon icon="menu" class="cursor" style="fill:white" size="24"></ng-md-icon> 
-		</div>
-		<div class="toogle_menu_list">
-			<ul>
-				<li>
-					<ng-md-icon icon="email" class="cursor" style="fill:#a3a3a3" size="24"></ng-md-icon> 
-					<span></span>
-				</li>
-				<li>
-					<ng-md-icon icon="insert_drive_file" class="cursor" style="fill:#a3a3a3" size="24"></ng-md-icon> 
-					<span></span>
-				</li>
-				<li>
-					<ng-md-icon icon="business" class="cursor" style="fill:#a3a3a3" size="24"></ng-md-icon> 
-					<span></span>
-				</li>
-				<li>
-					<ng-md-icon icon="settings" class="cursor" style="fill:#a3a3a3" size="24"></ng-md-icon> 
-					<span></span>
-				</li>
-			</ul>
-		</div>
-	</div>
+	
 	<div class="dash_hd_hotel" >
 		<div layout="row" layout-align="space-between center">
 			<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
@@ -104,21 +26,23 @@
 	</div>
 	<div class="clearfix row">
 
-		<div  ng-if="jots==''">
-		  <div class="noresult">There is not jot available.</div>
-		</div>
+		
 
 		<div class="col-lg-3 col-md-6" ng-repeat = 'jot in jots'>
 			<div class="add_hotel_top" md-whiteframe="6">
 				<div class="add_hotel_icon">
+					
 					<ng-md-icon icon="email" style="fill:#a3a3a3" size="24"></ng-md-icon>
-					{{jot._id}}
+
+					<label ng-if="jot._id" class="capitalize">					
+					{{jot._id != 'false' && jot._id || 'Notype' }}
+					<label>
 				</div>
 
 				<div class="add_hotel_room mar-bot20" ng-repeat = 'jotMessage in jot.jot_data'>
 					<div class="add_hotel_room_inner">
 						<div class="room_change" layout="row" layout-align="space-between center">
-							<Span>{{jotMessage.jot_title}}</Span>
+							<Span class="capitalize">{{jotMessage.jot_title}}</Span>
 							<ng-md-icon icon="mode_edit" style="fill:#4d4d4d" size="18"></ng-md-icon> 
 						</div>
 						<ul class="taginglist clearfix">
@@ -128,7 +52,11 @@
 							<li>change room</li>
 						</ul>
 						<ul class="tim_list clearfix">
-							<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>Jul 19 </li>
+							<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+
+								{{ jotMessage.due_date | date: 'MMM d, y'}}
+
+							</li>
 							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
 							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
 							<li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
@@ -138,7 +66,7 @@
 						</ul>
 					</div>
 					<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
-						<span class="highttag">High</span>
+						<span class="highttag capitalize {{jotMessage.priority}}">{{jotMessage.priority}}</span>
 						<span class="yellowtag">Open</span>
 					</div>
 				</div>
@@ -147,7 +75,9 @@
 				<div class="cretejot_hotel"><a href="javascript:;"> Create a Jot </a></div>
 			</div>
 		</div>
-
+		<!-- <div  ng-if="jots==''">
+		  <div class="noresult">There is not jot available.</div>
+		</div> -->
 
 	
 		

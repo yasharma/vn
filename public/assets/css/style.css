@@ -1,3 +1,27 @@
+.orange, .add_hotel_room_proty .urgent {
+  background: orange none repeat scroll 0 0 !important;
+  color: #fff !important;
+}
+
+.red, .add_hotel_room_proty .high{
+  background: #de4a35 none repeat scroll 0 0 !important;
+  color: #fff !important;
+}
+
+.yellow ,.add_hotel_room_proty .medium{
+  background: #ffbb42 none repeat scroll 0 0 !important;
+  color: #fff !important;
+}
+
+.green,.add_hotel_room_proty .low {
+  background: green none repeat scroll 0 0 !important;
+  color: #fff !important;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
 body {
   background: #4ebdf6 none repeat scroll 0 0;
 }
@@ -75,3 +99,31 @@ div.white-space-pre-line {
 .result.Autherror ul {
   margin-top: 5px;
 }
+
+md-toast.success .md-toast-content {
+    background: #61bd4f none repeat scroll 0 0;
+}
+.newhotel_dialog_form md-input-container {
+  margin: 13px 0 11px;
+}
+
+.jot_prity > li > a,.Jot_type > li > a {
+  text-transform: capitalize;
+}
+.delete_hotel {
+  cursor: pointer;
+  position: absolute;
+  right: 22px;
+  top: 27px;
+}
+
+
+.hideHotel {
+  transition: all linear 0.5s;
+}
+
+.ng-hide {
+  background-color: transparent;
+  opacity:0;
+}
+

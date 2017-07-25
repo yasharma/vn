@@ -1,46 +1,11 @@
 <!-- header -->
-<div class="dash_home_header clearfix" ng-if="isAuth.headerType=='hotel_header'" ng-controller="headerController">
-	<duv class="dash_home_header_logo pull-left">
-		<a href="javascript:;"><img src="assets/images/dash-logo.png"></a>
-	</duv>
-	<duv class="dash_home_header_menu pull-right">
-		<ul class="dash_home_header_menu_list">
-			<li class="noti_icon positionrel">
-				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
-				<small class="notification-badge">5</small>
-			</li>
-			<li class="usermenu">
-				<md-menu md-position-mode="target-right target" md-offset="0 80">
-		          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
-		          	<i class="user_dp_header"><img src="assets/images/user_dp_header.png"></i>
-		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
-		          </md-button>
-		          <md-menu-content width="3" >
-		            <md-menu-item ng-repeat="item in [1]">
-		              <md-button ng-click="clearToken(); announceClick($index)">
-		                  <div layout="row">
-		                    <p>Logout</p>
-		                    <md-icon md-menu-align-target md-svg-icon="call:portable-wifi-off" style="margin: auto 3px auto 0;"></md-icon>
-		                  </div>
-		              </md-button>
-		            </md-menu-item>
-		          </md-menu-content>
-		        </md-menu>
-			</li>
-		</ul>
-	</duv>
-</div>
-<!--End header -->
-
-
-<!-- header -->
-<div class="dash_home_header clearfix" ng-if="isAuth.headerType=='dashboard_header'" ng-controller="headerController">
+<div class="dash_home_header clearfix">
 	<duv class="dash_home_header_logo_center">
 		<a href="javascript:;" ng-click="quickTaskPopup()"><img src="assets/images/circle-logo.png"></a>
 	</duv>
 	<div class="pull-left">
 		<div class="clearfix">
-			<div class="hotel_drop" layout="row" layout-align="space-between center">{{hotel.hotel_name}} 				
+			<div class="hotel_drop" layout="row" layout-align="space-between center">Hotel 1 				
 
 				<md-menu md-position-mode="target-right target " md-offset="0 68" >
 				  <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
@@ -48,9 +13,9 @@
 		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
 		          </md-button>
 
-				  <md-menu-content width="4">
+				  <md-menu-content width="3">
 				    <md-menu-item ng-repeat="hotel in hotels">
-				      <md-button ng-click="changeJotView(hotel._id,hotel.hotelname)">
+				      <md-button ng-click="">
 				          <div layout="row">
 				            <p>{{hotel.hotelname}}</p>
 				            <md-icon md-menu-align-target md-svg-icon="call:portable-wifi-off" style="margin: auto 3px auto 0;"></md-icon>
@@ -61,6 +26,11 @@
 
 				</md-menu>
 			</div>
+
+			
+
+
+
 
 			<div class="heder_srch">
 			</div>
