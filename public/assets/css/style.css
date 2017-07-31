@@ -127,3 +127,20 @@ md-toast.success .md-toast-content {
   opacity:0;
 }
 
+.chiildchecklist {
+  margin-left: 35px;
+}
+
+.error {
+    color: red;
+    opacity: 0.8;
+    padding: 16px 0 0 0;
+}
+
+.nested .nested {
+    margin-left: 20px;
+}
+
+.uploadimage_list > li .imgcon {
+    cursor: pointer;
+}

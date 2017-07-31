@@ -1,0 +1,16 @@
+<div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+<div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+ 
+<div class="clearfix mar-bot20"  ng-controller="jotQuickCtlr">
+    <div class="col-md-12">
+    <div class="jot_prity_txt">Jot Type: </div>
+    <ul class="Jot_type clearfix">	
+
+        <li ng-repeat="jotType in jotList">
+             <a href="javascript:void(0);" ng-class="{active : jot_type === jotType.name}" ng-click='jotSelect($event,jotType.name)'>{{jotType.name}}</a>            
+         </li>
+    </ul>   
+    </div>
+   <input type="hidden" name="jot_type" value="{{jot_type}}" ng-model="jot_type"> 
+</div>

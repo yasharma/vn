@@ -7,6 +7,7 @@ const    jwt         = require('jsonwebtoken'),
          mongoose    = require('mongoose'),
          bodyParser  = require('body-parser'),
          users       = require(path.resolve('models/User')),
+         response    = require(path.resolve('./config/lib/response')),
          config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));         
 
 
@@ -14,61 +15,23 @@ const    jwt         = require('jsonwebtoken'),
 * Register controller
 ******************************************/
 
-exports.register       = (request, response) => {	
-	var name           = request.body.name;
-	var email          = request.body.email;
-	var password       = request.body.password;
+exports.register       = (reqst, respe) => {
+	var name           = reqst.body.name;
+	var email          = reqst.body.email;
+	var password       = reqst.body.password;
     var data           = {};
     
+    users.find({email : email}, function (err, res) {
+        var usersave = new users(reqst.body);
+        usersave.save(function (err, result) {
+            if(result){
+                respe.json(response.success(result,'Member Registered Successfully.'));
+            }else{
+                respe.json(response.errors(err.errors,'Error in Member Registration.'));
+            }
 
-	users.find({email : email}, function (err, res) {
-       
-        var usersave = new users(request.body);
-		usersave.save(function (err, result) {
-            
-                var completeerror = [];
-
-                if(err){
-
-                    if(err.errors.name){
-                        completeerror.push(err.errors.name.message);
-                    }                   
-                
-                    if(err.errors.email){
-                        completeerror.push(err.errors.email.message);
-                    }
-
-                    if(err.errors.password){
-                        completeerror.push(err.errors.password.message);
-                    }
-                   
-                    
-                    message1  = completeerror;
-                    data = {
-                    				result: {
-	                    					message: message1,
-	                    					success: false,
-	                    					class: 'Autherror',
-	                    					result: err
-                    				} 
-                    		};
-
-                }else{
-
-                    data = {
-                    			result: {
-                    						message: 'User Successfully registered.',
-                    						success: true,
-                    						class: 'Authsuccess',
-                    						result: result
-                    					} 
-                    		};
-                }
-                
-            response.json(data);
-		});
+        });
     });
-	
 };
 
 

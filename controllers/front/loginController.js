@@ -6,7 +6,8 @@ const    jwt         = require('jsonwebtoken'),
          path        = require('path'),
          mongoose    = require('mongoose'),
          bodyParser  = require('body-parser'),
-         User       = require(path.resolve('models/User')),
+         User        = require(path.resolve('models/User')),
+         response    = require(path.resolve('./config/lib/response')),
          config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));         
 
 
@@ -15,77 +16,35 @@ const    jwt         = require('jsonwebtoken'),
 ***Function to check login credentials of user***
 *************************************************/
    
-exports.login           = (request, response) => {
+exports.login           = (reqst, respe) => {
 
-	var email           = request.body.email;
-	var password        = request.body.password;
-    let token           = jwt.sign(request.body, config.secret, {expiresIn: '1 day'});
-    var data            = {};
+    var email           = reqst.body.email;
+    var password        = reqst.body.password;
+    let token           = jwt.sign(reqst.body, config.secret, {expiresIn: '1 day'});
+    var logged_in_data  = {};
 
     if(!email || !password) {
-        
-        data =  {
-                    result: {
-                                message: 'Email and password are required',
-                                success: false,
-                                class: 'Autherror'
-                    } 
-                };
-
-        response.json(data);
-
+        return respe.json(response.errors({},'Email and password are required.'));
     }else{
-
-    	User.findOne({email : email}, function (err, res) {
-            if( err ){
-                
-                data =  {
-                            result: {
-                                        message: 'Authentication failed.',
-                                        success: false,
-                                        class: 'Autherror'
-                            }
-                        };
-            } else {
-                if(res){
-                    // Check for valid password and email address
-                    if(res.comparePassword(config.salt, password)){ // check for valid password
-                        
-                        res.password = '';
-                        data = {
-                                    result:{
-                                                user:res,
-                                                token:token,
-                                                success: true,
-                                                class: 'Authsuccess'
-                                    } 
-                                };
-                    } else {
-                        
-                        data =  {
-                                    result: {
-                                                message: 'Authentication failed. Wrong password.',
-                                                success: false,
-                                                class: 'Autherror'
-                                    } 
-                                };
-                    }
-                }else{ // Email address and password combination not found in DB
-                    
-                    data =  {
-                                result: {
-                                            message: 'Authentication failed. You are not registered with HotelJot.',
-                                            success: false,
-                                            class: 'Autherror'
-                                } 
+        
+        User.findOne({email : email}, function (err, result) {
+            if(result){
+                if(result.comparePassword(config.salt, password)){
+                    result.password = '';
+                    logged_in_data = {
+                                token : token,
+                                user  : result
                             };
+                    respe.json(response.success(logged_in_data,'Member Logged-In successfully.'));
+                }else{
+                    respe.json(response.errors({},"Authentication failed. Wrong password."));
                 }
+                
+            }else{
+                respe.json(response.errors(err,"Authentication failed. You are not registered with HotelJot."));
             }
-        response.json(data);
-
         });
     }
-	
 };
 
 /*****************************************

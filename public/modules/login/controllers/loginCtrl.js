@@ -41,14 +41,15 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 					data:dataObj
 				};
 
-			loginFactory.login(request).then(function(response){				
+			loginFactory.login(request).then(function(response){	
+
 				if(response.errors){
 					//toastService.alert({message: response.errors.message, class: 'error'});
 				} else {
-					if(response.success)
+					if(response.status == 1)
 					{
-						localStorageService.set('token', response.token);
-						localStorageService.set('user', response.user);
+						localStorageService.set('token', response.result.token);
+						localStorageService.set('user', response.result.user);
 						AuthSrv.isLogged = true;
 						$location.path('/dashboard');
 					}

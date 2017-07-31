@@ -6,7 +6,8 @@ var app = angular.module('hoteljotApp',[
 			'ngMaterial',
 			'ngRoute',
 			'LocalStorageModule',
-			'ngMdIcons'	
+			'ngMdIcons'	,
+			'ngFileUpload'
 			])
 
 .config(['localStorageServiceProvider',
@@ -55,6 +56,8 @@ __API_PATH.ADD_HOTEL   = '/api/add_hotel';
 * Jot 
 */
 
+__API_PATH.UPLOAD_FILE  = '/api/uploadfile';
+
 __API_PATH.JOT_TYPES 	   = [{name:'issue',class:'active',icon:'warning'},{name:'message',class:'',icon:'email'},{name:'task',class:'',icon:'format_list_bulleted'},{name:'note',class:'',icon:'email'},{name:'lost & found',class:'',icon:'call_missed'},{name:'meeting room',class:'',icon:'room'},{name:'vending',class:'',icon:'shopping_cart'}]; 
 
 __API_PATH.JOT_PRIORITY   = [{name:'urgent',class:'urgent orange'},{name:'high',class:'high red'},{name:'medium',class:'medium yellow'},{name:'low',class:'low green'}]; 
@@ -64,6 +67,20 @@ __API_PATH.GET_JOT       = '/api/get_jot';
 
 __API_PATH.delete_hotel = '/api/delete_hotel';
 
+
+__API_PATH.JOT_TAB 	   = [{name:'Quick Jot',id:'quick',src:'assets/images/logo_pic.png',icontype:'image'},{name:'Issue',id:'issue',src:'warning',icontype:'icon'},{name:'Task',id:'task',src:'format_list_bulleted',icontype:'icon'},{name:'Note',id:'note',src:'insert_drive_file',icontype:'icon'},{name:'lost & found',id:'lost&found',src:'local_drink',icontype:'icon'},{name:'Vending Machine',id:'vending_machine',src:'vignette',icontype:'icon'},{name:'Meeting Room',id:'meeting_room',src:'group',icontype:'icon'}]; 
+
+
+__API_PATH.DEFAULT_CHECKLIST 	= [
+										{
+											name   :"Prepare Room 7 AM @Jon",
+											sublist:[{name:"tea1"},{name:"tea2"}]
+										},
+										{
+											name   :"Prepare Room 7 AM @Jon2",
+											sublist:[{name:"tea3"},{name:"tea4"}]
+										}			
+									]; 
 
 'use strict';
 
@@ -316,7 +333,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 			var hotelData  = {
 					'hotel_id'   :hotelID,
 					'hotel_name' :hotelName
-				}
+				};
 			localStorageService.set('hotel', hotelData);			
 			$location.path('/dashboard/jot');
 		};
@@ -343,8 +360,8 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 			};
 			var request={
 					url:window.__API_PATH.delete_hotel,
-					method:"POST",
-					data:data
+					method:"DELETE",
+					params:data
 				};
 			
 			/*dashboardFactory.hotelCRUD(request).then(function(response){
@@ -469,7 +486,322 @@ app.factory('dashboardFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
-app.controller('createJotCtrl', ['$scope','$location','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','$filter',
+app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','localStorageService',
+	function($scope,$rootScope,Upload,$timeout,localStorageService) {
+
+
+		/*
+		*
+		* Set default jot type
+		*
+		*/		
+		$rootScope.jot_type = 'issue';
+
+		/*
+		* Default checklist
+		*/
+
+		$scope.checkList = window.__API_PATH.DEFAULT_CHECKLIST;
+
+
+		/**********************************************************
+		* Store value of checklist on change to add item in checklist
+		**********************************************************/
+
+
+		var selectedCheckBox = [];	
+		$scope.lookup = function (selectedItem, list) {
+			if( selectedItem ) {
+				selectedCheckBox.push(list.name);
+			} else {
+				selectedCheckBox = selectedCheckBox.filter(function( obj ) {
+				    return obj != list.name;
+				});
+			}
+
+
+		};
+
+		/***********************************************************************
+		* Store value of checklist on change of checklist checkbox to save items
+		***********************************************************************/
+		var CheckBoxValue =  [];	
+		$scope.storeValue = function(checkListType,currentValue,isCheck,parantValue){
+
+
+			/**************************
+			* Parent item List 
+			*************************/
+
+			if(checkListType == 'parentlist')				
+			{
+				var  parentItem = {
+								name   :currentValue,
+								sublist:[]
+							};
+
+				if(isCheck)
+				{
+					/*********** Push value on check  *********/
+
+					CheckBoxValue.push(parentItem);		
+				} else {
+
+					/*********** Remove value on uncheck  *********/
+
+					CheckBoxValue = CheckBoxValue.filter(function( obj ) {			    
+				    	return obj.name != currentValue;
+				    });
+				}							
+				
+			}
+
+			/**************************
+			* Sub-item List 
+			*************************/
+
+			if(checkListType == 'sublist')
+			{
+
+				
+				var storedSubList =  '';
+				angular.forEach(CheckBoxValue,function(value,index){
+					if( value.name == parantValue ) {
+						storedSubList = value.sublist;
+					  	//value.sublist.push(subItem);
+					  	if(isCheck)
+						{
+							/*********** Push subitem on check  *********/
+
+							var subItem = {name:currentValue};
+							storedSubList.push(subItem);
+						} else {	
+
+							/*********** Remove subitem on uncheck  *********/					
+							value.sublist = storedSubList.filter(function( obj ) {	
+						    	return obj.name != currentValue;
+						    });
+						}
+					}	               
+		        });
+
+			}
+
+			$rootScope.checklist = CheckBoxValue;			
+
+		};
+
+
+		/*****************************************
+		* Add item in checklist
+		*****************************************/
+		
+
+		$scope.addchecklist = function(itemType){
+				console.log($scope.checklistdate);
+				$scope.itemError = '';
+				var storedCheckbox = $scope.checkList;
+				var ItemToAdd = '';
+				if($scope.listItemName)
+				{
+					ItemToAdd = $scope.listItemName;
+					ItemToAdd 	  = ItemToAdd.replace(/(^[\s]+|[\s]+$)/g, '');
+				} else {
+					$scope.itemError = 'Please fill the blank teatarea.';
+					return false;
+				}
+			
+				var  parentItem = {
+								name   :ItemToAdd,
+								sublist:[]
+							};
+				var  subItem = {name:ItemToAdd};	
+
+
+				if(itemType == 'parentlist')
+				{
+					if(storedCheckbox.length == 0)
+					{
+						$scope.checkList.push(parentItem);
+
+					} else {
+						var valueFind = false;
+						for (var key in storedCheckbox) {
+						  if (storedCheckbox.hasOwnProperty(key)) {
+						  	if(storedCheckbox[key].name == ItemToAdd)
+						  	{
+						  		valueFind = true;
+						  	}
+						  }
+						}
+
+						if(!valueFind)
+						{
+							storedCheckbox.push(parentItem);
+						} else {
+							$scope.itemError = 'Item already exists.';
+							
+						}
+					}
+				}
+
+				if(itemType == 'sublist')
+				{
+
+					if( selectedCheckBox.length >0){
+						angular.forEach($scope.checkList,function(value,index){	
+							 selectedCheckBox.find( function( obj ) { 
+								if( obj == value.name ) {
+									var storedSublist = value.sublist;
+									var valueFind = false;
+									for (var key in storedSublist) {
+									  if (storedSublist.hasOwnProperty(key)) {
+									  	if(storedSublist[key].name == ItemToAdd)
+									  	{
+									  		valueFind = true;
+									  	}
+									  }
+									}
+
+									if(!valueFind)
+									{
+										storedSublist.push(subItem);
+										
+									} else {
+										$scope.itemError = 'Subitem already exists for "'+value.name+'".';
+										
+									}
+								  	
+								}						  
+							});                
+			            });
+					} else {
+						$scope.itemError = 'Please select item.';						
+					}
+
+				}
+			storedCheckbox = selectedCheckBox;
+		};
+
+		$scope.showTextArea = function(btnType){
+			$scope.showArea = true;
+			$scope.itemType = btnType;
+
+		};
+		
+	}
+]);
+
+"use strict";
+
+app.controller('departmentCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {
+		
+	}
+]);
+
+"use strict";
+
+app.controller('imageCtlr', ['$scope','$rootScope','Upload','$timeout','localStorageService',
+	function($scope,$rootScope,Upload,$timeout,localStorageService) {
+	
+
+		/*****************************************
+		* Jot image upload
+		*****************************************/
+
+		$rootScope.issueImages = '';
+		$scope.uploadFiles = function(files, errFiles) {
+			var hotel = localStorageService.get('hotel');
+			$scope.files = files;
+	        if (files && files.length) {
+	            Upload.upload({
+	                url: window.__API_PATH.UPLOAD_FILE,
+	                type:'post',
+	                data: {	                    
+	                    hotel_id : hotel.hotel_id,
+	                    files    : files
+	                }
+	            }).then(function (response) {
+	                $timeout(function () {
+	                   var result = response.data.result;
+	                   var uploadedImagesName = []; 
+	                    angular.forEach(result, function(data) {				
+				            if(data.status){
+				            	uploadedImagesName.push(data.filename);
+				            }
+				        });
+				        $rootScope.issueImages = uploadedImagesName;
+	                });
+	            }, function (response) {
+	                if (response.status > 0) {
+	                    $scope.errorMsg = response.status + ': ' + response.data;
+	                }
+	            }, function (evt) {
+	                $scope.progress = 
+	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+	            });
+	        }
+
+	    };
+
+		
+	}
+]);
+
+"use strict";
+
+app.controller('issueCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {
+
+		/*
+		*
+		* Set default jot type
+		*
+		*/		
+		/*$scope.jot_type = 'issue';*/		
+	}
+]);
+
+"use strict";
+
+app.controller('jotController', ['$scope','$location','jotFactory','$rootScope','$mdDialog','localStorageService',
+	function($scope,$location,jotFactory,$rootScope,$mdDialog,localStorageService) {
+
+
+		/**************************************
+		* Redirect if hotel not selected
+		**************************************/
+		
+		var hotel = localStorageService.get('hotel');
+
+		if(!hotel || hotel == ""){
+			$location.path('/dashboard');
+		}
+
+		/**************************************
+		* Get jot list
+		**************************************/
+				
+		var request= {
+			url:window.__API_PATH.GET_JOT,
+			method:"GET",
+			params:{hotel_id :hotel.hotel_id}
+		};	
+
+		jotFactory.jotCRUD(request)
+		.then(function(response){
+			$rootScope.jots = response.result;
+		});
+
+		
+	}
+]);
+
+
+"use strict";
+
+app.controller('jotFormCtrl', ['$scope','$location','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','$filter',
 	function($scope,$location, localStorageService,jotFactory,$rootScope,$mdDialog,toastService,$filter) {	
 
 
@@ -480,20 +812,23 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 		*
 		*/
 		$scope.createJot = function(){
+			/*console.log($rootScope.jot_type);			
+			return false;*/
+			$scope.message = ' ';
 
-			$scope.message = ' ';	
+			var hotel = localStorageService.get('hotel');
 
-
-			var hotelID = localStorageService.get('hotel');
 
 			var jotDataArray = {
 					jot_title          : $scope.jot_title,
 					priority           : $scope.jot_priority,
-					hotel_id		   : hotelID.hotel_id,
-					jot_type           : $scope.jot_type,
-					due_date   		   : new Date($scope.due_date).getTime(),
-					department		   : $scope.department,
-					assigned_to 	   : $scope.assigned_to		
+					hotel_id		   : hotel.hotel_id,
+					jot_type           : $rootScope.jot_type,
+					due_date   		   : new Date($scope.outsource.due_date).getTime(),
+					department		   : $scope.outsource.department,
+					assigned_to 	   : $scope.outsource.assigned_to,
+					checklist		   : $rootScope.checklist,	
+					image		   	   : $rootScope.issueImages	
 			};
 
 			var request={
@@ -503,8 +838,8 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 			};
 			
 			jotFactory.jotCRUD(request).then(function(response){
-
-				if(response.success)
+				
+				if(response.status == 1)
 				{
 
 					$mdDialog.cancel();
@@ -524,7 +859,7 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 						/******************************************************
 						* Check jot type(message,issue etc.) is new or already in object 
 						****************************************************/
-		                if(value._id == $scope.jot_type)
+		                if(value._id == $rootScope.jot_type)
 		                {                	
 		                	value.jot_data.push(jotDataArray);
 		                	keyFoundInObj = true;
@@ -540,7 +875,7 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 					{
 						var jotDataArrayInObj = [jotDataArray];
 			            var newcreatedJot = {
-				                				"_id"	  :$scope.jot_type,
+				                				"_id"	  :$rootScope.jot_type,
 				                				"jot_data": jotDataArrayInObj
 						                	};
 			            		                	
@@ -564,85 +899,119 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 			 $mdDialog.cancel();
 		};
 
-
 		/*
 		* Function
 		*
-		* Set default jot type when popup open
+		* Select tab
 		*
 		*/
+		$scope.jotTab        = window.__API_PATH.JOT_TAB;
+		$scope.currentNavItem=	$scope.jotTab[0].id;
 
-		$scope.jotList        = window.__API_PATH.JOT_TYPES;
-		$scope.jot_type       = $scope.jotList[0].name;	
-
-		/*
-		* Function
-		*
-		* Set jot type on click
-		*
-		*/
-
-		$scope.jotSelect = function(event,value){
-				
-			$scope.jot_type = value;
-		};
+	
 
 		/*
-		* Function
 		*
-		* Set default jot priority when popup open
+		* Set jot priority type on click
 		*
 		*/
 
 		$scope.jotPriorityList 	= window.__API_PATH.JOT_PRIORITY;
 		$scope.jot_priority 	= $scope.jotPriorityList[0].name;
 
-		/*
-		* Function
-		*
-		* Set jot priority type on click
-		*
-		*/
-
 		$scope.selectPriority = function(event,value){
 			 $scope.jot_priority = value;
 		};
+
+	}
+]).directive('jotTemplate', [function(){
+	return {
+		scope:{jotTemplate:'='},
+		template:'<span ng-include="template"></span>',
+		// controller: 'jotTabsCtlr',
+		link: function(scope,ele){			
+			scope.$watch('jotTemplate', function(templateName){
+				scope.template='/modules/jot/views/'+templateName+'.html';
+				console.log('templateName');	
+				console.log(templateName);
+				scope.jot_type	 = templateName;			
+			});
+
+		}
+	};
+}]);
+
+"use strict";
+
+app.controller('jotQuickCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {	
+			
+			/*
+			*
+			* Set jot type list
+			*
+			*/
+			$rootScope.jot_type = 'quick';
+			$scope.jotList   = window.__API_PATH.JOT_TYPES;
+
+			$scope.jotSelect = function(event,value){
+				$scope.jot_type = value;	
+				$rootScope.jot_type = value;
+			};
+	}
+]);
+
+"use strict";
+
+app.controller('staffCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {
 
 	}
 ]);
 
 "use strict";
 
-app.controller('jotController', ['$scope','$location','jotFactory','$rootScope','$mdDialog','localStorageService',
-	function($scope,$location,jotFactory,$rootScope,$mdDialog,localStorageService) {
-
-
-		/**************************************
-		* Get jot list
-		**************************************/
-		var hotel = localStorageService.get('hotel');
-
-		if(!hotel || hotel == ""){
-			$location.path('/dashboard');
-		}
-
-		
-				
-		var request= {
-			url:window.__API_PATH.GET_JOT,
-			method:"post",
-			data:{hotel_id :hotel.hotel_id}
-		};	
-
-		jotFactory.jotCRUD(request)
-		.then(function(response){
-			$rootScope.jots = response.result;
-		});
-
-		
+app.controller('taskCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {
+		/*
+		*
+		* Set default jot type
+		*
+		*/		
+		/*$scope.jot_type = 'task';*/		
 	}
 ]);
 
+"use strict";
+
+app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {
+
+		/*
+		* Show/Hide datepicker according to type
+		* Clear previous value before datepicker display
+		*/
+		
+		$scope.taskTime = function(taskType){
+			$scope.oneTime   = false;
+			$scope.recurring = false;
+			if(taskType == 'oneTime')
+			{
+				$scope.onetime = '';
+				$scope.oneTime = true;
+			}
+			if(taskType == 'recurring')
+			{
+				$scope.start_recurring = '';
+				$scope.end_recurring   = '';
+				$scope.recurring = true;
+			}
+		};
+
+		
+				
+	}
+]);
 
 'use strict';
 
@@ -703,14 +1072,15 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 					data:dataObj
 				};
 
-			loginFactory.login(request).then(function(response){				
+			loginFactory.login(request).then(function(response){	
+
 				if(response.errors){
 					//toastService.alert({message: response.errors.message, class: 'error'});
 				} else {
-					if(response.success)
+					if(response.status == 1)
 					{
-						localStorageService.set('token', response.token);
-						localStorageService.set('user', response.user);
+						localStorageService.set('token', response.result.token);
+						localStorageService.set('user', response.result.user);
 						AuthSrv.isLogged = true;
 						$location.path('/dashboard');
 					}
@@ -735,7 +1105,7 @@ app.factory('loginFactory', ['$http', function ($http) {
 		
 		login: function(obj){
 			return $http(obj).then(function(response){
-				return response.data.result;
+				return response.data;
 			}, function(response){
 				return {
 					errors: response.data.errors
@@ -760,10 +1130,12 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		var data = {
 				"user_id":localStorageService.get('user')._id
 			};
+
+			
 		var request={
 				url:window.__API_PATH.GET_HOTELS,
-				method:"POST",
-				data:data
+				method:"GET",
+				params:data
 			};
 		
 		
@@ -802,8 +1174,8 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 
 		$scope.quickTaskPopup = function(){
 			$mdDialog.show({
-				controller: 'createJotCtrl',
-				templateUrl: '/modules/jot/views/hotel-quick-task.tpl.html',
+				controller: 'jotFormCtrl',
+				templateUrl: '/modules/jot/views/jot-form.html',
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
 				clickOutsideToClose:true,

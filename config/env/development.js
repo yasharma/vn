@@ -33,13 +33,22 @@ const config = {
       'image/bmp' : 'bmp',
     },
     /*In case no property image found or upload */
-    image_path: 'images/',
-    image_name: 'noimage.jpg',
-    fileLimits: {
-        fileSize: 2000000, //the max file size (in bytes)
+    
+    
+    MAIL_ATTACHMENT_PATH: 'public/images/attachments',
+    JOT_ATTACHMENT_IMAGE_PATH: './images/Jotdocument/',
+    
+    /*In case no property image found or upload */
+    JOT_FILE_CONFIG: {
+        fileSize: 20971520, //the max file size (in bytes)
         files: 10 //the max number of file
     },
-    docLimit: 10,
+
+    defaultAdmin: {
+      email: 'admin@gmail.com',
+      password: process.env.ADMIN_PASSWORD
+    },
+    DOCLIMIT: 10,
     defaultAdmin: {
       email: 'admin@gmail.com',
       password: '123456',

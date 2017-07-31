@@ -14,10 +14,12 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		var data = {
 				"user_id":localStorageService.get('user')._id
 			};
+
+			
 		var request={
 				url:window.__API_PATH.GET_HOTELS,
-				method:"POST",
-				data:data
+				method:"GET",
+				params:data
 			};
 		
 		
@@ -56,8 +58,8 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 
 		$scope.quickTaskPopup = function(){
 			$mdDialog.show({
-				controller: 'createJotCtrl',
-				templateUrl: '/modules/jot/views/hotel-quick-task.tpl.html',
+				controller: 'jotFormCtrl',
+				templateUrl: '/modules/jot/views/jot-form.html',
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
 				clickOutsideToClose:true,

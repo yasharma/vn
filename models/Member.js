@@ -71,7 +71,7 @@ var MemberSchema  = new Schema({
     default: false
   },
   status: {
-    type: Boolean,
+    type: String,
     default: false
   },
 },{

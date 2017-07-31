@@ -9,3 +9,5 @@
 .newhotel_dialog_form md-input-container md-select-value{padding: 0 15px; font-size: 15px; border: 0; background: #fff; height: 48px;}
 .newhotel_dialog_form md-input-container md-select .md-select-value{padding: 0 15px; color: #222222;}
 .newhotel_dialog_form md-input-container md-select:not([disabled]):focus .md-select-value{border: 0; color: #222222;}
+
+.newhotel_dialog.edit_water{width: 570px;}

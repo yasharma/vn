@@ -1,0 +1,72 @@
+<div ng-controller="taskDatepickerCtlr">
+    <div class="clearfix">
+        <div class="col-md-12">
+            <md-radio-group ng-model="data.group1">
+            <ul class="Pattern_radio clearfix">
+                <li>
+                    <md-radio-button value="Apple" ng-click="taskTime('oneTime')" class="md-primary">One Time</md-radio-button>
+                </li>
+                <li>
+                    <md-radio-button value="Banana" ng-click="taskTime('recurring')">Recurring</md-radio-button>
+                </li>
+            </ul>        
+            </md-radio-group>
+        </div>
+    </div>
+    <div class="clearfix mar-bot20" ng-show="oneTime">
+        <div class="col-md-12">
+            <div class="Selectdep_txt">If One Time Task:</div>
+            <div class="clearfix">
+                <div class="recurring_task positionrel" >
+                    <md-datepicker ng-model="onetime" md-open-on-focus md-hide-icons="triangle"  md-placeholder="Start date"></md-datepicker>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+    <div class="clearfix mar-bot20"  ng-show="recurring">
+        <div class="col-md-12">
+            <div class="Selectdep_txt">If Recurring Task:</div>
+            <div class="clearfix">
+                <div class="recurring_task positionrel" >
+                    <md-datepicker ng-model="start_recurring" md-open-on-focus md-hide-icons="triangle"  ng-model="ctrl.myDate2" md-placeholder="Start date"></md-datepicker>
+                </div>
+                <div class="recurring_task positionrel" >
+                    <md-datepicker ng-model="end_recurring" md-open-on-focus md-hide-icons="triangle"  md-placeholder="End date"></md-datepicker>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <div class="clearfix mar-bot20">
+        <div class="col-md-12">
+            <div class="Selectdep_txt">Recurrance Pattern:</div>
+            <ul class="Pattern clearfix">
+                <li><a href="javascript:;">DAILY</a></li>
+                <li><a class="active" href="javascript:;">WEEKLY</a></li>
+                <li><a href="javascript:;">MONTHLY</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="clearfix mar-bot20">
+        <div class="col-md-12">
+            <div class="Selectdep_txt">Recur every 1 week(s)</div>
+            <div class="daylisted">
+                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
+                    Sunday
+                </md-checkbox>
+                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
+                   Monday
+                </md-checkbox>
+                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
+                    Tuesday
+                </md-checkbox>
+                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
+                    Wednesday
+                </md-checkbox>
+                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
+                    Thursday
+                </md-checkbox>
+            </div>
+        </div>
+    </div>
+</div>

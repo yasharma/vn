@@ -26,6 +26,7 @@ let watchFiles = [
     './public/assets/appjs/*.js',
     './public/modules/global-services/*.js',
     './public/modules/*/*/*.js', 
+    './public/modules/*/*.js', 
 ];
 
 
@@ -59,6 +60,8 @@ gulp.task('vendor:js', (cb) => {
             './bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
             './bower_components/angular-material/angular-material.min.js',
             './bower_components/angular-material-icons/angular-material-icons.min.js',
+            './bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js',
+            './bower_components/ng-file-upload/ng-file-upload.min.js',
         ]),
         concat('vendor.js'),
         uglify(),

@@ -5,20 +5,23 @@ app.controller('jotController', ['$scope','$location','jotFactory','$rootScope',
 
 
 		/**************************************
-		* Get jot list
+		* Redirect if hotel not selected
 		**************************************/
+		
 		var hotel = localStorageService.get('hotel');
 
 		if(!hotel || hotel == ""){
 			$location.path('/dashboard');
 		}
 
-		
+		/**************************************
+		* Get jot list
+		**************************************/
 				
 		var request= {
 			url:window.__API_PATH.GET_JOT,
-			method:"post",
-			data:{hotel_id :hotel.hotel_id}
+			method:"GET",
+			params:{hotel_id :hotel.hotel_id}
 		};	
 
 		jotFactory.jotCRUD(request)

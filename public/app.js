@@ -6,7 +6,8 @@ var app = angular.module('hoteljotApp',[
 			'ngMaterial',
 			'ngRoute',
 			'LocalStorageModule',
-			'ngMdIcons'	
+			'ngMdIcons'	,
+			'ngFileUpload'
 			])
 
 .config(['localStorageServiceProvider',

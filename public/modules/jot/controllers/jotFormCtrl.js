@@ -1,6 +1,6 @@
 "use strict";
 
-app.controller('createJotCtrl', ['$scope','$location','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','$filter',
+app.controller('jotFormCtrl', ['$scope','$location','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','$filter',
 	function($scope,$location, localStorageService,jotFactory,$rootScope,$mdDialog,toastService,$filter) {	
 
 
@@ -11,20 +11,23 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 		*
 		*/
 		$scope.createJot = function(){
+			/*console.log($rootScope.jot_type);			
+			return false;*/
+			$scope.message = ' ';
 
-			$scope.message = ' ';	
+			var hotel = localStorageService.get('hotel');
 
-
-			var hotelID = localStorageService.get('hotel');
 
 			var jotDataArray = {
 					jot_title          : $scope.jot_title,
 					priority           : $scope.jot_priority,
-					hotel_id		   : hotelID.hotel_id,
-					jot_type           : $scope.jot_type,
-					due_date   		   : new Date($scope.due_date).getTime(),
-					department		   : $scope.department,
-					assigned_to 	   : $scope.assigned_to		
+					hotel_id		   : hotel.hotel_id,
+					jot_type           : $rootScope.jot_type,
+					due_date   		   : new Date($scope.outsource.due_date).getTime(),
+					department		   : $scope.outsource.department,
+					assigned_to 	   : $scope.outsource.assigned_to,
+					checklist		   : $rootScope.checklist,	
+					image		   	   : $rootScope.issueImages	
 			};
 
 			var request={
@@ -34,8 +37,8 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 			};
 			
 			jotFactory.jotCRUD(request).then(function(response){
-
-				if(response.success)
+				
+				if(response.status == 1)
 				{
 
 					$mdDialog.cancel();
@@ -55,7 +58,7 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 						/******************************************************
 						* Check jot type(message,issue etc.) is new or already in object 
 						****************************************************/
-		                if(value._id == $scope.jot_type)
+		                if(value._id == $rootScope.jot_type)
 		                {                	
 		                	value.jot_data.push(jotDataArray);
 		                	keyFoundInObj = true;
@@ -71,7 +74,7 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 					{
 						var jotDataArrayInObj = [jotDataArray];
 			            var newcreatedJot = {
-				                				"_id"	  :$scope.jot_type,
+				                				"_id"	  :$rootScope.jot_type,
 				                				"jot_data": jotDataArrayInObj
 						                	};
 			            		                	
@@ -95,49 +98,44 @@ app.controller('createJotCtrl', ['$scope','$location','localStorageService','jot
 			 $mdDialog.cancel();
 		};
 
-
 		/*
 		* Function
 		*
-		* Set default jot type when popup open
+		* Select tab
 		*
 		*/
+		$scope.jotTab        = window.__API_PATH.JOT_TAB;
+		$scope.currentNavItem=	$scope.jotTab[0].id;
 
-		$scope.jotList        = window.__API_PATH.JOT_TYPES;
-		$scope.jot_type       = $scope.jotList[0].name;	
-
-		/*
-		* Function
-		*
-		* Set jot type on click
-		*
-		*/
-
-		$scope.jotSelect = function(event,value){
-				
-			$scope.jot_type = value;
-		};
+	
 
 		/*
-		* Function
 		*
-		* Set default jot priority when popup open
+		* Set jot priority type on click
 		*
 		*/
 
 		$scope.jotPriorityList 	= window.__API_PATH.JOT_PRIORITY;
 		$scope.jot_priority 	= $scope.jotPriorityList[0].name;
 
-		/*
-		* Function
-		*
-		* Set jot priority type on click
-		*
-		*/
-
 		$scope.selectPriority = function(event,value){
 			 $scope.jot_priority = value;
 		};
 
 	}
-]);
+]).directive('jotTemplate', [function(){
+	return {
+		scope:{jotTemplate:'='},
+		template:'<span ng-include="template"></span>',
+		// controller: 'jotTabsCtlr',
+		link: function(scope,ele){			
+			scope.$watch('jotTemplate', function(templateName){
+				scope.template='/modules/jot/views/'+templateName+'.html';
+				console.log('templateName');	
+				console.log(templateName);
+				scope.jot_type	 = templateName;			
+			});
+
+		}
+	};
+}]);

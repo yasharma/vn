@@ -69,7 +69,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 			var hotelData  = {
 					'hotel_id'   :hotelID,
 					'hotel_name' :hotelName
-				}
+				};
 			localStorageService.set('hotel', hotelData);			
 			$location.path('/dashboard/jot');
 		};
@@ -96,8 +96,8 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 			};
 			var request={
 					url:window.__API_PATH.delete_hotel,
-					method:"POST",
-					data:data
+					method:"DELETE",
+					params:data
 				};
 			
 			/*dashboardFactory.hotelCRUD(request).then(function(response){

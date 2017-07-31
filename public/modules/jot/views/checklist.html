@@ -1,0 +1,53 @@
+<div ng-controller="checklistCtlr">
+	<div class="Selectdep_txt">Add Check List</div>
+	<div class="Check_list_btn_chk">
+		<div class="clearfix">
+		<ul class="parantchecklist">
+
+		    <li ng-repeat="checkListItem in checkList" >
+		        <md-checkbox ng-change="lookup(parentCheckbox, checkListItem); storeValue('parentlist',checkListItem.name,parentCheckbox,false);" ng-true-value="true" ng-false-value="false" aria-label="Checkbox 2"  ng-model="parentCheckbox">
+		            {{checkListItem.name}}
+		        </md-checkbox>
+
+		        <ul class="chiildchecklist">
+		            <li ng-repeat="subListItem in checkListItem.sublist">
+		                <md-checkbox   ng-change="storeValue('sublist',subListItem.name,list,checkListItem.name);" aria-label="Checkbox 2"    ng-model="list" ng-true-value="true" ng-false-value="false">
+		                    {{subListItem.name}}
+		                </md-checkbox>
+		            </li>
+		        </ul>
+		    </li>
+		</ul>                
+		</div> 
+	</div>
+	<div class="add_sub_item">
+		<ul class="clearfix">
+			 <li ng-repeat="btn in [{name:'ADD ITEM',value:'parentlist'},{name:'ADD SUB ITEM',value:'sublist'}]">
+			    <a href="javascript:void(0);" ng-click="showTextArea(btn.value);"  ng-class="{active:itemType==btn.value}">{{btn.name}}</a>
+			 </li>
+		</ul>
+	</div>
+	<div ng-show="showArea">
+		<div class="clearfix">
+			<md-input-container class="md-block">
+			    <textarea aria-label="textarea"
+			    md-no-float class="md-block" ng-model="listItemName" style="min-height:100px" ></textarea>
+			    
+			    <div class="error"> {{itemError}} </div>
+
+			</md-input-container>
+		</div>
+		<div class="clearfix">
+			<div class="pull-left date_due" >
+			    <md-input-container md-no-float class="md-block">
+			        <label>Set Due Date</label>
+			        <md-datepicker md-open-on-focus md-hide-icons="all" ng-model="checklistdate"></md-datepicker>
+			    </md-input-container>
+			</div>
+			<div class="pull-right" >
+
+			     <md-button class="md-primary addyellobtn bluebtn" ng-click="addchecklist(itemType);">ADD</md-button>
+			</div>
+		</div>
+	</div>
+</div>

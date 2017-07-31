@@ -6,18 +6,8 @@ var mongoose      = require('mongoose'),
 
 var JotSchema  = new Schema({
   image:{
-    name: {
-      type: String,
-      default: 'no-image.jpg'
-    },
-    path: {
-      type: String,
-      default: 'images/'
-    },
-    original_name:  {
-      type: String,
-      default: 'no-image.jpg'
-    }
+    type: Array,
+    default: [] 
   },
   jot_title: {
     type: String,
@@ -57,8 +47,8 @@ var JotSchema  = new Schema({
     default: false
   },
   checklist: {
-    type: String,
-    default: false
+    type: Array,
+    default: []
   },
   recr_pattern: {
     type: String,
@@ -73,7 +63,7 @@ var JotSchema  = new Schema({
     default: false
   },
   status: {
-    type: Boolean,
+    type: String,
     default: false
   }
 },{

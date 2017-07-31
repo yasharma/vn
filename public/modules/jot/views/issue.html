@@ -1,0 +1,10 @@
+<div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+<div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+<div class="clearfix mar-bot20" ng-controller="issueCtlr">
+    <div class="col-md-12">
+        <div class="clearfix" ng-include="'/modules/jot/views/checklist.html'"></div>
+        <div class="clearfix" ng-include="'/modules/jot/views/image.html'"></div>
+    </div>
+    <input type="hidden" name="jot_type" value="{{jot_type}}" ng-model="jot_type"> 
+</div>
