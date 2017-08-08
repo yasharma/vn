@@ -84,7 +84,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		
 		
 		$scope.deleteHotel = function(event,hotelID){
-
+			
 			var storedHotelID = localStorageService.get('hotel');		
 			if(storedHotelID && storedHotelID.hotel_id == hotelID)
 			{
@@ -95,12 +95,12 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 				"hotel_id":hotelID
 			};
 			var request={
-					url:window.__API_PATH.delete_hotel,
+					url:window.__API_PATH.DELETE_HOTEL,
 					method:"DELETE",
 					params:data
 				};
 			
-			/*dashboardFactory.hotelCRUD(request).then(function(response){
+			dashboardFactory.hotelCRUD(request).then(function(response){
 				if(response.error){
 				} else {				
 					if(response.success)
@@ -109,7 +109,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 						toastService.alert(popup);
 					}
 				}
-			});*/		
+			});		
 		};
 
 

@@ -25,7 +25,7 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 		* Add new hotel data
 		*
 		*/
-
+		$scope.hotelResult = {message:'',class:'',status:''};
 		$scope.addNewHotel = function(){
 			var acceptTerm = $scope.terms;	
 			if(acceptTerm)
@@ -58,25 +58,23 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 						data:hotelDataObj
 					};
 
-				dashboardFactory.hotelCRUD(request).then(function(response){			
-						
-					$scope.message 		 = response.message;
-					$scope.validateclass = response.class;
-					$scope.success 		 = response.success;
-					if(response.success)
+				dashboardFactory.hotelCRUD(request).then(function(response){								
+					$scope.hotelResult 	 = response;
+					
+					if(response.status == 1)
 					{
-						$rootScope.hotels.push(hotelDataObj);
+						$rootScope.hotels.push(response.result);
 						$mdDialog.cancel();
 						var popup = {"message":response.message,"class":"success"};
 						toastService.alert(popup);
-
 					}				
 
 				});
 
 			} else {
-				$scope.validateclass = 'Autherror';
-				$scope.message = ['Please accept terms and conditions.'];
+				$scope.hotelResult.class = 'Autherror';
+				$scope.hotelResult.message = 'Please accept terms and conditions.';
+				$scope.hotelResult.status = 1;
 			}	
 			
 		};

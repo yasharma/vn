@@ -9,24 +9,9 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 	function($scope,$http,$location,$timeout, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog) {	
 
 
-		$scope.login = function(){
-			$mdDialog.show({
-				controller: "loginController",
-				templateUrl: '/modules/login/views/login.tpl.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-			})
-			.then(function(answer) {			
-			}, function() {			
-			});
-		};
-
-
-		$scope.close = function(){
-			 $mdDialog.cancel();
-		};
-
-
+		/*********************************************
+		* Submit login form
+		***********************************************/
 		
 		$scope.loginUser = function (obj) {
 		
@@ -41,8 +26,8 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 					data:dataObj
 				};
 
-			loginFactory.login(request).then(function(response){	
-
+			loginFactory.login(request).then(function(response){
+				$scope.loginresult = response;
 				if(response.errors){
 					//toastService.alert({message: response.errors.message, class: 'error'});
 				} else {
@@ -52,14 +37,35 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 						localStorageService.set('user', response.result.user);
 						AuthSrv.isLogged = true;
 						$location.path('/dashboard');
-					}
-					$scope.result = response.message;				
+					}									
 				}
+				
 			});				
 	               
 		};
 
+		/*********************************************
+		* Forget password
+		***********************************************/
 
+		$scope.forgetPassword = function(){
+
+			var data = {email:$scope.forget_email};
+			var request={
+					url:window.__API_PATH.FORGET_PASSWORD,
+					method:"POST",
+					data:data
+				};
+
+			loginFactory.login(request).then(function(response){
+					$scope.forgetresult = response;
+			});
+
+		};
+
+		/*********************************************
+		* Redirect to signup form
+		***********************************************/
 
 		$scope.openSignupForm = function (obj) {
 	           $location.path('/register');    

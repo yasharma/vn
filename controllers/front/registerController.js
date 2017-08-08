@@ -25,7 +25,7 @@ exports.register       = (reqst, respe) => {
         var usersave = new users(reqst.body);
         usersave.save(function (err, result) {
             if(result){
-                respe.json(response.success(result,'Member Registered Successfully.'));
+                respe.json(response.success(result,'You have successfully registered.'));
             }else{
                 respe.json(response.errors(err.errors,'Error in Member Registration.'));
             }

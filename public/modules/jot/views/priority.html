@@ -1,0 +1,11 @@
+<div class="clearfix EditMode" ng-controller="priorityCtlr"> 
+    <div class="col-md-7 pull-right text-right" >
+        <span class="jot_prity_txt">Set Priority:</span>
+        <ul class="jot_prity clearfix pull-right">
+           <li ng-repeat="jotPriority in jotPriorityList">
+            <a href="javascript:void(0);" ng-class="{active : $root.priority === jotPriority.name}" class="{{jotPriority.class}}" ng-click='selectPriority($event,jotPriority.name)'>{{jotPriority.name}}</a>
+         </li>
+          <input type="hidden" name="priority" value="{{$root.priority}}" ng-model="$root.priority">
+        </ul>
+    </div>
+</div>

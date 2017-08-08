@@ -29,49 +29,51 @@ app.run(['$log',function($log){
 * Global variable and api url
 ********************************************************************/
 
-window.__API_PATH={};
+window.__API_PATH  					=   {};
 
-__API_PATH.jotList = '/api/get_jot';
+__API_PATH.jotList 					= '/api/get_jot';
+__API_PATH.LOGIN   					= '/api/login';
+__API_PATH.REGISTER  				= '/api/register';
+__API_PATH.GET_HOTELS  				= '/api/get_hotels';
+__API_PATH.ADD_HOTEL  				= '/api/add_hotel';
+__API_PATH.CREATE_JOT 				= '/api/create_jot';
+__API_PATH.GET_JOT      	 		= '/api/get_jot';
+__API_PATH.DELETE_HOTEL 			= '/api/delete_hotel';
+__API_PATH.STAFF_SUGGESTION 		= '/api/get_members';
+__API_PATH.UPLOAD_FILE  			= '/api/uploadfile';
+__API_PATH.UPDATE_JOT  				= '/api/update_jot';
+__API_PATH.DELETE_JOT  				= '/api/delete_jot';
+__API_PATH.GET_DEPARTMENTS  		= '/api/get_departments';
+__API_PATH.FORGET_PASSWORD			= '/api/forgot_password';
+__API_PATH.PASSWORD_RESET			= '/api/resetPassword';
 
-/*
-* Login 
-*/
 
-__API_PATH.LOGIN   = '/api/login';
+__API_PATH.JOT_TYPES = {
+							quick:{label:"Quick Jot",id:'quick',src:'assets/images/logo_pic.png',icontype:'image'},
+							issue:{label:"Issue",id:'issue',src:'warning',icontype:'icon'},
+							task:{label:"task",id:'task',src:'format_list_bulleted',icontype:'icon'},
+							note:{label:"Note",id:'note',src:'insert_drive_file',icontype:'icon'},
+							lost_found:{label:"Lost & Found",id:'lost_found',src:'local_drink',icontype:'icon'},
+							vending_machine:{label:"Vending Machine",id:'vending_machine',src:'vignette',icontype:'icon'},
+							meeting_room:{label:"Meeting Room",id:'meeting_room',src:'group',icontype:'icon'}
+						};
 
 
-/*
-* Register 
-*/
-
-__API_PATH.REGISTER  = '/api/register';
-
-/*
-* Hotels 
-*/
-__API_PATH.GET_HOTELS  = '/api/get_hotels';
-__API_PATH.ADD_HOTEL   = '/api/add_hotel';
-
-/*
-* Jot 
-*/
-
-__API_PATH.UPLOAD_FILE  = '/api/uploadfile';
-
-__API_PATH.JOT_TYPES 	   = [{name:'issue',class:'active',icon:'warning'},{name:'message',class:'',icon:'email'},{name:'task',class:'',icon:'format_list_bulleted'},{name:'note',class:'',icon:'email'},{name:'lost & found',class:'',icon:'call_missed'},{name:'meeting room',class:'',icon:'room'},{name:'vending',class:'',icon:'shopping_cart'}]; 
+/*__API_PATH.JOT_TYPES 	   = [{name:'issue',class:'',icon:'warning'},{name:'message',class:'',icon:'email'},{name:'task',class:'',icon:'format_list_bulleted'},{name:'lost & found',class:'',icon:'call_missed'},{name:'meeting room',class:'',icon:'room'},{name:'vending',class:'',icon:'shopping_cart'}];*/ 
 
 __API_PATH.JOT_PRIORITY   = [{name:'urgent',class:'urgent orange'},{name:'high',class:'high red'},{name:'medium',class:'medium yellow'},{name:'low',class:'low green'}]; 
 
-__API_PATH.CREATE_JOT = '/api/create_jot';
-__API_PATH.GET_JOT       = '/api/get_jot';
 
-__API_PATH.delete_hotel = '/api/delete_hotel';
+/*__API_PATH.JOT_TAB 	   = [
+{name:'Quick Jot',id:'quick',src:'assets/images/logo_pic.png',icontype:'image'},
+{name:'Issue',id:'issue',src:'warning',icontype:'icon'},
+{name:'Task',id:'task',src:'format_list_bulleted',icontype:'icon'},
+{name:'Message',id:'message',src:'insert_drive_file',icontype:'icon'},
+{name:'lost & found',id:'lost&found',src:'local_drink',icontype:'icon'},
+{name:'Vending Machine',id:'vending_machine',src:'vignette',icontype:'icon'},
+{name:'Meeting Room',id:'meeting_room',src:'group',icontype:'icon'}]; */
 
-
-__API_PATH.JOT_TAB 	   = [{name:'Quick Jot',id:'quick',src:'assets/images/logo_pic.png',icontype:'image'},{name:'Issue',id:'issue',src:'warning',icontype:'icon'},{name:'Task',id:'task',src:'format_list_bulleted',icontype:'icon'},{name:'Note',id:'note',src:'insert_drive_file',icontype:'icon'},{name:'lost & found',id:'lost&found',src:'local_drink',icontype:'icon'},{name:'Vending Machine',id:'vending_machine',src:'vignette',icontype:'icon'},{name:'Meeting Room',id:'meeting_room',src:'group',icontype:'icon'}]; 
-
-
-__API_PATH.DEFAULT_CHECKLIST 	= [
+__API_PATH.DEFAULT_CHECKLIST 	=  [
 										{
 											name   :"Prepare Room 7 AM @Jon",
 											sublist:[{name:"tea1"},{name:"tea2"}]
@@ -80,7 +82,61 @@ __API_PATH.DEFAULT_CHECKLIST 	= [
 											name   :"Prepare Room 7 AM @Jon2",
 											sublist:[{name:"tea3"},{name:"tea4"}]
 										}			
-									]; 
+									];
+
+
+
+
+__API_PATH.RECURRING_PATTERN = [
+									{
+										label 	     :"Daily",
+										id    	     :"daily",	
+										description  : "Daily Recurring"					
+									},
+									{
+										label        :"Weekly",
+										id   		 :"weekly",
+										description	 : "Recurring every week" 
+									},
+									{
+										label        :"Monthly",
+										id           :"monthly",
+										description  : "Recurring every month"
+									}			
+								]; 
+
+
+__API_PATH.WEEK_NAME = [
+							
+							{
+								label :"Monday",
+								value :'monday',
+							},
+							{
+								label  :"Tuesday",
+								value  :'tuesday'
+							},
+							{
+								label  :"Wednesday",
+								value  :'wednesday'
+							},	
+							{
+								label  :"Thursday",
+								value  :'thursday'
+							},
+							{
+								label  :"Friday",
+								value  :'friday'
+							},
+							{
+								label  :"Saturday",
+								value  :'saturday'
+							},
+							{
+								label :"Sunday",
+								value :'sunday',						
+							},		
+						];								 
 
 'use strict';
 
@@ -144,32 +200,35 @@ app.config(['$httpProvider', function($httpProvider){
 
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) {           
-
-            if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
-              
-                AuthSrv.isLogged = 0;
-              
-                $location.path("/");
-            }else {
-               
-                var token = localStorageService.get('token');
-                if(($location.path() === '/login' || $location.path() === '/') && token ){           
-                   $location.path("/dashboard");
+                
+                if(nextRoute.$$route){
+                    if(nextRoute.$$route.access){
+                        $rootScope.isAuth= nextRoute.$$route.access;
+                   } 
                 }
-            }
+                if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {                  
+                    AuthSrv.isLogged = 0;                  
+                    $location.path("/");
+                }else {
+                   
+                    var token = localStorageService.get('token');
+                    if(($location.path() === '/login' || $location.path() === '/') && token ){           
+                       $location.path("/dashboard");
+                    }
+                }
         });
 
 
-        $rootScope.$on("$routeChangeSuccess", 
+        /*$rootScope.$on("$routeChangeSuccess", 
             function (event, nextRoute, currentRoute) {
-
+            
            if(nextRoute.$$route){
                 if(nextRoute.$$route.access){
-                    $rootScope.isAuth= nextRoute.$$route.access;
+                    $rootScope.isAuth= nextRoute.$$route.access;                    
                } 
            }
             
-        });
+        });*/
     	
     	
     	/* This will logout the user from the application */
@@ -191,7 +250,6 @@ app.config(['$httpProvider', function($httpProvider){
 	
 }]);
 
-
 "use strict";
 
 
@@ -212,6 +270,14 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false
         }
     })
+     .when("/resetpassword/:token", {
+        templateUrl : "/modules/login/views/resetpassword.html",
+        controller  :  "resetPasswordCtlr",
+        access: {
+            requiredLogin: false,
+        }
+    })
+
     .when("/register", {
         templateUrl : "/modules/register/views/register.tpl.html",
         controller  :  "registerController",
@@ -224,18 +290,22 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         controller  :  "dashboardController",
         access: {
             requiredLogin: true, 
-            headerType:'hotel_header'
+            headerType:'hotel_header',
+            sidebar: 'yes'
         }
     })
+
+   
     .when("/dashboard/jot", {
         templateUrl : "/modules/jot/views/dashboard-jot.html",
         controller  :  "jotController",
         access: {
             requiredLogin: true,
-            headerType:'dashboard_header'
+            headerType:'dashboard_header',
+            sidebar: 'yes'
         }
-    });
-   
+    })
+   .otherwise({redirectTo: '/'});
     $locationProvider.html5Mode(true);     
 }]);
 
@@ -348,7 +418,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		
 		
 		$scope.deleteHotel = function(event,hotelID){
-
+			
 			var storedHotelID = localStorageService.get('hotel');		
 			if(storedHotelID && storedHotelID.hotel_id == hotelID)
 			{
@@ -359,12 +429,12 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 				"hotel_id":hotelID
 			};
 			var request={
-					url:window.__API_PATH.delete_hotel,
+					url:window.__API_PATH.DELETE_HOTEL,
 					method:"DELETE",
 					params:data
 				};
 			
-			/*dashboardFactory.hotelCRUD(request).then(function(response){
+			dashboardFactory.hotelCRUD(request).then(function(response){
 				if(response.error){
 				} else {				
 					if(response.success)
@@ -373,7 +443,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 						toastService.alert(popup);
 					}
 				}
-			});*/		
+			});		
 		};
 
 
@@ -407,7 +477,7 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 		* Add new hotel data
 		*
 		*/
-
+		$scope.hotelResult = {message:'',class:'',status:''};
 		$scope.addNewHotel = function(){
 			var acceptTerm = $scope.terms;	
 			if(acceptTerm)
@@ -440,25 +510,23 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 						data:hotelDataObj
 					};
 
-				dashboardFactory.hotelCRUD(request).then(function(response){			
-						
-					$scope.message 		 = response.message;
-					$scope.validateclass = response.class;
-					$scope.success 		 = response.success;
-					if(response.success)
+				dashboardFactory.hotelCRUD(request).then(function(response){								
+					$scope.hotelResult 	 = response;
+					
+					if(response.status == 1)
 					{
-						$rootScope.hotels.push(hotelDataObj);
+						$rootScope.hotels.push(response.result);
 						$mdDialog.cancel();
 						var popup = {"message":response.message,"class":"success"};
 						toastService.alert(popup);
-
 					}				
 
 				});
 
 			} else {
-				$scope.validateclass = 'Autherror';
-				$scope.message = ['Please accept terms and conditions.'];
+				$scope.hotelResult.class = 'Autherror';
+				$scope.hotelResult.message = 'Please accept terms and conditions.';
+				$scope.hotelResult.status = 1;
 			}	
 			
 		};
@@ -490,12 +558,6 @@ app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','loca
 	function($scope,$rootScope,Upload,$timeout,localStorageService) {
 
 
-		/*
-		*
-		* Set default jot type
-		*
-		*/		
-		$rootScope.jot_type = 'issue';
 
 		/*
 		* Default checklist
@@ -549,7 +611,7 @@ app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','loca
 
 					/*********** Remove value on uncheck  *********/
 
-					CheckBoxValue = CheckBoxValue.filter(function( obj ) {			    
+					CheckBoxValue = CheckBoxValue.filter(function( obj ) {		    
 				    	return obj.name != currentValue;
 				    });
 				}							
@@ -598,7 +660,7 @@ app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','loca
 		
 
 		$scope.addchecklist = function(itemType){
-				console.log($scope.checklistdate);
+				
 				$scope.itemError = '';
 				var storedCheckbox = $scope.checkList;
 				var ItemToAdd = '';
@@ -694,11 +756,165 @@ app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','loca
 
 "use strict";
 
-app.controller('departmentCtlr', ['$scope','$rootScope',
-	function($scope,$rootScope) {
+app.controller('departmentCtlr', ['$scope','$rootScope','localStorageService','jotFactory',
+	function($scope,$rootScope,localStorageService,jotFactory) {
 		
+
+		/*****************************************
+		* Get department List
+		******************************************/
+
+		var hotel = localStorageService.get('hotel');
+		var request= {
+			url:window.__API_PATH.GET_DEPARTMENTS,
+			method:"GET",
+			params:{hotel_id: hotel.hotel_id}
+		};
+		jotFactory.jotCRUD(request)
+		.then(function(response){
+			$scope.departmentSuggetionList = response.result;	
+			
+		});
+
+	     
+	     /*after click on suggestion list*/                                                            
+	    $scope.callback = function(){	       
+	        $scope.deparmentfocus = true;
+	         
+	    };
+
 	}
 ]);
+"use strict";
+
+app.controller('dueDataCtlr', ['$scope','$rootScope','$mdDialog',
+	function($scope,$rootScope) {
+
+		/*
+		*
+		* Default Date
+		*
+		*/
+		if(!$rootScope.due_date)
+		{
+			$rootScope.due_date = new Date(new Date().getTime());
+		}
+
+	}
+]);
+
+"use strict";
+
+app.controller('editJotCtlr', ['$scope','jotFactory','$rootScope','$mdDialog','jotData','$route','toastService',
+	function($scope,jotFactory,$rootScope,$mdDialog,jotData,$route,toastService) {
+		
+		$scope.edit_jot		   = jotData;
+		
+		$scope.jot_title	   = $scope.edit_jot.jot_data.jot_title;
+		$rootScope.assigned_to = $scope.edit_jot.jot_data.assigned_to;
+		$rootScope.due_date    = new Date($scope.edit_jot.jot_data.due_date);
+		$rootScope.priority    = $scope.edit_jot.jot_data.priority;
+		$rootScope.department  = $scope.edit_jot.jot_data.department;
+
+
+
+		/**************************************
+		* Edit jot popup
+		**************************************/
+
+		$scope.jotQuickEditPopup = function(HtmlName){	
+			$mdDialog.show({				
+			    templateUrl: '/modules/jot/views/'+HtmlName+'.html',
+				multiple: true,
+				clickOutsideToClose:true,
+				fullscreen: $scope.customFullscreen,				
+			}).then(function(answer) {}, function() {});
+
+		};
+
+		/**************************************
+		* Change status
+		**************************************/
+
+		$scope.changeStatus = function(){
+			if($scope.edit_jot.jot_data.status == 'close')
+			{
+				$scope.edit_jot.jot_data.status = 'open';
+			} else {
+				$scope.edit_jot.jot_data.status = 'close';
+			}
+
+		};
+		
+		/**************************************
+		* Update Jot
+		**************************************/
+
+		$scope.saveUpdateedJot = function(){
+			$scope.edit_jot.jot_data.jot_id      = $scope.edit_jot.jot_data._id;
+			$scope.edit_jot.jot_data.jot_title   = $scope.jot_title;
+			$scope.edit_jot.jot_data.assigned_to = $rootScope.assigned_to;
+			$scope.edit_jot.jot_data.due_date    = new Date($rootScope.due_date).getTime();
+			$scope.edit_jot.jot_data.priority    = $rootScope.priority;
+			$scope.edit_jot.jot_data.department  = $rootScope.department;
+		
+
+			var request={
+				url:window.__API_PATH.UPDATE_JOT,
+				method:"put",
+				params:$scope.edit_jot.jot_data
+			};
+
+			jotFactory.jotCRUD(request).then(function(response){				
+				$scope.result = {message:response.message,class:response.class}; 	
+			});
+		};
+
+	
+		/**************************************
+		* Archive Jot
+		**************************************/
+
+		$scope.archiveJot = function(){
+			var jotid = {jot_id:$scope.edit_jot.jot_data._id};
+
+			var request={
+				url:window.__API_PATH.DELETE_JOT,
+				method:"DELETE",
+				params:jotid
+			};
+			
+			jotFactory.jotCRUD(request).then(function(response){				
+				$route.reload();
+				$mdDialog.cancel();
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+			});
+		};
+
+		/**************************************
+		* Close popup
+		**************************************/
+		$scope.close = function(){
+			 $mdDialog.cancel();
+		};
+		
+	}
+]).directive('ngConfirmClick', [
+        function(){
+            return {
+                link: function (scope, element, attr) {
+                    var msg = attr.ngConfirmClick || "Are you sure?";
+                    var clickAction = attr.confirmedClick;
+                    element.bind('click',function (event) {
+                        if ( window.confirm(msg) ) {
+                            scope.$eval(clickAction);
+                        }
+                    });
+                }
+            };
+    }]);
+
 
 "use strict";
 
@@ -758,8 +974,9 @@ app.controller('issueCtlr', ['$scope','$rootScope',
 		*
 		* Set default jot type
 		*
-		*/		
-		/*$scope.jot_type = 'issue';*/		
+		*/	
+		$rootScope.jot_type = 'issue';
+
 	}
 ]);
 
@@ -782,7 +999,20 @@ app.controller('jotController', ['$scope','$location','jotFactory','$rootScope',
 		/**************************************
 		* Get jot list
 		**************************************/
-				
+		$rootScope.task_iteration = [];
+		$rootScope.task_iteration.data = [];
+		$rootScope.task_iteration.type = [];
+		$rootScope.note_iteration = [];
+		$rootScope.note_iteration.data = [];
+		$rootScope.note_iteration.type = [];
+		$rootScope.issue_iteration = [];
+		$rootScope.issue_iteration.data = [];
+		$rootScope.issue_iteration.type = [];
+		$rootScope.others_iteration = [];
+		$rootScope.others_iteration.data = [];
+		$rootScope.others_iteration.type = [];	
+
+
 		var request= {
 			url:window.__API_PATH.GET_JOT,
 			method:"GET",
@@ -791,44 +1021,128 @@ app.controller('jotController', ['$scope','$location','jotFactory','$rootScope',
 
 		jotFactory.jotCRUD(request)
 		.then(function(response){
-			$rootScope.jots = response.result;
+			//$rootScope.jots = response.result;
+
+			angular.forEach(response.result,function(value,index){
+				
+				if(value._id == 'task')
+				{
+					$rootScope.task_iteration.data  = value.jot_data;
+					$rootScope.task_iteration.type  = value._id;
+				} else if(value._id == 'note') {
+					$rootScope.note_iteration.data = value.jot_data;
+					$rootScope.note_iteration.type  = value._id;
+				} else if(value._id == 'issue') {
+					$rootScope.issue_iteration.data  = value.jot_data;
+					$rootScope.issue_iteration.type  = value._id;
+				} else {
+					$rootScope.others_iteration.data  = value.jot_data;
+					$rootScope.others_iteration.type  = value._id;
+				}  
+		
+			});
 		});
 
+
+		/**************************************
+		* Edit jot popup
+		**************************************/
+
+		$scope.jotEditPopup = function(jotData,jotType){
 		
+			var data={jot_data:jotData,jot_type:jotType};
+			$mdDialog.show({
+				controller: 'editJotCtlr',
+				templateUrl: '/modules/jot/views/edit_jot.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				locals: {jotData:data}
+			})
+			.then(function(answer) {
+			
+			}, function() {
+			
+			});
+
+		};
+
+				
 	}
 ]);
 
 
 "use strict";
 
-app.controller('jotFormCtrl', ['$scope','$location','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','$filter',
-	function($scope,$location, localStorageService,jotFactory,$rootScope,$mdDialog,toastService,$filter) {	
-
+app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','ActivateTab',
+	function($scope,localStorageService,jotFactory,$rootScope,$mdDialog,toastService,ActivateTab) {	
 
 		/*
-		* Function
-		*
-		* Cteate jot.
-		*
+		* Blank field before open form
 		*/
+
+		$rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.assigned_to = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = '';
+
+		/*
+		* Activate tab
+		*/
+		$scope.currentNavItem       = ActivateTab;
+		
+
+		/******************************************************************
+		||	Create jot 
+		******************************************************************/
+
 		$scope.createJot = function(){
-			/*console.log($rootScope.jot_type);			
-			return false;*/
+			/*console.log($rootScope.due_date);
+			return false;
+			*/
+
+			/**
+			||	Start task Jot Data json 
+			**/
+
+			var task = '';
+			if($rootScope.taskTime == 'onetime')
+			{
+				 task = {
+					type: 'onetime',
+					date: new Date($rootScope.onetime_date).getTime()
+				};
+			} 
+
+			if($rootScope.taskTime == 'recurring'){
+
+				 task = {
+					type       : 'recurring',
+					start_date : new Date($rootScope.start_recurring_date).getTime(),
+					end_date   : new Date($rootScope.end_recurring_date).getTime(),
+					pattern: {
+								type : $rootScope.selectedPattern,
+								days : $rootScope.selectedDays,
+								day  : $rootScope.monthly_recurring_date			
+							 }
+				};
+			}
+
+			/**
+			||	End task Jot Data json 
+			**/
+
 			$scope.message = ' ';
 
 			var hotel = localStorageService.get('hotel');
-
-
 			var jotDataArray = {
 					jot_title          : $scope.jot_title,
-					priority           : $scope.jot_priority,
+					priority           : $rootScope.priority,
 					hotel_id		   : hotel.hotel_id,
 					jot_type           : $rootScope.jot_type,
-					due_date   		   : new Date($scope.outsource.due_date).getTime(),
-					department		   : $scope.outsource.department,
-					assigned_to 	   : $scope.outsource.assigned_to,
+					due_date   		   : new Date($rootScope.due_date).getTime(),
+					department		   : $rootScope.department,
+					assigned_to 	   : $rootScope.assigned_to,
 					checklist		   : $rootScope.checklist,	
-					image		   	   : $rootScope.issueImages	
+					image		   	   : $rootScope.issueImages,
+					task_type          : task,
+					status			   : 'open'
 			};
 
 			var request={
@@ -838,9 +1152,19 @@ app.controller('jotFormCtrl', ['$scope','$location','localStorageService','jotFa
 			};
 			
 			jotFactory.jotCRUD(request).then(function(response){
-				
+				var result = response.result;
 				if(response.status == 1)
 				{
+					if($rootScope.jot_type == 'task')
+					{
+						$rootScope.task_iteration.data.push(result);
+					} else if($rootScope.jot_type == 'note') {
+						$rootScope.note_iteration.data.push(result);
+					} else if($rootScope.jot_type == 'issue') {
+						$rootScope.issue_iteration.data.push(result);
+					} else {
+						$rootScope.others_iteration.data.push(result);
+					}					
 
 					$mdDialog.cancel();
 					var popup = {"message":response.message,"class":"success"};
@@ -851,27 +1175,27 @@ app.controller('jotFormCtrl', ['$scope','$location','localStorageService','jotFa
 					* Jot object iteration
 					****************************************************/
 
-					var keyFoundInObj = false;
+					/*var keyFoundInObj = false;
 
-					angular.forEach($rootScope.jots,function(value,index){
+					angular.forEach($rootScope.jots,function(value,index){*/
 						
 
 						/******************************************************
 						* Check jot type(message,issue etc.) is new or already in object 
 						****************************************************/
-		                if(value._id == $rootScope.jot_type)
+		               /* if(value._id == $rootScope.jot_type)
 		                {                	
 		                	value.jot_data.push(jotDataArray);
 		                	keyFoundInObj = true;
 		                }		                
-		            });
+		            });*/
 					
 
 		            /******************************************************
 					* Push new jot data if  jot type(message,issue etc.) is not in jot object
 					****************************************************/
 					
-					if(!keyFoundInObj)
+					/*if(!keyFoundInObj)
 					{
 						var jotDataArrayInObj = [jotDataArray];
 			            var newcreatedJot = {
@@ -881,7 +1205,7 @@ app.controller('jotFormCtrl', ['$scope','$location','localStorageService','jotFa
 			            		                	
 			            $rootScope.jots.push(newcreatedJot);
 		            
-			        }
+			        }*/
 
 				}
 			});
@@ -899,14 +1223,7 @@ app.controller('jotFormCtrl', ['$scope','$location','localStorageService','jotFa
 			 $mdDialog.cancel();
 		};
 
-		/*
-		* Function
-		*
-		* Select tab
-		*
-		*/
-		$scope.jotTab        = window.__API_PATH.JOT_TAB;
-		$scope.currentNavItem=	$scope.jotTab[0].id;
+		
 
 	
 
@@ -928,13 +1245,9 @@ app.controller('jotFormCtrl', ['$scope','$location','localStorageService','jotFa
 	return {
 		scope:{jotTemplate:'='},
 		template:'<span ng-include="template"></span>',
-		// controller: 'jotTabsCtlr',
 		link: function(scope,ele){			
 			scope.$watch('jotTemplate', function(templateName){
 				scope.template='/modules/jot/views/'+templateName+'.html';
-				console.log('templateName');	
-				console.log(templateName);
-				scope.jot_type	 = templateName;			
 			});
 
 		}
@@ -952,10 +1265,8 @@ app.controller('jotQuickCtlr', ['$scope','$rootScope',
 			*
 			*/
 			$rootScope.jot_type = 'quick';
-			$scope.jotList   = window.__API_PATH.JOT_TYPES;
 
 			$scope.jotSelect = function(event,value){
-				$scope.jot_type = value;	
 				$rootScope.jot_type = value;
 			};
 	}
@@ -963,10 +1274,70 @@ app.controller('jotQuickCtlr', ['$scope','$rootScope',
 
 "use strict";
 
-app.controller('staffCtlr', ['$scope','$rootScope',
+app.controller('noteCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {	
+		/*
+		*
+		* Set default jot type
+		*
+		*/	
+		$rootScope.jot_type = 'note';	
+	}
+]);
+"use strict";
+
+app.controller('priorityCtlr', ['$scope','$rootScope','$mdDialog',
 	function($scope,$rootScope) {
 
+		/*
+		*
+		* Set jot priority type on click
+		*
+		*/
+
+		$scope.jotPriorityList 	= window.__API_PATH.JOT_PRIORITY;
+		if(!$rootScope.priority)
+		{
+			$rootScope.priority = window.__API_PATH.JOT_PRIORITY[0].name;
+		}		
+
+		$scope.selectPriority = function(event,value){
+			 $rootScope.priority 	= value;
+		};
+
 	}
+]);
+
+"use strict";
+
+app.controller('staffCtlr', ['$scope','$rootScope','localStorageService','jotFactory',
+	function($scope,$rootScope,localStorageService,jotFactory) {
+		
+		/*****************************************
+		* Get Staff List
+		******************************************/
+
+		var hotel = localStorageService.get('hotel');
+		var request= {
+					url:window.__API_PATH.STAFF_SUGGESTION,
+					method:"GET",
+					params:{hotel_id: hotel.hotel_id}
+				};
+		jotFactory.jotCRUD(request)
+		.then(function(response){
+			$scope.staffList = response.result;			
+		});
+
+	     
+	     /*after click on suggestion list*/                                                            
+	    $scope.callbackStaff = function(){
+
+	            $scope.staffFocus = true;
+        
+	    };
+
+	}
+
 ]);
 
 "use strict";
@@ -977,41 +1348,260 @@ app.controller('taskCtlr', ['$scope','$rootScope',
 		*
 		* Set default jot type
 		*
-		*/		
-		/*$scope.jot_type = 'task';*/		
+		*/	
+		$rootScope.jot_type = 'task';		
+	
 	}
 ]);
 
 "use strict";
 
 app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
-	function($scope,$rootScope) {
+	function($scope,$rootScope) {	
 
 		/*
-		* Show/Hide datepicker according to type
-		* Clear previous value before datepicker display
+		* Get day list in array
 		*/
 		
-		$scope.taskTime = function(taskType){
-			$scope.oneTime   = false;
-			$scope.recurring = false;
-			if(taskType == 'oneTime')
-			{
-				$scope.onetime = '';
-				$scope.oneTime = true;
-			}
-			if(taskType == 'recurring')
-			{
-				$scope.start_recurring = '';
-				$scope.end_recurring   = '';
-				$scope.recurring = true;
-			}
+		$scope.getDay = function(num) {
+		    return new Array(num);   
 		};
 
-		
+		/*
+		* Make task pattern
+		*/
+
+		$scope.patterns = window.__API_PATH.RECURRING_PATTERN;
+		$scope.weeks    = window.__API_PATH.WEEK_NAME;
+		$rootScope.selectedDays = [];
+
+		 
+		/*
+		* Show/Hide pattern
+		*/
+
+		$scope.patternShow = function(pattern){
+			$rootScope.selectedPattern = pattern.id;		
+			$scope.selectedPatternDesc = pattern.description;	
+	        $rootScope.selectedDays = [];
+
+	        if(pattern.id == 'daily' || pattern.id == 'weekly')
+			{	
+				/***** Auto check all week value *****/	
+
+				
+				angular.forEach($scope.weeks, function (item) {
+					if(pattern.id == 'daily')
+					{
+						item.Selected = true;	
+					} else {
+						item.Selected = false;
+					}		            
+		            $rootScope.selectedDays.push(item.value);
+		        });				
+				
+			}
+			
+			
+
+		};		
+
+		/*
+		* Store pattern on temp variable
+		*/
+
+		  
+		  $scope.toggleWeek = function(selected,weekValue) {
+			  var index = $rootScope.selectedDays.indexOf(weekValue);		 
+			  if (index > -1) 
+			  {
+				$rootScope.selectedDays.splice(index, 1);
+			  }
+			  else
+			  {
+			    $rootScope.selectedDays.push(weekValue);
+			  }
+			  
+		  };
 				
 	}
 ]);
+
+"use strict";
+
+app.directive('departmentypeahead', ['$compile', '$timeout', function($compile, $timeout) {
+
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            ngModel: '=',
+            departmentypeahead: '=',
+            departmenttypeaheadCallback: "="
+        },
+        link: function(scope, elem, attrs) {
+
+            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (departmentypeahead | filterdepartment:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.department_name}}</a></li></ul></div>';
+
+            elem.bind('blur', function() {
+                $timeout(function() {
+                    scope.selected = true
+                }, 100)
+            });
+
+            /*****************************************
+            * Navigate list item on mouse key
+            ******************************************/
+
+            elem.bind("keydown", function($event) {
+                if($event.keyCode == 38 && scope.active > 0) { 
+                    scope.active--
+                    scope.$digest()
+                } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
+                    scope.active++
+                    scope.$digest()
+                } else if($event.keyCode == 13) {
+                    scope.$apply(function() {
+                        scope.click(scope.filitered[scope.active])
+                    })
+                }
+            });
+
+            scope.click = function(item) {
+            var replaceString = scope.ngModel;
+			var replaceWord   = scope.matchWord;
+			selectedValue     = "#"+item.department_name+" ";
+
+			var replacedValue = replaceString.replace(new RegExp("\\"+replaceWord+"\\b"), selectedValue);
+				scope.ngModel = replacedValue;
+				scope.selected = item;
+
+                if(scope.departmenttypeaheadCallback) {
+                    scope.departmenttypeaheadCallback(item)
+                }
+                elem[0].blur();
+            }
+
+            scope.mouseenter = function($index) {
+                scope.active = $index
+            };
+
+            scope.$watch('ngModel', function(input) {
+            	
+				if(scope.selected && scope.selected.department_name == input) {
+                	return
+                }
+                scope.active = 0;
+                scope.selected = false;
+            });
+            elem.after($compile(template)(scope));
+        }
+    }
+}]).directive('focusDepartment', function($timeout, $parse) {
+      return {
+          
+          link: function(scope, element, attrs) {
+              var model = $parse(attrs.focusMe);
+              scope.$watch(function(value) {
+                     if(value.deparmentfocus)
+                     {            
+                      $timeout(function() {                        
+                          element[0].focus();
+                      });
+                      scope.deparmentfocus = false;
+                     }
+              });
+          }
+      };
+    });
+
+"use strict";
+
+app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $timeout) {
+
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            ngModel: '=',
+            stafftypeahead: '=',
+            stafftypeaheadCallback: "="
+        },
+        link: function(scope, elem, attrs) {
+
+            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
+
+            elem.bind('blur', function() {
+                $timeout(function() {
+                    scope.selected = true
+                }, 100);
+            });
+
+            /*****************************************
+            * Navigate list item on mouse key
+            ******************************************/
+
+            elem.bind("keydown", function($event) {
+                if($event.keyCode == 38 && scope.active > 0) { 
+                    scope.active--;
+                    scope.$digest();
+                } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
+                    scope.active++
+                    scope.$digest()
+                } else if($event.keyCode == 13) {
+                    scope.$apply(function() {
+                        scope.click(scope.filitered[scope.active])
+                    })
+                }
+            });
+
+            scope.click = function(item) {
+            var replaceString = scope.ngModel;
+			var replaceWord   = scope.matchWord;
+			var selectedValue     = "@"+item.user_name+" ";
+
+			var replacedValue = replaceString.replace(new RegExp("\\"+replaceWord+"\\b"), selectedValue);
+				scope.ngModel = replacedValue;
+				scope.selected = item;
+
+                if(scope.stafftypeaheadCallback) {
+                    scope.stafftypeaheadCallback(item)
+                }
+                elem[0].blur();
+            };
+
+            scope.mouseenter = function($index) {
+                scope.active = $index
+            };
+
+            scope.$watch('ngModel', function(input) {
+            	
+				if(scope.selected && scope.selected.user_name == input) {
+                	return;
+                }
+                scope.active = 0;
+                scope.selected = false;
+            });
+            elem.after($compile(template)(scope));
+        }
+    }
+}]).directive('focusStaff', function($timeout, $parse) {
+      return {
+          
+          link: function(scope, element, attrs) {
+              var model = $parse(attrs.focusMe);
+              scope.$watch(function(value) {
+                     if(value.staffFocus)
+                     {            
+                      $timeout(function() {                        
+                          element[0].focus();
+                      });
+                      scope.staffFocus = false;
+                     }
+              });
+          }
+      };
+    });
 
 'use strict';
 
@@ -1031,6 +1621,141 @@ app.factory('jotFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
+app.filter("filterdepartment", function() {
+
+	/**************************************
+		* Get cursor position
+		**************************************/
+		 function GetCaretPosition(ctrl) {
+            var CaretPos = 0; 
+            if (document.selection) {
+                ctrl.focus();
+                var Sel = document.selection.createRange();
+                Sel.moveStart('character', -ctrl.value.length);
+                CaretPos = Sel.text.length;
+            }            
+            else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+                CaretPos = ctrl.selectionStart;
+            return (CaretPos);
+        }
+
+        /**************************************
+		* Retrun word of befor cursor
+		**************************************/
+        function ReturnWord(text, caretPos) {
+                var index = text.indexOf(caretPos);
+	            var preText = text.substring(0, caretPos);
+	            if (preText.indexOf(" ") > 0) {
+	                var words = preText.split(" ");
+	                return words[words.length - 1]; //return last word
+	            }
+	            else {
+	                return preText;
+	            }
+        }
+
+         return function(input,scope) {
+         	
+         	var text     = document.getElementById("department");
+			var caretPos = GetCaretPosition(text);
+            var word     = ReturnWord(text.value, caretPos);
+
+            var detectUserName = word.match(/\#[a-z]+/gm);
+			var countAtRate    = word.match(/\#/gm);
+			
+			if(detectUserName && countAtRate.length == 1)
+			{
+				var removeHash = word.split("#");
+				removeHash = removeHash[1];
+				scope.matchWord = word;		
+
+				var searchedString 	= [];
+				angular.forEach(input,function(value,key){
+					var listedDepartment = value.department_name;
+					listedDepartment     = listedDepartment.toLowerCase();
+					removeHash           = removeHash.toLowerCase();
+					
+					if(listedDepartment.startsWith(removeHash))
+					{						
+						searchedString.push(value);
+					}
+				});				
+				return searchedString;
+			}
+			
+         };
+});
+
+
+
+
+app.filter("filterstaff", function() {
+
+	/**************************************
+		* Get cursor position
+		**************************************/
+		 function GetCaretPosition(ctrl) {
+            var CaretPos = 0; 
+            if (document.selection) {
+                ctrl.focus();
+                var Sel = document.selection.createRange();
+                Sel.moveStart('character', -ctrl.value.length);
+                CaretPos = Sel.text.length;
+            }            
+            else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+                CaretPos = ctrl.selectionStart;
+            return (CaretPos);
+        }
+
+        /**************************************
+		* Retrun word of befor cursor
+		**************************************/
+        function ReturnWord(text, caretPos) {
+                var index = text.indexOf(caretPos);
+	            var preText = text.substring(0, caretPos);
+	            if (preText.indexOf(" ") > 0) {
+	                var words = preText.split(" ");
+	                return words[words.length - 1]; //return last word
+	            }
+	            else {
+	                return preText;
+	            }
+        }
+
+         return function(input,scope) {
+         	
+         	var text     = document.getElementById("staff");
+			var caretPos = GetCaretPosition(text);
+            var word     = ReturnWord(text.value, caretPos);
+
+            var detectUserName = word.match(/\@[a-z]+/gm);
+			var countAtRate    = word.match(/\@/gm);
+			
+			if(detectUserName && countAtRate.length == 1)
+			{
+				var removeAtRate = word.split("@");
+				
+				removeAtRate = removeAtRate[1];
+				scope.matchWord = word;		
+
+				var searchedString 	= [];
+				angular.forEach(input,function(value,key){
+					var listedstaff = value.user_name;
+					listedstaff     = listedstaff.toLowerCase();
+					removeAtRate      = removeAtRate.toLowerCase();
+					
+					if(listedstaff.startsWith(removeAtRate))
+					{						
+						searchedString.push(value);
+					}
+				});				
+				return searchedString;
+			}
+			
+         };
+});
+"use strict";
+
 /**************************************
 * Login controller
 **************************************/
@@ -1040,24 +1765,9 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 	function($scope,$http,$location,$timeout, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog) {	
 
 
-		$scope.login = function(){
-			$mdDialog.show({
-				controller: "loginController",
-				templateUrl: '/modules/login/views/login.tpl.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-			})
-			.then(function(answer) {			
-			}, function() {			
-			});
-		};
-
-
-		$scope.close = function(){
-			 $mdDialog.cancel();
-		};
-
-
+		/*********************************************
+		* Submit login form
+		***********************************************/
 		
 		$scope.loginUser = function (obj) {
 		
@@ -1072,8 +1782,8 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 					data:dataObj
 				};
 
-			loginFactory.login(request).then(function(response){	
-
+			loginFactory.login(request).then(function(response){
+				$scope.loginresult = response;
 				if(response.errors){
 					//toastService.alert({message: response.errors.message, class: 'error'});
 				} else {
@@ -1083,18 +1793,82 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 						localStorageService.set('user', response.result.user);
 						AuthSrv.isLogged = true;
 						$location.path('/dashboard');
-					}
-					$scope.result = response.message;				
+					}									
 				}
+				
 			});				
 	               
 		};
 
+		/*********************************************
+		* Forget password
+		***********************************************/
 
+		$scope.forgetPassword = function(){
+
+			var data = {email:$scope.forget_email};
+			var request={
+					url:window.__API_PATH.FORGET_PASSWORD,
+					method:"POST",
+					data:data
+				};
+
+			loginFactory.login(request).then(function(response){
+					$scope.forgetresult = response;
+			});
+
+		};
+
+		/*********************************************
+		* Redirect to signup form
+		***********************************************/
 
 		$scope.openSignupForm = function (obj) {
 	           $location.path('/register');    
 		};
+	}
+]);
+
+"use strict";
+
+/**************************************
+* Login controller
+http://localhost:3000/resetpassword/0c02baa57acfbb5a51cb0a04c587b8eec2099e3d
+**************************************/
+
+
+app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location',
+	function($scope,loginFactory,$rootScope,$routeParams,$location) {	
+		console.log($routeParams);
+		var token = $routeParams.token;
+		
+		
+
+		/*********************************************
+		* Forget password
+		***********************************************/
+		$scope.resetResult = {message:"",class:""};
+		
+		$scope.resetPass = function(){
+			if($scope.forget_password == $scope.forget_confirm_password)
+			{
+				var data = {password:$scope.forget_password,token:token};
+				var request={
+						url:window.__API_PATH.PASSWORD_RESET,
+						method:"POST",
+						data:data
+				};
+
+				loginFactory.login(request).then(function(response){
+						$scope.resetResult = response;
+				});
+			} else {
+				$scope.resetResult.message = 'Password is not match with confirm password.';
+				$scope.resetResult.class = 'Autherror';
+			}			
+			
+		};
+
 	}
 ]);
 
@@ -1116,9 +1890,56 @@ app.factory('loginFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
+app.directive('header',['$rootScope',function($rootScope){
+	return{
+		templateUrl:'/modules/partials/header.html',
+		link: function(scope,ele){}
+	
+	};
+}]);
+
+
+
+app.factory('headerFactory', ['$http', function ($http) {
+	return{	
+		
+		get: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		},			
+	};
+}]);
+'use strict';
+
+app.factory('registerFactory', ['$http', function ($http) {
+	return{		
+	
+		register: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		},		
+	};
+}]);
+"use strict";
+
 app.controller('headerController', ['$scope','$location','localStorageService','headerFactory','$rootScope','$mdDialog','$route',
 	function($scope,$location,localStorageService,headerFactory,$rootScope,$mdDialog,$route) {	
 
+		/*
+		* Jot form tab list
+		*/
+
+		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
 
 		/*
 		* Factory method
@@ -1179,6 +2000,24 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
 				clickOutsideToClose:true,
+				locals: {ActivateTab:'quick'}
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
+		/**************************************
+		* Open popup direct by jot type 
+		**************************************/
+
+		$rootScope.openFormByType = function(formType){
+		
+			$mdDialog.show({
+				controller: 'jotFormCtrl',
+				templateUrl: '/modules/jot/views/jot-form.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,				
+				locals: {ActivateTab:formType}
 			}).then(function(answer) {}, function() {});
 
 		};
@@ -1187,32 +2026,6 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 	}
 ]);
 
-"use strict";
-
-app.directive('header',['$rootScope',function($rootScope){
-	return{
-		templateUrl:'/modules/partials/header.html',
-		link: function(scope,ele){}
-	
-	};
-}]);
-
-
-
-app.factory('headerFactory', ['$http', function ($http) {
-	return{	
-		
-		get: function(obj){
-			return $http(obj).then(function(response){
-				return response.data;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		},			
-	};
-}]);
 "use strict";
 
 /**************************************
@@ -1238,7 +2051,8 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 				};
 
 			registerFactory.register(request).then(function(response){
-				$scope.result = response.result;
+				console.log(response);
+				$scope.registerResult = response;				
 			});       
 		};	
 
@@ -1251,20 +2065,3 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 	}
 ]);
 
-
-'use strict';
-
-app.factory('registerFactory', ['$http', function ($http) {
-	return{		
-	
-		register: function(obj){
-			return $http(obj).then(function(response){
-				return response.data;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		},		
-	};
-}]);

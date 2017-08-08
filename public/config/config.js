@@ -52,32 +52,35 @@ app.config(['$httpProvider', function($httpProvider){
 
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) {           
-
-            if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
-              
-                AuthSrv.isLogged = 0;
-              
-                $location.path("/");
-            }else {
-               
-                var token = localStorageService.get('token');
-                if(($location.path() === '/login' || $location.path() === '/') && token ){           
-                   $location.path("/dashboard");
+                
+                if(nextRoute.$$route){
+                    if(nextRoute.$$route.access){
+                        $rootScope.isAuth= nextRoute.$$route.access;
+                   } 
                 }
-            }
+                if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {                  
+                    AuthSrv.isLogged = 0;                  
+                    $location.path("/");
+                }else {
+                   
+                    var token = localStorageService.get('token');
+                    if(($location.path() === '/login' || $location.path() === '/') && token ){           
+                       $location.path("/dashboard");
+                    }
+                }
         });
 
 
-        $rootScope.$on("$routeChangeSuccess", 
+        /*$rootScope.$on("$routeChangeSuccess", 
             function (event, nextRoute, currentRoute) {
-
+            
            if(nextRoute.$$route){
                 if(nextRoute.$$route.access){
-                    $rootScope.isAuth= nextRoute.$$route.access;
+                    $rootScope.isAuth= nextRoute.$$route.access;                    
                } 
            }
             
-        });
+        });*/
     	
     	
     	/* This will logout the user from the application */
@@ -98,4 +101,3 @@ app.config(['$httpProvider', function($httpProvider){
 
 	
 }]);
-

@@ -7,7 +7,8 @@ app.controller('issueCtlr', ['$scope','$rootScope',
 		*
 		* Set default jot type
 		*
-		*/		
-		/*$scope.jot_type = 'issue';*/		
+		*/	
+		$rootScope.jot_type = 'issue';
+
 	}
 ]);

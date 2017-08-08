@@ -2,8 +2,7 @@ var mongoose      = require('mongoose'),
   Schema          = mongoose.Schema,
   path            = require('path'),
   config          = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
-    
-  
+     
 var DepartmentSchema  = new Schema({
   
   hotel_id: {
@@ -25,9 +24,6 @@ var DepartmentSchema  = new Schema({
         updatedAt: 'updated'
     }
 });
-
-
 DepartmentSchema.set('autoIndex', config.db.autoIndex);
-
 var departmentCollection  = mongoose.model('department', DepartmentSchema);
 module.exports            = departmentCollection;

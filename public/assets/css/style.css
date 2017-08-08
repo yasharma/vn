@@ -100,7 +100,7 @@ div.white-space-pre-line {
   margin-top: 5px;
 }
 
-md-toast.success .md-toast-content {
+md-toast.success .md-toast-content,md-toast.Authsuccess .md-toast-content {
     background: #61bd4f none repeat scroll 0 0;
 }
 .newhotel_dialog_form md-input-container {
@@ -143,4 +143,121 @@ md-toast.success .md-toast-content {
 
 .uploadimage_list > li .imgcon {
     cursor: pointer;
+}
+
+md-toast.ng-scope {
+    position: fixed;
+    bottom: 0;
+}
+.pattern_disable {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+.suggestions_list {
+    background: #fff none repeat scroll 0 0;
+    min-width: 400px;
+    padding: 0;
+    position: absolute;
+    left: 2px;
+    z-index: 999;
+    top: 50px;
+}
+.suggestions_list ul {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.suggestions_list li {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 8px;
+}
+
+
+.suggestions_list li a {
+    color: #000;
+}
+.suggestions_list li:hover {
+    background: #2aaae0 none repeat scroll 0 0;
+}
+.suggestions_list li.active {
+    background: #2aaae0;
+}
+
+.suggestions_list li.active a {
+    color: #fff;
+}
+.close_suggestion {
+    font-size: 20px;
+    position: absolute;
+    right: 5px;
+    top: 0;
+}
+
+md-dialog > .EditMode {
+    width: 500px;
+    min-height: 200px;
+}
+md-dialog > .EditMode md-input-container.md-block {
+    margin-bottom: 0;
+}
+
+md-dialog > .EditMode .suggestions_list {
+    top: 50px;
+}
+.jot_prity > li > a:hover, .jot_prity > li > a.active {
+  opacity: 0.7;
+}
+.message{
+  margin-top: 5px;
+}
+md-select {
+    background: #fff;
+    padding: 10px;
+}
+
+.tab_label {
+    display: block;
+}
+.md-nav-bar {
+  height: auto;
+}
+.jot_icon {
+    position: relative;
+    top: -3px;
+}
+.jotHead {
+    margin-left: 5px;
+}
+.status.close {
+    background: green !important;
+    opacity: 1;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 5px;
+    line-height: normal;
+    pointer-events: none;
+}
+.suggestions_list li.focused {
+    background-color: #ccc;
+}
+
+.heder_srch md-input-container {
+    display: inline-block;
+    margin: 0;
+    padding: 11px 0 0;
+    position: relative;
+    vertical-align: middle;
+}
+.heder_srch {
+  background: #fff none repeat scroll 0 0;
+  left: 231px;
+  padding: 0 75px 0 12px;
+  position: absolute;
+  top: 0;
+}
+
+.search_icon {
+    top: 17px;
 }

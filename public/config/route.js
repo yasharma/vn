@@ -18,6 +18,14 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false
         }
     })
+     .when("/resetpassword/:token", {
+        templateUrl : "/modules/login/views/resetpassword.html",
+        controller  :  "resetPasswordCtlr",
+        access: {
+            requiredLogin: false,
+        }
+    })
+
     .when("/register", {
         templateUrl : "/modules/register/views/register.tpl.html",
         controller  :  "registerController",
@@ -30,17 +38,21 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         controller  :  "dashboardController",
         access: {
             requiredLogin: true, 
-            headerType:'hotel_header'
+            headerType:'hotel_header',
+            sidebar: 'yes'
         }
     })
+
+   
     .when("/dashboard/jot", {
         templateUrl : "/modules/jot/views/dashboard-jot.html",
         controller  :  "jotController",
         access: {
             requiredLogin: true,
-            headerType:'dashboard_header'
+            headerType:'dashboard_header',
+            sidebar: 'yes'
         }
-    });
-   
+    })
+   .otherwise({redirectTo: '/'});
     $locationProvider.html5Mode(true);     
 }]);

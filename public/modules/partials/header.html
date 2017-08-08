@@ -20,7 +20,7 @@
 		              <md-button ng-click="clearToken(); announceClick($index)">
 		                  <div layout="row">
 		                    <p>Logout</p>
-		                    <md-icon md-menu-align-target md-svg-icon="call:portable-wifi-off" style="margin: auto 3px auto 0;"></md-icon>
+		                    <md-icon md-menu-align-target  style="margin: auto 3px auto 0;"></md-icon>
 		                  </div>
 		              </md-button>
 		            </md-menu-item>
@@ -35,8 +35,40 @@
 
 <!-- header -->
 <div class="dash_home_header clearfix" ng-if="isAuth.headerType=='dashboard_header'" ng-controller="headerController">
-	<duv class="dash_home_header_logo_center">
+	<!-- <duv class="dash_home_header_logo_center">
 		<a href="javascript:;" ng-click="quickTaskPopup()"><img src="assets/images/circle-logo.png"></a>
+	</duv> -->
+
+	<duv class="dash_home_header_logo_center">
+
+		<a href="javascript:;" ng-click="logocircle=!logocircle" class="md-block">
+			<img src="assets/images/circle-logo.png">
+		</a>	
+		<div class="iconHover " ng-class="{'logocircle':logocircle}">
+			<div class="center_circle">
+				<a href="javascript:void(0);" ng-click="quickTaskPopup()">
+					Quick Jot
+				</a>
+			</div>
+            <a href="javascript:void(0)" title="Issue" ng-click="$root.openFormByType('issue')" class="icon onelink" >
+            	<ng-md-icon icon="warning" style="fill: white" size="25"></ng-md-icon>
+            </a>
+            <a href="javascript:void(0)" title="Task" ng-click="$root.openFormByType('task')"  class="icon twolink">
+            	<ng-md-icon icon="format_list_bulleted" style="fill: white" size="25"></ng-md-icon>
+            </a>
+            <a href="javascript:void(0);" title="Note" ng-click="$root.openFormByType('note')" class="icon threelink">
+            	<ng-md-icon icon="insert_drive_file" style="fill: white" size="25"></ng-md-icon>
+            </a>
+            <a href="#" class="icon fourlink">
+            	<ng-md-icon icon="business" style="fill: white" size="25"></ng-md-icon>
+            </a>
+            <a href="#"  class="icon fivelink">
+            	<ng-md-icon icon="local_drink" style="fill: white" size="25"></ng-md-icon>
+            </a>
+            <a href="#" class="icon sixlink">
+            	<ng-md-icon icon="group" style="fill: white" size="25"></ng-md-icon>
+            </a>
+        </div>		
 	</duv>
 	<div class="pull-left">
 		<div class="clearfix">
@@ -53,7 +85,7 @@
 				      <md-button ng-click="changeJotView(hotel._id,hotel.hotelname)">
 				          <div layout="row">
 				            <p>{{hotel.hotelname}}</p>
-				            <md-icon md-menu-align-target md-svg-icon="call:portable-wifi-off" style="margin: auto 3px auto 0;"></md-icon>
+				            <md-icon md-menu-align-target  style="margin: auto 3px auto 0;"></md-icon>
 				          </div>
 				      </md-button>
 				    </md-menu-item>
@@ -63,6 +95,12 @@
 			</div>
 
 			<div class="heder_srch">
+
+			<md-input-container md-no-float="" class="md-block md-input-has-placeholder" autocomplete="off">
+			<ng-md-icon icon="search"  class="search_icon" style="fill:#a3a3a3" size="24"></ng-md-icon>
+	        <input  placeholder="Search here..." class="ng-pristine searchbar ng-untouched ng-valid ng-isolate-scope md-input ng-empty" aria-label="@ Staff Manager Name with Note for Manager" aria-invalid="false">	        
+
+	    </md-input-container>
 			</div>
 		</div>
 	</div>
@@ -90,7 +128,7 @@
 		              <md-button ng-click="clearToken(); announceClick($index)">
 		                  <div layout="row">
 		                    <p>Logout</p>
-		                    <md-icon md-menu-align-target md-svg-icon="call:portable-wifi-off" style="margin: auto 3px auto 0;"></md-icon>
+		                    <md-icon md-menu-align-target  style="margin: auto 3px auto 0;"></md-icon>
 		                  </div>
 		              </md-button>
 		            </md-menu-item>

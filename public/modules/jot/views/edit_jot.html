@@ -1,0 +1,96 @@
+<md-dialog class="newhotel_dialog edit_water">
+  <form ng-cloak>
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2 class="capitalize">{{edit_jot.jot_type}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="close()">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+    	<div class="newhotel_dialog_form">
+    		 <div class="clearfix">
+                <div class="edit_water_left">
+                    <div class="edit_water_left_inner">
+                        <textarea class="edit_water_bluetxt" ng-model="jot_title">
+                        </textarea>
+                        <ul class="taginglist clearfix">
+                            <li>metting</li>
+                            <li>clean</li>
+                            <li>room</li>
+                            <li>change room</li>
+                        </ul>
+                        <ul class="tim_list clearfix">
+                            <li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>{{ edit_jot.jot_data.due_date | date: 'MMM d'}} </li>
+
+                            <li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+                            <li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
+                            <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
+                        </ul>
+                        <ul class="housekepping_list clearfix">
+                            <img src="assets/images/house_keep.png"> <i>House Keeping</i>
+                        </ul>
+                    </div>
+                    <div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+                        <span class="highttag capitalize {{edit_jot.jot_data.priority}}">{{edit_jot.jot_data.priority}}</span>
+
+                        <span class="yellowtag capitalize status {{edit_jot.jot_data.status == 'close'? edit_jot.jot_data.status:'Open'}}">{{edit_jot.jot_data.status == 'close'? edit_jot.jot_data.status:'Open'}}</span>
+                    </div>
+                </div>
+                <div class="edit_water_right">
+                    <ul class="edit_water_right_list clearfix">
+                        <li>
+                            <a href="javascript:void(0);"  ng-click="jotQuickEditPopup('staff')">
+                            <ng-md-icon icon="person" size="20"></ng-md-icon>Change Member</a>
+                         </li>
+                        <li>
+                            <a href="javascript:void(0);" ng-click="jotQuickEditPopup('department')">
+                                <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Move
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);">
+                                <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Copy
+                            </a>
+                        </li>
+                        <li>
+                        <a href="javascript:void(0);" ng-click="jotQuickEditPopup('datepicker')">
+                        <ng-md-icon icon="watch_later" size="20"></ng-md-icon>Change Due Date</a>
+                        </li>
+
+                         <li>
+                        <a href="javascript:void(0);"  confirmed-click="archiveJot()" ng-confirm-click="Are you want to remove the jot?"><ng-md-icon icon="note" size="20"></ng-md-icon>Archive Jot</a>
+                        </li> 
+
+                        
+
+                        <li>
+                            <a href="javascript:void(0);" ng-click="jotQuickEditPopup('priority')">
+                            <ng-md-icon icon="date_range" size="20"></ng-md-icon>Set Priority</a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0);" ng-click="changeStatus()"><ng-md-icon icon="done_all" size="20"></ng-md-icon>
+                       
+                            {{edit_jot.jot_data.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
+                        </li>
+
+                        <li><a href="javascript:void(0);">
+                        <ng-md-icon icon="av_timer" size="20">
+                        </ng-md-icon>Set Reminder</a>
+                        </li>
+                        <li><a href="javascript:;"><ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC</a></li>
+                    </ul>
+                </div>
+             </div>
+             <div class="clearfix editsavecon">
+                    <md-button class="md-primary addyellobtn bluebtn" ng-click="saveUpdateedJot()">SAVE</md-button>
+
+              <div class="message {{result.class}}"> {{result.message}} </div>
+             </div>
+    	</div>
+    </md-dialog-content>
+  </form>
+</md-dialog>

@@ -50,16 +50,12 @@ var JotSchema  = new Schema({
     type: Array,
     default: []
   },
-  recr_pattern: {
-    type: String,
-    default: false
-  },
   hotel_id: {
     type: String,
     default: false
   },
-  recurring: {
-    type: Boolean,
+  task_type: {
+    type:  Object,
     default: false
   },
   status: {

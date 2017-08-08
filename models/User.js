@@ -1,9 +1,9 @@
 var mongoose      = require('mongoose'),
   Schema          = mongoose.Schema,
-  path 			      = require('path'),
+  path            = require('path'),
   uniqueValidator = require('mongoose-unique-validator'),
-  config 			    = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
-  crypto 			    = require('crypto');
+  config          = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
+  crypto          = require('crypto');
 
 
 
@@ -47,18 +47,24 @@ var UserSchema  = new Schema({
       message: '{VALUE} is not a valid email address'
     }
   },
-  
+  passwordReset: {
+        type: Object
+  },
   password: {
     type: String,
     required: 'Password is required.',
     minlength: [6, 'Password must be atleast 6 characters long.']
   },
-  
   status: {
     type: String,
-    default: false
+    enum: ['active','inactive','deleted'],
+    default: 'inactive'
   },
-  
+  email_verify: {
+        type: String,
+        enum: ['verified','unverified'],  // not verified to uunverified
+        default: 'unverified'
+  },
   salt: { type: String }
 },{
     timestamps: {

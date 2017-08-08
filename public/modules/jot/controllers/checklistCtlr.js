@@ -4,12 +4,6 @@ app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','loca
 	function($scope,$rootScope,Upload,$timeout,localStorageService) {
 
 
-		/*
-		*
-		* Set default jot type
-		*
-		*/		
-		$rootScope.jot_type = 'issue';
 
 		/*
 		* Default checklist
@@ -63,7 +57,7 @@ app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','loca
 
 					/*********** Remove value on uncheck  *********/
 
-					CheckBoxValue = CheckBoxValue.filter(function( obj ) {			    
+					CheckBoxValue = CheckBoxValue.filter(function( obj ) {		    
 				    	return obj.name != currentValue;
 				    });
 				}							
@@ -112,7 +106,7 @@ app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','loca
 		
 
 		$scope.addchecklist = function(itemType){
-				console.log($scope.checklistdate);
+				
 				$scope.itemError = '';
 				var storedCheckbox = $scope.checkList;
 				var ItemToAdd = '';

@@ -1,5 +1,8 @@
-<div class="col-md-12" ng-controller="staffCtlr">
-    <md-input-container md-no-float class="md-block">
-        <input  ng-model="outsource.assigned_to" placeholder="@ Staff Manager Name with Note for Manager">
-    </md-input-container>
+<div ng-controller="staffCtlr" style="position:relative" class="EditMode">
+	<div class="col-md-12">
+	    <md-input-container md-no-float class="md-block" autocomplete="off">
+	        <input  ng-model="$root.assigned_to" placeholder="@ Staff Manager Name with Note for Manager" focus-staff="staffFocus"  id="staff" stafftypeahead="staffList" stafftypeahead-callback="callbackStaff">
+	    </md-input-container>
+	</div>
+
 </div>

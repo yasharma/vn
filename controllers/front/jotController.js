@@ -111,7 +111,7 @@ exports.updateJot = (reqst, respe) => {
 
     var data            = {};
     var Jotid           = reqst.query.jot_id;
-
+        
     if(!Jotid){
         return respe.json(response.errors({},'Jot id is required.'));
     }else{
@@ -171,11 +171,14 @@ exports.listJot = (reqst, respe) => {
                             { _id: '$jot_type',
                                 jot_data: {
                                     $push: {
+                                        _id         :   '$_id',
                                         jot_title   :   '$jot_title',
                                         priority    :   '$priority',
                                         status      :   '$status',
                                         due_date    :   '$due_date',
-                                        checklist   :   '$checklist'
+                                        checklist   :   '$checklist',
+                                        assigned_to :   '$assigned_to',
+                                        department  :   '$department'
                                     }
                                 }
                             }

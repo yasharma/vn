@@ -23,7 +23,8 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 				};
 
 			registerFactory.register(request).then(function(response){
-				$scope.result = response.result;
+				console.log(response);
+				$scope.registerResult = response;				
 			});       
 		};	
 

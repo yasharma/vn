@@ -20,7 +20,7 @@ exports.addHotel = (reqst, respe) => {
     var Hotelsave       = new Hotel(reqst.body);
     Hotelsave.save(function (err, result) {
         if(result){
-            respe.json(response.success(result,'Hotel Added Successfully.'));
+            respe.json(response.success(result,'Hotel has been successfully added.'));
         }else{
             respe.json(response.errors(err.errors,'Error in Hotel Saved.'));
         }
@@ -95,7 +95,9 @@ exports.listHotel = (reqst, respe) => {
 exports.addDepartment = (reqst, respe) => {
 
     var Departmentsave       = new Department(reqst.body);
+
 	Departmentsave.save(function (err, result) {
+      
         if(result){
             respe.json(response.success(result,'Department Added Successfully.'));
         }else{
@@ -151,17 +153,31 @@ exports.deleteDepartment = (reqst, respe) => {
 
 exports.listDepartment = (reqst, respe) => {
 
-    var hotel_id 		= reqst.query.hotel_id;
+    var department_name        = reqst.query.department_name;
+    var hotel_id 		       = reqst.query.hotel_id;
+    var filter                 = reqst.query.filter;
 
-    if(!hotel_id){
-        return respe.json(response.errors({},'Hotel Id Is Required.'));
+    if(filter == 1){
+
+        if(!hotel_id || !department_name){
+            return respe.json(response.errors({},'Filter data is required.'));
+        }else{
+           Department.find({'department_name' : new RegExp(department_name, 'i'),hotel_id : hotel_id}, function (err, result) {
+                if(result.length > 0){
+                    respe.json(response.success(result,'Department Data Found.'));
+                }else{
+                    respe.json(response.errors(err,"Error In Department Listing."));
+                }
+            });
+        }
     }else{
-        Department.find({hotel_id: ObjectId(hotel_id)}, function (err, result) {
-            if(result){
-                respe.json(response.success(result,'Departments Data Found.'));
+        Department.find({hotel_id : hotel_id}, function (err, result) {
+            if(result.length > 0){
+                respe.json(response.success(result,'Department Data Found.'));
             }else{
-                respe.json(response.errors(err,"Error In Departments Listing."));
+                respe.json(response.errors(err,"Error In Department Listing."));
             }
         });
     }
+ 
 };

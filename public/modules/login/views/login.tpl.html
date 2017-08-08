@@ -1,10 +1,5 @@
-<!-- <md-dialog class="login_dialog" aria-label="login">
-  
-  <md-button class="md-icon-button login_close" arai-label="close" ng-click="close()">
-  		<ng-md-icon icon="close" style="fill:black" size="24"></ng-md-icon>
-  </md-button>
-    <md-dialog-content> -->
-    <form name="adminLoginForm" ng-submit="loginUser(adminLoginForm.$valid)" novalidate>
+
+    <form name="adminLoginForm" ng-submit="loginUser(adminLoginForm.$valid)" novalidate ng-show="!forget">
       <div class="md-dialog-content login_content">
       	<div class="pull-right rightlogin ">
         	<div class="loginHd">Login<p>Lorem ipsum dolor sit amet, consectetur</p></div>
@@ -28,14 +23,14 @@
 		        <div class="md-block">
 			        <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
 			            Remember Me 
-			         </md-checkbox>
-			         <a class="pull-right theme-color forgottxt" href="javascript:;">Forgot Password?</a>
+			        </md-checkbox>
+			         <a class="pull-right theme-color forgottxt" href="javascript:void(0);" ng-click="forget = true">Forgot Password?</a>
 	            </div>
                 <div class="md-block"> 
                  	<md-button type="submit" class="md-primary getloginbtn" aria-label="signup" >Login</md-button>
                 </div>                 
             </div>
-            <div class="result">{{result}}  </div> 
+            <div class="result {{loginresult.class}}">{{loginresult.message}}  </div> 
         </div>
        	<div class="leftlogbg pull-left" style="background:url(assets/images/login_bg.jpg) top center no-repeat; background-size:cover; ">
         	<div class="hellotxt">Hotel JOT</div>
@@ -47,5 +42,36 @@
         </div>
       </div>
        </form>
-    <!-- </md-dialog-content> 
-</md-dialog> -->
+
+       <form name="forgetForm" ng-submit="forgetPassword(forgetForm.$valid)" novalidate ng-show="forget">
+      <div class="md-dialog-content login_content">
+        <div class="pull-right rightlogin ">
+          <div class="loginHd">Forget Password<p>Lorem ipsum dolor sit amet, consectetur</p></div>
+            <div class="form">
+              <md-input-container class="md-block">
+              <label>Email Address </label>
+              <input required name="forget_email" type ="email" data-ng-model="forget_email" ng-required="true">
+              <ng-md-icon icon="person" class="login_icon" style="fill:gray" size="20"></ng-md-icon>
+          
+            </md-input-container>
+          
+            <div class="md-block">        
+               <a class="pull-right theme-color forgottxt" href="javascript:void(0);" ng-click="forget = false">Login</a>
+               <br>
+              </div>
+                <div class="md-block"> 
+                  <md-button type="submit" class="md-primary getloginbtn" aria-label="signup" >Send</md-button>
+                </div>                 
+            </div>
+            <div class="result {{forgetresult.class}}">{{forgetresult.message}}  </div> 
+        </div>
+        <div class="leftlogbg pull-left" style="background:url(assets/images/login_bg.jpg) top center no-repeat; background-size:cover; ">
+          <div class="hellotxt">Hotel JOT</div>
+            <div class="hellosubtxt">LoLorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
+            <div class="hellobottxt">
+              <p>Create an Account for Hotel?</p>
+              <md-button class="md-primary getsartbtn" ng-click="openSignupForm()" aria-label="signup" >GET STARTED</md-button>
+            </div>
+        </div>
+      </div>
+       </form>

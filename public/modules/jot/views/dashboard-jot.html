@@ -4,46 +4,57 @@
 <section class="dashrightsection">
 	
 	<div class="dash_hd_hotel" >
-		<div layout="row" layout-align="space-between center">
-			<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-			<div ><a class="dash_extra_menu" href="javascript:;">Menu</a></div>
-		</div>
+		
 	</div>
 	<div class="dash_hd_txt" layout="row" layout-align="space-between center">
 		<div class="dash_hd">Front-End Executive JOTs </div>
 		<div class="rightfilter">
-			<md-input-container md-no-float class="md-block">
-	            <md-select ng-model="user.State" placeholder="Filter">
+			<md-input-container md-no-float class="md-block" >
+	            <md-select ng-model="user.State" placeholder="Filter" style="background: none;">
 	              <md-option>
-	              	India
+	              	High Priority
 	              </md-option>
 	              <md-option>
-	              	India
+	              	Medium Priority
+	              </md-option>
+	              <md-option>
+	              	Low Priority
+	              </md-option>
+	              <md-option>
+	              	Urgent Priority
+	              </md-option>
+	              <md-option>
+	              	Open
+	              </md-option>
+	              <md-option>
+	              	Close
 	              </md-option>
 	            </md-select>
 	        </md-input-container>
 	    </div>    
 	</div>
+
+	<!----------------------------------------------------------------------------
+	|| Task Jot
+	---------------------------------------------------------------------------->
 	<div class="clearfix row">
-
-		
-
-		<div class="col-lg-3 col-md-6" ng-repeat = 'jot in jots'>
+		<div class="col-lg-3 col-md-6">
 			<div class="add_hotel_top" md-whiteframe="6">
-				<div class="add_hotel_icon">
-					
-					<ng-md-icon icon="email" style="fill:#a3a3a3" size="24"></ng-md-icon>
+				<div class="add_hotel_icon">		
 
-					<label ng-if="jot._id" class="capitalize">					
-					{{jot._id != 'false' && jot._id || 'Notype' }}
+					<ng-md-icon ng-if="jotTypes.task.icontype == 'icon'" icon="{{jotTypes.task.src}}"  class="jot_icon" style="fill:#a3a3a3" size="24"></ng-md-icon>
+					<img ng-if="jotTypes.task.icontype == 'image'" src="{{jotTypes.task.src}}">
+
+					<label class="capitalize jotHead">					
+					Task
 					<label>
 				</div>
 
-				<div class="add_hotel_room mar-bot20" ng-repeat = 'jotMessage in jot.jot_data'>
+				<div class="add_hotel_room mar-bot20" ng-repeat = 'jot in task_iteration.data'>
 					<div class="add_hotel_room_inner">
 						<div class="room_change" layout="row" layout-align="space-between center">
-							<Span class="capitalize">{{jotMessage.jot_title}}</Span>
-							<ng-md-icon icon="mode_edit" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+							<Span class="capitalize">{{jot.jot_title}}</Span>
+							<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot,task_iteration.type)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
 						</div>
 						<ul class="taginglist clearfix">
 							<li>metting</li>
@@ -53,7 +64,7 @@
 						</ul>
 						<ul class="tim_list clearfix">
 							<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
-								{{ jotMessage.due_date | date: 'MMM d, y'}}
+								{{ jot.due_date | date: 'MMM d, y'}}
 							</li>
 							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
 							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
@@ -64,18 +75,162 @@
 						</ul>
 					</div>
 					<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
-						<span class="highttag capitalize {{jotMessage.priority}}">{{jotMessage.priority}}</span>
-						<span class="yellowtag">Open</span>
+						<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+						<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
 					</div>
 				</div>
 
 				
-				<div class="cretejot_hotel"><a href="javascript:;"> Create a Jot </a></div>
+				<div class="cretejot_hotel"><a href="javascript:void(0);" ng-click="$root.openFormByType('task')" jotTemplate2> Create a Jot </a></div>
 			</div>
 		</div>
-		<!-- <div  ng-if="jots==''">
-		  <div class="noresult">There is not jot available.</div>
-		</div> -->
+	<!----------------------------------------------------------------------------
+	|| Issue Jot
+	---------------------------------------------------------------------------->
+
+		<div class="col-lg-3 col-md-6">
+			<div class="add_hotel_top" md-whiteframe="6">
+				<div class="add_hotel_icon">					
+					<ng-md-icon ng-if="jotTypes.issue.icontype == 'icon'" icon="{{jotTypes.issue.src}}" class="jot_icon" style="fill:#a3a3a3" size="24"></ng-md-icon>
+					<img ng-if="jotTypes.issue.icontype == 'image'" src="{{jotTypes.issue.src}}">
+
+					<label class="capitalize jotHead">					
+					Issue
+					<label>
+				</div>
+
+				<div class="add_hotel_room mar-bot20" ng-repeat = 'jot in issue_iteration.data'>
+					<div class="add_hotel_room_inner">
+						<div class="room_change" layout="row" layout-align="space-between center">
+							<Span class="capitalize">{{jot.jot_title}}</Span>
+							<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot,issue_iteration.type)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+						</div>
+						<ul class="taginglist clearfix">
+							<li>metting</li>
+							<li>clean</li>
+							<li>room</li>
+							<li>change room</li>
+						</ul>
+						<ul class="tim_list clearfix">
+							<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+								{{ jot.due_date | date: 'MMM d, y'}}
+							</li>
+							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
+							<li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
+						</ul>
+						<ul class="housekepping_list clearfix">
+							<img src="assets/images/house_keep.png"> <i>House Keeping</i>
+						</ul>
+					</div>
+					<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+						<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+						<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+					</div>
+				</div>
+
+				
+				<div class="cretejot_hotel"><a href="javascript:void(0);" ng-click="$root.openFormByType('issue')"> Create a Jot </a></div>
+			</div>
+		</div>
+	<!----------------------------------------------------------------------------
+	|| Note Jot
+	---------------------------------------------------------------------------->
+		<div class="col-lg-3 col-md-6">
+			<div class="add_hotel_top" md-whiteframe="6">
+				<div class="add_hotel_icon">					
+					<ng-md-icon ng-if="jotTypes.note.icontype == 'icon'" icon="{{jotTypes.note.src}}" class="jot_icon" style="fill:#a3a3a3" size="24"></ng-md-icon>
+					<img ng-if="jotTypes.note.icontype == 'image'" src="{{jotTypes.note.src}}">
+
+					<label class="capitalize jotHead">					
+					Note
+					<label>
+				</div>
+
+				<div class="add_hotel_room mar-bot20" ng-repeat = 'jot in note_iteration.data'>
+					<div class="add_hotel_room_inner">
+						<div class="room_change" layout="row" layout-align="space-between center">
+							<Span class="capitalize">{{jot.jot_title}}</Span>
+							<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot,note_iteration.type)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+						</div>
+						<ul class="taginglist clearfix">
+							<li>metting</li>
+							<li>clean</li>
+							<li>room</li>
+							<li>change room</li>
+						</ul>
+						<ul class="tim_list clearfix">
+							<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+								{{ jot.due_date | date: 'MMM d, y'}}
+							</li>
+							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
+							<li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
+						</ul>
+						<ul class="housekepping_list clearfix">
+							<img src="assets/images/house_keep.png"> <i>House Keeping</i>
+						</ul>
+					</div>
+					<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+						<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+						<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+					</div>
+				</div>
+
+				
+				<div class="cretejot_hotel"><a href="javascript:void(0);" ng-click="$root.openFormByType('note')">Create a Jot </a></div>
+			</div>
+		</div>
+		
+	<!----------------------------------------------------------------------------
+	|| Others Jot
+	---------------------------------------------------------------------------->
+		<div class="col-lg-3 col-md-6">
+			<div class="add_hotel_top" md-whiteframe="6">
+				<div class="add_hotel_icon">
+					
+					<ng-md-icon icon="email" class="jot_icon" style="fill:#a3a3a3" size="24"></ng-md-icon>
+					<label class="capitalize jotHead">					
+					Others
+					<label>
+
+				</div>
+
+				<div class="add_hotel_room mar-bot20" ng-repeat = 'jot in others_iteration.data'>
+					<div class="add_hotel_room_inner">
+						<div class="room_change" layout="row" layout-align="space-between center">
+							<Span class="capitalize">{{jot.jot_title}}</Span>
+							<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot,others_iteration.type)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+						</div>
+						<ul class="taginglist clearfix">
+							<li>metting</li>
+							<li>clean</li>
+							<li>room</li>
+							<li>change room</li>
+						</ul>
+						<ul class="tim_list clearfix">
+							<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+								{{ jot.due_date | date: 'MMM d, y'}}
+							</li>
+							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
+							<li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
+						</ul>
+						<ul class="housekepping_list clearfix">
+							<img src="assets/images/house_keep.png"> <i>House Keeping</i>
+						</ul>
+					</div>
+					<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+						<span class="highttag capitalize status {{jot.priority}}">{{jot.priority}}</span>
+						<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+					</div>
+				</div>
+
+				
+				<div class="cretejot_hotel"><a href="javascript:void(0);" ng-click="$root.openFormByType('quick')"> Create a Jot </a></div>
+			</div>
+		</div>
+
 
 	
 		

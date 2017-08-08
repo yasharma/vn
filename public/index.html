@@ -20,8 +20,9 @@
       <body style="height: auto;">
         <header ng-if="isAuth"><!--@header template--> </header>
 
-        <div class="left_side_menu
+        <div ng-if="isAuth.sidebar=='yes'" class="left_side_menu
         " ng-class="{'leftopen':leftopen}"   ng-include="'/modules/partials/sidebar.html'"></div>
+
         <ng-view class="view"> </ng-view>
 
         

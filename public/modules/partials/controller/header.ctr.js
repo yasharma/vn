@@ -3,6 +3,11 @@
 app.controller('headerController', ['$scope','$location','localStorageService','headerFactory','$rootScope','$mdDialog','$route',
 	function($scope,$location,localStorageService,headerFactory,$rootScope,$mdDialog,$route) {	
 
+		/*
+		* Jot form tab list
+		*/
+
+		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
 
 		/*
 		* Factory method
@@ -63,6 +68,24 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
 				clickOutsideToClose:true,
+				locals: {ActivateTab:'quick'}
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
+		/**************************************
+		* Open popup direct by jot type 
+		**************************************/
+
+		$rootScope.openFormByType = function(formType){
+		
+			$mdDialog.show({
+				controller: 'jotFormCtrl',
+				templateUrl: '/modules/jot/views/jot-form.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,				
+				locals: {ActivateTab:formType}
 			}).then(function(answer) {}, function() {});
 
 		};

@@ -73,11 +73,26 @@ exports.deleteMember = (reqst, respe) => {
 
 exports.listMember = (reqst, respe) => {
 
-    Member.find({}, function (err, result) {
-        if(result){
-            respe.json(response.success(result,'Member Data Found.'));
-        }else{
-            respe.json(response.errors(err,"Error In Member Listing."));
-        }
-    });
- };
+    var user_name         = reqst.query.user_name;
+    var hotel_id          = reqst.query.hotel_id;
+    var filter            = reqst.query.filter;
+    
+    
+    if(filter == 1){
+       Member.find({'user_name' : new RegExp(user_name, 'i'),hotel_id:hotel_id}, function (err, result) {
+            if(result.length > 0){
+                respe.json(response.success(result,'Member Data Found.'));
+            }else{
+                respe.json(response.errors(err,"Error In Member Listing."));
+            }
+        });
+    }else{
+        Member.find({hotel_id:hotel_id}, function (err, result) {
+            if(result.length > 0){
+                respe.json(response.success(result,'Member Data Found.'));
+            }else{
+                respe.json(response.errors(err,"Error In Member Listing."));
+            }
+        });
+    }
+};

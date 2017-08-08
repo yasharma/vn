@@ -37,36 +37,32 @@
 		            	<div ng-message="required">This is required.</div>
 		          	</div> -->
 		        </md-input-container>	
-		        <div class="md-block">
-			        <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-			            Remember Me 
-			         </md-checkbox>
-			         <a class="pull-right theme-color forgottxt" href="javascript:;">Forgot Password?</a>
-	            </div>
+		        
                 <div class="md-block"> 
                  	<md-button type="submit" class="md-primary getloginbtn" aria-label="signup" >Register</md-button>
                 </div>                 
             </div>
             <!-- <div class="result">{{result}}</div>  -->
 
-            <div class="result white-space-pre-line {{result.class}}" ng-if="result.success">            
-                {{result.message}}
+            <div class="result {{registerResult.class}}" ng-if="registerResult.status==2">    
+                <ul>
+                  <li ng-repeat="(key,value) in registerResult.errors">
+                  {{value.message}}
+                  </li>
+                </ul>
+            </div> 
+            <div class="result {{registerResult.class}}" ng-if="registerResult.status==1"> 
+                {{registerResult.message}}
             </div> 
 
-            <div class="result {{result.class}}" ng-if="!result.success">            
-                <ul>
-                <li ng-repeat="message in result.message">
-                {{message}}
-                </li>
-                <ul> 
-            </div>
+            
 
         </div>
        	<div class="leftlogbg pull-left" style="background:url(assets/images/login_bg.jpg) top center no-repeat; background-size:cover; ">
         	<div class="hellotxt">Hotel JOT</div>
             <div class="hellosubtxt">LoLorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
             <div class="hellobottxt">
-            	<p>Create an Account for Hotel?</p>
+            	<p>Login into dashboard</p>
             	<md-button class="md-primary getsartbtn" ng-click="openLoginForm()" aria-label="signup" >Login</md-button>
             </div>
         </div>

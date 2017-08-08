@@ -4,32 +4,32 @@
       <div class="md-toolbar-tools">
         <h2>What do you want to write in JOT ?</h2>
         <span flex></span>
-        <md-button class="md-icon-button" ng-click="close()">
+        <md-button class="md-icon-button" aria-label="close" ng-click="close()">
           <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
         </md-button>
       </div>
     </md-toolbar>
     <md-dialog-content>
-        <form name="createJotForm" ng-submit="createJot(createJotForm.$valid)" novalidate ng-init='outsource={assigned_to:"",department:"",due_date:""}'>
+
+
+
+        <form name="createJotForm" ng-submit="createJot(createJotForm.$valid)" novalidate ng-init='outsource={assigned_to:"",department:""}'>
 
         <div class="Quick_jot_list">
             <md-nav-bar
                 md-selected-nav-item="currentNavItem"
                 nav-bar-aria-label="navigation links">
             <md-nav-item 
-                ng-repeat="tabs in jotTab" 
-                md-nav-click="goto(tabs.id)" 
-                name="{{tabs.id}}">
-
+                ng-repeat="(jotKey,jotValue) in $root.jotTypes" 
+                md-nav-click="goto(jotValue.id)" 
+                name="{{jotValue.id}}">
               <ng-md-icon 
-                icon="{{tabs.src}}" 
-                ng-if="tabs.icontype == 'icon'" 
+                icon="{{jotValue.src}}" 
+                ng-if="jotValue.icontype == 'icon'" 
                 style="fill:#a5a7a7">
                 </ng-md-icon>
-
-                <img src="{{tabs.src}}" ng-if="tabs.icontype == 'image'">
-
-                {{tabs.name}}
+                <img src="{{jotValue.src}}" ng-if="jotValue.icontype == 'image'">
+                <span class="tab_label">{{jotValue.label}}</span>
             </md-nav-item>
           
             </md-nav-bar>
@@ -42,24 +42,11 @@
                 <div class="clearfix">
                     <div class="col-md-12">
                         <md-input-container class="md-block">
-                            <textarea md-no-float class="md-block" ng-model="jot_title" rows="5" ng-required="true"></textarea>
+                            <textarea md-no-float class="md-block" ng-model="jot_title" rows="5" aria-label="textarea" ng-required="true"></textarea>
                         </md-input-container>
                     </div>
                 </div>
-                <div class="clearfix">
-
-                   
-
-                    <div class="col-md-7 pull-right text-right" >
-                        <span class="jot_prity_txt">Set Priority:</span>
-                        <ul class="jot_prity clearfix pull-right">
-                           <li ng-repeat="jotPriority in jotPriorityList">
-                            <a href="javascript:void(0);" ng-class="{active : jot_priority === jotPriority.name}" class="{{jotPriority.class}}" ng-click='selectPriority($event,jotPriority.name)'>{{jotPriority.name}}</a>
-                         </li>
-                          <input type="hidden" name="jot_priority" value="{{jot_priority}}" ng-model="jot_priority">
-                        </ul>
-                    </div>
-                </div>
+                
 
                  <div class="ext-content">
                         <div ng-if="currentNavItem" jot-template="currentNavItem">

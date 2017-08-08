@@ -4,7 +4,7 @@
 .dash_home_header_logo a{display: block;}
 .dash_home_header_menu_list > li {float: left; height: 58px;}
 .user_dp_header{width: 30px; display: inline-block; height: 30px; border-radius: 50%; -webkit-border-radius: 50%;}
-.dash_home_header_menu_list > li.noti_icon{padding: 12px 18px 0 15px; border-left: 1px solid #71caf8;}
+.dash_home_header_menu_list  > li.noti_icon{padding: 12px 18px 0 15px; border-left: 1px solid #71caf8;}
 .notification-badge {width: 20px;top: 6px;left: 36px; height: 20px; line-height: 11px; text-align: center; position: absolute;color: #ffffff;background-color: #F06;margin: 0 -.8em;border-radius: 50%;padding: 4px 5px;}
 .dash_home_header_menu_list > li.usermenu{padding: 0px 0 0px 10px; background: #4288ae;}
 .dash_home_header_menu_list > li.usermenu i{position: absolute; left: 10px;top: 13px; }
@@ -56,7 +56,7 @@
 .toogle_menu_list > ul > li > a:hover, .toogle_menu_list ul > li > a:focus{text-decoration: none; }
 .toogle_menu_list > ul > li > a.active span, .toogle_menu_list ul > li > a:hover span{color: #fff;}
 .toogle_menu_list > ul > li > a span{color: #9299a2; font-size: 15px; line-height: 24px; font-weight: 600; padding-left: 30px;  text-transform: uppercase; }
-.left_side_menu.leftopen > ul > li > a span{padding-left: 5px;}
+.left_side_menu.leftopen .toogle_menu_list > ul > li > a span{padding-left: 5px;}
 .toogle_menu_list > ul > li > a ng-md-icon{vertical-align: top; color:#9299a2; }
 .toogle_menu_list > ul > li > a.active ng-md-icon, .toogle_menu_list ul > li > a:hover ng-md-icon{color: #fff;}
 .sub_menu > li {display: block; display: none;}
@@ -82,11 +82,10 @@
 .add_hotel_room_proty span.highttag{background: #de4a35;}
 .add_hotel_room_proty span.yellowtag{background: #ffbb42;}
 .add_hotel_room_proty span.mediumtag{background: #fd7461;}
-.add_hotel_room_proty span.greentag{background: #61bd4f;}
+.add_hotel_room_proty span.greentag{background: #61bd4f;} 
 .add_hotel_room_proty span.urgenttag{background: #df2910;}
 .add_hotel_room_proty span.lowtag{    background: rgba(253,116,97,.8);}
 .cretejot_hotel a{font-size: 14px; color: #4ebdf6; display: block; margin-top: 10px; text-transform: uppercase;}
-.dash_hd_txt{}
 .rightfilter md-input-container{margin: 0;}
 .rightfilter md-input-container md-select-value{padding: 0 15px; margin-bottom: 20px; font-size: 15px; border: 1px solid #ddd; background: #fff; height: 35px;}
 .rightfilter md-input-container md-select .md-select-value{padding: 0 15px; color: #222222;}
@@ -122,9 +121,9 @@
 .Jot_type > li > a{background: #fff;display: block; padding: 5px 15px; border: 1px solid #ddd;font-size: 12px; color: #7b7b7b; }
 .Jot_type > li > a:hover, .Jot_type > li > a.active{ text-decoration: none; background: #2aaae0; color: #fff; border-color: #2aaae0;}
 .addyellobtn {margin: 0;width: 100%; display: block;font-weight: 600!important;color: #fff!important;text-transform: uppercase;font-size: 15px;border-radius: 0;-webkit-border-radius: 0; padding: 0px 15px;}
-.addyellobtn.yellowbtn, .addyellobtn.yellowbtn:hover{background: #ffbb42;}
-.addyellobtn.bluebtn, .addyellobtn.bluebtn:hover{background: #2aaae0;}
-.addyellobtn.graybtn, .addyellobtn.graybtn:hover{background: #9d9d9d;}
+.addyellobtn.yellowbtn, .addyellobtn.yellowbtn:hover, .addyellobtn.yellowbtn:focus{background: #ffbb42;}
+.addyellobtn.bluebtn, .addyellobtn.bluebtn:hover, .addyellobtn.bluebtn:focus{background: #2aaae0;}
+.addyellobtn.graybtn, .addyellobtn.graybtn:hover, .addyellobtn.graybtn:focus {background: #9d9d9d;}
 /******************************************quick issue form***************************/
 .Selectdep_txt{font-size: 16px; color: #4d4d4d; font-weight: 600; padding-bottom: 5px;}
 .Select_txt_list > li{float: left; margin: 0 5px 5px 0; }
@@ -165,12 +164,14 @@
 
 
 
-
+/*************************************button anomation *************************/
 .center_circle{border-width:2px; border-color: #5299bd; border-style: solid;  width: 90px;height: 90px;border-radius: 50%;-webkit-border-radius:50%;background:#3da0d3;position: absolute; left: 0; right: 0; top:75px; margin: auto; z-index: 3;box-shadow: 0 0 15px 3px rgba(0,0,0,0.2);}
 .center_circle a{line-height: 90px; display: block; padding: 0 5px;color: #fff; font-size: 15px; font-weight: 600; text-align: center;}
 .center_circle a:hover, .center_circle a:focus{text-decoration: none;}
-.iconHover {background:#4ebdf6; border-radius:50%; height:5rem; left:50%; margin-top:0; opacity:0; pointer-events:none; position:absolute; top:-100%; transform: translate(-50%, -50%) scale(0.8) rotate(100deg); transition: width 0.3s ease 0.3s, height 0.3s ease 0.3s, opacity 0.1s ease 0.3s, transform 0.3s ease 0.3s, z-index 5ms ease 0.6s; width:5rem; z-index:1; overflow:hidden;}
-.iconHover.logocircle {width:23rem; top:50%; height:23rem; -webkit-transform:translate(-50%,-50%); transform:translate(-50%,-50%); opacity:1; -webkit-transition:opacity .1s,width .4s ease-in,height .4s ease-in,-webkit-transform .4s .4s linear;transition:opacity .1s,width .4s ease-in,height .4s ease-in,transform .4s .4s linear; z-index:11; pointer-events:all;}
+/*.iconHover {background:#4ebdf6; border-radius:50%; height:5rem; left:50%; margin-top:0; opacity:0; pointer-events:none; position:absolute; top:-100%; transform: translate(-50%, -50%) scale(0.8) rotate(100deg); transition: width 0.3s ease 0.3s, height 0.3s ease 0.3s, opacity 0.1s ease 0.3s, transform 0.3s ease 0.3s, z-index 5ms ease 0.6s; width:5rem; z-index:1; overflow:hidden;}
+.iconHover.logocircle {width:23rem; top:50%; height:23rem; -webkit-transform:translate(-50%,-50%); transform:translate(-50%,-50%); opacity:1; -webkit-transition:opacity .1s,width .4s ease-in,height .4s ease-in,-webkit-transform .4s .4s linear;transition:opacity .1s,width .4s ease-in,height .4s ease-in,transform .4s .4s linear; z-index:11; pointer-events:all;}*/
+.iconHover {background:#4ebdf6; border-radius:50%; height:5rem; left:50%; margin-top:0; opacity:0; pointer-events:none; position:absolute; top:-100%; transform: translate(-50%, -50%) scale(0.8) rotate(0deg); transition: width 0.3s ease 0.3s, height 0.3s ease 0.3s, opacity 0.1s ease 0.3s, transform 0.3s ease 0.3s, z-index 5ms ease 0.6s; width:5rem; z-index:1; overflow:hidden;}
+.iconHover.logocircle {width:23rem; top:50%; height:23rem; -webkit-transform:translate(-50%,-50%); transform:translate(-50%,-50%); opacity:1;  z-index:11; pointer-events:all;}
 .iconHover .icon {position:absolute; width:24px; height:24px; display:block!important; opacity:0; cursor:pointer; border-radius:35px; text-align:center;}
 .iconHover.logocircle .icon{opacity:1; -webkit-transform:none; transform:none;}
 .iconHover.logocircle .icon.onelink{top:84px;left:15px;}

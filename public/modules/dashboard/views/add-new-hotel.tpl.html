@@ -164,10 +164,13 @@
     				<div class="col-md-12">
                     <input type="checkbox" ng-model="terms" name="terms">
 				         I accept the terms and conditions
-                        <div class="result {{validateclass}}">
+                         <div class="result {{hotelResult.class}}" ng-if="hotelResult.status == 1">
+                            {{hotelResult.message}}
+                        </div>
+                        <div class="result {{hotelResult.class}}"  ng-if="hotelResult.status == 2">
                             <ul>
-                            <li ng-repeat="message in message">
-                            {{message}}
+                            <li ng-repeat="(key,value) in hotelResult.errors">
+                            {{value.message}}
                             </li>
                             <ul> 
                         </div>

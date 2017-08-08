@@ -4,69 +4,72 @@
             <md-radio-group ng-model="data.group1">
             <ul class="Pattern_radio clearfix">
                 <li>
-                    <md-radio-button value="Apple" ng-click="taskTime('oneTime')" class="md-primary">One Time</md-radio-button>
+                    <md-radio-button value="onetime" ng-click="$root.taskTime = 'onetime'" class="md-primary">One Time</md-radio-button>
                 </li>
                 <li>
-                    <md-radio-button value="Banana" ng-click="taskTime('recurring')">Recurring</md-radio-button>
+                    <md-radio-button value="recurring" ng-click="$root.taskTime = 'recurring'">Recurring</md-radio-button>
                 </li>
             </ul>        
             </md-radio-group>
         </div>
     </div>
-    <div class="clearfix mar-bot20" ng-show="oneTime">
+
+    <div class="clearfix mar-bot20" ng-if="$root.taskTime == 'onetime'">
         <div class="col-md-12">
             <div class="Selectdep_txt">If One Time Task:</div>
             <div class="clearfix">
                 <div class="recurring_task positionrel" >
-                    <md-datepicker ng-model="onetime" md-open-on-focus md-hide-icons="triangle"  md-placeholder="Start date"></md-datepicker>
+                    <md-datepicker ng-model="$root.onetime_date" md-open-on-focus md-hide-icons="triangle"  md-placeholder="Start date"></md-datepicker>
                 </div>
             </div>
         </div>
     </div>  
+    <div ng-if="$root.taskTime == 'recurring'">
+        <div class="clearfix mar-bot20">
+            <div class="col-md-12">
+                <div class="Selectdep_txt">If Recurring Task:</div>
+                <div class="clearfix">
+                    <div class="recurring_task positionrel" >
+                        <md-datepicker ng-model="$root.start_recurring_date" md-open-on-focus md-hide-icons="triangle"  md-placeholder="Start date"></md-datepicker>
+                    </div>
+                    <div class="recurring_task positionrel" >
+                        <md-datepicker ng-model="$root.end_recurring_date" md-open-on-focus md-hide-icons="triangle"  md-placeholder="End date"></md-datepicker>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        <div class="clearfix mar-bot20">
+            <div class="col-md-12">
+                <div class="Selectdep_txt">Recurrance Pattern:</div>
+                <ul class="Pattern clearfix">
+                    <li ng-repeat="pattern in patterns">
+                        <a href="javascript:void(0);" ng-click="patternShow(pattern);" ng-class="{active : $root.selectedPattern == pattern.id}">{{pattern.label}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+       
 
-    <div class="clearfix mar-bot20"  ng-show="recurring">
-        <div class="col-md-12">
-            <div class="Selectdep_txt">If Recurring Task:</div>
-            <div class="clearfix">
-                <div class="recurring_task positionrel" >
-                    <md-datepicker ng-model="start_recurring" md-open-on-focus md-hide-icons="triangle"  ng-model="ctrl.myDate2" md-placeholder="Start date"></md-datepicker>
+        <div class="clearfix mar-bot20" >
+            <div class="col-md-12">
+                <div class="Selectdep_txt">{{selectedPatternDesc}}</div>
+
+                <div class="daylisted" ng-class="$root.selectedPattern == 'daily'?'pattern_disable':''" ng-if="$root.selectedPattern == 'daily' || $root.selectedPattern == 'weekly'">
+                        <md-checkbox ng-repeat="week in weeks" ng-value="{{week.value}}" ng-model="week.Selected"  aria-label="week.label"  ng-change="toggleWeek(week,week.value)" >
+                            {{week.label}}
+                        </md-checkbox>
+
                 </div>
-                <div class="recurring_task positionrel" >
-                    <md-datepicker ng-model="end_recurring" md-open-on-focus md-hide-icons="triangle"  md-placeholder="End date"></md-datepicker>
+
+                <div class="daylisted {{patternClass}}" ng-if="$root.selectedPattern == 'monthly'">
+               
+                    <md-select ng-model="$root.monthly_recurring_date" placeholder="Select Day" class="md-no-underline">
+
+                      <md-option ng-repeat="i in getDay(31) track by $index" value="{{$index+1}}">{{$index+1}}</md-option>                      
+                    </md-select>                       
+
                 </div>
-            </div>
-        </div>
-    </div>    
-    <div class="clearfix mar-bot20">
-        <div class="col-md-12">
-            <div class="Selectdep_txt">Recurrance Pattern:</div>
-            <ul class="Pattern clearfix">
-                <li><a href="javascript:;">DAILY</a></li>
-                <li><a class="active" href="javascript:;">WEEKLY</a></li>
-                <li><a href="javascript:;">MONTHLY</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="clearfix mar-bot20">
-        <div class="col-md-12">
-            <div class="Selectdep_txt">Recur every 1 week(s)</div>
-            <div class="daylisted">
-                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
-                    Sunday
-                </md-checkbox>
-                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
-                   Monday
-                </md-checkbox>
-                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
-                    Tuesday
-                </md-checkbox>
-                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
-                    Wednesday
-                </md-checkbox>
-                <md-checkbox ng-model="data.cb2" aria-label="Checkbox 2">
-                    Thursday
-                </md-checkbox>
-            </div>
+
         </div>
     </div>
 </div>
