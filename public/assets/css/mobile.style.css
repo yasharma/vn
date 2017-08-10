@@ -1,16 +1,22 @@
 @media(max-width:1400px){
 .About_banner h4{padding: 80px 0;}
+.dash_pro_top_inner{height: 270px;}
 }
 @media(max-width:1200px){
 .frontnav ul > li{padding: 0 10px;}
 .frontnav ul > li > a{font-size: 14px;}
 .map_cicle{top: 14%;left: 18%;}
 .frontfoter_inner{padding: 45px 0;}
+.table_div{overflow: auto;}
+.vending_table{width: 700px;}
 }
 
 @media(max-width:1023px){
 .login_content{width: auto;}
 .leftlogbg, .rightlogin{width: 100%; float: none; height: auto;}
+.Quick_jot_list ul > li > a span{font-size: 12px;}
+.vending_left{width: 100%; float: none; margin-bottom: 15px;}
+.vending_right{width: 100%; float: none;}
 }
 @media(max-width:970px){
 .conctleft{width: 280px;}
@@ -57,6 +63,9 @@ md-dialog {max-width: 100% !important;width: 100%;height: 100%;max-height: 100% 
 .demoform{padding: 20px 10px;}
 .vid_icon{width: 60px; height: 60px;}
 .vid_icon img{width: 100%;}
+.lost_tab_content_list > li{width: 49%;}
+.lost_tab_content_list > li:nth-child(3n){margin-right: 2%;}
+.lost_tab_content_list > li:nth-child(2n){margin-right: 0;}
 }
 @media(max-width:479px){
 .mainhd{font-size: 22px;}	
@@ -91,5 +100,8 @@ md-dialog {max-width: 100% !important;width: 100%;height: 100%;max-height: 100% 
 .expert_con_list > li:nth-child(2n){margin-right: 0;}
 .expert_con{padding: 45px 0 0 0; }
 .hoversec .expertname{font-size: 15px;}
-.hoversec span{font-size: 12px; text-align: center;;}
+.hoversec span{font-size: 12px; text-align: center;}
+.lost_tab_content_list > li{width: 100%; margin-right: 0;}
+.vending_left_top_ser{padding-right: 0;}
+.serchoption{position: relative; width: 100%; right: auto; top:auto; width: 100%; margin-bottom: 10px;}
 }

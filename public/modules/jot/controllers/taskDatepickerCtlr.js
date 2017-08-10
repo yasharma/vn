@@ -3,6 +3,7 @@
 app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
 	function($scope,$rootScope) {	
 
+
 		/*
 		* Get day list in array
 		*/
@@ -14,7 +15,7 @@ app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
 		/*
 		* Make task pattern
 		*/
-
+		$scope.getMonth = window.__API_PATH.MONTH;
 		$scope.patterns = window.__API_PATH.RECURRING_PATTERN;
 		$scope.weeks    = window.__API_PATH.WEEK_NAME;
 		$rootScope.selectedDays = [];
@@ -32,16 +33,17 @@ app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
 	        if(pattern.id == 'daily' || pattern.id == 'weekly')
 			{	
 				/***** Auto check all week value *****/	
-
 				
 				angular.forEach($scope.weeks, function (item) {
 					if(pattern.id == 'daily')
 					{
 						item.Selected = true;	
+						$rootScope.selectedDays.push(item.value);
 					} else {
 						item.Selected = false;
+						$rootScope.selectedDays = [];
 					}		            
-		            $rootScope.selectedDays.push(item.value);
+		            
 		        });				
 				
 			}

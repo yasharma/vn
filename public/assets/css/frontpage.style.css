@@ -35,7 +35,7 @@
 .absdresslist > li .contact_icon{display:table-cell; width:43px; border-right:1px solid #ddd;  vertical-align:middle; }
 .absdresslist > li .contact_icontxt{display:table-cell; padding:0 0 0 15px; font-size:14px; color:#737a7a; font-weight:600; vertical-align:middle; }
 .absdresslist > li .contact_icontxt a{color:#00b3d9; text-decoration:underline;}
-/***********************************demopage***************************/
+/***********************************Demopage***************************/
 .demopad300{padding-bottom: 200px;margin-bottom: -177px; position: relative;}
 .demovidpanel{width: 100%;  position: relative; max-width: 960px; padding: 0 15px; margin: 0 auto;}
 .vid_icon{width: 114px; height: 114px; position: absolute; left: 0; top:0; right: 0; bottom: 0; margin: auto; z-index: 5;}
@@ -56,3 +56,7 @@
 .panel.faqaccord .panel-heading .panel-title ng-md-icon.minus{display: none;}
 .panel.faqaccord.panel-open .panel-heading .panel-title ng-md-icon.minus{display: inline-block;}
 .panel.faqaccord.panel-open .panel-heading .panel-title ng-md-icon.plus{display: none;}
+
+
+
+

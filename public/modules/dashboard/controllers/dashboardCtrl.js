@@ -84,7 +84,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		
 		
 		$scope.deleteHotel = function(event,hotelID){
-			
+
 			var storedHotelID = localStorageService.get('hotel');		
 			if(storedHotelID && storedHotelID.hotel_id == hotelID)
 			{

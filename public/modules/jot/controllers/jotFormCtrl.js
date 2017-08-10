@@ -3,12 +3,17 @@
 app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','ActivateTab',
 	function($scope,localStorageService,jotFactory,$rootScope,$mdDialog,toastService,ActivateTab) {	
 
+		$scope.callbackTitleStaff = function(){
+	            $scope.titleFocus = true;	
+	    };
+
 		/*
 		* Blank field before open form
 		*/
 
-		$rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.assigned_to = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = '';
+		$rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.assigned_to = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = $rootScope.jot_title = $rootScope.files  =  '';
 
+		 $rootScope.progress = -1;
 		/*
 		* Activate tab
 		*/
@@ -20,9 +25,10 @@ app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$roo
 		******************************************************************/
 
 		$scope.createJot = function(){
-			/*console.log($rootScope.due_date);
-			return false;
-			*/
+			/*console.log($rootScope);
+			console.log($rootScope.selectedPattern);
+			return false;*/
+			
 
 			/**
 			||	Start task Jot Data json 
@@ -39,18 +45,52 @@ app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$roo
 
 			if($rootScope.taskTime == 'recurring'){
 
+				var pattern = '';
+				if($rootScope.selectedPattern == 'weekly')
+				{
+					 pattern = {
+									type : $rootScope.selectedPattern,
+									days : $rootScope.selectedDays,
+									
+								 };
+				} 
+
+
+				if($rootScope.selectedPattern == 'yearly')
+				{
+					 pattern = {
+									type : $rootScope.selectedPattern,
+									month: $rootScope.yealy_month,
+									date : $rootScope.yearly_day			
+								 };
+				} 
+
+
+				if($rootScope.selectedPattern == 'monthly')
+				{
+					 pattern = {
+									type : $rootScope.selectedPattern,
+									date : $rootScope.monthly_recurring_date
+								 };
+				}
+
+				if($rootScope.selectedPattern == 'daily')
+				{
+					pattern = {
+									type : $rootScope.selectedPattern,
+									days : $rootScope.selectedDays
+								 };
+				}
+
 				 task = {
 					type       : 'recurring',
 					start_date : new Date($rootScope.start_recurring_date).getTime(),
 					end_date   : new Date($rootScope.end_recurring_date).getTime(),
-					pattern: {
-								type : $rootScope.selectedPattern,
-								days : $rootScope.selectedDays,
-								day  : $rootScope.monthly_recurring_date			
-							 }
+					pattern: pattern
 				};
 			}
 
+			
 			/**
 			||	End task Jot Data json 
 			**/
@@ -59,7 +99,7 @@ app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$roo
 
 			var hotel = localStorageService.get('hotel');
 			var jotDataArray = {
-					jot_title          : $scope.jot_title,
+					jot_title          : $rootScope.jot_title,
 					priority           : $rootScope.priority,
 					hotel_id		   : hotel.hotel_id,
 					jot_type           : $rootScope.jot_type,

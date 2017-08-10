@@ -102,8 +102,67 @@ __API_PATH.RECURRING_PATTERN = [
 										label        :"Monthly",
 										id           :"monthly",
 										description  : "Recurring every month"
-									}			
+									},
+									{
+										label        :"Yearly",
+										id           :"yearly",
+										description  : "Recurring every year"
+									}
+
 								]; 
+
+
+__API_PATH.MONTH = [
+								{
+									label 	     : "January",
+									value    	 : "1"			
+								},
+								{
+									label 	     : "February",
+									value    	 : "2"			
+								},
+								{
+									label 	     : "March",
+									value    	 : "3"			
+								},
+								{
+									label 	     : "April",
+									value    	 : "4"			
+								},
+								{
+									label 	     : "May",
+									value    	 : "5"			
+								},
+								{
+									label 	     : "June",
+									value    	 : "6"			
+								},
+								{
+									label 	     : "July",
+									value    	 : "7"			
+								},
+								{
+									label 	     : "August",
+									value    	 : "8"			
+								},
+								{
+									label 	     : "September",
+									value    	 : "9"			
+								},
+								{
+									label 	     : "October",
+									value    	 : "10"			
+								},
+								{
+									label 	     : "Novemmber",
+									value    	 : "11"			
+								},
+								{
+									label 	     : "December",
+									value    	 : "12"			
+								},
+
+							];
 
 
 __API_PATH.WEEK_NAME = [
@@ -311,6 +370,48 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
 
 'use strict';
 
+app.factory('cursorPosition', ['$http', function ($http) {
+	return{		
+		
+		GetCaretPosition: function(ctrl){
+			var CaretPos = 0; 
+            if (document.selection) {
+                ctrl.focus();
+                var Sel = document.selection.createRange();
+                Sel.moveStart('character', -ctrl.value.length);
+                CaretPos = Sel.text.length;
+            }            
+            else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+                CaretPos = ctrl.selectionStart;
+            return (CaretPos);
+		},	
+
+		ReturnWord: function(text, caretPos){
+			var index = text.indexOf(caretPos);
+            var preText = text.substring(0, caretPos);
+            if (preText.indexOf(" ") > 0) {
+                var words = preText.split(" ");
+                return words[words.length - 1]; //return last word
+            }
+            else {
+                return preText;
+            }			
+		},
+
+	};
+}]);
+'use strict';
+
+app.factory('replaceOccurence', ['$http', function ($http) {
+	return{	
+		replaceAll: function(string, search, replacement){
+			
+            return string.replace(new RegExp(search, 'g'), replacement);
+		}
+	};
+}]);
+'use strict';
+
 app.factory('toastService', ['$mdToast','$timeout', function ($mdToast, $timeout) {
 	return{
 		alert: function(opt){
@@ -418,7 +519,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		
 		
 		$scope.deleteHotel = function(event,hotelID){
-			
+
 			var storedHotelID = localStorageService.get('hotel');		
 			if(storedHotelID && storedHotelID.hotel_id == hotelID)
 			{
@@ -918,18 +1019,20 @@ app.controller('editJotCtlr', ['$scope','jotFactory','$rootScope','$mdDialog','j
 
 "use strict";
 
-app.controller('imageCtlr', ['$scope','$rootScope','Upload','$timeout','localStorageService',
+app.controller('iconCtlr', ['$scope','$rootScope','Upload','$timeout','localStorageService',
 	function($scope,$rootScope,Upload,$timeout,localStorageService) {
-	
+
 
 		/*****************************************
 		* Jot image upload
 		*****************************************/
 
+		
+
 		$rootScope.issueImages = '';
 		$scope.uploadFiles = function(files, errFiles) {
 			var hotel = localStorageService.get('hotel');
-			$scope.files = files;
+			$rootScope.files = files;			
 	        if (files && files.length) {
 	            Upload.upload({
 	                url: window.__API_PATH.UPLOAD_FILE,
@@ -954,17 +1057,29 @@ app.controller('imageCtlr', ['$scope','$rootScope','Upload','$timeout','localSto
 	                    $scope.errorMsg = response.status + ': ' + response.data;
 	                }
 	            }, function (evt) {
-	                $scope.progress = 
+	                $rootScope.progress = 
 	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
 	            });
 	        }
 
 	    };
 
-		
+	    /*****************************************
+		* Open staff list
+		*****************************************/
+
+	    $scope.openMemberList	=	function(userName){	    	
+	    	if($rootScope.clickopen)
+	    	{
+	    		$rootScope.clickopen = false;	    		
+	    	} else {
+	    		$rootScope.clickopen = true;
+	    	}	    	
+	    };
+
+
 	}
 ]);
-
 "use strict";
 
 app.controller('issueCtlr', ['$scope','$rootScope',
@@ -1076,12 +1191,17 @@ app.controller('jotController', ['$scope','$location','jotFactory','$rootScope',
 app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$rootScope','$mdDialog','toastService','ActivateTab',
 	function($scope,localStorageService,jotFactory,$rootScope,$mdDialog,toastService,ActivateTab) {	
 
+		$scope.callbackTitleStaff = function(){
+	            $scope.titleFocus = true;	
+	    };
+
 		/*
 		* Blank field before open form
 		*/
 
-		$rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.assigned_to = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = '';
+		$rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.assigned_to = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = $rootScope.jot_title = $rootScope.files  =  '';
 
+		 $rootScope.progress = -1;
 		/*
 		* Activate tab
 		*/
@@ -1093,9 +1213,10 @@ app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$roo
 		******************************************************************/
 
 		$scope.createJot = function(){
-			/*console.log($rootScope.due_date);
-			return false;
-			*/
+			/*console.log($rootScope);
+			console.log($rootScope.selectedPattern);
+			return false;*/
+			
 
 			/**
 			||	Start task Jot Data json 
@@ -1112,18 +1233,52 @@ app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$roo
 
 			if($rootScope.taskTime == 'recurring'){
 
+				var pattern = '';
+				if($rootScope.selectedPattern == 'weekly')
+				{
+					 pattern = {
+									type : $rootScope.selectedPattern,
+									days : $rootScope.selectedDays,
+									
+								 };
+				} 
+
+
+				if($rootScope.selectedPattern == 'yearly')
+				{
+					 pattern = {
+									type : $rootScope.selectedPattern,
+									month: $rootScope.yealy_month,
+									date : $rootScope.yearly_day			
+								 };
+				} 
+
+
+				if($rootScope.selectedPattern == 'monthly')
+				{
+					 pattern = {
+									type : $rootScope.selectedPattern,
+									date : $rootScope.monthly_recurring_date
+								 };
+				}
+
+				if($rootScope.selectedPattern == 'daily')
+				{
+					pattern = {
+									type : $rootScope.selectedPattern,
+									days : $rootScope.selectedDays
+								 };
+				}
+
 				 task = {
 					type       : 'recurring',
 					start_date : new Date($rootScope.start_recurring_date).getTime(),
 					end_date   : new Date($rootScope.end_recurring_date).getTime(),
-					pattern: {
-								type : $rootScope.selectedPattern,
-								days : $rootScope.selectedDays,
-								day  : $rootScope.monthly_recurring_date			
-							 }
+					pattern: pattern
 				};
 			}
 
+			
 			/**
 			||	End task Jot Data json 
 			**/
@@ -1132,7 +1287,7 @@ app.controller('jotFormCtrl', ['$scope','localStorageService','jotFactory','$roo
 
 			var hotel = localStorageService.get('hotel');
 			var jotDataArray = {
-					jot_title          : $scope.jot_title,
+					jot_title          : $rootScope.jot_title,
 					priority           : $rootScope.priority,
 					hotel_id		   : hotel.hotel_id,
 					jot_type           : $rootScope.jot_type,
@@ -1325,7 +1480,8 @@ app.controller('staffCtlr', ['$scope','$rootScope','localStorageService','jotFac
 				};
 		jotFactory.jotCRUD(request)
 		.then(function(response){
-			$scope.staffList = response.result;			
+			//$scope.staffList = response.result;	
+			$rootScope.staffList = response.result;			
 		});
 
 	     
@@ -1359,6 +1515,7 @@ app.controller('taskCtlr', ['$scope','$rootScope',
 app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
 	function($scope,$rootScope) {	
 
+
 		/*
 		* Get day list in array
 		*/
@@ -1370,7 +1527,7 @@ app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
 		/*
 		* Make task pattern
 		*/
-
+		$scope.getMonth = window.__API_PATH.MONTH;
 		$scope.patterns = window.__API_PATH.RECURRING_PATTERN;
 		$scope.weeks    = window.__API_PATH.WEEK_NAME;
 		$rootScope.selectedDays = [];
@@ -1388,16 +1545,17 @@ app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
 	        if(pattern.id == 'daily' || pattern.id == 'weekly')
 			{	
 				/***** Auto check all week value *****/	
-
 				
 				angular.forEach($scope.weeks, function (item) {
 					if(pattern.id == 'daily')
 					{
 						item.Selected = true;	
+						$rootScope.selectedDays.push(item.value);
 					} else {
 						item.Selected = false;
+						$rootScope.selectedDays = [];
 					}		            
-		            $rootScope.selectedDays.push(item.value);
+		            
 		        });				
 				
 			}
@@ -1429,7 +1587,7 @@ app.controller('taskDatepickerCtlr', ['$scope','$rootScope',
 
 "use strict";
 
-app.directive('departmentypeahead', ['$compile', '$timeout', function($compile, $timeout) {
+app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', function($compile, $timeout,replaceOccurence) {
 
     return {
         restrict: 'A',
@@ -1445,8 +1603,8 @@ app.directive('departmentypeahead', ['$compile', '$timeout', function($compile, 
 
             elem.bind('blur', function() {
                 $timeout(function() {
-                    scope.selected = true
-                }, 100)
+                    scope.selected = true;
+                }, 100);
             });
 
             /*****************************************
@@ -1455,48 +1613,53 @@ app.directive('departmentypeahead', ['$compile', '$timeout', function($compile, 
 
             elem.bind("keydown", function($event) {
                 if($event.keyCode == 38 && scope.active > 0) { 
-                    scope.active--
-                    scope.$digest()
+                    scope.active--;
+                    scope.$digest();
                 } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
-                    scope.active++
-                    scope.$digest()
+                    scope.active++;
+                    scope.$digest();
                 } else if($event.keyCode == 13) {
                     scope.$apply(function() {
-                        scope.click(scope.filitered[scope.active])
-                    })
+                        scope.click(scope.filitered[scope.active]);
+                    });
                 }
             });
 
             scope.click = function(item) {
-            var replaceString = scope.ngModel;
-			var replaceWord   = scope.matchWord;
-			selectedValue     = "#"+item.department_name+" ";
+              var replaceString = scope.ngModel;
+        			var replaceWord   = scope.matchWord;
+              replaceWord       = replaceWord.split('#');
+              replaceWord       = '#'+replaceWord[1];
 
-			var replacedValue = replaceString.replace(new RegExp("\\"+replaceWord+"\\b"), selectedValue);
-				scope.ngModel = replacedValue;
-				scope.selected = item;
+        			var selectedValue = "#"+item.department_name+" ";
 
-                if(scope.departmenttypeaheadCallback) {
-                    scope.departmenttypeaheadCallback(item)
-                }
-                elem[0].blur();
-            }
+    
+        			var replacedValue = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);  
+
+        			scope.ngModel = replacedValue;
+        			scope.selected = item;
+
+              if(scope.departmenttypeaheadCallback) {
+                    scope.departmenttypeaheadCallback(item);
+              }
+              elem[0].blur();
+            };
 
             scope.mouseenter = function($index) {
-                scope.active = $index
+                scope.active = $index;
             };
 
             scope.$watch('ngModel', function(input) {
             	
-				if(scope.selected && scope.selected.department_name == input) {
-                	return
+				        if(scope.selected && scope.selected.department_name == input) {
+                	return;
                 }
                 scope.active = 0;
                 scope.selected = false;
             });
             elem.after($compile(template)(scope));
         }
-    }
+    };
 }]).directive('focusDepartment', function($timeout, $parse) {
       return {
           
@@ -1517,7 +1680,227 @@ app.directive('departmentypeahead', ['$compile', '$timeout', function($compile, 
 
 "use strict";
 
-app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $timeout) {
+app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope', function($compile, $timeout,$rootScope) {
+
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            ngModel: '=',
+            iconstafflistsuggestion: '=',
+            iconstaffsuggestionCallback: "="
+        },
+        link: function(scope, elem, attrs) {
+
+              var template = '<ul class="" style="display:block;"><li ng-repeat="item in filitered = (iconstafflistsuggestion | filter:$root.filtermember) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul>';
+
+              elem.bind('blur', function() {
+                  $timeout(function() {
+                      scope.selected = true;
+                  }, 100);
+              });
+
+              /*****************************************
+              * Navigate list item on mouse key
+              ******************************************/
+
+              elem.bind("keydown", function($event) {
+
+                  if($event.keyCode == 38 && scope.active > 0) { 
+                      scope.active--;
+                      scope.$digest();
+                  } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
+                      scope.active++;
+                      scope.$digest();
+                  } else if($event.keyCode == 13) {
+                      scope.click(scope.filitered[scope.active]);
+                  }
+              });
+
+              /***************************************************
+              * Replace word with selected suggestion list item
+              ***************************************************/
+
+              scope.click = function(item) {
+                
+                var username  = item.user_name;
+                    username  = username.trim();                
+                var appendValue = "@"+username+" ";
+                $rootScope.$broadcast('addUserNameAtMousePosition',appendValue);
+                $rootScope.clickopen = false;
+              };
+
+              /*********************************************
+              * Set index on mouse click on list
+              **********************************************/
+
+              scope.mouseenter = function($index) {
+                  scope.active = $index;
+              };
+
+              scope.$watch('ngModel', function(input) {
+                
+                  if(scope.selected && scope.selected.user_name == input) {
+                        return;
+                  }
+                  scope.active = 0;
+                  scope.selected = false;
+              });
+
+            /*********************************************
+            * Append template under element
+            **********************************************/
+            elem.after($compile(template)(scope));                       
+        }
+    };
+}]);
+"use strict";
+
+app.directive('textareastaffsuggestion', ['$compile', '$timeout','$rootScope','replaceOccurence', function($compile, $timeout,$rootScope,replaceOccurence) {
+
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            ngModel: '=',
+            textareastaffsuggestion: '=',
+            textareastaffsuggestionCallback: "="
+        },
+        link: function(scope, elem, attrs) {
+
+              var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (textareastaffsuggestion | filterstaffJotTitle:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
+
+              elem.bind('blur', function() {
+                  $timeout(function() {
+                      scope.selected = true;
+                  }, 100);
+              });
+
+              /*****************************************
+              * Navigate list item on mouse key
+              ******************************************/
+
+              elem.bind("keydown", function($event) {
+
+                  if($event.keyCode == 38 && scope.active > 0) { 
+                      scope.active--;
+                      scope.$digest();
+                  } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
+                      scope.active++;
+                      scope.$digest();
+                  } else if($event.keyCode == 13) {
+
+                      scope.$apply(function() {
+                          scope.click(scope.filitered[scope.active]);
+                      });
+                  }
+              });
+
+              /***************************************************
+              * Replace word with selected suggestion list item
+              ***************************************************/
+
+              scope.click = function(item) {
+                
+              	var replaceString     = scope.ngModel;
+          			var replaceWord       = scope.matchWord;
+                replaceWord           = replaceWord.split('@');
+                replaceWord           = '@'+replaceWord[1];
+          			var selectedValue     = "@"+item.user_name+" ";
+
+          			var replacedValue     = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);
+                
+          				scope.ngModel = replacedValue;
+          				scope.selected = item;
+
+                  if(scope.textareastaffsuggestionCallback) {
+                      scope.textareastaffsuggestionCallback(item);
+                  }
+                  elem[0].blur();
+              };
+
+              /*********************************************
+              * Set index on mouse click on list
+              **********************************************/
+
+              scope.mouseenter = function($index) {
+                  scope.active = $index;
+              };
+
+              scope.$watch('ngModel', function(input) {
+              	
+      				    if(scope.selected && scope.selected.user_name == input) {
+                      	return;
+                  }
+                  scope.active = 0;
+                  scope.selected = false;
+              });
+
+            /*********************************************
+            * Append template under element
+            **********************************************/
+            elem.after($compile(template)(scope));
+
+            /*********************************************
+            * Add user name on click user suggestion list
+            **********************************************/
+
+            $rootScope.$on('addUserNameAtMousePosition', function(e, val) {
+                var domElement = elem[0];
+
+                if (document.selection) {
+                  domElement.focus();
+                  var sel = document.selection.createRange();
+                  sel.text = val;
+                  $timeout(function() {                        
+                      domElement.focus();
+                  });
+                  
+                } else if (domElement.selectionStart || domElement.selectionStart === 0) {
+                  var startPos = domElement.selectionStart;
+                  var endPos = domElement.selectionEnd;
+                  //var scrollTop = domElement.scrollTop;
+                  domElement.value = domElement.value.substring(0, startPos) + val + domElement.value.substring(endPos, domElement.value.length);
+                  domElement.selectionStart = startPos + val.length;
+                  domElement.selectionEnd = startPos + val.length;
+                  //domElement.scrollTop = scrollTop;
+
+                  $timeout(function() {                        
+                      domElement.focus();
+                  });
+                } else {
+                  
+                  domElement.value += val;
+                  $timeout(function() {                        
+                      domElement.focus();
+                  });
+                }
+
+              }); 
+
+            
+        }
+    };
+}]).directive('focusTitle', function($timeout, $parse) {
+      return {          
+          link: function(scope, element, attrs) {
+              var model = $parse(attrs.focusMe);
+              scope.$watch(function(value) {
+              		
+                     if(value.titleFocus)
+                     {            
+                      $timeout(function() {                        
+                          element[0].focus();
+                      });
+                      scope.titleFocus = false;
+                     }
+              });
+          }
+      };
+    });
+"use strict";
+
+app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', function($compile, $timeout,replaceOccurence) {
 
     return {
         restrict: 'A',
@@ -1529,11 +1912,11 @@ app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $tim
         },
         link: function(scope, elem, attrs) {
 
-            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
+            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
 
             elem.bind('blur', function() {
                 $timeout(function() {
-                    scope.selected = true
+                    scope.selected = true;
                 }, 100);
             });
 
@@ -1546,32 +1929,37 @@ app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $tim
                     scope.active--;
                     scope.$digest();
                 } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
-                    scope.active++
-                    scope.$digest()
+                    scope.active++;
+                    scope.$digest();
                 } else if($event.keyCode == 13) {
+
                     scope.$apply(function() {
-                        scope.click(scope.filitered[scope.active])
-                    })
+                        scope.click(scope.filitered[scope.active]);
+                    });
                 }
             });
 
             scope.click = function(item) {
-            var replaceString = scope.ngModel;
-			var replaceWord   = scope.matchWord;
-			var selectedValue     = "@"+item.user_name+" ";
-
-			var replacedValue = replaceString.replace(new RegExp("\\"+replaceWord+"\\b"), selectedValue);
-				scope.ngModel = replacedValue;
-				scope.selected = item;
+              
+              var replaceString = scope.ngModel;
+        			var replaceWord   = scope.matchWord;
+              replaceWord       = replaceWord.split('@');
+              replaceWord       = '@'+replaceWord[1];
+        			var selectedValue = "@"+item.user_name+" ";
+              
+        			var replacedValue = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);             
+              
+      				scope.ngModel = replacedValue;
+      				scope.selected = item;
 
                 if(scope.stafftypeaheadCallback) {
-                    scope.stafftypeaheadCallback(item)
+                    scope.stafftypeaheadCallback(item);
                 }
                 elem[0].blur();
             };
 
             scope.mouseenter = function($index) {
-                scope.active = $index
+                scope.active = $index;
             };
 
             scope.$watch('ngModel', function(input) {
@@ -1584,7 +1972,7 @@ app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $tim
             });
             elem.after($compile(template)(scope));
         }
-    }
+    };
 }]).directive('focusStaff', function($timeout, $parse) {
       return {
           
@@ -1621,44 +2009,14 @@ app.factory('jotFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
-app.filter("filterdepartment", function() {
+app.filter("filterdepartment", function(cursorPosition) {
 
-	/**************************************
-		* Get cursor position
-		**************************************/
-		 function GetCaretPosition(ctrl) {
-            var CaretPos = 0; 
-            if (document.selection) {
-                ctrl.focus();
-                var Sel = document.selection.createRange();
-                Sel.moveStart('character', -ctrl.value.length);
-                CaretPos = Sel.text.length;
-            }            
-            else if (ctrl.selectionStart || ctrl.selectionStart == '0')
-                CaretPos = ctrl.selectionStart;
-            return (CaretPos);
-        }
-
-        /**************************************
-		* Retrun word of befor cursor
-		**************************************/
-        function ReturnWord(text, caretPos) {
-                var index = text.indexOf(caretPos);
-	            var preText = text.substring(0, caretPos);
-	            if (preText.indexOf(" ") > 0) {
-	                var words = preText.split(" ");
-	                return words[words.length - 1]; //return last word
-	            }
-	            else {
-	                return preText;
-	            }
-        }
 
          return function(input,scope) {
          	
          	var text     = document.getElementById("department");
-			var caretPos = GetCaretPosition(text);
-            var word     = ReturnWord(text.value, caretPos);
+			var caretPos = cursorPosition.GetCaretPosition(text);
+            var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
             var detectUserName = word.match(/\#[a-z]+/gm);
 			var countAtRate    = word.match(/\#/gm);
@@ -1687,46 +2045,13 @@ app.filter("filterdepartment", function() {
 });
 
 
-
-
-app.filter("filterstaff", function() {
-
-	/**************************************
-		* Get cursor position
-		**************************************/
-		 function GetCaretPosition(ctrl) {
-            var CaretPos = 0; 
-            if (document.selection) {
-                ctrl.focus();
-                var Sel = document.selection.createRange();
-                Sel.moveStart('character', -ctrl.value.length);
-                CaretPos = Sel.text.length;
-            }            
-            else if (ctrl.selectionStart || ctrl.selectionStart == '0')
-                CaretPos = ctrl.selectionStart;
-            return (CaretPos);
-        }
-
-        /**************************************
-		* Retrun word of befor cursor
-		**************************************/
-        function ReturnWord(text, caretPos) {
-                var index = text.indexOf(caretPos);
-	            var preText = text.substring(0, caretPos);
-	            if (preText.indexOf(" ") > 0) {
-	                var words = preText.split(" ");
-	                return words[words.length - 1]; //return last word
-	            }
-	            else {
-	                return preText;
-	            }
-        }
+app.filter("filterstaff", function(cursorPosition) {
 
          return function(input,scope) {
-         	
+
          	var text     = document.getElementById("staff");
-			var caretPos = GetCaretPosition(text);
-            var word     = ReturnWord(text.value, caretPos);
+			var caretPos = cursorPosition.GetCaretPosition(text);
+            var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
             var detectUserName = word.match(/\@[a-z]+/gm);
 			var countAtRate    = word.match(/\@/gm);
@@ -1742,7 +2067,7 @@ app.filter("filterstaff", function() {
 				angular.forEach(input,function(value,key){
 					var listedstaff = value.user_name;
 					listedstaff     = listedstaff.toLowerCase();
-					removeAtRate      = removeAtRate.toLowerCase();
+					removeAtRate    = removeAtRate.toLowerCase();
 					
 					if(listedstaff.startsWith(removeAtRate))
 					{						
@@ -1751,6 +2076,43 @@ app.filter("filterstaff", function() {
 				});				
 				return searchedString;
 			}
+			
+         };
+});
+
+
+
+app.filter("filterstaffJotTitle", function(cursorPosition) {
+
+         return function(input,scope) {
+         		
+	         	var text     = document.getElementById("jot_title");
+				var caretPos = cursorPosition.GetCaretPosition(text);
+	            var word     = cursorPosition.ReturnWord(text.value, caretPos);
+
+	            var detectUserName = word.match(/\@[a-z]+/gm);
+				var countAtRate    = word.match(/\@/gm);
+				
+				if(detectUserName && countAtRate.length == 1)
+				{
+					var removeAtRate = word.split("@");
+					
+					removeAtRate = removeAtRate[1];
+					scope.matchWord = word;		
+
+					var searchedString 	= [];
+					angular.forEach(input,function(value,key){
+						var listedstaff = value.user_name;
+						listedstaff     = listedstaff.toLowerCase();
+						removeAtRate    = removeAtRate.toLowerCase();
+						
+						if(listedstaff.startsWith(removeAtRate))
+						{						
+							searchedString.push(value);
+						}
+					});				
+					return searchedString;
+				}
 			
          };
 });
@@ -1890,48 +2252,6 @@ app.factory('loginFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
-app.directive('header',['$rootScope',function($rootScope){
-	return{
-		templateUrl:'/modules/partials/header.html',
-		link: function(scope,ele){}
-	
-	};
-}]);
-
-
-
-app.factory('headerFactory', ['$http', function ($http) {
-	return{	
-		
-		get: function(obj){
-			return $http(obj).then(function(response){
-				return response.data;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		},			
-	};
-}]);
-'use strict';
-
-app.factory('registerFactory', ['$http', function ($http) {
-	return{		
-	
-		register: function(obj){
-			return $http(obj).then(function(response){
-				return response.data;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		},		
-	};
-}]);
-"use strict";
-
 app.controller('headerController', ['$scope','$location','localStorageService','headerFactory','$rootScope','$mdDialog','$route',
 	function($scope,$location,localStorageService,headerFactory,$rootScope,$mdDialog,$route) {	
 
@@ -2028,6 +2348,32 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 
 "use strict";
 
+app.directive('header',['$rootScope',function($rootScope){
+	return{
+		templateUrl:'/modules/partials/header.html',
+		link: function(scope,ele){}
+	
+	};
+}]);
+
+
+
+app.factory('headerFactory', ['$http', function ($http) {
+	return{	
+		
+		get: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		},			
+	};
+}]);
+"use strict";
+
 /**************************************
 * Register controller
 **************************************/
@@ -2065,3 +2411,20 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 	}
 ]);
 
+
+'use strict';
+
+app.factory('registerFactory', ['$http', function ($http) {
+	return{		
+	
+		register: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		},		
+	};
+}]);

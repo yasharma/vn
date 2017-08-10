@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('departmentypeahead', ['$compile', '$timeout', function($compile, $timeout) {
+app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', function($compile, $timeout,replaceOccurence) {
 
     return {
         restrict: 'A',
@@ -16,8 +16,8 @@ app.directive('departmentypeahead', ['$compile', '$timeout', function($compile, 
 
             elem.bind('blur', function() {
                 $timeout(function() {
-                    scope.selected = true
-                }, 100)
+                    scope.selected = true;
+                }, 100);
             });
 
             /*****************************************
@@ -26,48 +26,53 @@ app.directive('departmentypeahead', ['$compile', '$timeout', function($compile, 
 
             elem.bind("keydown", function($event) {
                 if($event.keyCode == 38 && scope.active > 0) { 
-                    scope.active--
-                    scope.$digest()
+                    scope.active--;
+                    scope.$digest();
                 } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
-                    scope.active++
-                    scope.$digest()
+                    scope.active++;
+                    scope.$digest();
                 } else if($event.keyCode == 13) {
                     scope.$apply(function() {
-                        scope.click(scope.filitered[scope.active])
-                    })
+                        scope.click(scope.filitered[scope.active]);
+                    });
                 }
             });
 
             scope.click = function(item) {
-            var replaceString = scope.ngModel;
-			var replaceWord   = scope.matchWord;
-			selectedValue     = "#"+item.department_name+" ";
+              var replaceString = scope.ngModel;
+        			var replaceWord   = scope.matchWord;
+              replaceWord       = replaceWord.split('#');
+              replaceWord       = '#'+replaceWord[1];
 
-			var replacedValue = replaceString.replace(new RegExp("\\"+replaceWord+"\\b"), selectedValue);
-				scope.ngModel = replacedValue;
-				scope.selected = item;
+        			var selectedValue = "#"+item.department_name+" ";
 
-                if(scope.departmenttypeaheadCallback) {
-                    scope.departmenttypeaheadCallback(item)
-                }
-                elem[0].blur();
-            }
+    
+        			var replacedValue = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);  
+
+        			scope.ngModel = replacedValue;
+        			scope.selected = item;
+
+              if(scope.departmenttypeaheadCallback) {
+                    scope.departmenttypeaheadCallback(item);
+              }
+              elem[0].blur();
+            };
 
             scope.mouseenter = function($index) {
-                scope.active = $index
+                scope.active = $index;
             };
 
             scope.$watch('ngModel', function(input) {
             	
-				if(scope.selected && scope.selected.department_name == input) {
-                	return
+				        if(scope.selected && scope.selected.department_name == input) {
+                	return;
                 }
                 scope.active = 0;
                 scope.selected = false;
             });
             elem.after($compile(template)(scope));
         }
-    }
+    };
 }]).directive('focusDepartment', function($timeout, $parse) {
       return {
           

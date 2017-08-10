@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $timeout) {
+app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', function($compile, $timeout,replaceOccurence) {
 
     return {
         restrict: 'A',
@@ -12,11 +12,11 @@ app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $tim
         },
         link: function(scope, elem, attrs) {
 
-            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
+            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
 
             elem.bind('blur', function() {
                 $timeout(function() {
-                    scope.selected = true
+                    scope.selected = true;
                 }, 100);
             });
 
@@ -29,32 +29,37 @@ app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $tim
                     scope.active--;
                     scope.$digest();
                 } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
-                    scope.active++
-                    scope.$digest()
+                    scope.active++;
+                    scope.$digest();
                 } else if($event.keyCode == 13) {
+
                     scope.$apply(function() {
-                        scope.click(scope.filitered[scope.active])
-                    })
+                        scope.click(scope.filitered[scope.active]);
+                    });
                 }
             });
 
             scope.click = function(item) {
-            var replaceString = scope.ngModel;
-			var replaceWord   = scope.matchWord;
-			var selectedValue     = "@"+item.user_name+" ";
-
-			var replacedValue = replaceString.replace(new RegExp("\\"+replaceWord+"\\b"), selectedValue);
-				scope.ngModel = replacedValue;
-				scope.selected = item;
+              
+              var replaceString = scope.ngModel;
+        			var replaceWord   = scope.matchWord;
+              replaceWord       = replaceWord.split('@');
+              replaceWord       = '@'+replaceWord[1];
+        			var selectedValue = "@"+item.user_name+" ";
+              
+        			var replacedValue = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);             
+              
+      				scope.ngModel = replacedValue;
+      				scope.selected = item;
 
                 if(scope.stafftypeaheadCallback) {
-                    scope.stafftypeaheadCallback(item)
+                    scope.stafftypeaheadCallback(item);
                 }
                 elem[0].blur();
             };
 
             scope.mouseenter = function($index) {
-                scope.active = $index
+                scope.active = $index;
             };
 
             scope.$watch('ngModel', function(input) {
@@ -67,7 +72,7 @@ app.directive('stafftypeahead', ['$compile', '$timeout', function($compile, $tim
             });
             elem.after($compile(template)(scope));
         }
-    }
+    };
 }]).directive('focusStaff', function($timeout, $parse) {
       return {
           

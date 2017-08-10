@@ -40,10 +40,16 @@
         <div class="newhotel_dialog_form" >
             <div class="row">
                 <div class="clearfix">
-                    <div class="col-md-12">
+                    <div class="col-md-12 jot_textarea">
+
+                    <div class="clearfix attachment_list" ng-include="'/modules/jot/views/attachment_list.html'"></div> 
+
                         <md-input-container class="md-block">
-                            <textarea md-no-float class="md-block" ng-model="jot_title" rows="5" aria-label="textarea" ng-required="true"></textarea>
+                            <textarea md-no-float class="md-block" ng-model="$root.jot_title" rows="5" aria-label="textarea" ng-required="true" id="jot_title" focus-title="titleFocus"  textareastaffsuggestion ="$root.staffList" textareastaffsuggestion-callback="callbackTitleStaff"  my-text=""></textarea>   
+                                                 
                         </md-input-container>
+                        <div class="clearfix icon_list" ng-include="'/modules/jot/views/icons.html'"></div>
+
                     </div>
                 </div>
                 

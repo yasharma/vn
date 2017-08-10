@@ -15,7 +15,8 @@ app.controller('staffCtlr', ['$scope','$rootScope','localStorageService','jotFac
 				};
 		jotFactory.jotCRUD(request)
 		.then(function(response){
-			$scope.staffList = response.result;			
+			//$scope.staffList = response.result;	
+			$rootScope.staffList = response.result;			
 		});
 
 	     

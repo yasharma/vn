@@ -164,28 +164,28 @@ md-toast.ng-scope {
     z-index: 999;
     top: 50px;
 }
-.suggestions_list ul {
+.suggestions_list ul,.suggestions_list_title ul {
     max-height: 300px;
     overflow-y: auto;
 }
-.suggestions_list li {
+.suggestions_list li,.suggestions_list_title li {
     cursor: pointer;
     font-size: 16px;
     padding: 8px;
 }
 
 
-.suggestions_list li a {
+.suggestions_list li a,.suggestions_list_title li a {
     color: #000;
 }
-.suggestions_list li:hover {
+.suggestions_list li:hover,.suggestions_list_title li:hover {
     background: #2aaae0 none repeat scroll 0 0;
 }
-.suggestions_list li.active {
+.suggestions_list li.active,.suggestions_list_title li.active {
     background: #2aaae0;
 }
 
-.suggestions_list li.active a {
+.suggestions_list li.active a,.suggestions_list_title li.active a {
     color: #fff;
 }
 .close_suggestion {
@@ -260,4 +260,47 @@ md-select {
 
 .search_icon {
     top: 17px;
+}
+
+.icon_list {
+    bottom: 45px;
+    position: absolute;
+    right: 50px;
+}
+.icon_list > a {
+    margin-right: 10px;
+}
+.uploadimage_list > li {
+    width:45%;
+}
+
+.mentioned_menber_list {
+    background: #fff none repeat scroll 0 0;
+    min-width: 235px;
+    padding: 0 0;
+    position: absolute;
+    right: 0;
+    z-index: 99;
+}
+.mentioned_menber_list li {
+    padding: 7px 9px;
+}
+
+.suggestions_list_title {
+    background: #fff none repeat scroll 0 0;
+    width: 235px;
+    padding: 0;
+    position: absolute;
+    right: 2px;
+    z-index: 999;
+}
+
+.member_filter {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 7px 5px;
+}
+a.icon.fivelink {
+    top: 139px;
+    right: 18px;
 }

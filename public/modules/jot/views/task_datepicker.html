@@ -63,10 +63,27 @@
 
                 <div class="daylisted {{patternClass}}" ng-if="$root.selectedPattern == 'monthly'">
                
-                    <md-select ng-model="$root.monthly_recurring_date" placeholder="Select Day" class="md-no-underline">
+                    <md-select ng-model="$root.monthly_recurring_date" placeholder="Select Date" class="md-no-underline">
 
                       <md-option ng-repeat="i in getDay(31) track by $index" value="{{$index+1}}">{{$index+1}}</md-option>                      
                     </md-select>                       
+
+                </div>
+
+
+                <div class="daylisted {{patternClass}}" ng-if="$root.selectedPattern == 'yearly'">
+                    <div class="col-md-6">
+                        <md-select ng-model="$root.yealy_month" placeholder="Select Month" class="md-no-underline">
+                          <md-option ng-repeat="i in getMonth" value="{{i.value}}">{{i.label}}</md-option>                      
+                        </md-select>  
+                    </div>   
+
+                    <div class="col-md-6">
+                       <md-select ng-model="$root.yearly_day" placeholder="Select Date" class="md-no-underline">
+
+                        <md-option ng-repeat="i in getDay(31) track by $index" value="{{$index+1}}">{{$index+1}}</md-option>                      
+                    </md-select> 
+                    </div>                   
 
                 </div>
 
