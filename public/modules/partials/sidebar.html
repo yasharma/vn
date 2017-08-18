@@ -6,8 +6,7 @@
 			<ng-md-icon icon="menu" ng-click="leftopen=!leftopen" class="cursor" style="fill:white" size="24"></ng-md-icon> 
 			</a>
 		</div>
-		<div class="toogle_menu_list">
- 
+		<div class="toogle_menu_list" ng-if="isAuth.outside != 'yes'">
 			<ul>
 				<li>
 					<a href="javascript">	
@@ -15,18 +14,41 @@
 						<span>Phone Directory</span>
 					</a>
 				</li>
-				<li>
-					<a href="javascript">	
-						<ng-md-icon icon="group" class="cursor"  size="24"></ng-md-icon> 
-						<span>view members group</span>
-					</a>	
-					<ul class="sub_menu">
-						<li><a href="javascript">View &amp; Add Member </a></li>
-						<li><a href="javascript">View &amp; Create Group</a></li>
-						<li></li>
-					</ul>
+				
+				<li title="Add/View Employee" >
+					<a href="/dashboard/employee">	
+						<ng-md-icon icon="group_add" class="cursor"  size="24"></ng-md-icon> 
+						<span>Add/View Employee</span>
+					</a>						
 				</li>
-				<li>
+				<li title="Employee Schedule">
+					<a href="/dashboard/employee_schedule">	
+						<ng-md-icon icon="group" class="cursor" style="" size="24"></ng-md-icon> 
+						<span>Employee Schedule</span>
+					</a>
+				</li>
+
+				<li title="Add/View Department">
+					<a href="/dashboard/department">	
+						<ng-md-icon icon="portrait" class="cursor" style="" size="24"></ng-md-icon> 
+						<span>Add/View Department</span>
+					</a>
+				</li>
+
+				<li title="Add/View Inventory">
+					<a href="/dashboard/inventory">	
+						<ng-md-icon icon="shop" class="cursor" style="" size="24"></ng-md-icon> 
+						<span>Add/View Inventory</span>
+					</a>
+				</li>
+				<li title="Add/View Inventory Category">
+					<a href="/dashboard/inventory_category">	
+						<ng-md-icon icon="business" class="cursor" style="" size="24"></ng-md-icon> 
+						<span>Add/View Inventory Category</span>
+					</a>
+				</li>
+
+				<!-- <li>
 					<a href="javascript">	
 						<ng-md-icon icon="email" class="cursor"  size="24"></ng-md-icon> 
 						<span>message</span>
@@ -37,8 +59,8 @@
 						<ng-md-icon icon="insert_drive_file" class="cursor"  size="24"></ng-md-icon> 
 						<span>report</span>
 					</a>
-				</li>
-				<li>
+				</li> -->
+				<!-- <li>
 					<a href="javascript">
 						<ng-md-icon icon="business" class="cursor"  size="24"></ng-md-icon> 
 						<span>alert for hotels</span>
@@ -49,7 +71,7 @@
 						<ng-md-icon icon="settings" class="cursor"  size="24"></ng-md-icon> 
 						<span>Settings</span>
 					</a>
-				</li>
+				</li> -->
 			</ul>
 		</div>
 <!--middle panel -->

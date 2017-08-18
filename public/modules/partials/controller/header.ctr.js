@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('headerController', ['$scope','$location','localStorageService','headerFactory','$rootScope','$mdDialog','$route',
-	function($scope,$location,localStorageService,headerFactory,$rootScope,$mdDialog,$route) {	
+app.controller('headerController', ['$scope','$location','localStorageService','headerFactory','$rootScope','$mdDialog','$route','$timeout',
+	function($scope,$location,localStorageService,headerFactory,$rootScope,$mdDialog,$route,$timeout) {	
 
 		/*
 		* Jot form tab list
@@ -44,13 +44,13 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		*
 		*/
 		$scope.hotel = localStorageService.get('hotel');
-		$scope.changeJotView = function(hotelID,hotelName){
-			var hotelData  = {
+		$scope.changeJotView = function(hotel){
+			/*var hotelData  = {
 				'hotel_id':hotelID,
 				'hotel_name':hotelName
-			};
-			localStorageService.set('hotel', hotelData);
-			$scope.hotel = hotelData;
+			};*/
+			localStorageService.set('hotel', hotel);
+			$scope.hotel = hotel;
 			$route.reload();
 		};
 
@@ -60,18 +60,21 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		/**************************************
 		* Open jot popup
 		**************************************/
+		$timeout(function(){
 
-		$scope.quickTaskPopup = function(){
-			$mdDialog.show({
-				controller: 'jotFormCtrl',
-				templateUrl: '/modules/jot/views/jot-form.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				clickOutsideToClose:true,
-				locals: {ActivateTab:'quick'}
-			}).then(function(answer) {}, function() {});
+			$scope.quickTaskPopup = function(){
+				$mdDialog.show({
+					controller: 'jotPopupCtrl',
+					templateUrl: '/modules/jot/views/jot-form.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,
+					locals: {ActivateTab:{label:"Quick Jot",id:'quick',directory:'jot'}}
+				}).then(function(answer) {}, function() {});
 
-		};
+			};
+		});
+		
 
 
 		/**************************************
@@ -79,9 +82,9 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		**************************************/
 
 		$rootScope.openFormByType = function(formType){
-		
+			
 			$mdDialog.show({
-				controller: 'jotFormCtrl',
+				controller: 'jotPopupCtrl',
 				templateUrl: '/modules/jot/views/jot-form.html',
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,				

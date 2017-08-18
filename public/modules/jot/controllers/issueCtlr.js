@@ -9,6 +9,7 @@ app.controller('issueCtlr', ['$scope','$rootScope',
 		*
 		*/	
 		$rootScope.jot_type = 'issue';
+		$rootScope.directory = 'issue';	
 
 	}
 ]);

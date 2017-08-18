@@ -28,8 +28,12 @@ var HotelSchema  = new Schema({
   hotelname: {
     type: String,
     trim: true,
-    required: 'Hotel name can not be empty.',
-    unique: 'The Hotel Name you have entered already exists.',
+    required: 'Hotel name can not be empty.'
+  },
+  currency: {
+    type: String,
+    trim: true,
+    required: 'Please select currency'
   },
 
   ownername: {

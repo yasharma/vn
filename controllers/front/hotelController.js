@@ -38,11 +38,11 @@ exports.updateHotel = (reqst, respe) => {
         return respe.json(response.errors({},'Hotel Id Is Required.'));
     }else{
         
-        Hotel.findByIdAndUpdate(Hotelid,{$set:reqst.query}, {new: true}, function(err, result) {
+        Hotel.findByIdAndUpdate(Hotelid,{$set:reqst.query}, {new: true, runValidators: true}, function(err, result) {
             if(result){
                 respe.json(response.success(result,'Hotel Updated successfully.'));
             }else{
-                respe.json(response.errors(err,"Error in Hotel update."));
+                respe.json(response.errors(err.errors,"Error in Hotel update."));
             }
         });
     }
@@ -101,7 +101,7 @@ exports.addDepartment = (reqst, respe) => {
         if(result){
             respe.json(response.success(result,'Department Added Successfully.'));
         }else{
-            respe.json(response.errors(err.errors,'Error in Department Saved.'));
+            respe.json(response.errors(err,'Error in Department Saved.'));
         }
     });
 };
@@ -112,16 +112,16 @@ exports.addDepartment = (reqst, respe) => {
                                             
 exports.updateDepartment = (reqst, respe) => {
 
-    var department_id         	= 	reqst.query.department_id;
+    var department_id         	= 	reqst.query._id;
     if(!department_id){
         return respe.json(response.errors({},'Department Id Is Required.'));
     }else{
         
-        Department.findByIdAndUpdate(department_id,{$set:reqst.query}, {new: true}, function(err, result) {
+        Department.findByIdAndUpdate(department_id,{$set:reqst.query}, {new: true, runValidators: true}, function(err, result) {
             if(result){
                 respe.json(response.success(result,'Department Updated successfully.'));
             }else{
-                respe.json(response.errors(err,"Error in Department update."));
+                respe.json(response.errors(err.errors,"Error in Department update."));
             }
         });
     }
@@ -133,9 +133,9 @@ exports.updateDepartment = (reqst, respe) => {
 
 exports.deleteDepartment = (reqst, respe) => {
 
-    var department_id         	= reqst.query.department_id;
+    var Departmentid         	= reqst.query._id;
 
-    if(!department_id){
+    if(!Departmentid){
         return respe.json(response.errors({},'Department Id Is Required.'));
     }else{
         Department.findByIdAndRemove(Departmentid, function(err, result) {

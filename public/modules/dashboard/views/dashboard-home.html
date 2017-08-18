@@ -10,7 +10,7 @@
 		<div class="col-lg-3 col-md-6 hideHotel"  ng-repeat="hotel in hotels" 
 			            ng-hide="hideHotel">
 
-			<div class="dash_hotel_top" ng-click="redirectToJot(hotel._id,hotel.hotelname)">
+			<div class="dash_hotel_top" ng-click="redirectToJot(hotel)">
 				<h4><a href="javascript:void(0);"> {{hotel.hotelname}}</a></h4>
 
 				<i>{{hotel.address}}</i>

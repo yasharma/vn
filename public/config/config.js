@@ -48,16 +48,18 @@ app.config(['$httpProvider', function($httpProvider){
 }])
 .run(['$location','$rootScope','localStorageService','AuthSrv',
 	function($location, $rootScope,localStorageService,AuthSrv){   	
-
-
+        
+        
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) {           
+            
                 
                 if(nextRoute.$$route){
                     if(nextRoute.$$route.access){
                         $rootScope.isAuth= nextRoute.$$route.access;
                    } 
                 }
+                
                 if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {                  
                     AuthSrv.isLogged = 0;                  
                     $location.path("/");

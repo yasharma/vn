@@ -14,6 +14,14 @@ var DepartmentSchema  = new Schema({
     trim: true,
     required: 'Department name can not be empty.',
   },
+  abbreviation: {
+    type: String,
+    trim: true,
+  },
+  description: {
+    type: String,
+    trim: true,
+  },
   status: {
     type: String,
     default: false

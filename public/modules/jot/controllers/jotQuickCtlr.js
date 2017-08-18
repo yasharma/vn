@@ -8,7 +8,8 @@ app.controller('jotQuickCtlr', ['$scope','$rootScope',
 			* Set jot type list
 			*
 			*/
-			$rootScope.jot_type = 'quick';
+			$rootScope.jot_type  = 'quick';
+			$rootScope.directory = 'quick';
 
 			$scope.jotSelect = function(event,value){
 				$rootScope.jot_type = value;

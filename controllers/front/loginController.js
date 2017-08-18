@@ -62,7 +62,7 @@ exports.forgotPassword = function(req,res,next){
     tmpEmail    = _.escapeRegExp(req.body.email);
 
     async.waterfall([
-//0     
+ 
         function (done) {
 
             User.findOne({ email: {$regex: new RegExp(`^${tmpEmail}`), $options:"im"}},{email_verify: 1, status: 1, name: 1}, function (err, user) {
@@ -96,14 +96,14 @@ exports.forgotPassword = function(req,res,next){
                 }
             });
         },
-// 1    
+
         function (user, done) {
             crypto.randomBytes(20, function (err, buffer) {
                 let token = buffer.toString('hex');
                 done(err, user, token);
             });
         },
-// 2    
+  
         function (user, token, done) {
             User.update(
                 {_id: user._id},
@@ -114,7 +114,7 @@ exports.forgotPassword = function(req,res,next){
                 }
             );
         },
-// 3    
+ 
         function (token, user, done) {
 
             let baseUrl = hostPath.host(req),

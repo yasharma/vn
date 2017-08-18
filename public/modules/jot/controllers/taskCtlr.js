@@ -7,7 +7,8 @@ app.controller('taskCtlr', ['$scope','$rootScope',
 		* Set default jot type
 		*
 		*/	
-		$rootScope.jot_type = 'task';		
+		$rootScope.jot_type  = 'task';
+		$rootScope.directory = 'task';		
 	
 	}
 ]);

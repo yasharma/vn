@@ -11,18 +11,18 @@
     </md-toolbar>
     <md-dialog-content>
 
-
-
-        <form name="createJotForm" ng-submit="createJot(createJotForm.$valid)" novalidate ng-init='outsource={assigned_to:"",department:""}'>
-
         <div class="Quick_jot_list">
             <md-nav-bar
                 md-selected-nav-item="currentNavItem"
                 nav-bar-aria-label="navigation links">
             <md-nav-item 
                 ng-repeat="(jotKey,jotValue) in $root.jotTypes" 
-                md-nav-click="goto(jotValue.id)" 
-                name="{{jotValue.id}}">
+                md-nav-click="goto(jotValue);" 
+                name="{{jotValue}}"
+                value="demo" 
+                ng-class="{currentNav : $root.activeNav == jotValue.id}"
+                >
+
               <ng-md-icon 
                 icon="{{jotValue.src}}" 
                 ng-if="jotValue.icontype == 'icon'" 
@@ -30,54 +30,18 @@
                 </ng-md-icon>
                 <img src="{{jotValue.src}}" ng-if="jotValue.icontype == 'image'">
                 <span class="tab_label">{{jotValue.label}}</span>
-            </md-nav-item>
-          
+            </md-nav-item>          
             </md-nav-bar>
-
-
-        </div>
-
+        </div>        
+        
         <div class="newhotel_dialog_form" >
-            <div class="row">
-                <div class="clearfix">
-                    <div class="col-md-12 jot_textarea">
 
-                    <div class="clearfix attachment_list" ng-include="'/modules/jot/views/attachment_list.html'"></div> 
-
-                        <md-input-container class="md-block">
-                            <textarea md-no-float class="md-block" ng-model="$root.jot_title" rows="5" aria-label="textarea" ng-required="true" id="jot_title" focus-title="titleFocus"  textareastaffsuggestion ="$root.staffList" textareastaffsuggestion-callback="callbackTitleStaff"  my-text=""></textarea>   
-                                                 
-                        </md-input-container>
-                        <div class="clearfix icon_list" ng-include="'/modules/jot/views/icons.html'"></div>
-
-                    </div>
-                </div>
+            <div class="row" ng-if="currentNavItem" jot-template="currentNavItem">
                 
-
-                 <div class="ext-content">
-                        <div ng-if="currentNavItem" jot-template="currentNavItem">
-                            <!--@ dynamic template -->
-                        </div>
-                </div>
-
-                 
-                <div class="clearfix">
-                    <div class="col-md-2 pull-right addyellobtn_noflot">
-                        <md-button class="md-primary addyellobtn graybtn" >CANCEL</md-button>
-                    </div>
-                    <div class="col-md-2 pull-right addyellobtn_noflot">
-                     
-                     <md-button type="submit" class="md-primary addyellobtn bluebtn" >SAVE</md-button>
-                    </div>
-                    
-                    <div class="col-md-3 pull-left addyellobtn_noflot">
-                        <md-button class="md-primary addyellobtn yellowbtn" >ADD ANOTHER JOT</md-button>
-                    </div>
-                </div>      
-
+                <!--@ dynamic template -->
             </div>
         </div>
-        </form>
+        
     </md-dialog-content>
   
 </md-dialog>    

@@ -1,0 +1,57 @@
+<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+	
+	<div class="dash_hd_txt mar-bot20" layout="row" layout-align="space-between center">
+		<div class="dash_hd mar-bot0">Employee Schedule</div>
+		<!-- <div class="rightfilter">
+			 <md-button class="md-primary addyellobtn yellowbtn">Add Employee</md-button>
+	    </div>  -->   
+	</div>
+	<div class="clearfix depart_midle">
+		<div class="deptsrch">
+			<div class="vending_left_top_serch positionrel">
+			  <md-input-container md-no-float class="md-block">
+			      <input  ng-model="searchEmployee" placeholder="Search Employee">
+			  </md-input-container>
+			  
+			</div>
+		</div>
+		<div class="deptsrch_data_table">
+			<div class="deptsrch_data_table_mon">August 2017</div>
+			<div class="deptsrch_data_table_inner" style="height:auto;">
+				<table class="deptsrch_data_table_lay" cellpadding="0" cellspacing="0" border="0">
+					<thead>
+						<tr>
+							<th><div class="tab_div">S.NO.</div></th>
+							<th><div class="tab_div">Name</div></th>
+							<th><div class="tab_div">11 Mon</div></th>
+							<th><div class="tab_div">12 Tue</div></th>
+							<th><div class="tab_div">13 Wed</div></th>
+							<th><div class="tab_div">14 Thu</div></th>
+							<th><div class="tab_div">15 Fri</div></th>
+							<th><div class="tab_div">16 Sat</div></th>
+							<th><div class="tab_div">17 Sun</div></th>
+							<th><div class="tab_div">18 Mon </div></th>
+							<th><div class="tab_div">19 Tue </div></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat ="member in list = (membersList | employeefilter:this)  track by $index">
+							<td><div class="tab_div">{{$index+1}} </div>
+							<td><div class="tab_div capitalize">{{member.first_name}} {{member.last_name}}</div>
+							<td><div class="tab_div"> <a class="addscho" href="javascript:;">Add Schedule</a> </div>
+							<td><div class="tab_div"><a class="addscho" href="javascript:;">Add Schedule</a></div>
+							<td><div class="tab_div"><a class="addscho" href="javascript:;">Add Schedule</a></div>
+							<td><div class="tab_div"><a class="addscho" href="javascript:;">Add Schedule</a></div>
+							<td><div class="tab_div"><a class="addscho" href="javascript:;">Add Schedule</a></div>
+							<td><div class="tab_div"><a class="addscho" href="javascript:;">Add Schedule</a></div>
+							<td><div class="tab_div"><a class="addscho" href="javascript:;">Add Schedule</a></div>
+							<td><div class="tab_div"><a class="addscho" href="javascript:;">Add Schedule</a></div>
+							<td><div class="tab_div"><a class="addscho" href="javascript:;">Add Schedule</a></div>
+						</tr>						
+					</tbody>
+				</table>
+			</div>
+			  
+		</div>
+	</div>	
+</section>

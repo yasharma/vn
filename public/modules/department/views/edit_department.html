@@ -1,0 +1,56 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Edit Department</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+<div class="dash-main-con">
+	<div class="dash_pro_inform transformable">
+		<form name="updateDepartmentform" ng-submit="updateDepartment(updateDepartmentform.$valid)" novalidate>
+			<div class="clearfix">
+				<!-- <div class="dash_pro_inform_hd">Add Department</div> -->
+			</div>
+			<div class="dash_pro_inform_inner boxunoversal">
+				<div class="row">
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					            <input  ng-model="department_name" placeholder="Department Name">
+					            
+					    </md-input-container>
+					</div>
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					            <input  ng-model="abbreviation" placeholder="Abbreviation">
+					    </md-input-container>
+					</div>
+					<div class="col-sm-12">
+						<md-input-container md-no-float class="md-block">
+							 <input  ng-model="description" placeholder="Description">
+						</md-input-container>	
+					</div>
+				</div>
+				<div class="clearfix">
+					<div class="chane_pass_btn">
+						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+					</div>						
+				</div>
+
+				<div class="message {{departmentEditResult.class}}" ng-if="departmentEditResult.status == 1">{{departmentEditResult.message}}
+			</div>
+			
+			<div class="result {{departmentEditResult.class}}" ng-if="departmentEditResult.status == 2">  
+                <ul>
+                  <li ng-repeat="(key,value) in departmentEditResult.errors">
+                  {{value.message}}
+                  </li>
+                </ul>
+            </div>
+			</div>
+		</form>
+	</div>
+</div>
+</md-dialog>

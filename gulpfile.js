@@ -62,6 +62,9 @@ gulp.task('vendor:js', (cb) => {
             './bower_components/angular-material-icons/angular-material-icons.min.js',
             './bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js',
             './bower_components/ng-file-upload/ng-file-upload.min.js',
+  /*          './bower_components/angularjs-slider/dist/rzslider.min.js',*/
+            './bower_components/angularjs-datetime-picker/angularjs-datetime-picker.min.js',
+
         ]),
         concat('vendor.js'),
         uglify(),
@@ -69,8 +72,6 @@ gulp.task('vendor:js', (cb) => {
     ],cb);
 
 });
-
-
 
 /********************************************************************************************************************************************************************************************************************************************************/
 
@@ -97,13 +98,18 @@ gulp.task('vendor:theme-css', (cb) => {
         gulp.src([
             './bower_components/bootstrap/dist/css/bootstrap.min.css',
             './bower_components/angular-material/angular-material.min.css',
-            './bower_components/angular-material-icons/angular-material-icons.css'
+            './bower_components/angular-material-icons/angular-material-icons.css',
+            /*'./bower_components/angularjs-slider/dist/rzslider.min.css',*/
+             './bower_components/angularjs-datetime-picker/angularjs-datetime-picker.css',
+          
+            
         ]),
          concat('vendor-theme-css.css'),
         /*uglify(),*/
         gulp.dest('./public/css')
     ],cb);
 });
+
 
 
 /********************************************************************************************************************************************************************************************************************************************************/

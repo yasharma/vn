@@ -50,7 +50,7 @@
     				</div>
     			</div>
     			<div class="clearfix">
-    				<div class="col-md-12">
+    				<div class="col-md-6">
     					<label class="labeltxt">Address  </label>
     					<md-input-container class="md-block">
 				            <input ng-required="true" ng-model="address" placeholder="Address">
@@ -59,6 +59,18 @@
                             </div>
 				        </md-input-container>
     				</div>
+                    <div class="col-md-6">
+                        <label class="labeltxt">Currency  </label>
+
+                        <md-input-container md-no-float class="md-block">
+                            <md-select ng-model="currency" placeholder="Currency">
+                              <md-option ng-repeat="(key,value) in currencyList" value="{{value.symbol}}">
+                                {{value.symbol}} ({{key}})
+                              </md-option>                              
+                            </md-select>
+                            
+                        </md-input-container>
+                    </div>
     			</div>	
     			
                     <div class="clearfix">

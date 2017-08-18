@@ -1,0 +1,142 @@
+<div ng-controller="lostFoundCtlr as ctrl">
+    <form name="lostFoundForm" ng-submit="submitLostFound(lostFoundForm.$valid)" novalidate'>
+        
+        <div class="clearfix lost_panel" ng-init="lfTab = 'lost'">
+          <!--  <ul class="lost_panel_tab clearfix">
+              <li><a href="javascript:void(0);" ng-class="{active:lfTab == 'lost'}" ng-click="lfTab = 'lost'">LOST</a></li>
+              <li><a href="javascript:void(0);" ng-class="{active:lfTab == 'found'}" ng-click="lfTab = 'found'">FOUND</a></li>
+           </ul> -->
+          
+<!-- 
+           <div class="lost_tab_content" ng-if="lfTab == 'lost'"> 
+              <ul class="lost_tab_content_list">
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <input  ng-model="lost_place" placeholder="Place of item lost">
+                 </md-input-container>
+              </li>
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <md-select ng-model="lost_category" placeholder="Select category">
+                       <md-option value="purse">
+                          purse
+                       </md-option>
+                       
+                       <md-option value="electronic">
+                          Electronic
+                       </md-option>
+
+                    </md-select>
+                 </md-input-container>
+              </li>
+              <li>
+                 <md-input-container md-no-float class="md-block lost_found_picker">
+
+                   <md-datepicker md-open-on-focus  ng-model="lost_date" string-to-timestamp md-hide-icons="triangle"  md-placeholder="Date of lost"></md-datepicker>
+
+                 </md-input-container>                 
+              </li>              
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <input  ng-model="no_of_items" placeholder="Number of items">
+                 </md-input-container>
+              </li>
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <md-select ng-model="lost_status" placeholder="Status">
+                       <md-option value="processing">
+                          Processing
+                       </md-option>
+                       <md-option  value="completed">
+                          Completed
+                       </md-option>
+                    </md-select>
+                 </md-input-container>
+              </li>
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <input  ng-model="contact" placeholder="Contact information">
+                 </md-input-container>
+              </li>
+              <li class="fullWidth">
+                 <md-chips ng-model="ctrl.itemTagModel" name="itemTag" readonly="ctrl.readonly"
+                    md-removable="ctrl.removable" placeholder="#Item tag" class="tag_name">
+                    <md-chip-template>
+                       <span class="entered_tags">{{$chip}}</span>                          
+                    </md-chip-template>
+                 </md-chips>
+              </li>
+              <li class="fullWidth">
+                <div class="clearfix" ng-include="'/modules/jot/views/jot_title.html'"></div>
+              </li>
+              </ul>
+           </div> -->
+
+
+           <div class="lost_tab_content"> 
+              <ul class="lost_tab_content_list">
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <input  ng-model="lost_place" placeholder="Place of item found">
+                 </md-input-container>
+              </li>
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <md-select ng-model="lost_category" placeholder="Select category">
+                       <md-option value="purse">
+                          purse
+                       </md-option>
+                       
+                       <md-option value="electronic">
+                          Electronic
+                       </md-option>
+
+                    </md-select>
+                 </md-input-container>
+              </li>
+              <li>
+                 <md-input-container md-no-float class="md-block lost_found_picker">
+
+                   <md-datepicker md-open-on-focus  ng-model="lost_date" string-to-timestamp md-hide-icons="triangle"  md-placeholder="Date of lost"></md-datepicker>
+
+                 </md-input-container>                 
+              </li>              
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <input  ng-model="no_of_items" placeholder="Number of items">
+                 </md-input-container>
+              </li>
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <md-select ng-model="lost_status" placeholder="Status">
+                       <md-option value="processing">
+                          Processing
+                       </md-option>
+                       <md-option  value="completed">
+                          Completed
+                       </md-option>
+                    </md-select>
+                 </md-input-container>
+              </li>
+              <li>
+                 <md-input-container md-no-float class="md-block">
+                    <input  ng-model="contact" placeholder="Contact information">
+                 </md-input-container>
+              </li>
+              <li class="fullWidth">
+                 <md-chips ng-model="ctrl.itemTagModel" name="itemTag" readonly="ctrl.readonly"
+                    md-removable="ctrl.removable" placeholder="#Item tag" class="tag_name">
+                    <md-chip-template>
+                       <span class="entered_tags">{{$chip}}</span>                          
+                    </md-chip-template>
+                 </md-chips>
+              </li>
+              <li class="fullWidth">
+                <div class="clearfix" ng-include="'/modules/jot/views/jot_title.html'"></div>
+              </li>
+              </ul>
+           </div>
+        </div>
+        <div  ng-include="'/modules/jot/views/buttons.html'"></div>
+    </form>
+</div>

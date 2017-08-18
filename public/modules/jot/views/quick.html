@@ -1,17 +1,22 @@
-<div class="clearfix" ng-include="'/modules/jot/views/priority.html'"></div>
-<div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
-<div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
-<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
- 
-<div class="clearfix mar-bot20"  ng-controller="jotQuickCtlr">
-    <div class="col-md-12">
-    <div class="jot_prity_txt">Jot Type: </div>
-    <ul class="Jot_type clearfix">	
+<form name="createJotForm" ng-submit="createJot(createJotForm.$valid)" novalidate ng-init='outsource={assigned_to:"",department:""}' jot-form-submit-directives>
 
-        <li ng-repeat="(jotKey,jotValue) in $root.jotTypes">
-             <a href="javascript:void(0);" ng-class="{active : $root.jot_type === jotKey}" ng-click='jotSelect($event,jotKey)'>{{jotValue.label}}</a>            
-         </li>
-    </ul>   
-    </div>
-   <input type="hidden" name="jot_type" value="{{$root.jot_type}}" ng-model="$root.jot_type"> 
-</div>
+	<div class="col-md-12 clearfix" ng-include="'/modules/jot/views/jot_title.html'"></div>
+	<div class="clearfix" ng-include="'/modules/jot/views/priority.html'"></div>
+	<div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+	<div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+	<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+	 
+	<div class="clearfix mar-bot20"  ng-controller="jotQuickCtlr">
+	    <div class="col-md-12">
+	    <div class="jot_prity_txt">Jot Type: </div>
+	    <ul class="Jot_type clearfix">	
+
+	        <li ng-repeat="(jotKey,jotValue) in $root.jotTypes">
+	             <a href="javascript:void(0);" ng-class="{active : $root.jot_type === jotKey}" ng-click='jotSelect($event,jotKey)'>{{jotValue.label}}</a>            
+	         </li>
+	    </ul>   
+	    </div>
+	   <input type="hidden" name="jot_type" value="{{$root.jot_type}}" ng-model="$root.jot_type"> 
+	</div>
+	<div  ng-include="'/modules/jot/views/buttons.html'"></div>
+</form>

@@ -11,9 +11,9 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 		$scope.registerUser = function (obj) {
 
 	        var dataObj = {
-					name     : $scope.name,
-					email    : $scope.email,
-					password : $scope.password
+					user_name   : $scope.name,
+					email       : $scope.email,
+					password    : $scope.password
 			};
 
 			var request={

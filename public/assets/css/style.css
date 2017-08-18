@@ -56,8 +56,10 @@ h2.hotel_header {
 }
 
 .Autherror {
-  color: #ff0000;
-  opacity: 0.8;
+    color: #ff0000;
+    opacity: 0.8;
+    display: block;
+    clear: both;
 }
 .Authsuccess {
   color: #228B22;
@@ -172,6 +174,8 @@ md-toast.ng-scope {
     cursor: pointer;
     font-size: 16px;
     padding: 8px;
+    width: 100% !important;
+    float: none !important;
 }
 
 
@@ -211,12 +215,13 @@ md-dialog > .EditMode .suggestions_list {
 }
 .message{
   margin-top: 5px;
+  font-size: 12px;
 }
-md-select {
+/*md-select {
     background: #fff;
     padding: 10px;
 }
-
+*/
 .tab_label {
     display: block;
 }
@@ -303,4 +308,231 @@ md-select {
 a.icon.fivelink {
     top: 139px;
     right: 18px;
+}
+.vending_left md-select,.vending_right md-select {
+    padding: 0;
+}
+
+
+.rzslider .rz-pointer {
+    top: -11px;
+    width: 25px;
+    height: 25px;
+}
+
+.rzslider .rz-pointer:after {
+    top: 9px;
+    left: 9px;
+    width: 6px;
+    height: 7px;
+}
+
+
+.chipsdemoBasicUsage .errors {
+  font-size: 12px;
+  color: #dd2c00;
+  margin-top: 10px; }
+
+.chipsdemoBasicUsage .custom-chips md-chip {
+  position: relative; }
+  .chipsdemoBasicUsage .custom-chips md-chip .md-chip-remove-container {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    margin-right: 0;
+    height: 24px; }
+    .chipsdemoBasicUsage .custom-chips md-chip .md-chip-remove-container button.vegetablechip {
+      position: relative;
+      height: 24px;
+      width: 24px;
+      line-height: 30px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      margin: 0;
+      transition: background 0.15s linear;
+      display: block; }
+      .chipsdemoBasicUsage .custom-chips md-chip .md-chip-remove-container button.vegetablechip md-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0) scale(0.7);
+        color: white;
+        fill: white; }
+      .chipsdemoBasicUsage .custom-chips md-chip .md-chip-remove-container button.vegetablechip:hover, .chipsdemoBasicUsage .custom-chips md-chip .md-chip-remove-container button.vegetablechip:focus {
+        background: rgba(255, 0, 0, 0.8); }
+
+.chipsdemoBasicUsage .custom-chips md-chips-wrap.md-removable md-chip md-chip-template {
+  padding-right: 5px; }
+
+
+
+.lost_panel md-icon {
+    margin: auto;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    fill: currentColor;
+    height: 24px;
+    width: 24px;
+    min-height: 15px;
+    min-width: 15px;
+}
+
+
+
+.lost_panel .md-chips md-chip .md-chip-remove md-icon {
+    height: 11px;
+    width: 16px;
+    top: 33%;
+    left: 55%;
+    color: #fff;
+}
+
+
+.lost_panel .md-chips md-chip .md-chip-remove-container {
+    position: absolute;
+    right: 0;
+    line-height: 12px;
+}
+
+.lost_panel .md-chips md-chip .md-chip-content {
+    line-height: 22px;
+}
+
+.lost_panel .md-chips md-chip {
+    height: 22px;
+    line-height: 29px;
+    margin: 8px 8px 0 0;
+    background: #2aaae0;
+    color: #fff;
+}
+
+
+.newhotel_dialog_form .lost_panel .tag_name .md-chips {
+     height: auto;     
+}
+
+
+.tag_name input.md-input {
+    width: 100%;
+}
+
+
+._md-nav-bar-list button::after {
+    background: #4ebdf6 none repeat scroll 0 0;
+    content: "";
+    height: 3px;
+    left: 50%;
+    position: absolute;
+    top: 96%;
+    transition: all 0.3s ease-in-out 0s;
+    width: 0;
+}
+
+._md-nav-bar-list .currentNav button::after, ._md-nav-bar-list .currentNav button:hover::after {
+    left: 0;
+    width: 100%;
+}
+
+.Quick_jot_list md-nav-ink-bar {
+    display: none !important;
+}
+
+.currentNav .md-button.md-default-theme.md-accent,.currentNav.currentNav  .md-button.md-accent {
+    color: #4ebdf6;
+}
+
+.currentNav ng-md-icon.ng-scope {
+    fill: #4ebdf6 !important;
+}
+
+
+.lost_found_picker{
+    border: 1px solid #ddd;
+    height: 49px;
+    position: relative;
+    top: 3px;
+}
+
+.lost_found_picker input{
+    border: 0 !important;
+    background: none !important;
+}
+.lost_found_picker  ._md-datepicker-floating-label>md-datepicker .md-datepicker-button {
+    margin-top: -7px !important;
+}
+
+.lost_tab_content_list  li {
+    width: 31%;
+    margin-right: 2%;
+    display: inline-block;
+    vertical-align: top;
+    float:none;
+}
+.itemnotfound {
+    padding: 50px 0;
+    text-align: center;
+    color: #4ebdf6;
+}
+.mkcall {
+    background: #ffbb42;
+    color: #fff !important;
+    border: 1px solid #ffbb42;
+}
+.selected {
+    opacity: 0.6;
+    pointer-events: none;
+}
+.done {
+    float: right;
+    display: none;
+    position: relative;
+    top: -2px;
+}
+
+.done.itemselected {
+    float: right;
+    display: inline-block;
+}
+
+.fullWidth {
+    width: 100% !important;
+    margin-right: 0 !important;
+}
+.jot_textarea{position: relative !important;}
+
+.angularjs-datetime-picker {
+    z-index: 999;
+}
+
+.vending_table .table_img {
+    width: 60px;
+    height: 60px;
+}
+
+.table_img img {
+    width: 100%;
+}
+.payment_mode {
+    padding: 10px 0 0px 25px;
+    margin: 12px 0;
+}
+
+.activebtn {
+    background: #000 !important;
+}
+.deptsrch_data_title {
+    position: relative;
+}
+.icon_btn {
+    position: absolute;
+    right: 15px;
+}
+.invent_img {
+    width: 90px !important;
+    height: 90px !important;
 }

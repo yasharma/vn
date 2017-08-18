@@ -1,6 +1,6 @@
 "use strict";
 
-app.controller('dueDataCtlr', ['$scope','$rootScope','$mdDialog',
+app.controller('dueDataCtlr', ['$scope','$rootScope',
 	function($scope,$rootScope) {
 
 		/*

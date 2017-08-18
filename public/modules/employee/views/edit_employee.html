@@ -1,0 +1,192 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Edit Employee</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+
+<div class="dash_pro_inform">
+	<form name="editEmployeeform" ng-submit="editEmployee(editEmployeeform.$valid)" novalidate>	
+		<div class="dash_pro_inform_inner boxunoversal">
+			<div class="row">
+				<div class="col-sm-4">
+					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="first_name" placeholder="First Name" ng-required="true">
+				             <div ng-messages="first_name.$error">
+					            <div ng-message="required">This is required.</div>
+					        </div>
+				    </md-input-container>
+				</div>
+				<div class="col-sm-4">
+					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="last_name" placeholder="Last Name" ng-required="true">
+				            <div ng-messages="last_name.$error">
+					            <div ng-message="required">This is required.</div>
+					        </div>
+				    </md-input-container>
+				</div>
+				<div class="col-sm-4">
+					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="user_name" placeholder="User Name" ng-required="true">
+
+				            <div ng-messages="user_name.$error">
+					            <div ng-message="required">This is required.</div>
+					        </div>
+				    </md-input-container>
+				</div>
+
+				<div class="col-sm-4">
+					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="email" placeholder="Email" ng-required="true">
+
+				            <div ng-messages="email.$error">
+					            <div ng-message="required">This is required.</div>
+					        </div>
+				    </md-input-container>
+				</div>
+
+				<div class="col-sm-4">
+					<md-input-container md-no-float class="md-block">
+                        <md-select ng-model="department" placeholder="Select Department" style="padding:0">
+                          <md-option ng-repeat="dept in departmentList" value="{{dept.department_name}}">
+                            {{dept.department_name}}
+                          </md-option>                         
+                        </md-select>
+                    </md-input-container>
+				</div>
+				<div class="col-sm-4">
+					<md-input-container md-no-float class="md-block">
+				        <md-select ng-model="position" placeholder="Position" style="padding:0">
+                          <md-option value="Executive Assistant">
+                            Executive Assistant
+                          </md-option> 
+                          <md-option value="General Manager">
+                            General Manager
+                          </md-option>  
+                          <md-option value="Hotel Manager">
+                            Hotel Manager
+                          </md-option> 
+                          <md-option value="Operations Director">
+                            Operations Director
+                          </md-option> 
+                          <md-option value="Operations Manager">
+                            Operations Manager
+                          </md-option> 
+                          <md-option value="Event Planner">
+                            Event Planner
+                          </md-option>  
+                          <md-option value="Front Desk Clerk">
+                            Front Desk Clerk
+                          </md-option>
+                          <md-option value="Housekeeper">
+                            Housekeeper
+                          </md-option>                     
+                        </md-select>
+				    </md-input-container>
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-sm-4">
+					<md-input-container md-no-float class="md-block">
+						 <md-select ng-model="status" placeholder="Select Status" style="padding:0">
+                          <md-option value="active">
+                            Active
+                          </md-option> 
+                          <md-option value="inactive">
+                            Inactive
+                          </md-option>                       
+                        </md-select>
+					</md-input-container>	
+				</div>
+
+				<div class="col-sm-8">
+					<md-input-container md-no-float class="md-block">
+						 <input  ng-model="address" placeholder="Address">
+					</md-input-container>	
+				</div>
+			</div>
+			
+			
+			<div class="clearfix ">
+				<div class="Selectdep_txt">Upload Images</div>
+				<div class="change_pro positionrel">
+					
+					<img ngf-thumbnail="profile[0] || '{{image}}'"  class="width100" style="height:100%">
+					<div class="hover_de">
+						<ng-md-icon icon="photo_camera" style="fill: #fff" size="24"></ng-md-icon> 
+						<span class="text-center">
+							Change your profile photo
+						</span>
+					</div>
+					<input type="file" ngf-select ="uploadprofileImage($files, $invalidFiles)" ngf-resize="{width: 90, height: 90}" ng-model="profile_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
+				</div>				
+				<span class="progress" ng-show="profileProgress >= 0">
+				     <div style="background: green;text-align: center;color: #fff; width:{{profileProgress}}%" ng-bind="profileProgress + '%'"></div>
+				</span> 
+				<br>
+			</div>
+
+			<!-- <div class="clearfix ">
+				<div class="Selectdep_txt">Permisson:</div>
+					<div class="selall">
+						<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+				            Select All
+				         </md-checkbox>
+          			</div>
+          			<div class="selall_list clearfix">
+	          			<ul class="selall_list_ul">
+	          				<li><md-checkbox ng-model="Meeting.cb1" aria-label="Checkbox 2">
+					            Meeting Room 
+					         </md-checkbox></li>
+					         <li><md-checkbox ng-model="Vending.cb1" aria-label="Checkbox 2">
+					            Vending Room
+					         </md-checkbox></li>
+					         <li><md-checkbox ng-model="Lost.cb1" aria-label="Checkbox 3">
+					            Lost &amp; Found
+					         </md-checkbox></li>
+					         <li><md-checkbox ng-model="Messages.cb1" aria-label="Checkbox 4">
+					           Messages
+					         </md-checkbox></li>
+					         <li><md-checkbox ng-model="Phone.cb1" aria-label="Checkbox 5">
+					             Phone Directory 
+					         </md-checkbox></li>
+					         <li><md-checkbox ng-model="Report.cb1" aria-label="Checkbox 6">
+					            View Report
+					         </md-checkbox></li>
+					         <li><md-checkbox ng-model="Remove.cb1" aria-label="Checkbox 7">
+					            Add / Remove Members
+					         </md-checkbox></li>
+					         <li><md-checkbox ng-model="Group.cb1" aria-label="Checkbox 8">
+					           Add / Remove Group
+					         </md-checkbox></li>
+	          			</ul>
+	          		</div>	
+				</div> -->
+
+			<div class="clearfix">
+				<div class="chane_pass_btn">
+					<md-button   type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+				</div>
+					
+			</div>
+
+
+			<div class="message {{memberEditResult.class}}" ng-if="memberEditResult.status == 1">{{memberEditResult.message}}
+			</div>
+
+			<div class="result {{memberEditResult.class}}" ng-if="memberEditResult.status==2">    
+                <ul>
+                  <li ng-repeat="(key,value) in memberEditResult.errors">
+                  {{value.message}}
+                  </li>
+                </ul>
+            </div>
+
+		</div>
+		</form>
+	</div>
+
+</md-dialog>

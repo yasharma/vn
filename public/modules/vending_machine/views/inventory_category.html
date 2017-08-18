@@ -1,0 +1,99 @@
+<div class="dash-main-con">
+<!--middle panel -->
+<section class="dashrightsection">
+	
+	<div class="dash_hd_txt mar-bot20 clearfix">
+		<div class="dash_hd mar-bot0 dash_hd-left">Category</div>
+		<div class="rightfilter_right">
+			<div class="chane_pass_btn_right">
+				<md-button class="md-primary addyellobtn yellowbtn widthauto"  ng-click="invCatform = !invCatform; blankFields();" ng-class="{activebtn:invCatform}">
+		
+				{{(invCatform)?"Close":"Add Category"}}
+		    </md-button>
+			</div>
+	    </div>    
+	</div>
+
+
+
+	<div class="dash_pro_inform" ng-show="invCatform">
+	<form name="addInvtCatform" ng-submit="addInvtCat(addInvtCatform.$valid)" novalidate>		
+		<div class="dash_pro_inform_inner boxunoversal">
+			<div class="row">
+				<div class="col-sm-3">
+					<md-input-container md-no-float class="md-block">
+				            <input  ng-model="inventory_category_name" placeholder="Category Name">
+				    </md-input-container>
+				</div>
+			</div> 
+			<div class="clearfix">
+				<div class="chane_pass_btn">
+					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+				</div>				
+			</div>
+
+
+			<div class="message {{invtResult.class}}" ng-if="invtResult.status == 1">{{invtResult.message}}
+			</div>
+
+			<div class="result {{invtResult.class}}" ng-if="invtResult.status==2">    
+                <ul>
+                  <li ng-repeat="(key,value) in invtResult.errors">
+                  {{value.message}}
+                  </li>
+                </ul>
+            </div>
+
+		</div>
+		</form>
+	</div>
+
+
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch deptsrch_gray">
+			<div class="deptsrch_gray_top mar-bot0 clearfix">
+			<div class="positionrel inventory_filter_top">
+				<div class="vending_left_top_serch positionrel">
+					<md-input-container md-no-float class="md-block">
+			      <input  ng-model="search_cat_name" placeholder="Search Category" autocomplete="off">
+			  	</md-input-container>
+			  	
+				</div>
+				
+			</div>
+			</div>
+		</div>
+		<div class="addmember_data_table">
+			<div class="table_div">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table smalltable">
+          <thead>
+              <tr>
+                  <th width="40%">S.No</th>
+                  <th width="40%">Category</th>
+                  <th width="20%">Action </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr ng-repeat="invCat in filteredCat = 
+              (invtList | filter:{inventory_category_name:search_cat_name}) 
+              track by $index" ng-hide="hideCat">
+                <td>{{$index+1}}</td>                   
+                <td>{{invCat.inventory_category_name}}</td>
+                <td>
+                	<!-- <ng-md-icon class="cursor tablegreentag" icon="remove_red_eye" class="cursor"  size="22"></ng-md-icon> -->
+                	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(invCat);"></ng-md-icon>
+                	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeCat(invCat);hideCat = ! hideCat"></ng-md-icon>
+                </td>
+              </tr>              
+          </tbody>
+        </table>
+        <div ng-show="!filteredCat.length" class="itemnotfound">
+                No category found.                
+         </div>
+      </div>
+		</div>
+	</div> 
+	
+</section>
+</div>

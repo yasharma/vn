@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('editJotCtlr', ['$scope','jotFactory','$rootScope','$mdDialog','jotData','$route','toastService',
-	function($scope,jotFactory,$rootScope,$mdDialog,jotData,$route,toastService) {
+app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','$route','toastService',
+	function($scope,globalRequest,$rootScope,$mdDialog,jotData,$route,toastService) {
 		
 		$scope.edit_jot		   = jotData;
 		
@@ -57,10 +57,10 @@ app.controller('editJotCtlr', ['$scope','jotFactory','$rootScope','$mdDialog','j
 			var request={
 				url:window.__API_PATH.UPDATE_JOT,
 				method:"put",
-				params:$scope.edit_jot.jot_data
+				data:$scope.edit_jot.jot_data
 			};
 
-			jotFactory.jotCRUD(request).then(function(response){				
+			globalRequest.jotCRUD(request).then(function(response){				
 				$scope.result = {message:response.message,class:response.class}; 	
 			});
 		};
@@ -79,7 +79,7 @@ app.controller('editJotCtlr', ['$scope','jotFactory','$rootScope','$mdDialog','j
 				params:jotid
 			};
 			
-			jotFactory.jotCRUD(request).then(function(response){				
+			globalRequest.jotCRUD(request).then(function(response){				
 				$route.reload();
 				$mdDialog.cancel();
 				var popup = {"message":response.message,"class":response.class};

@@ -64,13 +64,13 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		*/
 		
 
-		$scope.redirectToJot = function(hotelID,hotelName){
+		$scope.redirectToJot = function(hotel){
 
-			var hotelData  = {
+			/*var hotelData  = {
 					'hotel_id'   :hotelID,
 					'hotel_name' :hotelName
-				};
-			localStorageService.set('hotel', hotelData);			
+				};*/	
+			localStorageService.set('hotel', hotel);			
 			$location.path('/dashboard/jot');
 		};
 
@@ -86,7 +86,7 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		$scope.deleteHotel = function(event,hotelID){
 
 			var storedHotelID = localStorageService.get('hotel');		
-			if(storedHotelID && storedHotelID.hotel_id == hotelID)
+			if(storedHotelID && storedHotelID._id == hotelID)
 			{
 				localStorageService.remove('hotel');
 			}	

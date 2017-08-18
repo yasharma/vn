@@ -45,7 +45,7 @@ app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', func
         			var replaceWord   = scope.matchWord;
               replaceWord       = replaceWord.split('@');
               replaceWord       = '@'+replaceWord[1];
-        			var selectedValue = "@"+item.user_name+" ";
+        			var selectedValue = "@"+item.user_name;
               
         			var replacedValue = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);             
               

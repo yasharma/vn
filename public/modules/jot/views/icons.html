@@ -1,0 +1,37 @@
+<!-- <div ng-controller="imageCtlr">
+    <div class="Selectdep_txt">Upload Images</div>
+    <ul class="uploadimage_list clearfix">
+        <li ng-repeat="f in files"> 
+            <div class="imgcon" style="height:100%">
+                <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'">
+            </div>
+            <span>{{f.name}} {{f.$errorParam}}</span>                        
+        </li>                    
+        <li> 
+            <div class="imgcon positionrel" ngf-select ="uploadFiles($files, $invalidFiles)" multiple ng-model="file"   ngf-max-size="5MB" ngf-resize="{width: 90, height: 90}">
+                    <ng-md-icon icon="attach_file" style="fill: #000" size="45"></ng-md-icon>
+            </div>
+            <span>Add New Image</span>
+
+        </li>                     
+    </ul>  
+     <span class="progress" ng-show="progress >= 0">
+            <div style="background: green;text-align: center;color: #fff; width:{{progress}}%" ng-bind="progress + '%'"></div>
+     </span> 
+ </div> -->
+
+ <div ng-controller="iconCtlr">    
+  
+            <a href="javaScript:void(0)" ngf-select ="uploadFiles($files, $invalidFiles)" multiple ng-model="file"   ngf-max-size="5MB" ngf-resize="{width: 90, height: 90}" title="Add an attachment">
+                <ng-md-icon icon="attach_file" style="fill:#a5a7a7" size="24"></ng-md-icon>
+            </a>
+
+            <a href="javaScript:void(0)" ng-click="openMemberList()" title="Mention a member" appendafter = "$root.staffList">
+                <ng-md-icon icon="perm_contact_calendar" style="fill:#a5a7a7" size="24"></ng-md-icon>
+            </a>
+
+            <div class="dropdown suggestions_list_title" ng-show="$root.clickopen"> 
+                <input  ng-model="$root.filtermember" iconstafflistsuggestion="$root.staffList" iconstaffsuggestion-callback="callbackStafflist" class="member_filter" placeholder="Search member here..." id="member_filter"  autocomplete="off">
+            </div>           
+
+ </div>

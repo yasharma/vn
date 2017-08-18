@@ -5,19 +5,21 @@ const    express     = require('express'),
          path        = require('path'),
          mongoose    = require('mongoose'),
          bodyParser  = require('body-parser'),
-         Member      = require(path.resolve('models/Member')),
+         //Member      = require(path.resolve('models/Member')),
+         User        = require(path.resolve('models/User')),
          response    = require(path.resolve('./config/lib/response')),
          config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));         
 
 
 
-/********************************
+/*********************************
 *** Function to add new Member ***
-*********************************/
+**********************************/
    
 exports.addMember = (reqst, respe) => {
 
-    var Membersave       = new Member(reqst.body);
+    var Membersave       = new User(reqst.body);
+    
     Membersave.save(function (err, result) {
         if(result){
             respe.json(response.success(result,'Member Added Successfully.'));
@@ -27,39 +29,40 @@ exports.addMember = (reqst, respe) => {
     });
 };
 
-/******************************************
+/*******************************************
 **** Function to Update Existing Member ****
-*******************************************/
+********************************************/
 exports.updateMember =  (reqst, respe) => {
+ 
+    var Memberid         	= reqst.body._id;
 
-    var Memberid         	= reqst.query.member_id;
     if(!Memberid){
-        return respe.json(response.errors({},'Member Id Is Required.'));
+        return respe.json(response.errors({},'Member id is required.'));
     }else{
         
-        Member.findByIdAndUpdate(Memberid,{$set:reqst.query}, {new: true}, function(err, result) {
+        User.findByIdAndUpdate(Memberid,{$set:reqst.body}, {new: true, runValidators: true, context:'query'}, function(err, result) {
             if(result){
-                respe.json(response.success(result,'Member Updated successfully.'));
+                respe.json(response.success(result,'Member updated successfully.'));
             }else{
-                respe.json(response.errors(err,"Error in Member update."));
+                respe.json(response.errors(err.errors,"Error in Member update."));
             }
         });
     }
 };
 
 /******************************************
-**** Function to Delete Existing Member ****
+**** Function to Delete Existing Member ***
 *******************************************/
 
 exports.deleteMember = (reqst, respe) => {
 
-    var Memberid         	= reqst.query.member_id;
+    var Memberid         	= reqst.query._id;
     if(!Memberid){
         return respe.json(response.errors({},'Member Id Is Required.'));
     }else{
-        Member.findByIdAndRemove(Memberid, function(err, result) {
+        User.findByIdAndRemove(Memberid, function(err, result) {
             if(result){
-                respe.json(response.success(result,'Member Deleted successfully.'));
+                respe.json(response.success(result,'Member deleted successfully.'));
             }else{
                 respe.json(response.errors(err,"Error in Member Deletion."));
             }
@@ -67,9 +70,9 @@ exports.deleteMember = (reqst, respe) => {
     }
 };
 
-/********************************
+/*********************************
 ** Function to list all Members **
-*********************************/
+**********************************/
 
 exports.listMember = (reqst, respe) => {
 
@@ -79,7 +82,7 @@ exports.listMember = (reqst, respe) => {
     
     
     if(filter == 1){
-       Member.find({'user_name' : new RegExp(user_name, 'i'),hotel_id:hotel_id}, function (err, result) {
+       User.find({'user_name' : new RegExp(user_name, 'i'),hotel_id:hotel_id}, function (err, result) {
             if(result.length > 0){
                 respe.json(response.success(result,'Member Data Found.'));
             }else{
@@ -87,7 +90,7 @@ exports.listMember = (reqst, respe) => {
             }
         });
     }else{
-        Member.find({hotel_id:hotel_id}, function (err, result) {
+        User.find({hotel_id:hotel_id}, function (err, result) {
             if(result.length > 0){
                 respe.json(response.success(result,'Member Data Found.'));
             }else{

@@ -1,0 +1,99 @@
+<div class="dash-main-con">
+<!--middle panel -->
+<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+	
+	<div class="dash_hd_txt mar-bot20" layout="row" layout-align="space-between center">
+		<div class="dash_hd mar-bot0">Department</div>
+		<div class="rightfilter">
+			 <md-button class="md-primary addyellobtn yellowbtn" ng-class="{activebtn:slideDown}" ng-click="slideDown = (slideDown)?false:true; blankFields();" >Add department </md-button>
+	    </div>    
+	</div>
+
+	<div class="dash_pro_inform transformable" ng-show="slideDown">
+		<form name="addDepartmentform" ng-submit="addDepartment(addDepartmentform.$valid)" novalidate>
+			<div class="clearfix">
+				<!-- <div class="dash_pro_inform_hd">Add Department</div> -->
+			</div>
+			<div class="dash_pro_inform_inner boxunoversal">
+				<div class="row">
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					            <input  ng-model="department_name" placeholder="Department Name">
+					            
+					    </md-input-container>
+					</div>
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					            <input  ng-model="department_abbreviation" placeholder="Abbreviation">
+					    </md-input-container>
+					</div>
+					<div class="col-sm-12">
+						<md-input-container md-no-float class="md-block">
+							 <input  ng-model="department_desc" placeholder="Description">
+						</md-input-container>	
+					</div>
+				</div>
+				<div class="clearfix">
+					<div class="chane_pass_btn">
+						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+					</div>						
+				</div>
+
+				<div class="message {{departmentResult.class}}" ng-if="departmentResult.status == 1">{{departmentResult.message}}
+			</div>
+
+			<div class="result {{departmentResult.class}}" ng-if="departmentResult.status==2">    
+                <ul>
+                  <li ng-repeat="(key,value) in departmentResult.errors">
+                  {{value.message}}
+                  </li>
+                </ul>
+            </div>
+			</div>
+		</form>
+	</div>
+
+
+
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch">
+			<div class="vending_left_top_serch positionrel">
+			  <md-input-container md-no-float class="md-block">
+			      <input  ng-model="searchDepartment" placeholder="Search Department" autocomplete="off">
+			  </md-input-container>			 
+			</div>
+		</div>
+		<div class="deptsrch_data">
+			 <ul class="deptsrch_data_list clearfix">
+			 		<li ng-repeat="department in filtereddepartment = (departmentList | departmentfilter:this)" ng-hide="hideDept">
+			 			<div class="deptsrch_data_title">
+			 				<ng-md-icon icon="home" style="fill: #7b7b7b" size="20"></ng-md-icon> 
+			 				{{department.department_name}}
+			 		
+                  	<span class="icon_btn">
+	                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditDepartment(department);">
+				 		</ng-md-icon>
+
+	                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeDepartment(department);hideDept = ! hideDept">
+	                  	</ng-md-icon>
+                  	</span>
+			 			</div>
+			 			<div class="deptsrch_data_para">
+			 				<p>{{department.description}}</p>
+			 				<span>{{department.abbreviation}}</span>
+			 			</div>
+			 		</li>
+			 		
+			 </ul>
+
+			 <div ng-show="!filtereddepartment.length" class="itemnotfound">
+                No department found in this hotel.                
+             </div>
+		</div>
+	</div>
+
+
+	
+</section>
+</div>

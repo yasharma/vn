@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout','localStorageService',
-	function($scope,$rootScope,Upload,$timeout,localStorageService) {
+app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout',
+	function($scope,$rootScope,Upload,$timeout) {
 
 
 

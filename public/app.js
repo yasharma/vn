@@ -7,7 +7,8 @@ var app = angular.module('hoteljotApp',[
 			'ngRoute',
 			'LocalStorageModule',
 			'ngMdIcons'	,
-			'ngFileUpload'
+			'ngFileUpload',
+			'angularjs-datetime-picker',
 			])
 
 .config(['localStorageServiceProvider',

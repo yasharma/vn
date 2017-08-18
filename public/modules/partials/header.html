@@ -41,28 +41,28 @@
 
 	<duv class="dash_home_header_logo_center">
 
-		<a href="javascript:;" ng-click="logocircle=!logocircle" class="md-block">
+		<a href="javascript:void(0);" ng-click="logocircle=!logocircle" class="md-block">
 			<img src="assets/images/circle-logo.png">
 		</a>	
-		<div class="iconHover " ng-class="{'logocircle':logocircle}">
+		<div class="iconHover " ng-class="{'logocircle':logocircle}" circle-toggle>
 			<div class="center_circle">
 				<a href="javascript:void(0);" ng-click="quickTaskPopup()">
 					Quick Jot
 				</a>
 			</div>
-            <a href="javascript:void(0)" title="Issue" ng-click="$root.openFormByType('issue')" class="icon onelink" >
+            <a href="javascript:void(0)" title="Issue" ng-click="$root.openFormByType({label:'Issue',id:'issue',src:'warning',icontype:'icon',directory:'jot'})" class="icon onelink" >
             	<ng-md-icon icon="warning" style="fill: white" size="25"></ng-md-icon>
             </a>
-            <a href="javascript:void(0)" title="Task" ng-click="$root.openFormByType('task')"  class="icon twolink">
+            <a href="javascript:void(0)" title="Task" ng-click="$root.openFormByType({label:'Task',id:'task',directory:'jot'})"  class="icon twolink">
             	<ng-md-icon icon="format_list_bulleted" style="fill: white" size="25"></ng-md-icon>
             </a>
-            <a href="javascript:void(0);" title="Note" ng-click="$root.openFormByType('note')" class="icon threelink">
+            <a href="javascript:void(0);" title="Note" ng-click="$root.openFormByType({label:'Note',id:'note',directory:'jot'})" class="icon threelink">
             	<ng-md-icon icon="insert_drive_file" style="fill: white" size="25"></ng-md-icon>
             </a>
-            <a href="javascript:void(0);" title="Lost & Found" ng-click="$root.openFormByType('lost_found')" class="icon fourlink">
+            <a href="javascript:void(0);" title="Lost & Found" ng-click="$root.openFormByType({label:'Lost & Found',id:'lost_found',directory:'lost_found'})" class="icon fourlink">
             	<ng-md-icon icon="business" style="fill: white" size="25"></ng-md-icon>
             </a>
-            <a href="javascript:void(0);" title="Vending Machine" ng-click="$root.openFormByType('vending_machine')"  class="icon fivelink">
+            <a href="javascript:void(0);" title="Vending Machine" ng-click="$root.openFormByType({label:'Vending Machine',id:'vending_machine',directory:'vending_machine'})"  class="icon fivelink">
             	
             	<ng-md-icon icon="local_drink" style="fill: white" size="25"></ng-md-icon>
             </a>
@@ -73,7 +73,7 @@
 	</duv>
 	<div class="pull-left">
 		<div class="clearfix">
-			<div class="hotel_drop" layout="row" layout-align="space-between center">{{hotel.hotel_name}} 				
+			<div class="hotel_drop" layout="row" layout-align="space-between center">{{hotel.hotelname}} 				
 
 				<md-menu md-position-mode="target-right target " md-offset="0 68" >
 				  <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
@@ -83,7 +83,7 @@
 
 				  <md-menu-content width="4">
 				    <md-menu-item ng-repeat="hotel in hotels">
-				      <md-button ng-click="changeJotView(hotel._id,hotel.hotelname)">
+				      <md-button ng-click="changeJotView(hotel)">
 				          <div layout="row">
 				            <p>{{hotel.hotelname}}</p>
 				            <md-icon md-menu-align-target  style="margin: auto 3px auto 0;"></md-icon>
@@ -107,12 +107,7 @@
 	</div>
 	<duv class="dash_home_header_menu pull-right">
 		<div class="clearfix">
-		<ul class="dash_hotel_menu_list pull-left">
-			<li><a href="javascript:;">Dashboard</a></li>
-			<li><a href="javascript:;">Meeting Room</a></li>
-			<li><a href="javascript:;">Vending</a></li>
-			<li><a href="javascript:;">Lost &amp; Found</a></li>
-		</ul>                         
+		                        
 		<ul class="dash_home_header_menu_list pull-left">
 			<li class="noti_icon positionrel">
 				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>

@@ -16,7 +16,7 @@ const    jwt         = require('jsonwebtoken'),
 ******************************************/
 
 exports.register       = (reqst, respe) => {
-	var name           = reqst.body.name;
+	var name           = reqst.body.user_name;
 	var email          = reqst.body.email;
 	var password       = reqst.body.password;
     var data           = {};

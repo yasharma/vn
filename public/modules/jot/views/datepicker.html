@@ -1,7 +1,16 @@
  <div class="col-md-3 pull-left date_due EditMode" ng-controller="dueDataCtlr">
     <md-input-container md-no-float class="md-block">
-        <label>Set Due Date</label>
-        <md-datepicker md-open-on-focus md-hide-icons="all" ng-model="$root.due_date" string-to-timestamp></md-datepicker>
+        <label>Set Due Date</label>        
+
+        <input ng-model="$root.due_date" string-to-timestamp  datetime-picker hour="23" minute='59' style="padding-left: 22px;width: 350px;"/>
+        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20"></ng-md-icon>
     </md-input-container>
+
+
+
+    <!-- <input datetime-picker ng-model="model" /> -->
+
+    
+
 </div>
 

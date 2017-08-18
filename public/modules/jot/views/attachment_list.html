@@ -1,0 +1,20 @@
+<ul class="uploadimage_list clearfix">
+
+    <li ng-repeat="f in $root.files" ng-hide="hideattachment"> 
+    {{f}}
+        <div class="col-lg-4 col-md-4" style="height:100%">
+            <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'">
+        </div>
+
+        <div class="col-lg-6 col-md-6">
+        	<strong>{{f.name}} {{f.$errorParam}}</strong>
+        	<div class="attachment_list_icon">
+        		<a href="javaScript:void(0)" ng-click="hideattachment = ! hideattachment">Delete</a>
+        	</div>
+        </div>
+        <div class="clearfix"></div>                     
+    </li>               
+</ul> 
+<span class="progress" ng-show="$root.progress >= 0">
+            <div style="background: green;text-align: center;color: #fff; width:{{$root.progress}}%" ng-bind="$root.progress + '%'"></div>
+</span> 

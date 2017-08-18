@@ -9,14 +9,23 @@
 .frontfoter_inner{padding: 45px 0;}
 .table_div{overflow: auto;}
 .vending_table{width: 700px;}
+.right_montfilter ul > li {margin-right: 10px; width: 120px;}
+.recurring_task_fil{ width: 120px;}
+.montfilter ul > li{width: 65px;}
+.montfilter ul > li > a{padding: 8px 0; font-size: 13px;}
 }
-
 @media(max-width:1023px){
 .login_content{width: auto;}
 .leftlogbg, .rightlogin{width: 100%; float: none; height: auto;}
 .Quick_jot_list ul > li > a span{font-size: 12px;}
 .vending_left{width: 100%; float: none; margin-bottom: 15px;}
 .vending_right{width: 100%; float: none;}
+.deptsrch_data_list > li {width: 49%; margin-right: 2%;}
+.deptsrch_data_list > li:nth-child(3n){margin-right: 2%;}
+.deptsrch_data_list > li:nth-child(2n){margin-right: 0;}
+.montfilter{float: none;}
+.right_montfilter{float: none; width: 100%; margin-top: 15px;}
+
 }
 @media(max-width:970px){
 .conctleft{width: 280px;}
@@ -66,6 +75,17 @@ md-dialog {max-width: 100% !important;width: 100%;height: 100%;max-height: 100% 
 .lost_tab_content_list > li{width: 49%;}
 .lost_tab_content_list > li:nth-child(3n){margin-right: 2%;}
 .lost_tab_content_list > li:nth-child(2n){margin-right: 0;}
+.deptsrch_data_list > li {width: 100%; margin-right: 0%;}
+.dash_hd, .dash_pro_inform_hd{font-size: 16px;}
+.addyellobtn{font-size: 12px; padding: 0 8px;}
+.depart_midle, .dash_pro_inform_inner{padding: 20px 10px;}
+.dash_pro_inform_hd{line-height: 15px;}
+.dash_pro_inform md-input-container .md-input{padding: 5px 10px; height: 40px;}
+.chane_pass_btn{margin-right: 10px;}
+.chane_pass_btn:last-child{margin-right: 0;}
+.dash_hd_hotel{padding: 15px;margin: -30px -30px 20px -14px;}
+.dash_hd_hotel span{font-size: 15px;}
+.right_montfilter ul > li {margin-bottom: 10px;}
 }
 @media(max-width:479px){
 .mainhd{font-size: 22px;}	
@@ -104,4 +124,17 @@ md-dialog {max-width: 100% !important;width: 100%;height: 100%;max-height: 100% 
 .lost_tab_content_list > li{width: 100%; margin-right: 0;}
 .vending_left_top_ser{padding-right: 0;}
 .serchoption{position: relative; width: 100%; right: auto; top:auto; width: 100%; margin-bottom: 10px;}
+.dash_hd_txt{-ms-flex-wrap: wrap;flex-wrap: wrap;}
+.rightfilter{width: 100%; display: block; margin-top: 10px;} 
+.deptsrch_gray{padding: 10px;}
+.right_montfilter ul > li {margin-bottom: 10px; width: 100%; float: none;}
+.montfilter ul > li {width: 48%;margin-bottom: 5px; margin-right: 2%;}
+.right_montfilter ul > li:last-child{margin-bottom: 0;}
+.montfilter ul > li > a{border: 1px solid silver;}
+.montfilter ul > li:nth-child(2n){margin-right: 0;}
+.recurring_task_fil{  width: 100%;}
+.deptsrch_data_table_mon{font-size: 16px;}
+.inventory_filter_top{padding-right: 0px;}
+.inventory_filter_top .vending_left_top_serch{max-width: 100%;}
+.inventory_filter{position: relative;right: auto; top:auto; width: 100%; }
 }

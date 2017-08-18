@@ -8,31 +8,31 @@ var mongoose      = require('mongoose'),
 
 
 var UserSchema  = new Schema({
-  
+ 
   profile_image:{
-    name: {
-      type: String,
-      default: 'no-image.jpg'
-    },
-    path: {
-      type: String,
-      default: 'images/'
-    },
-    original_name:  {
-      type: String,
-      default: 'no-image.jpg'
-    }
+    type: Array,
+    default: [] 
   },
-
-  name: {
+  first_name: {
     type: String,
-    required: 'Name can not be empty.'   
+    /*required: 'First name can not be empty.',*/
+    trim: true,
   },
-  
+  last_name: {
+    type: String,
+    trim: true,
+  },
+  user_name: {
+    type: String,
+    trim: true,
+    required: 'User name can not be empty.',
+    unique: 'The User Name you have entered already exists.',
+  },
   role: {
     type: String,
+    enum: ['staff','admin','hotel_owner'],
+    default: 'staff'
   },
-  
   email: {
     type: String,
     lowercase: true,
@@ -48,7 +48,7 @@ var UserSchema  = new Schema({
     }
   },
   passwordReset: {
-        type: Object
+    type: Object
   },
   password: {
     type: String,
@@ -62,10 +62,36 @@ var UserSchema  = new Schema({
   },
   email_verify: {
         type: String,
-        enum: ['verified','unverified'],  // not verified to uunverified
+        enum: ['verified','unverified'],
         default: 'unverified'
   },
-  salt: { type: String }
+  phone: {
+    type: Number,
+    default: false
+  },
+  department: {
+    type: String,
+    trim: true,
+    default: false
+  },
+  position: {
+    type: String,
+    trim: true,
+    default: false
+  },
+  hotel_id: {
+    type: String,
+    trim: true,
+    default: false
+  },
+  designation: {
+    type: String,
+    trim: true,
+    default: false
+  },
+  salt: { 
+    type: String 
+  }
 },{
     timestamps: {
         createdAt: 'created',

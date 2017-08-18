@@ -8,6 +8,9 @@
 app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route','toastService',
 	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route,toastService) {	
 
+
+		$scope.currencyList = window.__API_PATH.CURRENCY_LIST;
+
 		/*
 		* Function
 		*
@@ -36,6 +39,7 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 				 		user_id     	   : localStorageService.get('user')._id,
 						hotelname          : $scope.hotelname,
 						ownername          : $scope.ownername,
+						currency           : $scope.currency,
 						email              : $scope.email,
 						phone              : $scope.phone,
 						address            : $scope.address,

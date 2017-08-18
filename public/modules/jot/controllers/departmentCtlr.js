@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('departmentCtlr', ['$scope','$rootScope','localStorageService','jotFactory',
-	function($scope,$rootScope,localStorageService,jotFactory) {
+app.controller('departmentCtlr', ['$scope','$rootScope','localStorageService','globalRequest',
+	function($scope,$rootScope,localStorageService,globalRequest) {
 		
 
 		/*****************************************
@@ -12,12 +12,11 @@ app.controller('departmentCtlr', ['$scope','$rootScope','localStorageService','j
 		var request= {
 			url:window.__API_PATH.GET_DEPARTMENTS,
 			method:"GET",
-			params:{hotel_id: hotel.hotel_id}
+			params:{hotel_id: hotel._id}
 		};
-		jotFactory.jotCRUD(request)
+		globalRequest.jotCRUD(request)
 		.then(function(response){
-			$scope.departmentSuggetionList = response.result;	
-			
+			$scope.departmentSuggetionList = response.result;
 		});
 
 	     

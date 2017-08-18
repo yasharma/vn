@@ -60,6 +60,11 @@ var MemberSchema  = new Schema({
     trim: true,
     default: false
   },
+  position: {
+    type: String,
+    trim: true,
+    default: false
+  },
   hotel_id: {
     type: String,
     trim: true,

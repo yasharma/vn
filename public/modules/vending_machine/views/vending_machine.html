@@ -1,0 +1,195 @@
+<div class="newhotel_dialog_form clearfix" style="position: relative;" ng-controller="vendingMachineCtlr as ctlr">
+            <div class="vending_left">
+                <div class="vending_left_top">
+                    <div class="vending_left_top_ser positionrel">
+                        <div class="vending_left_top_serch positionrel">
+                            <md-input-container md-no-float class="md-block"  style="margin: 0;">
+                                <input  ng-model="searchItemName" placeholder="Search by item name">
+                            </md-input-container>                            
+                        </div>
+
+                        <div class="serchoption">
+                            <md-input-container md-no-float class="md-block selectgeneral38" style="margin: 0;">
+                                <md-select ng-model="itemCategory" placeholder="Select Category">
+                                 <md-option value="">
+                                    Select
+                                  </md-option>   
+                                  <md-option ng-repeat = "cat in productCategory" value="{{cat.label}}">
+                                    {{cat.label}}
+                                  </md-option>
+                                 
+                                </md-select>
+                            </md-input-container>
+                        </div> 
+                    </div>
+                    <!-- <div class="rangeslider_cending">
+                         <rzslider rz-slider-model="slider.minValue"
+                          rz-slider-high="slider.maxValue" 
+                          rz-slider-options="slider.options"></rzslider>
+                    </div> -->
+
+                </div>
+                <div class="table_div">
+                
+                    <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table" >
+                        <thead>
+                            <tr>
+                                <th width="10%">S.No</th>
+                                <th width="25%">Item Name</th>
+                                <th width="15%">Category</th> 
+                                <th width="10%">Price</th>
+                                <th width="10%">Available</th>
+                                <th width="15%">Quantity</th>
+                                <th width="15%">Action</th>                 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="pitem in filteredProduct = (products | productfilter:this) track by $index">
+                                <td>{{$index+1}}</td>
+                                <td >
+                                    <span class="table_img" style="border: 0">
+                                        <img src="{{(pitem.image)?'/images/hotel/'+pitem.hotel_id+'/inventory/'+ pitem.image :'/assets/images/vending_default.jpg' }}" width="90">
+                                    </span>
+                                    {{pitem.item_name}}
+                                </td>
+                                <td>{{pitem.category}}</td>
+                                
+                                <td>{{(pitem.price)?pitem.price:0 | currency}}</td>
+                                <td>{{pitem.quantity}}</td>
+                                <td>
+                                    <md-input-container md-no-float class="md-block selectgeneral">
+                                       <input type = "number" aria-label="quantity" min="1" ng-model="quantity" style="height: auto;padding: 0 0 0 15px;font-size: 12px;" placeholder="Quantity">
+                                    </md-input-container>
+                                </td>
+                                <td ng-if="pitem.quantity > 0">                                    
+                                    <a href="javascript:void(0);" ng-class="{selected: checkSelected(pitem._id)}" class="add-to-cart mkcall" ng-click="addToCart(pitem, quantity);">Make Sell
+                                     </a>
+                                      <ng-md-icon ng-class="{itemselected: checkSelected(pitem._id)}" class="done" icon="done" style="fill:green" size="20"></ng-md-icon>
+                                </td>
+
+                                <td ng-if="pitem.quantity <= 0">                                    
+                                    <a href="javascript:void(0);"  class="add-to-cart mkcall" style="background: #ff4d4d;border-color: #ff4d4d;">Out of stock
+                                     </a>                                      
+                                </td>
+                            </tr>                            
+                        </tbody>
+                    </table>
+
+                    <div ng-show="!filteredProduct.length" class="itemnotfound">No item available.</div>
+                </div>
+            </div>
+            <div class="vending_right" >
+            
+                <div class="vending_right_hd">
+                <ng-md-icon class="shopping-cart" icon="add_shopping_cart" style="fill: #4ebdf6" size="24"></ng-md-icon> SELECTED ITEMS</div>
+
+                <ul class="vending_right_list">
+                    <li ng-repeat="cartitem in cart">
+                        <div class="close_vending">
+                            <ng-md-icon class="cursor" icon="close" style="fill: red" size="20" ng-click = "removeItem(cartitem._id)"></ng-md-icon> 
+                        </div>
+                        <div class="sel_img" style="border:0">                       
+
+                         <img src="{{(cartitem.image)?'/images/hotel/'+cartitem.hotel_id+'/inventory/'+ cartitem.image :'/assets/images/vending_default.jpg' }}">
+
+                        </div>
+                        <h5><a href="javascript:void(0);">{{cartitem.item_name}}</a> </h5>
+
+                        <input type = "number" aria-label="quantity" min="1" ng-model="cartitem.quantity" style="height: auto;padding: 0 0 0 15px;width: 100%;font-size: 12px;" ng-change="changeItemPrice(cartitem,cartitem.quantity)" placeholder="Quantity">
+                        <div class="clearfix">
+                            <div class="sel_price">{{cartitem.totalprice | currency}}</div>
+                           
+                        </div>
+                    </li>                    
+                </ul>
+                <div ng-show="!cart.length" class="itemnotfound">
+                Cart is empty.
+                 <div class="message Autherror">{{cartErrors.itemerror}}</div>
+                </div>
+
+                <div class="vending_right_tag">
+
+                    <md-input-container md-no-float class="md-block">
+                        <input  ng-model="cart_tags" placeholder="Tag customer name or Room number">
+                        <div class="message Autherror">{{cartErrors.tagerror}}</div>
+                        <br>
+                     </md-input-container>
+                     
+
+                     <div class="vending_right_tag_chk">
+
+                         <md-radio-group ng-model="payment_status" aria-label="payment">                       
+                            <md-radio-button value="paid"> Paid Now 
+                            </md-radio-button>
+                            <div class="payment_mode" ng-if="payment_status == 'paid'">
+                                <md-radio-group ng-model="ctlr.paymentmode" aria-label="payment">
+                                    <md-radio-button value="cash"> 
+                                    Cash
+                                    </md-radio-button>
+
+                                    <md-radio-button value="card">
+                                    Card
+                                    </md-radio-button>
+
+                                    <div class="payment_mode" ng-if="ctlr.paymentmode == 'card'"> 
+                                    <md-input-container md-no-float class="md-block" style="border:1px solid #ccc;margin-top:0">    
+                                    <md-select ng-model="ctlr.cardtype" placeholder="Select Status" style="padding:0">
+                                                <md-option value="MasterCard">
+                                                MasterCard
+                                                </md-option> 
+                                                <md-option value="Visa">
+                                                Visa
+                                                </md-option> 
+                                                <md-option value="American Express">
+                                                American Express
+                                                </md-option> 
+                                                <md-option value="Discover">
+                                                Discover
+                                                </md-option>
+                                                <md-option value="Dankort">
+                                                Dankort
+                                                </md-option> 
+                                                <md-option value="Visa Electron">
+                                                Visa Electron
+                                                </md-option>  
+                                                                      
+                                    </md-select>
+                                     </md-input-container>   
+                                    </div>
+                                </md-radio-group> 
+                            </div>
+                           
+
+                            <md-radio-button value="unpaid">Add Bill in Room
+                            </md-radio-button>
+
+                            <div class="payment_mode" ng-if="payment_status == 'unpaid'">
+                                <md-input-container md-no-float class="md-block"  style="margin: 0;">
+                                    <input  ng-model="ctlr.payment_room_number" placeholder="Enter room number">
+                                </md-input-container>
+                            </div>
+                        </md-radio-group>
+
+                        <div class="message Autherror">{{cartErrors.paymenterror}}</div>
+                        <br>
+                     </div>
+                </div>
+                <div class="vending_right_total">
+                    TOTAL  <span>{{getTotal() | currency}}</span>
+                </div>
+                <div class="vending_right_total">
+                    <div class="clearfix">
+                        <div class="chane_pass_btn">
+                            <md-button ng-click="submitVendingDetail()" class="md-primary addyellobtn yellowbtn textlower">Submit</md-button>  
+                        </div>
+                        <div class="chane_pass_btn">
+                            <md-button class="md-primary addyellobtn widthauto graybtn textlower">Cancel</md-button>
+                        </div>  
+
+                        <div class="message {{cartSaved.class}}">{{cartSaved.message}}</div>
+
+                         
+                    </div>
+                </div>
+            </div>
+    	</div>

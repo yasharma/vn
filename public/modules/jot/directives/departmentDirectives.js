@@ -44,7 +44,7 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
               replaceWord       = replaceWord.split('#');
               replaceWord       = '#'+replaceWord[1];
 
-        			var selectedValue = "#"+item.department_name+" ";
+        			var selectedValue = "#"+item.department_name;
 
     
         			var replacedValue = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);  

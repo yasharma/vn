@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('jotController', ['$scope','$location','jotFactory','$rootScope','$mdDialog','localStorageService',
-	function($scope,$location,jotFactory,$rootScope,$mdDialog,localStorageService) {
+app.controller('jotController', ['$scope','$location','globalRequest','$rootScope','$mdDialog','localStorageService',
+	function($scope,$location,globalRequest,$rootScope,$mdDialog,localStorageService) {
 
 
 		/**************************************
@@ -34,12 +34,11 @@ app.controller('jotController', ['$scope','$location','jotFactory','$rootScope',
 		var request= {
 			url:window.__API_PATH.GET_JOT,
 			method:"GET",
-			params:{hotel_id :hotel.hotel_id}
+			params:{hotel_id :hotel._id}
 		};	
 
-		jotFactory.jotCRUD(request)
-		.then(function(response){
-			//$rootScope.jots = response.result;
+		globalRequest.jotCRUD(request)
+		.then(function(response){	
 
 			angular.forEach(response.result,function(value,index){
 				
