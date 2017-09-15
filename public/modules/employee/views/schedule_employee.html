@@ -1,0 +1,115 @@
+<md-dialog class="schedule_container">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Schedule</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+				<ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+	<div class="dash-main-con">
+		<div class="scheduling_field">
+
+			<div class="fields">
+				<div class="col-sm-6 field_label"> Select Shift </div>
+
+				<div class="col-sm-6"> 
+					<md-input-container md-no-float class="md-block">
+						<md-select ng-model="shiftTimeList" placeholder="Time" ng-change="onChangeSchedule()">
+							<md-option value=""">
+								No schedule
+							</md-option>
+
+							<md-option ng-repeat="shift in $parent.shiftList  track by $index" value="{{shift}}" style="background:{{shift.bgcolor}}" ng-selected="{{(selectVal == shift._id)}}">		
+
+								{{shift.start_time[0].hour+":"+shift.start_time[0].minute | getmeridiem:this}} - 
+
+								{{shift.end_time[0].hour +":"+shift.end_time[0].minute | getmeridiem:this}}
+							</md-option>	
+
+							<md-option value="custom" style="background:#98d4ed" ng-selected="{{(selectVal == 'custom')}}">
+								Custom
+							</md-option>
+			            <!-- <md-option value="off" style="background:#86f47b">
+                				Off
+                			</md-option> -->		                       
+                		</md-select>
+                	</md-input-container>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <div ng-class="{pattern_disable:shiftTimeList != 'custom'}">
+
+            	<div class="fields">
+            		<div class="col-sm-2 field_label"> From </div>
+
+            		<div class="col-sm-5"> 
+            			<md-input-container md-no-float class="md-block selectgeneral38">
+            				<md-select ng-model="start_hour" placeholder="Start Hour">
+            					<md-option ng-repeat="hour in getDay(23) track by $index" value="{{$index+1}}">
+            						{{$index+1 | timeConvertorfilter:this | digits:this}}
+            					</md-option>
+            				</md-select>
+            			</md-input-container>
+            		</div>
+
+            		<div class="col-sm-5"> 
+            			<md-input-container md-no-float class="md-block selectgeneral38">
+            				<md-select ng-model="start_min" placeholder="Start Minute">
+            					
+            					<md-option ng-repeat="min in getDay(60)  track by $index" value="{{$index | digits:this}}">
+            						{{$index | digits:this}}
+            					</md-option>
+            				</md-select>
+            			</md-input-container>
+            		</div>
+            		<div class="clearfix"></div>
+            	</div>
+
+
+
+
+            	<div class="fields">
+            		<div class="col-sm-2 field_label"> To </div>
+
+            		<div class="col-sm-5"> 
+            			<md-input-container md-no-float class="md-block selectgeneral38">
+            				<md-select ng-model="end_hour" placeholder="End Hour">
+            					<md-option value="-1">
+            						Untill Finish
+            					</md-option>
+
+            					<md-option ng-repeat="hour in getDay(23) track by $index" value="{{$index+1}}">
+            						{{$index+1  | timeConvertorfilter:this | digits:this}}
+            					</md-option>
+            				</md-select>
+            			</md-input-container>
+            		</div>
+
+            		<div class="col-sm-5"> 
+            			<md-input-container md-no-float class="md-block selectgeneral38">
+            				<md-select ng-model="end_min" placeholder="End Minute">
+            					
+            					<md-option ng-repeat="min in getDay(60)  track by $index" value="{{$index | digits:this}}" ng-selected="$index == 0">
+            						{{$index | digits:this}}
+            					</md-option>
+            				</md-select>
+            			</md-input-container>
+            		</div>
+            		<div class="clearfix"></div>
+            	</div>
+            </div>
+            <div class="fields">
+            	<br>
+            	<div class="chane_pass_btn">
+            		<md-button type="submit" ng-click="setSchedule();" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+            	</div>
+            	<div class="clearfix"></div>
+            </div>
+            
+        </div>
+    </div>
+</md-dialog>

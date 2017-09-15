@@ -8,7 +8,10 @@ var app = angular.module('hoteljotApp',[
 			'LocalStorageModule',
 			'ngMdIcons'	,
 			'ngFileUpload',
-			'angularjs-datetime-picker',
+			'angularjs-datetime-picker',	
+			'colorpicker.module',
+			'ui.bootstrap',	
+			'ngSanitize',
 			])
 
 .config(['localStorageServiceProvider',
@@ -21,7 +24,3 @@ var app = angular.module('hoteljotApp',[
 app.run(['$log',function($log){
 	$log.info("Application is running");
 }]);
-
-
-
-

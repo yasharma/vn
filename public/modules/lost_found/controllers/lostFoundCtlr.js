@@ -5,7 +5,6 @@ app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','localSto
 		
 		$rootScope.directory = 'lost_found';
 
-
 		globalRequest.getStaff();
 
 		/**********************************************************
@@ -38,8 +37,8 @@ app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','localSto
 			  description    : $rootScope.jot_title,
 			  hotel_id       : hotel._id,	
 			  image          : $rootScope.issueImages,
-			  lost_place 	 : $scope.lost_place,	
-			  lost_date 	 : $scope.lost_date,				  
+			  place 		 : $scope.lost_place,	
+			  date 	 		 : new Date($scope.lost_date).getTime(),			  
 			  no_of_items 	 : $scope.no_of_items,				  
 			  category 	     : $scope.lost_category,			  
 			  status 	     : $scope.lost_status,			  

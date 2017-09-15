@@ -1,19 +1,17 @@
 "use strict";
 
-/**************************************
-* Register controller
-**************************************/
-
-
-app.controller('registerController', ['$scope','registerFactory','$location',
-	function($scope,registerFactory,$location) {
+app.controller('registerController', ['$scope','$rootScope','registerFactory','$location','$mdDialog','$timeout',
+	function($scope,$rootScope,registerFactory,$location,$mdDialog,$timeout) {
 
 		$scope.registerUser = function (obj) {
 
 	        var dataObj = {
-					user_name   : $scope.name,
-					email       : $scope.email,
-					password    : $scope.password
+					
+					first_name  	 : $scope.first_name,
+					last_name   	 : $scope.last_name,
+					email       	 : $scope.email,
+					contact_number   : $scope.contact_number,
+					password    	 : $scope.password
 			};
 
 			var request={
@@ -23,14 +21,32 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 				};
 
 			registerFactory.register(request).then(function(response){
-				console.log(response);
-				$scope.registerResult = response;				
+
+				$scope.registerResult   = response;
+
+				if(response.status == 1)
+				{
+					
+					$rootScope.popupData = {text:response.message,action:'ok'};
+					$timeout(function() {
+					 	$mdDialog.cancel();
+					 }, 200);
+					 $timeout(function() {
+					 	$rootScope.popup = true;
+					 }, 300);	
+				 }			
 			});       
 		};	
 
 
 		$scope.openLoginForm = function (obj) {	
-	           $location.path('/');    
+	           $mdDialog.show({
+				templateUrl : "/modules/login/views/login.tpl.html",
+       			controller: "loginController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true							
+			}).then(function(answer) {}, function() {});    
 		};	
 
 		

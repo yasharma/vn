@@ -1,15 +1,8 @@
 <div class="dash-main-con">
 
-
-
-
-
 <!--middle panel -->
 <section class="dashrightsection">
-	
-	<div class="dash_hd_hotel" >
-		
-	</div>
+
 	<div class="dash_hd_txt" layout="row" layout-align="space-between center">
 		<div class="dash_hd">Front-End Executive JOTs </div>
 		<div class="rightfilter">
@@ -71,7 +64,11 @@
 								{{ jot.due_date | date: 'MMM d, y'}}
 							</li>
 							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
-							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
+
+							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
+							{{jot.image.length}}
+							</li>
+
 							<li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
 						</ul>
 						<ul class="housekepping_list clearfix">
@@ -120,7 +117,7 @@
 								{{ jot.due_date | date: 'MMM d, y'}}
 							</li>
 							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
-							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
+							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>{{jot.image.length}}</li>
 							<li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
 						</ul>
 						<ul class="housekepping_list clearfix">
@@ -168,7 +165,7 @@
 								{{ jot.due_date | date: 'MMM d, y'}}
 							</li>
 							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
-							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
+							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>{{jot.image.length}}</li>
 							<li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
 						</ul>
 						<ul class="housekepping_list clearfix">
@@ -217,7 +214,7 @@
 								{{ jot.due_date | date: 'MMM d, y'}}
 							</li>
 							<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
-							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
+							<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>{{jot.image.length}}</li>
 							<li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
 						</ul>
 						<ul class="housekepping_list clearfix">

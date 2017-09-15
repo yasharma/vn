@@ -1,10 +1,9 @@
 <div class="EditMode" style="position:relative" ng-controller="departmentCtlr">
-    <div class="col-md-12">
+    
         <md-input-container md-no-float class="md-block">
-            <input  ng-model="$root.department" focus-department="deparmentfocus" placeholder="# Tag a Room, Department Name, Assign Name" autocomplete="off" id="department" departmentypeahead="departmentSuggetionList" departmenttypeahead-callback="callback">
+            <input  ng-model="$root.department" focus-department="deparmentfocus" placeholder="# Tag Department Name" autocomplete="off" id="department" departmentypeahead="$root.departmentList" departmenttypeahead-callback="callback">
+        </md-input-container>   
 
-            </md-input-container>   
-    </div>
     
 </div>
 

@@ -2,8 +2,8 @@
 
 app.controller('inventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','$route','toastService',
 	function($scope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,$route,toastService) {
+		
 		var hotel = localStorageService.get('hotel');
-
 
 		/************************************
 		* Blank all field before open form
@@ -18,40 +18,31 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 			$scope.profile_image = "";
 			$scope.profile = "";
 			$scope.profileProgress = -1;
-		}
+		};
 
 		$scope.blankFields = function(){
 			$scope.blank();
 			$scope.inverntoryResult = "";
-		}
+		};
 
 		/************************************
 		* Get item list
 		*************************************/	
-			var request = {
-			            url:window.__API_PATH.GET_ITEMS,
-			            method:"GET",
-			            params:{
-			            	hotel_id    :  hotel._id		
-			            }
-			          };
-			globalRequest.jotCRUD(request).then(function(response){				
-			 	$scope.inverntoryList = response.result;
-			});
+		globalRequest.getVendingItems();
 
 
 		/************************************
 		* Get Category list
 		*************************************/			
 			
-		var request = {
+		var catRequest = {
 		            url:window.__API_PATH.GET_INVENTORY_CATEGORY,
 		            method:"GET",
 		            params:{
 		            	hotel_id    :  hotel._id		
 		            }
 		          };
-		globalRequest.jotCRUD(request).then(function(response){				
+		globalRequest.jotCRUD(catRequest).then(function(response){				
 		 	$scope.inventCatList = response.result;
 		});
 
@@ -97,6 +88,7 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 		*****************************************/	
 
 		$scope.openEditForm = function(detail){
+			console.log(detail);
 				$mdDialog.show({
 					controller: 'editInventoryController',
 					templateUrl: '/modules/vending_machine/views/edit_inventory.html',

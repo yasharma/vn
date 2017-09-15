@@ -8,6 +8,7 @@ app.config(['$httpProvider', function($httpProvider){
 		/* Get the application storage type default (localstorage) */
 		return {
 			request: function (config) {
+
                 config.headers = config.headers || {};
 				var token = localStorageService.get('token');
 				if (token) {
@@ -46,13 +47,12 @@ app.config(['$httpProvider', function($httpProvider){
    }    
   localStorageServiceProvider.setPrefix(prefix);
 }])
-.run(['$location','$rootScope','localStorageService','AuthSrv',
-	function($location, $rootScope,localStorageService,AuthSrv){   	
+.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$timeout',
+	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$timeout){   	
         
         
         $rootScope.$on("$routeChangeStart", 
-            function (event, nextRoute, currentRoute) {           
-            
+            function (event, nextRoute, currentRoute) { 
                 
                 if(nextRoute.$$route){
                     if(nextRoute.$$route.access){
@@ -60,35 +60,83 @@ app.config(['$httpProvider', function($httpProvider){
                    } 
                 }
                 
-                if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {                  
+                if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
                     AuthSrv.isLogged = 0;                  
                     $location.path("/");
-                }else {
+                }/*else {
                    
                     var token = localStorageService.get('token');
                     if(($location.path() === '/login' || $location.path() === '/') && token ){           
                        $location.path("/dashboard");
                     }
-                }
+                }*/
+
+                $rootScope.$watch(function(newValue, oldValue) {
+                    $rootScope.logggedin = AuthSrv.isLogged;
+                });
+
+        
+
+        });
+
+        $rootScope.$on("$routeChangeSuccess", function(event, next, current) {
+          $templateCache.removeAll(); 
+
+          /*$timeout(function() {
+            var viewHeight,windowHeightl,containerHeight;
+
+            viewHeight = document.getElementsByTagName('ng-view')[0].clientHeight;
+            windowHeight = window.innerHeight;
+            if(windowHeight > viewHeight)
+            {
+
+                containerHeight = windowHeight-70;
+            }
+
+            if(windowHeight < viewHeight)
+            {
+
+                containerHeight = viewHeight-70;
+            }
+
+
+            window.addEventListener('resize', setWindowSize);
+
+              function setWindowSize() { 
+                    $rootScope.$apply(function(){
+                        viewHeight = document.getElementsByTagName('ng-view')[0].clientHeight;
+                        windowHeight = window.innerHeight;
+                        if(windowHeight > viewHeight)
+                            {
+
+                                containerHeight = windowHeight-70;
+                            }
+
+                            if(windowHeight < viewHeight)
+                            {
+
+                                containerHeight = viewHeight-70;
+                            }
+                            $rootScope.iframeHeight = containerHeight;
+
+                    });
+              }
+          });        
+
+          $rootScope.iframeHeight = window.innerHeight-70;
+          window.addEventListener('resize', setWindowSize);
+          function setWindowSize() { 
+                $rootScope.$apply(function(){$rootScope.iframeHeight = window.innerHeight-70;});
+          }*/
         });
 
 
-        /*$rootScope.$on("$routeChangeSuccess", 
-            function (event, nextRoute, currentRoute) {
-            
-           if(nextRoute.$$route){
-                if(nextRoute.$$route.access){
-                    $rootScope.isAuth= nextRoute.$$route.access;                    
-               } 
-           }
-            
-        });*/
-    	
     	
     	/* This will logout the user from the application */
     	$rootScope.clearToken = function () {
             localStorageService.remove('token');
             localStorageService.remove('user');
+            localStorageService.remove('hotel');
             delete $rootScope.user;
             AuthSrv.isLogged = false;
             $location.path('/');

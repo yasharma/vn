@@ -11,7 +11,7 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
             iconstaffsuggestionCallback: "="
         },
         link: function(scope, elem, attrs) {
-
+              $rootScope.clickopen = false;
               var template = '<ul class="" style="display:block;"><li ng-repeat="item in filitered = (iconstafflistsuggestion | filter:$root.filtermember) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul>';
 
               elem.bind('blur', function() {
@@ -25,7 +25,7 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
               ******************************************/
 
               elem.bind("keydown", function($event) {
-
+                 
                   if($event.keyCode == 38 && scope.active > 0) { 
                       scope.active--;
                       scope.$digest();
@@ -46,6 +46,8 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
                 var username  = item.user_name;
                     username  = username.trim();                
                 var appendValue = "@"+username+" ";
+                console.log(1);
+                console.log(appendValue);
                 $rootScope.$broadcast('addUserNameAtMousePosition',appendValue);
                 $rootScope.clickopen = false;
                 $rootScope.filtermember = '';

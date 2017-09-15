@@ -1,7 +1,53 @@
-<!-- header -->
-<div class="dash_home_header clearfix" ng-if="isAuth.headerType=='hotel_header'" ng-controller="headerController">
+<div class="clearfix frontheder" ng-if="isAuth.headerType =='front_header'" ng-controller="frontHeaderController">
+		<div class="yellowlogo pull-left">
+			<a href="/">
+				<img src="assets/images/yellowlogo.png">
+			</a>
+		</div>
+		<div class="front_hrader_menu pull-right"  >
+			<div class="clearfix">
+				<div class="pull-left frontnav" ng-class="{'openleftmenu':openleftmenu}">
+					<ul class="clearfix header_menu">                             
+						<li ng-repeat="menu in menus">
+							<a ng-class="{active: activemenu == menu.label}" href="{{(menu.href)?menu.href:''}}" ng-click="gotoElement(menu)"> {{menu.label}} </a>
+						</li>
+					</ul>
+				</div>
+
+
+				<div class="pull-right frontnav_login">
+					<ul class="clearfix">
+						<li>
+						<a ng-if="!$root.logggedin" href="javaScript:void(0);" ng-click="openLoginForm()">LOGIN</a>
+						<a ng-if="$root.logggedin == 1" href="/dashboard">Dashboard</a>
+
+						</li>
+
+						<li>
+						<a ng-if="!$root.logggedin" href="javaScript:void(0);" ng-click="openRegisterFormpopup()"  class="active">GET STARTED</a>
+
+						<a ng-if="$root.logggedin == 1" ng-click="$root.clearToken();" href="javaScript:void(0);">Logout</a>
+						</li>
+					</ul>
+					<div class="mobile-menu_div" >
+						<a href="javascript:;" ng-class="{'openleftmenu':openleftmenu}" ng-click="openleftmenu=!openleftmenu" class="mobile-menu">
+							<span></span>
+							<span></span>
+							<span></span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+<div class="dash_home_header clearfix" ng-if="isAuth.headerType =='hotel_header'" ng-controller="headerController">
 	<duv class="dash_home_header_logo pull-left">
-		<a href="javascript:;"><img src="assets/images/dash-logo.png"></a>
+		<a href="/dashboard"><img src="assets/images/dash-logo.png"></a>
 	</duv>
 	<duv class="dash_home_header_menu pull-right">
 		<ul class="dash_home_header_menu_list">
@@ -9,12 +55,13 @@
 				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
 				<small class="notification-badge">5</small>
 			</li>
-			<li class="usermenu">
+			<li class="usermenu" title="{{$root.userData.first_name}} {{$root.userData.last_name}}">
 				<md-menu md-position-mode="target-right target" md-offset="0 80">
 		          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
 		          	<i class="user_dp_header"><img src="assets/images/user_dp_header.png"></i>
 		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
 		          </md-button>
+
 		          <md-menu-content width="3" >
 		            <md-menu-item ng-repeat="item in [1]">
 		              <md-button ng-click="clearToken(); announceClick($index)">
@@ -25,6 +72,7 @@
 		              </md-button>
 		            </md-menu-item>
 		          </md-menu-content>
+
 		        </md-menu>
 			</li>
 		</ul>
@@ -33,44 +81,50 @@
 <!--End header -->
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- header -->
 <div class="dash_home_header clearfix" ng-if="isAuth.headerType=='dashboard_header'" ng-controller="headerController">
-	<!-- <duv class="dash_home_header_logo_center">
-		<a href="javascript:;" ng-click="quickTaskPopup()"><img src="assets/images/circle-logo.png"></a>
-	</duv> -->
 
-	<duv class="dash_home_header_logo_center">
+
+	<duv class="dash_home_header_logo_center"> 
 
 		<a href="javascript:void(0);" ng-click="logocircle=!logocircle" class="md-block">
 			<img src="assets/images/circle-logo.png">
 		</a>	
-		<div class="iconHover " ng-class="{'logocircle':logocircle}" circle-toggle>
+		<div class="iconHover " ng-class="{'logocircle':logocircle}" circle-toggle > 
 			<div class="center_circle">
 				<a href="javascript:void(0);" ng-click="quickTaskPopup()">
 					Quick Jot
 				</a>
 			</div>
-            <a href="javascript:void(0)" title="Issue" ng-click="$root.openFormByType({label:'Issue',id:'issue',src:'warning',icontype:'icon',directory:'jot'})" class="icon onelink" >
-            	<ng-md-icon icon="warning" style="fill: white" size="25"></ng-md-icon>
+
+
+            <a href="javascript:void(0);" ng-repeat="board in $root.boards"  title="{{jotValue.label}}" 
+            ng-click="$root.openFormByType($root.jotTypes[board])" class="icon {{$root.jotTypes[board].class}}">            	
+            	<img src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'" width="25px">
             </a>
-            <a href="javascript:void(0)" title="Task" ng-click="$root.openFormByType({label:'Task',id:'task',directory:'jot'})"  class="icon twolink">
-            	<ng-md-icon icon="format_list_bulleted" style="fill: white" size="25"></ng-md-icon>
-            </a>
-            <a href="javascript:void(0);" title="Note" ng-click="$root.openFormByType({label:'Note',id:'note',directory:'jot'})" class="icon threelink">
-            	<ng-md-icon icon="insert_drive_file" style="fill: white" size="25"></ng-md-icon>
-            </a>
-            <a href="javascript:void(0);" title="Lost & Found" ng-click="$root.openFormByType({label:'Lost & Found',id:'lost_found',directory:'lost_found'})" class="icon fourlink">
-            	<ng-md-icon icon="business" style="fill: white" size="25"></ng-md-icon>
-            </a>
-            <a href="javascript:void(0);" title="Vending Machine" ng-click="$root.openFormByType({label:'Vending Machine',id:'vending_machine',directory:'vending_machine'})"  class="icon fivelink">
-            	
-            	<ng-md-icon icon="local_drink" style="fill: white" size="25"></ng-md-icon>
-            </a>
-            <a href="#" class="icon sixlink">
-            	<ng-md-icon icon="group" style="fill: white" size="25"></ng-md-icon>
-            </a>
+
         </div>		
 	</duv>
+
 	<div class="pull-left">
 		<div class="clearfix">
 			<div class="hotel_drop" layout="row" layout-align="space-between center">{{hotel.hotelname}} 				
@@ -113,22 +167,36 @@
 				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
 				<small class="notification-badge">5</small>
 			</li>
-			<li class="usermenu">
+			<li class="usermenu"  title="{{$root.userData.first_name}} {{$root.userData.last_name}}">
 				<md-menu md-position-mode="target-right target " md-offset="0 80" >
 		          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
 		          	<i class="user_dp_header"><img src="assets/images/user_dp_header.png"></i>
 		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
 		          </md-button>
 		          <md-menu-content width="3" >
-		            <md-menu-item ng-repeat="item in [1]">
+		            <md-menu-item>
+
 		              <md-button ng-click="clearToken(); announceClick($index)">
-		                  <div layout="row">
-		                    <p>Logout</p>
-		                    <md-icon md-menu-align-target  style="margin: auto 3px auto 0;"></md-icon>
-		                  </div>
+		              
+		                  <a layout="row" href="javascript:void(0)">
+		                  <ng-md-icon icon="power_settings_new" md-menu-align-target  style="margin: auto 3px auto 0;"></ng-md-icon>
+		                    <p>Logout</p>		                    
+		                  </a>
+		              </md-button>
+
+		            </md-menu-item>
+
+		             <md-menu-item>
+		              <md-button>
+		                  <a layout="row" href="/dashboard/profile">
+		                  <ng-md-icon icon="person" md-menu-align-target  style="margin: auto 3px auto 0;"></ng-md-icon>
+		                    <p>Edit Profile</p>
+		                    
+		                  </a>
 		              </md-button>
 		            </md-menu-item>
 		          </md-menu-content>
+		         
 		        </md-menu>
 			</li>
 		</ul>
@@ -136,7 +204,4 @@
 	</duv>
 </div>
 
-
-
-
-<!--End header -->
+<!--End header

@@ -1,0 +1,35 @@
+<div class="dash-main-con hotelsteps" ng-controller="step1Controller">
+	<!--middle panel -->
+	<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+		<div class="dash_hd_txt" layout="row" layout-align="space-between center">
+			<div class="dash_hd">Set Up Your New Hotel</div>
+		</div>
+		<div class="dash_pro_inform dash_step boxunoversal">
+
+			<div class="dash_step_panel">
+				<ul class="clearfix">
+
+					<li ng-class="{currentStep:$index+1 == ActiveStep,active:$index+1 < ActiveStep}" ng-repeat="steps in hotelStepList">
+						<div class="">
+							<div class="step_number">
+								<label>{{$index+1}}</label>
+								<ng-md-icon icon="done" ></ng-md-icon> 
+							</div>
+							<span class="label">{{steps.label}}</span>
+						</div>
+					</li>
+					
+				</ul>
+			</div>
+			<div class="dash_step_inner slide-animate-container">
+				<div class="stephd">
+					<h4>Step {{ActiveStep}} : {{hotelStepList[ActiveStep-1].label}}</h4>
+				</div>
+				<!-- <ng-include class="slide-animate" src="stepsTemplate"></ng-include> -->
+
+				<div class="slide-animate" ng-include="stepsTemplate"></div>
+
+			</div>
+		</div>
+	</section>
+</div>

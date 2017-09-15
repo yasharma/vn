@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('editCategoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','catDetail','$route','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,catDetail,$route,$mdDialog) {
+app.controller('editCategoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','catDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,Upload,$timeout,catDetail,$mdDialog) {
 		var hotel = localStorageService.get('hotel');
 
 		
@@ -35,7 +35,7 @@ app.controller('editCategoryController', ['$scope','localStorageService','global
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
-			 		$route.reload();
+			 		globalRequest.getVendingCategory();
 			 	}
 
 			 });

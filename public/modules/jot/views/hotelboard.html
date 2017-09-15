@@ -1,0 +1,484 @@
+<div class="dash-main-con">
+	<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+	
+		
+		<div class="dash_hd_txt" layout="row" layout-align="space-between center">
+			<div class="dash_hd">Welcome To {{activeHotelData.hotelname}}</div>
+			<div class="rightfilter_right dash-home_right">
+				<div class="chane_pass_btn_right mrright0 positionrel">
+					<md-button class="md-primary addyellobtn yellowbtn widthauto" ng-click="orderBy = !orderBy">SETTING</md-button>
+
+					<div class="settingdrop" ng-show="orderBy">
+						<ul class="settingdrop_list">
+
+							<li class="clearfix">
+								<a href="javascript:;">
+									<div class="icon_circle messange_color">
+									<img src="assets/images/message_icon.png"></div>
+									<span class="txtdrop">Messages</span>
+									<span class="pull-right">
+										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+										</md-checkbox>
+									</span>
+								</a>
+							</li>
+
+
+							<li class="clearfix">
+								<a href="javascript:;">
+									<div class="icon_circle task_jot_color"><img src="assets/images/task_icon.png"></div>
+									<span class="txtdrop">Task</span>
+									<span class="pull-right">
+										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+										</md-checkbox>
+									</span>
+								</a>
+							</li>
+							<li class="clearfix">
+								<a href="javascript:;">
+									<div class="icon_circle note_jot_color"><img src="assets/images/note_icon.png"></div>
+									<span class="txtdrop">Note</span>
+									<span class="pull-right">
+										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+										</md-checkbox>
+									</span>
+								</a>
+							</li>
+							<li class="clearfix">
+								<a href="javascript:;">
+									<div class="icon_circle issue_jot_color"><img src="assets/images/issue_icon.png"></div>
+									<span class="txtdrop">Issue</span>
+									<span class="pull-right">
+										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+										</md-checkbox>
+									</span>
+								</a>
+							</li>
+							<li class="clearfix">
+								<a href="javascript:;">
+									<div class="icon_circle lost_jot_color"><img src="assets/images/lost_icon.png"></div>
+									<span class="txtdrop">Lost &amp; Found</span>
+									<span class="pull-right">
+										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+										</md-checkbox>
+									</span>
+								</a>
+							</li>
+							<li class="clearfix">
+								<a href="javascript:;">
+									<div class="icon_circle metting_jot_color"><img src="assets/images/metting_icon.png"></div>
+									<span class="txtdrop">Meeting Room</span>
+									<span class="pull-right">
+										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+										</md-checkbox>
+									</span>
+								</a>
+							</li>
+							<li class="clearfix">
+								<a href="javascript:;">
+									<div class="icon_circle vending_color"><img src="assets/images/vending_icon.png"></div>
+									<span class="txtdrop">Vending Room</span>
+									<span class="pull-right">
+										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+										</md-checkbox>
+									</span>
+								</a>
+							</li>
+						</ul>
+						<div class="dragtxt">Drag &amp; Drop to Change the Order</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
+			<!-- <a class="circle_container" ng-repeat="board in boards" href="/dashboard/hotelboard/{{$root.jotTypes[board].id}}"> -->
+
+		<div class="hotel_list_top" ng-hide="BoardsPage">
+			<div class="circle_container" ng-repeat="board in $root.boards">
+				<a class="circle" href="/dashboard/hotelboard/{{$root.jotTypes[board].id}}">
+					<div class="circle__inner">
+						<div class="circle__wrapper">
+							<div class="messange_jotnum numberdigit">
+								{{
+								(($root.JotCount | filter : {_id: $root.jotTypes[board].id})[0].count)?($root.JotCount | filter : {_id: $root.jotTypes[board].id})[0].count:0;
+							}}
+						</div>
+						<div class="hover_effect_home" style='background: {{($root.jotTypes[board].bgcolor)?$root.jotTypes[board].bgcolor:"#71adf7";}}'>
+
+							<div>
+								<img  class="hotel-list-icon" src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'">
+							</div>
+							<h4>{{$root.jotTypes[board].label}}</h4>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div> 
+	<div class="clearfix"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<div class="withparams" ng-show="BoardsPage">
+			<div class="hotel_message"> 
+				<div class="top_tab_panel clearfix">
+					<div class="left_current">
+						<span style="border-color:{{$root.jotTypes[activetype].bgcolor}}">
+							{{$root.jotTypes[activetype].label}}
+						</span>
+					</div>
+					<div class="all_option">
+						<ul class="all_option_list">
+							<li ng-repeat="board in $root.boards">
+								<a href="/dashboard/hotelboard/{{$root.jotTypes[board].id}}">
+									<span class="txtdrop">{{$root.jotTypes[board].label}}</span>
+									<div class="icon_circle messange_color" style="background:{{$root.jotTypes[board].bgcolor}}">
+										<img src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'">
+									</div>
+								</a>
+							</li>
+							
+						</ul>
+					</div>
+				</div>
+
+
+
+				<!----------------------------------------------------------------------------
+				* For hotel owner
+				-------------------------------------------------------------------------- -->
+
+
+
+				<div class="hotel_message_inner" ng-if="$root.userData.role == 'hotelowner'">
+
+					<div class="clearfix new_mesge">
+						
+						<ul class="new_mesge_list">
+
+							<li ng-repeat="jot in ownerjotlist = (JotListData)">
+								<div class="add_hotel_room mar-bot20">
+									<div class="add_hotel_room_inner">
+										<div class="room_change" layout="row" layout-align="space-between center">
+											<a class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</a>
+											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+										<ul class="taginglist clearfix">
+											<li ng-repeat="jottag in jot.assigned_departments">
+
+											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
+											 </li>											
+										</ul>
+										<ul class="tim_list clearfix">
+											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+												{{ jot.due_date | date: 'MMM d, y'}}
+											</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+
+											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											{{jot.image.length}}
+											</li>
+
+											<!-- <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li> -->
+										</ul>										
+									</div>
+									<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+									</div>
+								</div>
+							</li>	
+						</ul>
+
+						<div ng-show="!ownerjotlist.length" class="itemnotfound">
+				                No Jot Available              
+				         </div>
+
+					</div>
+				</div>
+
+
+				<!----------------------------------------------------------------------------
+				* For Staff
+				-------------------------------------------------------------------------- -->
+
+
+				<div class="hotel_message_inner"  ng-if="$root.userData.role == 'staff'">
+					<div class="clearfix new_mesge">
+						<div class="add_hotel_icon">							
+							New Jot
+						</div>
+						<ul class="new_mesge_list">
+
+							<li ng-repeat="jot in jotlist = (JotListData['my'] |filter:{status:'!close'})">
+								<div class="add_hotel_room mar-bot20">
+									<div class="add_hotel_room_inner">
+										<div class="room_change" layout="row" layout-align="space-between center">
+											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+										<ul class="taginglist clearfix">
+											<li ng-repeat="jottag in jot.assigned_departments">
+
+											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
+											 </li>
+										</ul>
+										<ul class="tim_list clearfix">
+											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+												{{ jot.due_date | date: 'MMM d, y'}}
+											</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+
+											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											{{jot.image.length}}
+											</li>
+
+											<!-- <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li> -->
+										</ul>
+										
+									</div>
+									<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+									</div>
+								</div>
+							</li>
+
+
+							<li ng-repeat="jot in JotListData['department']">
+								<div class="add_hotel_room mar-bot20">
+									<div class="add_hotel_room_inner">
+										<div class="room_change" layout="row" layout-align="space-between center">
+											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+										<ul class="taginglist clearfix">
+											<li ng-repeat="jottag in jot.assigned_departments">
+
+											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
+											 </li>
+										</ul>
+										<ul class="tim_list clearfix">
+											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+												{{ jot.due_date | date: 'MMM d, y'}}
+											</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+
+											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											{{jot.image.length}}
+											</li>
+
+											<!-- <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li> -->
+										</ul>
+										
+									</div>
+									<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+									</div>
+								</div>
+							</li>
+							
+
+						</ul>
+
+
+						<div ng-show="!jotlist.length" class="itemnotfound">
+				                No Jot Available              
+				         </div>
+					</div>
+
+
+
+
+
+
+
+
+					<div class="clearfix row">
+						<div class="col-lg-4 col-md-6">
+							<div class="add_hotel_top" md-whiteframe="1">
+								<div class="add_hotel_icon">									
+									Assigned Jot
+								</div>
+
+
+								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['my']">
+									<div class="add_hotel_room_inner">
+										<div class="room_change" layout="row" layout-align="space-between center">
+											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+
+										<ul class="taginglist clearfix">
+											<li ng-repeat="jottag in jot.assigned_departments">
+
+											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
+											 </li>
+										</ul>
+
+										<ul class="tim_list clearfix">
+											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+												{{ jot.due_date | date: 'MMM d, y'}}
+											</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+
+											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											{{jot.image.length}}
+											</li>
+
+											<!-- <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li> -->
+										</ul>
+										
+									</div>
+									<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+									</div>
+								</div>
+							
+								<div ng-show="!JotListData['my'].length" class="itemnotfound">
+						                No Jot Available              
+						         </div>
+							
+
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="add_hotel_top" md-whiteframe="1">
+								<div class="add_hotel_icon">								
+									My Departments Jot
+								</div>
+								
+
+
+								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['department']">
+									<div class="add_hotel_room_inner">
+										<div class="room_change" layout="row" layout-align="space-between center">
+											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+										<ul class="taginglist clearfix">
+											<li ng-repeat="jottag in jot.assigned_departments">
+
+											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
+											 </li>
+										</ul>
+										<ul class="tim_list clearfix">
+											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+												{{ jot.due_date | date: 'MMM d, y'}}
+											</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+
+											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											{{jot.image.length}}
+											</li>
+
+											<!-- <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li> -->
+										</ul>
+										
+									</div>
+									<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+									</div>
+								</div>
+
+								<div ng-show="!JotListData['department'].length" class="itemnotfound">
+						                No Jot Available              
+						        </div>
+
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6">
+							<div class="add_hotel_top" md-whiteframe="1">
+								<div class="add_hotel_icon">								
+									Closed
+								</div>
+
+
+
+								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['closed']">
+									<div class="add_hotel_room_inner">
+										<div class="room_change" layout="row" layout-align="space-between center">
+											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+										<ul class="taginglist clearfix">
+											<li ng-repeat="jottag in jot.assigned_departments">
+
+											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
+											 </li>
+										</ul>
+										<ul class="tim_list clearfix">
+											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+												{{ jot.due_date | date: 'MMM d, y'}}
+											</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+
+											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											{{jot.image.length}}
+											</li>
+
+											<!-- <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li> -->
+										</ul>
+										
+									</div>
+									<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
+										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
+										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
+									</div>
+								</div>
+								
+								
+								<div ng-show="!JotListData['closed'].length" class="itemnotfound">
+						                No Jot Available              
+						        </div>
+
+
+							</div>
+						</div>
+						<!-- <div class="col-lg-3 col-md-6">
+							<div class="add_hotel_top" md-whiteframe="1">
+								<div class="add_hotel_icon">									 
+									Others
+								</div>
+								 No others jot
+							</div>
+						</div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+</div>
+
+

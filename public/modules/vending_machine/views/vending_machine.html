@@ -1,3 +1,4 @@
+
 <div class="newhotel_dialog_form clearfix" style="position: relative;" ng-controller="vendingMachineCtlr as ctlr">
             <div class="vending_left">
                 <div class="vending_left_top">
@@ -14,8 +15,8 @@
                                  <md-option value="">
                                     Select
                                   </md-option>   
-                                  <md-option ng-repeat = "cat in productCategory" value="{{cat.label}}">
-                                    {{cat.label}}
+                                  <md-option ng-repeat = "cat in $root.invtList" value="{{cat.inventory_category_name}}">
+                                    {{cat.inventory_category_name}}
                                   </md-option>
                                  
                                 </md-select>
@@ -34,7 +35,7 @@
                     <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table" >
                         <thead>
                             <tr>
-                                <th width="10%">S.No</th>
+                                <th width="10%">#</th>
                                 <th width="25%">Item Name</th>
                                 <th width="15%">Category</th> 
                                 <th width="10%">Price</th>
@@ -58,11 +59,11 @@
                                 <td>{{pitem.quantity}}</td>
                                 <td>
                                     <md-input-container md-no-float class="md-block selectgeneral">
-                                       <input type = "number" aria-label="quantity" min="1" ng-model="quantity" style="height: auto;padding: 0 0 0 15px;font-size: 12px;" placeholder="Quantity">
+                                       <input type = "number" aria-label="editquantity" min="1" ng-model="editquantity" style="height: auto;padding: 0 0 0 15px;font-size: 12px;" placeholder="Quantity">
                                     </md-input-container>
                                 </td>
                                 <td ng-if="pitem.quantity > 0">                                    
-                                    <a href="javascript:void(0);" ng-class="{selected: checkSelected(pitem._id)}" class="add-to-cart mkcall" ng-click="addToCart(pitem, quantity);">Make Sell
+                                    <a href="javascript:void(0);" ng-class="{selected: checkSelected(pitem._id)}" class="add-to-cart mkcall" ng-click="addToCart(pitem, editquantity);">Make Sell
                                      </a>
                                       <ng-md-icon ng-class="{itemselected: checkSelected(pitem._id)}" class="done" icon="done" style="fill:green" size="20"></ng-md-icon>
                                 </td>
@@ -95,7 +96,7 @@
                         </div>
                         <h5><a href="javascript:void(0);">{{cartitem.item_name}}</a> </h5>
 
-                        <input type = "number" aria-label="quantity" min="1" ng-model="cartitem.quantity" style="height: auto;padding: 0 0 0 15px;width: 100%;font-size: 12px;" ng-change="changeItemPrice(cartitem,cartitem.quantity)" placeholder="Quantity">
+                        <input type = "number" aria-label="editquantity" min="1" ng-model="cartitem.editquantity" style="height: auto;padding: 0 0 0 15px;width: 100%;font-size: 12px;" ng-change="changeItemPrice(cartitem,cartitem.editquantity)" placeholder="Quantity">
                         <div class="clearfix">
                             <div class="sel_price">{{cartitem.totalprice | currency}}</div>
                            

@@ -1,0 +1,99 @@
+<div ng-controller="step1Controller">
+<form name="step1Form" ng-submit="step1FormSubmit(step1Form.$valid)" novalidate ng-show="!forget">
+	<div class="row">
+		<div class=" col-md-3 col-sm-6">
+			<md-input-container md-no-float class="md-block">
+		    <input  name="hotelname"  ng-model="hotelname" ng-required="true"  placeholder="Hotel Name">
+		  </md-input-container>
+		</div>
+		<div class=" col-md-3 col-sm-6">
+			<md-input-container md-no-float class="md-block">
+		    <input  ng-model="ownername" ng-required="true" placeholder="Owner Entity" ng-required="true">
+		  </md-input-container>
+		</div>
+		<div class=" col-md-3 col-sm-6">
+			<md-input-container md-no-float class="md-block">
+		    <input  ng-model="phone" ng-required="true" placeholder="Hotel Phone Number">
+		  </md-input-container>
+		</div>
+		<div class=" col-md-3 col-sm-6">
+			<md-input-container md-no-float class="md-block">
+		    <input  type="email"  ng-model="email" placeholder="Email Address" ng-required="true">
+		  </md-input-container>
+		</div>
+		<div class="col-md-8 col-sm-8">
+			<md-input-container md-no-float class="md-block">
+		    <input  ng-model="address" placeholder="Address" ng-required="true">
+		  </md-input-container>
+		</div>
+
+		<div class="col-md-4">
+	        
+	        <md-input-container md-no-float class="md-block">
+	            <md-select ng-model="currency" placeholder="Currency" ng-required="true">
+	              <md-option ng-repeat="(key,value) in currencyList" value="{{value.symbol}}">
+	                {{value.symbol}} ({{key}})
+	              </md-option>                              
+	            </md-select>
+	            
+	        </md-input-container>
+	    </div>
+		<div class=" col-md-3 col-sm-6">
+			<md-input-container md-no-float class="md-block">
+		    <input  ng-model="city" placeholder="City">
+		  </md-input-container>
+		</div>
+		<div class=" col-md-3 col-sm-6">	
+
+		  <md-input-container md-no-float class="md-block">
+			    <md-select ng-model="country" placeholder="Country">
+
+			      <md-option ng-repeat="country in countryList" value="{{country.name}}"> 
+			      	{{country.name}}
+			      </md-option>
+			   
+			</md-input-container>
+		</div>
+		<div class=" col-md-3 col-sm-6">
+			<md-input-container md-no-float class="md-block">
+			    <md-select ng-model="state" placeholder="State">
+			      <md-option ng-repeat="stateN in stateList" value="{{stateN.name}}"> 
+			      	{{stateN.name}}
+			      </md-option>
+			    </md-select>
+			</md-input-container>
+		</div>
+		<div class=" col-md-3 col-sm-6">
+			<md-input-container md-no-float class="md-block">
+		    <input  ng-model="zipcode" placeholder="Zipcode">
+		  </md-input-container>
+		</div>
+	
+		
+		
+		
+		<div class="col-md-12 ">
+			<input type="checkbox" ng-model="terms" name="terms">
+         I accept the terms and conditions
+         <div class="result {{hotelResult.class}}" ng-if="hotelResult.status == 1">
+            {{hotelResult.message}}
+        </div>
+        <div class="result {{hotelResult.class}}"  ng-if="hotelResult.status == 2">
+            <ul>
+            <li ng-repeat="(key,value) in hotelResult.errors">
+            {{value.message}}
+            </li>
+            <ul> 
+        </div>
+		</div>
+
+	</div>
+	<div class="clearfix mar-top20">
+			
+		<div class="chane_pass_btn">
+			<md-button type="submit" class="md-primary addyellobtn yellowbtn">NEXT</md-button> 
+		</div>
+	</div>
+</form>
+</div>
+		

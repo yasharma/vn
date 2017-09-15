@@ -7,9 +7,6 @@ app.controller('iconCtlr', ['$scope','$rootScope','Upload','$timeout','localStor
 		/*****************************************
 		* Jot image upload
 		*****************************************/
-
-		
-
 		$rootScope.issueImages = '';
 		$scope.uploadFiles = function(files, errFiles) {
 			var hotel         = localStorageService.get('hotel');
@@ -32,7 +29,7 @@ app.controller('iconCtlr', ['$scope','$rootScope','Upload','$timeout','localStor
 	                   var uploadedImagesName = []; 
 	                    angular.forEach(result, function(data) {				
 				            if(data.status){
-				            	uploadedImagesName.push(data.filename);
+				            	uploadedImagesName.push(data);
 				            }
 				        });
 				        $rootScope.issueImages = uploadedImagesName;

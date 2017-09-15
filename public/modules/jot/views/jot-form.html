@@ -2,7 +2,7 @@
 
   <md-toolbar>
       <div class="md-toolbar-tools">
-        <h2>What do you want to write in JOT ?</h2>
+        <h2> Create Your Jot</h2>
         <span flex></span>
         <md-button class="md-icon-button" aria-label="close" ng-click="close()">
           <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
@@ -15,33 +15,28 @@
             <md-nav-bar
                 md-selected-nav-item="currentNavItem"
                 nav-bar-aria-label="navigation links">
-            <md-nav-item 
-                ng-repeat="(jotKey,jotValue) in $root.jotTypes" 
-                md-nav-click="goto(jotValue);" 
-                name="{{jotValue}}"
-                value="demo" 
-                ng-class="{currentNav : $root.activeNav == jotValue.id}"
-                >
 
-              <ng-md-icon 
-                icon="{{jotValue.src}}" 
-                ng-if="jotValue.icontype == 'icon'" 
-                style="fill:#a5a7a7">
-                </ng-md-icon>
-                <img src="{{jotValue.src}}" ng-if="jotValue.icontype == 'image'">
-                <span class="tab_label">{{jotValue.label}}</span>
-            </md-nav-item>          
+
+                <md-nav-item 
+                    ng-repeat="board in $root.boards" 
+                    md-nav-click="goto($root.jotTypes[board]);" 
+                    name="{{$root.jotTypes[board]}}"
+                    value="demo" 
+                    ng-class="{currentNav : $root.activeNav == $root.jotTypes[board].id}">
+                  
+                    <span class="jot-type-popupimg" style='background: {{$root.jotTypes[board].bgcolor}}'>                    
+                    <img src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'">
+                    </span>
+                    <span class="tab_label">{{$root.jotTypes[board].label}}</span>
+                </md-nav-item> 
+          
             </md-nav-bar>
         </div>        
         
-        <div class="newhotel_dialog_form" >
-
+        <div class="newhotel_dialog_form">
             <div class="row" ng-if="currentNavItem" jot-template="currentNavItem">
-                
                 <!--@ dynamic template -->
             </div>
-        </div>
-        
-    </md-dialog-content>
-  
+        </div>        
+    </md-dialog-content>  
 </md-dialog>    

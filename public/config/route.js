@@ -2,34 +2,83 @@
 
 app.config(['$routeProvider','$locationProvider',function($routeProvider, $locationProvider){
     $routeProvider
-    .when('/',  {
-       templateUrl : "/modules/login/views/login.tpl.html",
-        controller: "loginController",
+    
+    .when("/", {
+        templateUrl: "/modules/home/views/home.html",
+        controller: "homeController",
         access: {
-            requiredLogin: false
+            requiredLogin: false,
+            headerType:'front_header',
+             sidebar: 'no',
         }
     })
 
+    .when("/about-us", {
+        templateUrl: "/modules/about/views/about-us.html",
+        controller: "aboutUsCtrl",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+            sidebar: 'no',
+        }
+    })
+
+    .when("/contact-us", {
+        templateUrl: "/modules/contact/views/contact.html",
+        controller: "contactController",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+            sidebar: 'no',
+        }
+    })
+
+
+    .when("/faq", {
+        templateUrl: "/modules/faq/views/faq.html",
+        controller : "faqController",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+             sidebar: 'no',
+        }
+    })
+
+    .when("/demo", {
+        templateUrl: "/modules/demo/views/demo.html",
+        controller: "demoController",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+            sidebar: 'no',
+        }
+    })
+
+
     .when("/login", {
-        templateUrl : "/modules/login/views/login.html",
+        templateUrl : "/modules/login/views/login.tpl.html",
         controller: "loginController",
         access: {
-            requiredLogin: false
+            requiredLogin: false,
+             sidebar: 'no',
         }
     })
      .when("/resetpassword/:token", {
         templateUrl : "/modules/login/views/resetpassword.html",
         controller  :  "resetPasswordCtlr",
         access: {
-            requiredLogin: false,
+           requiredLogin: false,
+            headerType:'front_header',
+            sidebar: 'no',
         }
-    })
+    })    
 
     .when("/register", {
         templateUrl : "/modules/register/views/register.tpl.html",
         controller  :  "registerController",
         access: {
-            requiredLogin: false
+            requiredLogin: false,
+             sidebar: 'no',
         }
     })
     .when("/dashboard", {
@@ -38,22 +87,35 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         access: {
             requiredLogin: true, 
             headerType:'hotel_header',
-            sidebar: 'yes',
+            sidebar: 'no',
             outside:'yes'
         }
     })
 
-   
-    .when("/dashboard/jot", {
-        templateUrl : "/modules/jot/views/dashboard-jot.html",
-        controller  :  "jotController",
+
+    .when("/dashboard/hotel-setup/:steps?", {
+        templateUrl : "/modules/dashboard/views/steps.html",
+        controller  :  "hotelSetupController",
         access: {
-            requiredLogin: true,
+           requiredLogin: false,
+            headerType:'hotel_header',
+            sidebar: 'no',
+        }
+    })
+
+
+    .when("/dashboard/hotelboard/:type?", {
+        templateUrl : "/modules/jot/views/hotelboard.html",
+        //controller  :  "dashboardController",
+        controller  :  "hotelBoardController",
+        access: {
+            requiredLogin: true, 
             headerType:'dashboard_header',
             sidebar: 'yes'
         }
     })
 
+  
     .when("/dashboard/employee", {
         templateUrl : "/modules/employee/views/employee.html",
         controller  :  "employeeController",
@@ -64,8 +126,9 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
     .when("/dashboard/employee_schedule", {
-        templateUrl : "/modules/employee/views/employee_schedule.html",
-        controller  :  "employeeScheduleController",
+        templateUrl : "/modules/employee/views/scheduler.html",
+        controller  :  "schedulerController",
+        controllerAs  :  "ctlr",
         access: {
             requiredLogin: true,
             headerType:'dashboard_header',
@@ -92,14 +155,60 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
     })
 
     .when("/dashboard/inventory_category", {
-        templateUrl : "/modules/vending_machine/views/inventory_category.html",
-        controller  :  "inventoryCatController",
+        templateUrl   : "/modules/vending_machine/views/inventory_category.html",
+        controller    : "inventoryCatController",
         access: {
             requiredLogin: true,
             headerType:'dashboard_header',
             sidebar: 'yes'
         }
     })
-   .otherwise({redirectTo: '/'});
-    $locationProvider.html5Mode(true);     
-}]);
+    .when("/dashboard/lost_found", {
+        templateUrl   : "/modules/lost_found/views/lost_found_management.html",
+        controller    : "lostFoundManagementController",
+        controllerAs  : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/profile", {
+        templateUrl   : "/modules/profile/views/profile.html",
+        controller    : "profileController",
+        access: {
+            requiredLogin: true,
+            headerType:'hotel_header',
+            sidebar: 'no'
+        }
+    })
+
+    .when("/dashboard/phone_directory", {
+        templateUrl   : "/modules/phone_directory/views/phone_directory.html",
+        controller    : "phoneDirController",
+        controllerAs  : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/document_center", {
+        templateUrl   : "/modules/document_center/views/document_center.html",
+        controller    : "documentCenterController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+   .otherwise({
+    redirectTo: '/modules/error/views/404.html'
+
+    });
+        $locationProvider.html5Mode(true);     
+    }]);

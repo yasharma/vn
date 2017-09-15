@@ -22,9 +22,9 @@ exports.addItem = (reqst, respe) => {
     var Vendingsave       = new Vending(reqst.body);
     Vendingsave.save(function (err, result) {
         if(result){
-            respe.json(response.success(result,'Item has been Added Successfully.'));
+            return respe.json(response.success(result,'Item has been Added Successfully.'));
         }else{
-            respe.json(response.errors(err.errors,'Error in item Saved.'));
+            return respe.json(response.errors(err.errors,'Error in item Saved.'));
         }
     });
 };
@@ -37,17 +37,15 @@ exports.updateItem = (reqst, respe) => {
 
     var item_id         	= 	reqst.body._id;
 
-/*console.log(reqst.body);*/
-
-
     if(!item_id){
-        return respe.json(response.errors({},'Item id is required.'));
+        var errors =    { _id: {'message':'Item id is required.'}}
+        return respe.json(response.errors(errors,"Error in Item data."));
     }else{
         Vending.findByIdAndUpdate(item_id,{$set:reqst.body}, {new: true, runValidators: true, context: 'query'}, function(err, result) {
             if(result){
-              respe.json(response.success(result,'Item Updated successfully.'));
+              return respe.json(response.success(result,'Item Updated successfully.'));
             }else{
-                respe.json(response.errors(err,"Error in item update."));
+                return respe.json(response.errors(err,"Error in item update."));
             }
         });
     }
@@ -61,13 +59,14 @@ exports.deleteItem = (reqst, respe) => {
 
     var item_id         	=         reqst.query._id;
 	if(!item_id){
-        return respe.json(response.errors({},'Item id is required.'));
+        var errors =    { _id: {'message':'Item id is required.'}}
+        return respe.json(response.errors(errors,"Error in Item data."));
     }else{
         Vending.findByIdAndRemove(item_id, function(err, result) {
     		if(result){
-                respe.json(response.success(result,'Item deleted successfully.'));
+                return respe.json(response.success(result,'Item deleted successfully.'));
             }else{
-                respe.json(response.errors(err,"Error in item Deletion."));
+                return respe.json(response.errors(err,"Error in item Deletion."));
             }
         });
     }
@@ -82,13 +81,14 @@ exports.listItem = (reqst, respe) => {
    var hotel_id          =         reqst.query.hotel_id;
 
     if(!hotel_id){
-        return respe.json(response.errors({},'Hotel id is required.'));
+        var errors =    { hotel_id: {'message':'Hotel id is required.'}}
+        return respe.json(response.errors(errors,"Error in Item data."));
     }else{
         Vending.find({hotel_id: hotel_id}, function (err, result) {
             if(result){
-                respe.json(response.success(result,'Data Found.'));
+                return respe.json(response.success(result,'Data Found.'));
             }else{
-                respe.json(response.errors(err,"Error in vending listing."));
+                return respe.json(response.errors(err,"Error in vending listing."));
             }
         });
     }
@@ -104,9 +104,9 @@ exports.addCart = (reqst, respe) => {
     var Cartsave       = new Cart(reqst.body);
     Cartsave.save(function (err, result) {
         if(result){
-            respe.json(response.success(result,'Item has been sold.'));
+            return respe.json(response.success(result,'Item has been sold.'));
         }else{
-            respe.json(response.errors(err.errors,'Something went wrong.'));
+            return respe.json(response.errors(err.errors,'Something went wrong.'));
         }
     });
 };
@@ -120,9 +120,9 @@ exports.addCategory = (reqst, respe) => {
     var Categorysave       = new Category(reqst.body);
     Categorysave.save(function (err, result) {
         if(result){
-            respe.json(response.success(result,'Category has been Added Successfully.'));
+            return respe.json(response.success(result,'Category has been Added Successfully.'));
         }else{
-            respe.json(response.errors(err.errors,'Error in category Saved.'));
+            return respe.json(response.errors(err.errors,'Error in category Saved.'));
         }
     });
 };
@@ -135,13 +135,14 @@ exports.updateCategory = (reqst, respe) => {
 
     var category_id             =   reqst.body._id;
     if(!category_id){
-        return respe.json(response.errors({},'Category id is required.'));
+        var errors =    { _id: {'message':'Category id is required.'}}
+        return respe.json(response.errors(errors,"Error in Category data."));
     }else{
         Category.findByIdAndUpdate(category_id,{$set:reqst.body}, {new: true, runValidators: true}, function(err, result) {
             if(result){
-              respe.json(response.success(result,'Category Updated successfully.'));
+              return respe.json(response.success(result,'Category Updated successfully.'));
             }else{
-                respe.json(response.errors(err.errors,"Error in Category update."));
+                return respe.json(response.errors(err.errors,"Error in Category update."));
             }
         });
     }
@@ -154,13 +155,14 @@ exports.deleteCategory = (reqst, respe) => {
 
     var category_id             =         reqst.query._id;
     if(!category_id){
-        return respe.json(response.errors({},'Item id is required.'));
+        var errors =    { _id: {'message':'Category id is required.'}}
+        return respe.json(response.errors(errors,"Error in Category data."));
     }else{
         Category.findByIdAndRemove(category_id, function(err, result) {
             if(result){
-                respe.json(response.success(result,'Category deleted successfully.'));
+                return respe.json(response.success(result,'Category deleted successfully.'));
             }else{
-                respe.json(response.errors(err,"Error in Category Deletion."));
+                return respe.json(response.errors(err,"Error in Category Deletion."));
             }
         });
     }
@@ -175,13 +177,14 @@ exports.listCategory = (reqst, respe) => {
    var hotel_id          =         reqst.query.hotel_id;
 
     if(!hotel_id){
-        return respe.json(response.errors({},'Hotel id is required.'));
+        var errors =    { hotel_id: {'message':'Hotel id is required.'}}
+        return respe.json(response.errors(errors,"Error in Hotel data."));
     }else{
         Category.find({hotel_id: hotel_id}, function (err, result) {
             if(result){
-                respe.json(response.success(result,'Data Found.'));
+                return respe.json(response.success(result,'Data Found.'));
             }else{
-                respe.json(response.errors(err,"Error in Category listing."));
+                return respe.json(response.errors(err,"Error in Category listing."));
             }
         });
     }

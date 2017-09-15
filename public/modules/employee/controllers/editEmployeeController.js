@@ -1,8 +1,9 @@
 "use strict";
 
-app.controller('editEmployeeController', ['$scope','localStorageService','globalRequest','Upload','$timeout','empDetail','$route','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,empDetail,$route,$mdDialog) {
+app.controller('editEmployeeController', ['$scope','localStorageService','globalRequest','Upload','$timeout','empDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,Upload,$timeout,empDetail,$mdDialog) {
 		var hotel = localStorageService.get('hotel');
+		$scope.position_list = window.__API_PATH.POSITION;
 
 		
 		/***********************************************
@@ -38,13 +39,13 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 			            	_id  		  :  $scope._id,
 			            	first_name    :  $scope.first_name || null,
 			            	last_name     :  $scope.last_name || null,
-			            	user_name     :  $scope.user_name || null,
+			            	contact_number:  $scope.contact_number || null,
 			            	email         :  $scope.email || null,
 			            	status 		  :  status,
 			            	department    :  $scope.department,
 			            	profile_image :  $scope.profileimages,
 			            	position 	  :  $scope.position,
-			            	password      :  '123456',
+			            	address 	  :  $scope.address
 			            }
 			          };
 
@@ -53,7 +54,7 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
-			 		$route.reload();
+			 		globalRequest.getStaff();
 			 	}
 
 			 });

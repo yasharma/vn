@@ -1,0 +1,53 @@
+<md-dialog class="newhotel_dialog custom_size">
+<md-toolbar>
+      <div class="md-toolbar-tools custom_padding">
+        <h2>
+        <div class="show_profile_image">
+		<img src="{{image}}" class="cn_profile_image "> 
+			<label class="full_name capitalize">{{first_name}} {{last_name}}</label>
+		</div></h2>
+
+         <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+
+<div class="user_info">
+
+<ul>
+<!-- <li>
+	<div class="heading-left">First Name:</div>
+	<div class="desc-right capitalize">{{first_name}}</div>
+	<div class="clearfix"></div>
+</li>
+
+<li>
+	<div class="heading-left">Last Name:</div>
+	<div class="desc-right capitalize">{{last_name}}</div>
+	<div class="clearfix"></div>
+</li> -->
+<li>
+	<div class="heading-left">Email Address:</div>
+	<div class="desc-right capitalize">{{email}}</div>
+	<div class="clearfix"></div>
+</li>
+<li>
+	<div class="heading-left">Department:</div>
+	<div class="desc-right capitalize">{{department}}</div>
+	<div class="clearfix"></div>
+</li><li>
+	<div class="heading-left">Position:</div>
+	<div class="desc-right capitalize">{{position}}</div>
+	<div class="clearfix"></div>
+</li>
+</li><li>
+	<div class="heading-left">Status:</div>
+	<div class="desc-right capitalize">{{status}}</div>
+	<div class="clearfix"></div>
+</li>
+</ul>
+</div>
+
+</md-dialog>

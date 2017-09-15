@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('departmentController', ['$scope','localStorageService','globalRequest','$mdDialog',
-	function($scope,localStorageService,globalRequest,$mdDialog) {
+app.controller('departmentController', ['$scope','localStorageService','globalRequest','$mdDialog','toastService',
+	function($scope,localStorageService,globalRequest,$mdDialog,toastService) {
 		var hotel = localStorageService.get('hotel');
 
 
@@ -13,32 +13,22 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 			$scope.department_name = "";		
 			$scope.department_abbreviation = "";		
 			$scope.department_desc = "";
-		}
+		};
 
 		$scope.blankFields = function(){
 			$scope.blank();
 			$scope.departmentResult = "";
-		}
+		};
 
 		
 		/************************************
 		* Get department list
-		*************************************/			
-		
-		var request = {
-		            url:window.__API_PATH.GET_DEPARTMENTS,
-		            method:"GET",
-		            params:{
-		            	hotel_id    :  hotel._id		
-		            }
-		          };
-		globalRequest.jotCRUD(request).then(function(response){				
-		 	$scope.departmentList = response.result;
-		 });		
+		*************************************/	
+				
+		globalRequest.getDepartments();
 
-
-		 /************************************
-		* Add employee
+		/************************************
+		* Add Department
 		*************************************/		
 		
 
@@ -60,6 +50,7 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 			            	hotel_id      	   :  hotel._id,
 			            	department_name    :  departmentName,
 			            	abbreviation       :  Abbreviation,
+			            	bgcolor       	   :  $scope.bgcolor,
 			            	description        :  $scope.department_desc
 			            }
 			          };
@@ -120,6 +111,8 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 		
 	}
 ]);
+
+
 
 
 

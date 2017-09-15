@@ -1,0 +1,38 @@
+<div ng-controller="step2Controller as step2Ctlr">
+
+<form name="step2Form" ng-submit="step2FormSubmit(step2Form.$valid)" novalidate ng-show="!forget">
+	<ul class="step_hotel_list_edit noshadow clearfix">
+
+	<li ng-repeat="(key,value) in defaultBoards">
+	
+		<div class="Quick_jotnum numberdigit">
+
+
+			<md-checkbox aria-label="Checkbox" ng-model="step2Ctlr.selectFeature[value.id]" class="cssCheck" id="{{value.id}}" ng-true-value="{{value}}" ng-false-value="false"  ng-checked="{{(($root.hotelStatus.jot_types | filter:value.id)[0] == value.id)}}">
+		    </md-checkbox>
+
+		</div>
+		<div class="hover_effect_home" style='background: {{(value.bgcolor)?value.bgcolor:"#71adf7";}}'>
+			<div class="hover_effect_img"><img src="{{value.data}}"></div>
+			<h4>{{value.label}}</h4>
+		</div>
+	</li>
+	
+	</ul>
+	<div class="result {{featureResult.class}}" ng-if="featureResult.status == 1">
+            {{featureResult.message}}
+      </div>
+	<div class="clearfix mar-top20">
+	
+
+	<div class="chane_pass_btn">
+		<md-button  ng-click="navigateBack()" class="md-primary addyellobtn graybtn" >PREVIOUS</md-button>
+	</div>	
+	<div class="chane_pass_btn">
+		<md-button  type="submit" class="md-primary addyellobtn yellowbtn">NEXT</md-button> 
+	</div>
+	</div>
+
+	 
+</form>
+</div>

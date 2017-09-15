@@ -1,5 +1,6 @@
 "use strict";
-app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $mdDialog,toastService,globalRequest,localStorageService) {
+
+app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $mdDialog,toastService,globalRequest,localStorageService,$routeParams) {
       return {
           
           link: function($scope, element, attrs) {
@@ -13,16 +14,13 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                   $event.preventDefault();
                  }
               });
-              
-              $scope.callbackTitleStaff = function(){                
-                          $rootScope.titleFocus = true; 
-              };
+                
 
               /*
               * Blank field before open form
               */
 
-              $rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.assigned_to = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = $rootScope.jot_title = $rootScope.files  =  '';
+              $rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.jot_members = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = $rootScope.jot_description = $rootScope.files = $rootScope.jot_title  =  '';
               $rootScope.progress = -1;
                            
                 
@@ -32,6 +30,7 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                 ******************************************************************/
 
               $scope.createJot = function(){
+
                   /*console.log($rootScope);
                   console.log($rootScope.selectedPattern);
                   return false;*/
@@ -98,26 +97,31 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                   }
 
                   
-                  /**
+                  /*******************************
                   ||  End task Jot Data json 
-                  **/
+                  *******************************/
 
                   $scope.message = ' ';
-
                   var hotel = localStorageService.get('hotel');
+                  
                   var jotDataArray = {
-                      jot_title      : $rootScope.jot_title,
-                      priority       : $rootScope.priority,
-                      hotel_id       : hotel.hotel_id,
-                      jot_type       : $rootScope.jot_type,
-                      due_date       : new Date($rootScope.due_date).getTime(),
-                      department     : $rootScope.department,
-                      assigned_to    : $rootScope.assigned_to,
-                      checklist      : $rootScope.checklist,  
-                      image          : $rootScope.issueImages,
-                      task_type      : task,
-                      status         : 'open'
+                      jot_title           : $rootScope.jot_title,
+                      jot_description     : $rootScope.jot_description,
+                      jot_members         : $rootScope.jot_members,
+                      priority            : $rootScope.priority,
+                      hotel_id            : hotel._id,
+                      jot_type            : $rootScope.jot_type,
+                      hotel_room          : $rootScope.hotel_room,
+                      due_date            : new Date($rootScope.due_date).getTime(),
+                      department          : $rootScope.department,                      
+                      checklist           : $rootScope.checklist,  
+                      image               : $rootScope.issueImages,
+                      task_type           : task,
+                      status              : 'open'
                   };
+
+                 /* console.log(jotDataArray);
+                  return false;*/
 
                   var request={
                     url:window.__API_PATH.CREATE_JOT,
@@ -126,65 +130,16 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                   };
                   
                   globalRequest.jotCRUD(request).then(function(response){
-                    var result = response.result;
+                   
                     if(response.status == 1)
                     {
+                      var JotType = $routeParams.type;
+                      globalRequest.getJotList(JotType);
                       $mdDialog.cancel();
                       var popup = {"message":response.message,"class":"success"};
                       toastService.alert(popup);
-
-                      
-                      if($rootScope.jot_type == 'task')
-                      {
-                        $rootScope.task_iteration.data.push(result);
-                      } else if($rootScope.jot_type == 'note') {
-                        $rootScope.note_iteration.data.push(result);
-                      } else if($rootScope.jot_type == 'issue') {
-                        $rootScope.issue_iteration.data.push(result);
-                      } else {
-                        $rootScope.others_iteration.data.push(result);
-                      }         
-
-                      
-                      
-
-                      /******************************************************
-                      * Jot object iteration
-                      ****************************************************/
-
-                      /*var keyFoundInObj = false;
-
-                      angular.forEach($rootScope.jots,function(value,index){*/
-                        
-
-                        /******************************************************
-                        * Check jot type(message,issue etc.) is new or already in object 
-                        ****************************************************/
-                               /* if(value._id == $rootScope.jot_type)
-                                {                 
-                                  value.jot_data.push(jotDataArray);
-                                  keyFoundInObj = true;
-                                }                   
-                            });*/
-                      
-
-                            /******************************************************
-                      * Push new jot data if  jot type(message,issue etc.) is not in jot object
-                      ****************************************************/
-                      
-                      /*if(!keyFoundInObj)
-                      {
-                        var jotDataArrayInObj = [jotDataArray];
-                              var newcreatedJot = {
-                                            "_id"   :$rootScope.jot_type,
-                                            "jot_data": jotDataArrayInObj
-                                          };
-                                                    
-                              $rootScope.jots.push(newcreatedJot);
-                            
-                          }*/
-
                     }
+                    
                   });
 
                 };

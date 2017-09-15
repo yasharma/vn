@@ -1,59 +1,48 @@
 <div class="dash-main-con">
 
 <!--middle panel -->
-<section class="dashrightsection">
-	
-	<div class="dash_hd">Hotels</div>
-	<div class="clearfix row">
+<section class="dashrightsection" ng-style="{'padding-left': isAuth.headerType =='hotel_header'?'20px':'','margin-left': isAuth.headerType =='hotel_header'?'0':'' }"  ng-class="{'leftopen':leftopen}" style="background: #f4f8f9;">
 
 
-		<div class="col-lg-3 col-md-6 hideHotel"  ng-repeat="hotel in hotels" 
-			            ng-hide="hideHotel">
-
-			<div class="dash_hotel_top" ng-click="redirectToJot(hotel)">
-				<h4><a href="javascript:void(0);"> {{hotel.hotelname}}</a></h4>
-
-				<i>{{hotel.address}}</i>
-			</div>
-			<label class="delete_hotel"><ng-md-icon ng-click="deleteHotel($event,hotel._id); hideHotel = ! hideHotel"  icon="cancel" style="fill:#7a7a7a" size="18"></ng-md-icon></label>
-			<div class="dash_hotel_bot">
-				<div class="status_info">
-					<ul class="clearfix">
-						<li class="bgyellow">Open (13)</li>
-						<li class="bggreen">Completed (09)</li>
-					</ul>
-				</div>
-				<div class="job_priorty">
-					<span>Jot Priority</span>
-					<ul class="clearfix">
-						<li>Urgent (04)</li>
-						<li>High (04)</li>
-						<li>Medium (05)</li>
-						<li>Low (02)</li>
-					</ul>
-				</div>
-				<div class="job_priorty_bot">
-					<ul class="clearfix">
-						<li> <ng-md-icon icon="warning" style="fill: #7a7a7a" size="13"></ng-md-icon>  Issue (12) </li>                  
-						<li><ng-md-icon icon="format_list_bulleted" style="fill: #7a7a7a" size="14"></ng-md-icon>Task (02)</li>
-						<li><ng-md-icon icon="insert_drive_file" style="fill: #7a7a7a" size="14"></ng-md-icon>Note (10)</li>
-						<li><ng-md-icon icon="email" style="fill: #7a7a7a" size="14"></ng-md-icon>Message (06)</li>
-					</ul>
-				</div>
+	<div class="dash_hd" style="
+    display: inline-block;
+    color: #4ebdf6;
+    border-bottom: 2px solid #4ebdf6;
+    font-size: 26px;
+">Hotels</div>
+	<div class="hotel_list_top">
+		
+		<div class="circle_container" ng-repeat="hotel in hotels" 
+			            ng-hide="hideHotel" ng-click="redirectToJot(hotel)">
+			<div class="circle" style="background: url('assets/images/hotel_1.png') 0 0 no-repeat; background-size: cover;">
+			  <div class="circle__inner">
+			    <div class="circle__wrapper">
+			      <div class="hover_effect">
+						<div><img class="hotel-list-icon" src="assets/images/hotet_5star.png"></div>
+						<h4 class="hotel_name">{{hotel.hotelname}} <span>{{hotel.address}}</span></h4>
+					</div>
+			    </div>
+			  </div>
 			</div>
 		</div>
 
-	</div>
-	<div class="clearfix row">
-		<div class="col-lg-3 col-md-6">
-			<div class="dash_hotel_top_new">
-				<a href="javascript:;" ng-click="openAddHotelPopup()">
-					<h3 class="text-center">+</h3>
-					<h2 class="text-center">Add a new hotel</h2>
-				</a>
+		<div class="circle_container"  ng-click="openHotelSetupWizard();" ng-if="$root.userData.role !='staff'">
+			<div class="circle">
+			  <div class="circle__inner">
+			    <div class="circle__wrapper">
+			       <div class="dash_hotel_top_new">
+						<a href="javascript:void(0);">
+							<h3 class="text-center">+</h3>
+							<h2 class="text-center hotel_name">Add a new hotel</h2>
+						</a>
+					</div>
+			    </div>
+			  </div>
 			</div>
 		</div>
-	</div>
+
+		<div class="clearfix"></div>
+
+	</div>	 
 </section>
-
 </div>

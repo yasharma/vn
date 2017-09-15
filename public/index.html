@@ -20,14 +20,15 @@
       <body style="height: auto;">
         <header ng-if="isAuth"><!--@header template--> </header>
 
-        <div ng-if="isAuth.sidebar=='yes'" class="left_side_menu
-        " ng-class="{'leftopen':leftopen}"   ng-include="'/modules/partials/sidebar.html'"></div>
+        <div ng-if="isAuth.sidebar=='yes'" 
+        class="left_side_menu
+        " ng-class="{'leftopen':leftopen,'active':(isAuth.sidebar=='yes')}"   ng-include="'/modules/partials/sidebar.html'"></div>
 
-        <ng-view class="view"> </ng-view>
-
+        <ng-view ng-style="{height: $root.iframeHeight + 'px'}" style="display: block;" class="view" autoscroll> </ng-view>
         
         <footer  ng-include="'/modules/partials/footer.html'"> </footer>       
         
+        <script type="text/javascript" src="/js/jquery.min.js"></script> 
         <script src="/js/vendor.js"></script> 
         <script src="/js/main.js"></script>      
      </body>

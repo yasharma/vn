@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('editInventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','invDetail','$route','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,invDetail,$route,$mdDialog) {
+app.controller('editInventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','invDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,Upload,$timeout,invDetail,$mdDialog) {
 		var hotel = localStorageService.get('hotel');
 
 		
@@ -49,7 +49,7 @@ app.controller('editInventoryController', ['$scope','localStorageService','globa
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
-			 		$route.reload();
+			 		globalRequest.getVendingItems();
 			 	}
 
 			 });

@@ -1,0 +1,37 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2 class="capitalize">{{document_name}} Files</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+<div class="FilesList">
+	<ul>
+		<li ng-repeat="f in files track by $index">
+			<a target="_blank" href="{{'/images/hotel/'+hotel_id+'/document_center/'+f.filename}}">
+
+			<span ng-switch="f.type" style="float: left;margin-right: 10px;">
+
+  			<img style="width:50px" ng-switch-when="image/jpeg|image/png" ng-switch-when-separator="|" src="{{'/images/hotel/'+hotel_id+'/document_center/'+f.filename}}">
+
+
+
+  			<ng-md-icon style="fill:#2aaae0" ng-switch-when="application/pdf" class="cursor" icon="picture_as_pdf" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+  			</ng-md-icon>
+
+  			<ng-md-icon ng-switch-default style="fill:#2aaae0" class="cursor" icon="insert_drive_file" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+  			</ng-md-icon>
+
+  			</span>							
+			 {{f.filename}}
+			 <span ng-switch="f.type" style="float: right;">{{f.size | bytes}}</span>
+			</a>
+			<div class="clearfix"></div>
+		</li>		
+		
+	</ul>
+</div>
+</md-dialog>

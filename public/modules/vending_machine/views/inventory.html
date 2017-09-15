@@ -6,16 +6,18 @@
 		<div class="dash_hd mar-bot0 dash_hd-left">Inventory</div>
 		<div class="rightfilter_right">
 			<div class="chane_pass_btn_right">
-				<md-button ng-click="invForm = !invForm; blankFields();" ng-class="{activebtn:invForm}" class="md-primary addyellobtn yellowbtn widthauto">
-					
+				<!-- <md-button ng-click="invForm = !invForm; blankFields();" ng-class="{activebtn:invForm}" class="md-primary addyellobtn yellowbtn widthauto">					
+				{{(invForm)?"Close":"Add items"}}
+				</md-button> -->
+				<md-button  slide-toggle="#inv" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
 				{{(invForm)?"Close":"Add items"}}
 				</md-button>
 			</div>
 	    </div>    
 	</div>
 
-
-	<div class="dash_pro_inform" ng-show="invForm">
+<!-- ng-show="invForm" -->
+	<div id="inv" class="slideable dash_pro_inform" >
 		<div class="dash_pro_inform_inner boxunoversal">
 		<form name="addItemform" ng-submit="addItem(addItemform.$valid)" novalidate>
 			<div class="row">
@@ -63,7 +65,7 @@
 					<div class="hover_de">
 						<ng-md-icon icon="photo_camera" style="fill: #fff" size="24"></ng-md-icon> 
 						<span class="text-center">
-							Change your profile photo
+							Change your item photo
 						</span>
 					</div>
 					<input type="file" ngf-select ="uploadprofileImage($files, $invalidFiles)" ngf-resize="{width: 90, height: 90}" ng-model="profile_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
@@ -133,7 +135,7 @@
         <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table">
           <thead>
               <tr>
-                  <th width="10%">S.No</th>
+                  <th width="10%">#</th>
                   <th width="15%">Item Name</th>
                   <th width="15%">Category</th>
                   <th width="15%">Sku Code</th>
@@ -151,7 +153,7 @@
                   <td>{{$index+1}}</td>
                   <td>
                     <span class="invent_img">
-                        <img src="{{(invent.image)?'/images/hotel/'+invent.hotel_id+'/inventory/'+ invent.image :'/assets/images/vending_default.jpg' }}" style="margin-right: 10px;">
+                        <img src="{{(invent.image)?'/images/hotel/'+invent.hotel_id+'/inventory/'+ invent.image :'/assets/images/vending_default.jpg' }}"  style="margin-right: 10px;max-width: 70px;">
                     </span>
                   	{{invent.item_name}}
               		</td>

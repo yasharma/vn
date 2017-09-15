@@ -13,12 +13,13 @@ var LostFoundSchema 	= new Schema({
     description: {
 	    type: String,
 	    trim: true,
+	    required:"Description/Title shoud not be blank."
 	},
 	image:{
 	    type: Array,
 	    default: [] 
   	},
-	lost_place: {
+	place: {
 	    type: String,
 	    trim: true,
 	},
@@ -27,7 +28,7 @@ var LostFoundSchema 	= new Schema({
 	    trim: true,
 	    default: false
 	},
-	lost_date: {
+	date: {
 	    type: Number,
 	},
 	no_of_items: {
@@ -44,7 +45,8 @@ var LostFoundSchema 	= new Schema({
 	},
 	contact: {
 		type: String,
-		default: null
+		default: null,
+		required:"Contact number shoud not be blank."
 	},
 	search_tag:{
 		type: String,

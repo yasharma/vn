@@ -103,13 +103,13 @@
               </li>              
               <li>
                  <md-input-container md-no-float class="md-block">
-                    <input  ng-model="no_of_items" placeholder="Number of items">
+                    <input type="number" ng-model="no_of_items" placeholder="Number of items">
                  </md-input-container>
               </li>
               <li>
                  <md-input-container md-no-float class="md-block">
                     <md-select ng-model="lost_status" placeholder="Status">
-                       <md-option value="processing">
+                       <md-option value="processing" selected>
                           Processing
                        </md-option>
                        <md-option  value="completed">
@@ -120,7 +120,7 @@
               </li>
               <li>
                  <md-input-container md-no-float class="md-block">
-                    <input  ng-model="contact" placeholder="Contact information">
+                    <input type="tel"  ng-model="contact" placeholder="Contact information">
                  </md-input-container>
               </li>
               <li class="fullWidth">
@@ -133,6 +133,7 @@
               </li>
               <li class="fullWidth">
                 <div class="clearfix" ng-include="'/modules/jot/views/jot_title.html'"></div>
+                <div class="clearfix" ng-include="'/modules/jot/views/jot_desc.html'"></div>
               </li>
               </ul>
            </div>

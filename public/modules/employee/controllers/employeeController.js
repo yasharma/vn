@@ -1,8 +1,9 @@
 "use strict";
 
-app.controller('employeeController', ['$scope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','$route','toastService',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,$route,toastService) {
+app.controller('employeeController', ['$scope','$rootScope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','toastService',
+	function($scope,$rootScope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,toastService) {
 		var hotel = localStorageService.get('hotel');
+		$scope.position_list = window.__API_PATH.POSITION;
 
 
 		/************************************
@@ -12,7 +13,7 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 		$scope.blank = function(){
 			$scope.first_name = "";
 			$scope.last_name = "";
-			$scope.user_name = "";
+			$scope.contact_number = "";
 			$scope.email = "";
 			$scope.department = "";
 			$scope.position = "";
@@ -20,52 +21,32 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 			$scope.address = "";
 			$scope.profile = "";
 			$scope.profileProgress = -1;
-		}
+			$scope.profileimages = '';
+		};
 
 		$scope.blankFields = function(){
 			$scope.blank();
 			$scope.memberResult = "";
-		}
+		};
 
 		/************************************
 		* Get department list
 		*************************************/			
 		
-		var request = {
-		            url:window.__API_PATH.GET_DEPARTMENTS,
-		            method:"GET",
-		            params:{
-		            	hotel_id    :  hotel._id		
-		            }
-		          };
-		globalRequest.jotCRUD(request).then(function(response){				
-		 	$scope.departmentList = response.result;
-		 });
+		globalRequest.getDepartments();
 		
 		/************************************
 		* Get employee list
 		*************************************/		
-		
-			
-			var request = {
-			            url:window.__API_PATH.STAFF_SUGGESTION,
-			            method:"GET",
-			            params:{
-			            	hotel_id    :  hotel._id		
-			            }
-			          };
-			globalRequest.jotCRUD(request).then(function(response){
-				
-			 	$scope.membersList = response.result;
-			});
+		globalRequest.getStaff();
 
-		
 		/************************************
 		* Add employee
 		*************************************/		
 		
 
 		$scope.addEmployee = function(){
+			
 			var status  = ($scope.status)?$scope.status:'inactive';			
 			var request = {
 			            url:window.__API_PATH.ADD_MEMBER,
@@ -74,12 +55,13 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 			            	hotel_id      :  hotel._id,
 			            	first_name    :  $scope.first_name,
 			            	last_name     :  $scope.last_name,
-			            	user_name     :  $scope.user_name,
+			            	contact_number     :  $scope.contact_number,
 			            	email         :  $scope.email,
 			            	status 		  :  status,
 			            	department    :  $scope.department,
 			            	profile_image :  $scope.profileimages,
 			            	position 	  :  $scope.position,
+			            	address 	  :  $scope.address,
 			            	role 	      :  'staff',
 			            	password      :  '123456',
 			            }
@@ -89,11 +71,11 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 			 	$scope.blank();
 			 	if(response.status == 1)
 			 	{
-			 		if(!$scope.membersList)
+			 		if(!$rootScope.staffList)
 			 		{
-			 			$scope.membersList = [];
+			 			$rootScope.staffList = [];
 			 		}
-			 		$scope.membersList.push(response.result);
+			 		$rootScope.staffList.push(response.result);
 			 	}
 			 });
 
@@ -104,16 +86,16 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 		*****************************************/	
 
 		$scope.openEditForm = function(detail){
-				$mdDialog.show({
-					controller: 'editEmployeeController',
-					templateUrl: '/modules/employee/views/edit_employee.html',
-					parent: angular.element(document.body),
-					fullscreen: $scope.customFullscreen,
-					clickOutsideToClose:true,	
-					locals:{empDetail:{detail:detail,prevScope:$scope}}				
-				}).then(function(answer) {}, function() {});
+			$mdDialog.show({
+				controller: 'editEmployeeController',
+				templateUrl: '/modules/employee/views/edit_employee.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{empDetail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
 
-			};
+		};
 
 
 		/*****************************************
@@ -171,9 +153,6 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 
 	    };
 
-	    /*****************************************
-		* Profile image upload
-		*****************************************/
 
 	    $scope.viewDetail = function(){
 

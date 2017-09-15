@@ -1,40 +1,36 @@
 "use strict";
 
-app.controller('headerController', ['$scope','$location','localStorageService','headerFactory','$rootScope','$mdDialog','$route','$timeout',
-	function($scope,$location,localStorageService,headerFactory,$rootScope,$mdDialog,$route,$timeout) {	
+app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','$route','globalRequest',
+	function($scope,localStorageService,$rootScope,$mdDialog,$route,globalRequest) {	
 
+		$rootScope.userData  = localStorageService.get('user');
 		/*
 		* Jot form tab list
 		*/
 
 		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
 
+
+		/**********************************************************
+	    * Get active hotel data
+	    **********************************************************/
+
+		$scope.activeHotelData   = localStorageService.get('hotel');
+
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$rootScope.boards = $scope.activeHotelData.jot_types;
+
 		/*
-		* Factory method
 		*
-		* Display hotels
+		* Get hotels list
 		*
 		*/
 		
-		var data = {
-				"user_id":localStorageService.get('user')._id
-			};
-
-			
-		var request={
-				url:window.__API_PATH.GET_HOTELS,
-				method:"GET",
-				params:data
-			};
-		
-		
-
-		headerFactory.get(request).then(function(response){
-			if(response.error){
-			} else {				
-				$rootScope.hotels = response.result;				
-			}
-		});
+		globalRequest.getHotels();		
 
 
 		/*
@@ -44,14 +40,12 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		*
 		*/
 		$scope.hotel = localStorageService.get('hotel');
-		$scope.changeJotView = function(hotel){
-			/*var hotelData  = {
-				'hotel_id':hotelID,
-				'hotel_name':hotelName
-			};*/
+		$scope.changeJotView = function(hotel){				
+			globalRequest.getJotCount();
 			localStorageService.set('hotel', hotel);
-			$scope.hotel = hotel;
+			$scope.hotel = localStorageService.get('hotel');
 			$route.reload();
+			
 		};
 
 
@@ -60,7 +54,6 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		/**************************************
 		* Open jot popup
 		**************************************/
-		$timeout(function(){
 
 			$scope.quickTaskPopup = function(){
 				$mdDialog.show({
@@ -73,7 +66,7 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 				}).then(function(answer) {}, function() {});
 
 			};
-		});
+
 		
 
 
@@ -91,6 +84,19 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 				locals: {ActivateTab:formType}
 			}).then(function(answer) {}, function() {});
 
+		};
+
+
+
+		$scope.openLoginForm = function(detail){
+			$mdDialog.show({
+				templateUrl : "/modules/login/views/login.tpl.html",
+       			controller: "loginController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{empDetail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
 		};
 
 

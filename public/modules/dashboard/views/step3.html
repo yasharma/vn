@@ -1,0 +1,111 @@
+<div ng-controller="step3Controller as step3Ctlr">
+<form name="step3Form" ng-submit="step3FormSubmit(step3Form.$valid)" novalidate ng-show="!forget">
+	<div class="deprtment_list">
+
+		<!-- <ul class="clearfix">
+			<li ng-repeat="department in defaultDepartment">
+				<div class="yellowlay clearfix">
+					<div class="pull-left">
+						<ng-md-icon icon="home" style="fill:#747677" size="22"></ng-md-icon> 
+						{{department.department_name}} ({{department.abbreviation}})
+					</div>
+					<div class="pull-right right_check_lay">
+						<md-checkbox ng-model="step3Ctlr.department_select[department.abbreviation]"  aria-label="Checkbox 1" ng-true-value="{{department}}" ng-false-value="false" ng-checked="{{(($root.hotelStatus.departments | filter:{abbreviation:department.abbreviation})[0].abbreviation == department.abbreviation)}}" aria>
+
+		       			</md-checkbox>
+						<ng-md-icon icon="mode_edit" style="fill:#59c1f6" size="20"></ng-md-icon> 
+					</div>
+				</div>
+			</li>
+		</ul> -->
+
+
+
+		<div class="step_emp_tab_content_inner">
+					<table class="step_emp_tab_table" cellpadding="0" cellspacing="0" border="0">
+						<thead>
+							<tr>  
+								<th width="4%">#</th>
+								<th width="46%">Department Name</th>
+								<th width="46%">Abbreviation</th>								
+								<th width="5%">&nbsp;</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<tr ng-repeat="department in defaultDepartment track by $index">
+
+								<td>{{$index+1}}</td>
+								<td>
+								<md-input-container md-no-float class="md-block">
+									<input ng-init="step3Ctlr.department_name[department.department_name] = department.department_name"  ng-model="step3Ctlr.department_name[department.department_name]" placeholder="Department Name" autocomplete="off">
+								</md-input-container>
+								</td>
+
+								<td>
+								<md-input-container md-no-float class="md-block">
+									<input ng-init="step3Ctlr.abbreviation[department.department_name] = department.abbreviation"  ng-model="step3Ctlr.abbreviation[department.department_name]" placeholder="Abbreviation"  autocomplete="off">
+								</md-input-container>
+								</td>
+
+								
+								<td style="text-align: right;cursor: pointer;">
+			
+									<ng-md-icon ng-if="blankFieldCount.length == 0 && $index != 0 && $index == defaultDepartment.length-1" icon="delete_forever" style="fill:red" size="20"  ng-click="deleteDeptRow(department,'defaultDepartment',$index);"></ng-md-icon>
+								
+
+								</td>
+							</tr>
+
+							<!-- Add more functionality -->
+
+
+							<tr ng-repeat="department in blankFieldCount track by $index">
+
+								<td>{{defaultDepartment.length+$index+1}}</td>
+								<td>
+								<md-input-container md-no-float class="md-block">
+									<input  ng-model="step3Ctlr.department_name[$index]" placeholder="Department Name" autocomplete="off">
+								</md-input-container>
+								</td>
+
+								<td>
+								<md-input-container md-no-float class="md-block">
+									<input   ng-model="step3Ctlr.abbreviation[$index]" placeholder="Abbreviation"  autocomplete="off">
+								</md-input-container>
+								</td>
+
+								
+								<td style="text-align: right;cursor: pointer;">										
+									<ng-md-icon ng-if="$index == blankFieldCount.length-1" icon="delete_forever" style="fill:red" size="20"  ng-click="deleteDeptRow(department,'blankFieldCount',$index);"></ng-md-icon>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+					
+					<!-- <a href="javaScript:void(0)" class="emp_add_more_field" ng-click="defaultBlankField = defaultBlankField+1">+ Add More Employee</a> -->
+
+					<a href="javaScript:void(0)" class="emp_add_more_field" ng-click="addmore();">+ Add More department</a>
+				</div>
+
+
+
+
+	</div>
+	<br>
+	<div class="result {{departmentResult.class}}" ng-if="departmentResult.status == 1">
+            {{departmentResult.message}}
+    </div>
+
+	<div class="clearfix mar-top20">
+		<div class="chane_pass_btn">
+			<md-button  ng-click="navigateBack()" class="md-primary addyellobtn graybtn" >PREVIOUS</md-button>
+		</div>	
+		<div class="chane_pass_btn">
+			<md-button  type="submit" class="md-primary addyellobtn yellowbtn">NEXT</md-button> 
+		</div>
+	</div>
+</form>
+</div>
+		

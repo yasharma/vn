@@ -1,12 +1,31 @@
 "use strict";
 
-/**************************************
-* Login controller
-**************************************/
+app.controller('dashboardController', ['$scope','$location','localStorageService','$rootScope','$mdDialog','toastService','globalRequest',
+	function($scope,$location, localStorageService,$rootScope,$mdDialog,toastService,globalRequest) {
+
+		/*
+		*
+		* Redirect user if not hotel owner
+		*
+		*/	
+
+		var userDetail = localStorageService.get('user');
+		if(userDetail.role == 'staff')
+		{
+			$location.path('/dashboard/hotelboard');
+			return false;
+		}
 
 
-app.controller('dashboardController', ['$scope','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','toastService',
-	function($scope,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,toastService) {	
+		/*
+		*
+		* Get hotels list
+		*
+		*/
+		
+		globalRequest.getHotels();
+
+
 
 		/*
 		* Function
@@ -15,45 +34,11 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		*
 		*/
 
-		$scope.openAddHotelPopup = function(){
-			$mdDialog.show({
-				controller:'dashboardPopupController',	          
-				templateUrl: '/modules/dashboard/views/add-new-hotel.tpl.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				clickOutsideToClose:true,
-			})
-			.then(function(answer) {
-			}, function() {
 
-			});
-
-		};
-
-
-
-		/*
-		* Factory method
-		*
-		* Display hotels
-		*
-		*/
-
-		/*var data = {
-				"user_id":localStorageService.get('user')._id
-			};
-		var request={
-				url:window.__API_PATH.GET_HOTELS,
-				method:"POST",
-				data:data
-			};
-		
-		dashboardFactory.hotelCRUD(request).then(function(response){
-			if(response.error){
-			} else {				
-				$rootScope.hotels = response.result;
-			}
-		});*/
+		$scope.openHotelSetupWizard = function(){
+			localStorageService.remove('processingHotel');
+			$location.path('/dashboard/hotel-setup/1');	
+		};		
 
 
 		/*
@@ -65,13 +50,42 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		
 
 		$scope.redirectToJot = function(hotel){
+			
+			globalRequest.getHotelStatus(hotel._id).then(function(response){				
 
-			/*var hotelData  = {
-					'hotel_id'   :hotelID,
-					'hotel_name' :hotelName
-				};*/	
-			localStorageService.set('hotel', hotel);			
-			$location.path('/dashboard/jot');
+				var completedStep;	
+
+				if(response[0].step != 'completed')
+				{
+					if(response[0].jot_types.length == 0)
+					{
+						completedStep = 2;
+
+					} else if(response[0].departments.length == 0) {
+						completedStep = 3;
+
+					} else if(response[0].members.length == 0) {
+						completedStep = 4;
+					} else {
+						completedStep = 'completed';
+					}
+				} else {
+					completedStep = 'completed';
+				}
+
+
+
+				if(completedStep == 'completed')
+				{
+					localStorageService.set('hotel', hotel);			
+					$location.path('/dashboard/hotelboard');
+				} else {
+					localStorageService.set('processingHotel',hotel);
+					$location.path('/dashboard/hotel-setup');
+				}
+
+
+			});
 		};
 
 
@@ -100,14 +114,11 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 					params:data
 				};
 			
-			dashboardFactory.hotelCRUD(request).then(function(response){
-				if(response.error){
-				} else {				
-					if(response.success)
-					{
-						var popup = {"message":response.message,"class":"success"};
-						toastService.alert(popup);
-					}
+			globalRequest.jotCRUD(request).then(function(response){
+				if(response.success)
+				{
+					var popup = {"message":response.message,"class":"success"};
+					toastService.alert(popup);
 				}
 			});		
 		};

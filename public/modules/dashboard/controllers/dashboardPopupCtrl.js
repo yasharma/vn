@@ -1,12 +1,7 @@
 "use strict";
 
-/**************************************
-* Login controller
-**************************************/
-
-
-app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route','toastService',
-	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route,toastService) {	
+app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','globalRequest','$rootScope','$mdDialog','$route','toastService',
+	function($scope,$http,$location,$timeout, localStorageService,globalRequest,$rootScope,$mdDialog,$route,toastService) {	
 
 
 		$scope.currencyList = window.__API_PATH.CURRENCY_LIST;
@@ -62,7 +57,7 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 						data:hotelDataObj
 					};
 
-				dashboardFactory.hotelCRUD(request).then(function(response){								
+				globalRequest.jotCRUD(request).then(function(response){								
 					$scope.hotelResult 	 = response;
 					
 					if(response.status == 1)

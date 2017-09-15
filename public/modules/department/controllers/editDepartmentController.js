@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('editDepartmentController', ['$scope','localStorageService','globalRequest','Upload','$timeout','deptDetail','$route','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,deptDetail,$route,$mdDialog) {
+app.controller('editDepartmentController', ['$scope','localStorageService','globalRequest','deptDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,deptDetail,$mdDialog) {
 		var hotel = localStorageService.get('hotel');
 
 		
@@ -38,6 +38,7 @@ app.controller('editDepartmentController', ['$scope','localStorageService','glob
 			            	_id      	       :  $scope._id,
 			            	department_name    :  departmentName,
 			            	abbreviation       :  Abbreviation,
+			            	bgcolor       	   :  $scope.bgcolor,
 			            	description        :  $scope.description
 			            }
 			          };
@@ -46,7 +47,8 @@ app.controller('editDepartmentController', ['$scope','localStorageService','glob
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
-			 		$route.reload();
+			 		globalRequest.getDepartments();
+
 			 	}
 			 	
 			});

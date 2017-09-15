@@ -6,10 +6,24 @@ http://localhost:3000/resetpassword/0c02baa57acfbb5a51cb0a04c587b8eec2099e3d
 **************************************/
 
 
-app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location',
-	function($scope,loginFactory,$rootScope,$routeParams,$location) {	
-		console.log($routeParams);
+app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location','$mdDialog','$timeout',
+	function($scope,loginFactory,$rootScope,$routeParams,$location,$mdDialog,$timeout) {	
+
 		var token = $routeParams.token;
+
+
+		if($routeParams.expired && $routeParams.expired == 'true')
+		{
+		
+			$location.path('/');
+			$rootScope.popupData  = {
+						text:  'Link has been expired.',
+						action: 'redirect'
+			};
+			 $timeout(function() {
+			 	$rootScope.popup = true;
+			 }, 500);
+		}
 		
 		
 
@@ -30,10 +44,23 @@ app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$rout
 
 				loginFactory.login(request).then(function(response){
 						$scope.resetResult = response;
+						
+						if(response.status == 1)
+						{
+							
+							$timeout(function() {
+							 	$location.path('/');
+							 }, 200);
+							$rootScope.popupData = {text:response.message,action:'ok'};	
+							 $timeout(function() {
+							 	$rootScope.popup = true;
+							 }, 300);	
+						 }
 				});
 			} else {
 				$scope.resetResult.message = 'Password is not match with confirm password.';
 				$scope.resetResult.class = 'Autherror';
+				$scope.resetResult.status = 2;
 			}			
 			
 		};

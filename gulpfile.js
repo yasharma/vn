@@ -51,7 +51,6 @@ gulp.task('uglify:front-js', (cb) => {
 gulp.task('vendor:js', (cb) => {
     pump([
         gulp.src([
-            './bower_components/dist/jquery.min.js',
             './bower_components/angular/angular.min.js',
             './bower_components/angular-route/angular-route.min.js',
             './bower_components/angular-local-storage/dist/angular-local-storage.min.js',
@@ -62,8 +61,11 @@ gulp.task('vendor:js', (cb) => {
             './bower_components/angular-material-icons/angular-material-icons.min.js',
             './bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js',
             './bower_components/ng-file-upload/ng-file-upload.min.js',
-  /*          './bower_components/angularjs-slider/dist/rzslider.min.js',*/
+            /*   './bower_components/angularjs-slider/dist/rzslider.min.js',*/
             './bower_components/angularjs-datetime-picker/angularjs-datetime-picker.min.js',
+            './bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
+            './bower_components/owl.carousel/dist/owl.carousel.min.js',
+            './bower_components/angular-sanitize/angular-sanitize.js',
 
         ]),
         concat('vendor.js'),
@@ -91,6 +93,7 @@ gulp.task('uglify:css', (cb) => {
 });
 
 
+
 /********************************************************************************************************************************************************************************************************************************************************/
 
 gulp.task('vendor:theme-css', (cb) => {
@@ -101,7 +104,8 @@ gulp.task('vendor:theme-css', (cb) => {
             './bower_components/angular-material-icons/angular-material-icons.css',
             /*'./bower_components/angularjs-slider/dist/rzslider.min.css',*/
              './bower_components/angularjs-datetime-picker/angularjs-datetime-picker.css',
-          
+             './bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css',          
+             './bower_components/owl.carousel/dist/assets/owl.carousel.min.css',          
             
         ]),
          concat('vendor-theme-css.css'),
@@ -142,6 +146,7 @@ gulp.task('default',
     'jshint',
     'check:env',
     'nodemon'
+
     ],function(){
     console.log('Gulp finish');
 });

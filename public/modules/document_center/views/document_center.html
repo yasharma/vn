@@ -1,0 +1,169 @@
+<div class="dash-main-con">
+	<section class="dashrightsection" ng-class="{'leftopen':$root.leftopen}">
+	
+	<div class="dash_hd_txt mar-bot20 clearfix">
+		<div class="dash_hd mar-bot0 dash_hd-left">Document Center</div>
+		<div class="rightfilter_right">
+			<div class="chane_pass_btn_right">
+		    <md-button  slide-toggle="#doc" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">				
+					{{(invForm)?"Close":"Upload document"}}
+			</md-button>
+			</div>
+	  </div>    
+	</div>
+
+
+	<div class="dash_pro_inform slideable lost_panel" id="doc">
+
+		<div class="dash_pro_inform_inner boxunoversal">
+
+			<form name="addDCform" ng-submit="addDC(addDCform.$valid)" novalidate>
+				<div class="row mar-bot20">
+
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					    <input  ng-model="document_name" placeholder="Document Name">
+					  </md-input-container>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+					</div>
+
+					<div class="col-sm-6">						
+					    
+					    <md-chips ng-model="ctrl.itemTagModel" name="itemTag" readonly="ctrl.readonly"
+	                    md-removable="ctrl.removable" placeholder="Enter #Tag for Document" class="tag_name">
+	                    <md-chip-template>
+	                       <span class="entered_tags">{{$chip}}</span>
+	                    </md-chip-template>
+	                 </md-chips>
+
+					</div>
+
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					    <textarea ng-model="document_description" placeholder="Description"></textarea>
+					  </md-input-container>
+					</div>
+
+					<div class="col-sm-12">
+						<div class="uplaod_area" ngf-select ="uploadDocument($files, $invalidFiles)" ngf-multiple="true" ng-model="files"   ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" ngf-drop>							
+							<div class="drop_desc">
+								Drag and drop file here
+							</div>
+								<br>
+								or
+								<br>
+							<div class="select_files">
+								Select files
+							</div>
+							
+						</div>
+
+						<ul class="uploadimage_list clearfix">
+						    <li ng-repeat="f in files" ng-hide="hideattachment"> 
+						        {{f.name}}                  
+						    </li>               
+						</ul> 
+						<span class="progress" ng-show="documentProgress >= 0">
+						    <div style="background: green;text-align: center;color: #fff; width:{{documentProgress}}%" ng-bind="documentProgress + '%'"></div>
+						</span>
+					</div>
+					
+					
+				</div>
+				<div class="clearfix">
+					<div class="chane_pass_btn">
+						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+					</div>					
+				</div>
+
+				<div class="message {{documentResult.class}}" ng-if="documentResult.status == 1">{{documentResult.message}}
+				</div>
+
+				<div class="result {{documentResult.class}}" ng-if="documentResult.status==2">    
+	                <ul>
+	                  <li ng-repeat="(key,value) in documentResult.errors">
+	                  {{value.message}}
+	                  </li>
+	                </ul>
+	            </div>
+			</form>
+		</div>
+	</div>
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch">
+			<div class="deptsrch_gray_top mar-bot0 clearfix">
+				<div class="positionrel inventory_filter_top">
+					<div class="vending_left_top_serch positionrel">
+						<md-input-container md-no-float class="md-block">
+				      <input  ng-model="searchDCName" autocomplete="off" placeholder="Search by document name">
+				  	</md-input-container>
+				  	
+					</div>
+					<div class="selectwhite inventory_filter">
+		          <md-input-container md-no-float class="md-block selectgeneral38">
+		              <md-select ng-model="searchDepartment" placeholder="Filter">
+		                <md-option value="">
+		                  Select
+		                </md-option>
+		                <md-option ng-repeat="dept in departmentList" value="{{dept.department_name}}">
+                            				{{dept.department_name}}
+                        </md-option>
+		              </md-select>          
+		          </md-input-container>
+	  			</div>
+				</div>
+			</div>
+		</div>
+		<div class="doc_center">
+			<div class="doc_center_row">
+
+				<div class="doc_center_col" ng-repeat="docs in (documentList | filter:{document_name:searchDCName}| dcDepartmentFilter:this)" ng-hide="hideDc">
+
+					<div class="doc_center_col_top">
+						<span class="capitalize">
+						<ng-md-icon class="cursor" icon="insert_drive_file" style="fill: #a3a3a3" size="24"></ng-md-icon> 
+						 {{docs.document_name}}
+						 <label>- {{docs.filesize | bytes}}</label></span>
+
+						<span> 
+						<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openDocumentEditPopup(docs);">
+				 		</ng-md-icon>
+
+						<ng-md-icon ng-click="openDocumentFileView(docs)" class="cursor" icon="more_horiz" style="fill: #313942" size="24"></ng-md-icon> 
+
+						<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeDc(docs);hideDc = !hideDc">
+	                  	</ng-md-icon>
+
+						</span>
+					</div>
+					<div class="doc_center_col_mid">
+						<p>{{docs.document_description}}</p>
+						<ul class="taginglist clearfix">
+							<li ng-repeat="tag in docs.tags" style="background: #4ebdf6">
+									{{tag}}
+							</li>
+						</ul>
+					</div>
+					<div class="doc_center_col_bot">
+						<div class="doc_center_col_bot_link">
+						<a href="javascript:void(0);">
+							{{docs.department}}
+						</a></div>
+						<div class="date_st">
+							<ng-md-icon icon="access_time" style="fill: #ababab" size="18"></ng-md-icon>							
+							{{docs.upload_date | date: 'MMM d, y'}}
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+	</div> 
+	
+</section>
+</div>

@@ -7,6 +7,7 @@ const   express     = require('express'),
         bodyParser  = require('body-parser'),
         response    = require(path.resolve('./config/lib/response')),
         formidable  = require('formidable'),
+        _           = require('lodash'),
         fs          = require('fs'),
         async       = require('async');
          
@@ -54,20 +55,24 @@ exports.uploadfiledata = (reqst, respe) => {
                             status: true,
                             filename: filename,
                             type: filedata.type,
+                            size: filedata.size,
                             publicPath: newdir+'/' + filename
                         });
                    
                 }else{
                     
-                    filedata.map(function (singleimage) {
+                    _.map(filedata, function(singleimage){
+
                         filename = Date.now() + '-' + singleimage.name;
                         fs.rename(singleimage.path, path.join(newdir+'/' + filename));
                         totalDocument.push({
                             status: true,
                             filename: filename,
                             type: singleimage.type,
+                            size: singleimage.size,
                             publicPath: newdir+'/' + filename
                         });
+
                     });
                 }
                 

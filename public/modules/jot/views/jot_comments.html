@@ -1,0 +1,256 @@
+<md-dialog class="newhotel_dialog">
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{jot_title}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="close()">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+    	<div class="newhotel_dialog_form">
+    		<div class="clearfix">
+          <div class="edit_water_left backgounnonepad0">
+            <div class="edit_water_left_outer">
+              <div class="room_edit">
+                <p> {{$root.jot_description}}    <a class="edit_link" ng-hide="showDesc" ng-click="showDesc = !showDesc" href="javaScript:void(0);">Edit</a></p>
+
+              </div>
+
+
+              <!-- Start save jot description -->
+              <ul class="uploadimage_list clearfix">
+                  <li ng-repeat="files in edit_jot.image" ng-hide="hideattachment" ng-if="files.filename"> 
+
+                      <div class="col-lg-4 col-md-4" style="height:100%">
+                          <img src="images/hotel/{{edit_jot.hotel_id}}/{{edit_jot.jot_type}}/{{files.filename}}" style="max-width: 100%" ng-if='files.type == "image/jpeg"'>            
+
+                          <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-if='files.type=="application/pdf"'' icon="picture_as_pdf" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+                          </ng-md-icon>
+                      </div>
+
+                      <div class="col-lg-6 col-md-6">
+                        <strong> 
+                        <a href="/images/hotel/{{edit_jot.hotel_id}}/{{edit_jot.jot_type}}/{{files.filename}}" target="_blank">
+                        {{files.filename}} {{files.type}} 
+                        </a></strong>
+                        <div class="attachment_list_icon">
+                          <a href="javaScript:void(0)" ng-click="deleteAttachment(files.$$hashKey);  hideattachment = ! hideattachment">Delete</a>
+                        </div>
+                      </div>
+                      <div class="clearfix"></div>                     
+                  </li>               
+              </ul>
+
+              <!-- <div class="clearfix" ng-include="'/modules/jot/views/attachment_list.html'"></div> -->
+
+              <div class="hotelDesc-in-comment" ng-class="{expandDesc:showDesc}" >             
+                <div class="clearfix" ng-include="'/modules/jot/views/jot_desc.html'"></div>
+                <div class="chane_pass_btn">
+                   <a href="javascript:void(0)" ng-click="saveDescription()" class="custom-button">Save</a>
+                  </div>
+
+                <div class="chane_pass_btn">
+                    <md-button ng-click="cancelDesc(); showDesc = !showDesc" class="md-primary addyellobtn widthauto graybtn ">Cancel</md-button>
+                </div>
+                <br>
+              </div>
+
+
+
+               
+
+
+              <!-- End save jot description -->
+
+
+                
+
+              <!-- Start save jot comment -->
+
+              <ul class="uploadimage_list clearfix">
+                  <li ng-repeat="f in files" ng-hide="hideattachment"> 
+
+                      <div class="col-lg-4 col-md-4" style="height:100%">
+                          <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" style="max-width: 100%;">
+                      </div>
+
+                      <div class="col-lg-6 col-md-6">
+                        <strong>{{f.name}} {{f.$errorParam}}</strong>
+                        <div class="attachment_list_icon">
+                          <a href="javaScript:void(0)" ng-click="hideattachment = ! hideattachment">Delete</a>
+                        </div>
+                      </div>
+                      <div class="clearfix"></div>                     
+                  </li>               
+              </ul>
+
+              <div class="room_edit">
+               
+                <div class="addtxt">Add Comment</div>               
+                  <form name="commentForm" ng-submit="submitComment(commentForm.$valid)" novalidate>
+                    <textarea class="edit_water_bluetxt" ng-model="message" rows="3" cols="50" placeholder="Leave your reply here..." ng-required="true"></textarea>
+                    <div class="attctfield">
+                      <ng-md-icon class="cursor" ngf-select ="uploadFiles($files, $invalidFiles,'comment')" multiple ng-model="file"   ngf-max-size="5MB"  title="Add an attachment" icon="attach_file" style="fill:#c1c1c1" size="24"></ng-md-icon> 
+                    </div>
+                    <div class="clearfix">
+                      <div class="chane_pass_btn">
+                        <md-button type="submit"  class="md-primary addyellobtn yellowbtn">Send</md-button>  
+                      </div>
+
+                      <div class="chane_pass_btn">
+                        <md-button ng-click="cancelComment()" class="md-primary addyellobtn widthauto graybtn ">Cancel</md-button>
+                      </div>
+
+                    </div> 
+                </form>
+              </div>
+              <!-- End save jot comment -->
+
+              <div class="room_edit_new" ng-if="commentList.length > 0">
+                <div class="addtxt">Activity</div>
+                <ul class="activity_list">
+
+                  <li ng-repeat = "comment in commentList">
+                    <div class="acti_pic">
+                    <img style="width: 35px;" src="{{(comment.userdata[0].profile_image)?'/images/hotel/'+edit_jot.hotel_id+'/profile/'+comment.userdata[0].profile_image:'/assets/images/default_profile.png'}}">
+
+
+                    </div>
+                    <div class="acti_text_edit">
+                      <strong style="display: block;padding-bottom: 2px;">
+                      {{comment.userdata[0].first_name}} {{comment.userdata[0].last_name}}
+                      </strong>
+                      {{comment.message}}
+                    </div>
+
+                    <div class="acti_text_img">
+                      <ul>
+                        <li ng-repeat="files in comment.attachment" class="comment_images">
+                        <a href="images/hotel/{{edit_jot.hotel_id}}/comments/{{files.filename}}" target="_blank">
+                        <img src="images/hotel/{{edit_jot.hotel_id}}/comments/{{files.filename}}">
+                        </a>
+                        </li>                        
+                      </ul> 
+                    </div>
+
+
+
+
+                    <div class="acti_text_ed clearfix">
+                      <div class="acti_text_date">                        
+                        {{comment.post_date |  date : format : "MMMM dd, yyyy hh:mm a"}} 
+                      </div>  
+                       
+                    </div>   
+                  </li>
+                  
+
+
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="edit_water_right">
+            <div class="addtxt">Add</div>
+            <ul class="edit_water_right_list clearfix">
+                <li>
+                  <a href="javaScript:void(0);" ng-click="showMember = !showMember">
+                    <ng-md-icon icon="person" size="20" ></ng-md-icon>Member
+                  </a>
+
+                  <div class="right_edit_section" ng-show="showMember">           
+                      <div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+                      <div class="chane_pass_btn">
+                         <a href="javascript:void(0)" ng-click="saveMember();showMember = !showMember" class="custom-button">Save</a>
+                        </div>
+
+                      <div class="chane_pass_btn">
+                          <md-button ng-click="showMember = !showMember" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
+                      </div>
+                      <br>
+                  </div>
+
+
+                </li>
+                <li>
+                  <a href="javaScript:void(0);" ng-click="dDate = !dDate">
+                    <ng-md-icon icon="date_range" size="20"></ng-md-icon>Due Date
+                  </a>
+
+                  <div class="right_edit_section" ng-show="dDate">           
+                      <div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+                      <div class="chane_pass_btn">
+                         <a href="javascript:void(0)" ng-click="saveDueDate();dDate = !dDate" class="custom-button">Save</a>
+                        </div>
+
+                      <div class="chane_pass_btn">
+                          <md-button ng-click="dDate = !dDate" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
+                      </div>
+                      <br>
+                  </div>
+
+                </li>
+                <li>
+                  <a href="javascript:;">
+                    <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Checklist
+                  </a>
+                </li>
+                <li>
+                  <a href="javaScript:void(0);" ngf-select ="uploadFiles($files, $invalidFiles,'sidebar')" multiple ng-model="file"   ngf-max-size="5MB"  title="Add an attachment" icon="attach_file" style="fill:#c1c1c1">
+                    <ng-md-icon icon="attach_file" size="20"></ng-md-icon>Attachment
+                  </a>
+                </li>
+            </ul>  
+            <div class="addtxt mar-top20">Actions</div>
+              <ul class="edit_water_right_list clearfix">  
+                <li>
+                  <a href="javaScript:void(0);" ng-click="move = !move">
+                    <ng-md-icon icon="next_week" size="20"></ng-md-icon>Move
+                  </a>
+
+                  <div class="right_edit_section" ng-show="move">           
+                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+                      <div class="chane_pass_btn">
+                         <a href="javascript:void(0)" ng-click="saveDept();move = !move" class="custom-button">Save</a>
+                        </div>
+
+                      <div class="chane_pass_btn">
+                          <md-button ng-click="move = !move" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
+                      </div>
+                      <br>
+                  </div>
+
+                </li>
+
+                <li>
+                  <a href="javaScript:void(0);" ng-click="prior = !prior">
+                    <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Set Priority
+                  </a>
+
+                  <div class="right_edit_section" ng-show="prior">           
+                      <div class="clearfix" ng-include="'/modules/jot/views/priority.html'"></div>
+                      <br>
+                      <div class="chane_pass_btn">
+                         <a href="javascript:void(0)" ng-click="savePriority();prior = !prior" class="custom-button">Save</a>
+                        </div>
+
+                      <div class="chane_pass_btn">
+                          <md-button ng-click="prior = !prior" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
+                      </div>
+                      <br>
+                  </div>
+                </li>
+
+                <li>
+                  <a href="javascript:;">
+                    <ng-md-icon icon="av_timer" size="20"></ng-md-icon>Set Reminder
+                  </a>
+                </li>
+            </ul>
+          </div>
+        </div>
+    	</div>
+    </md-dialog-content>
+</md-dialog>

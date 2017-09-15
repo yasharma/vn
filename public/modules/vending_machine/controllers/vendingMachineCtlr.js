@@ -5,18 +5,9 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 		
 		/**********************************************************
 	    * Get item category
-	    **********************************************************/	
-		$scope.productCategory  = [
-										{label:'Confectionery'},
-										{label:'Dried foods'},
-										{label:'Dumplings'},
-										{label:'Fast food'},
-										{label:'Pastes'},
-										{label:'Spreads'},
-										{label:'Noodles'},
-										{label:'Dips'},
-										{label:'Soups'}
-								   ];		
+	    **********************************************************/
+	    globalRequest.getVendingCategory();
+
 
 		/**********************************************************
 	    * Get items list
@@ -49,7 +40,7 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 				item.totalprice = parseInt(item.price) * 0;
 			}
 			
-			item.quantity   = quantity;
+			item.editquantity   = quantity;
 			$scope.cart.push(item);
 		};
 

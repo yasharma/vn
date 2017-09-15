@@ -18,7 +18,7 @@
     "angular-local-storage": "^0.7.1",
     "angular": "^1.6.5",
     "angular-route": "^1.6.5",
-    "angular-sanitize": "^1.6.5",
+    "angular-sanitize": "^1.6.6",
     "angular-material": "^1.1.4",
     "bootstrap": "3",
     "angular-cookies": "^1.6.2",
@@ -34,10 +34,17 @@
     "angularjs-slider": "^6.3.0",
     "bootstrap-ui-datetime-picker": "^2.6.0",
     "glyphicons": "^0.0.2",
-    "angularjs-datetime-picker": "^0.1.20"
+    "angularjs-datetime-picker": "^0.1.20",
+    "datetimeRangePicker": "^1.3.1",
+    "angular-slider": "venturocket-angular-slider#^0.3.2",
+    "mdPickers": "^0.7.5",
+    "moment": "^2.18.1",
+    "angular-bootstrap-colorpicker": "^3.0.31",
+    "angular-owl-carousel2": "*"
   },
   "resolutions": {
     "angular-cookies": "1.6.5",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "angular": "^1.6.5"
   }
 }

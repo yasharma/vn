@@ -19,14 +19,20 @@ const    express            =   require('express'),
    
 exports.addLostFound = (reqst, respe) => {
 
-    var LostFoundsave       = new LostFound(reqst.body);
-    LostFoundsave.save(function (err, result) {
-        if(result){
-            respe.json(response.success(result,'Lost & Found Added Successfully.'));
-        }else{
-            respe.json(response.errors(err.errors,'Error in Lost & Found Saved.'));
-        }
-    });
+    if(reqst.body){
+
+        var LostFoundsave       = new LostFound(reqst.body);
+        LostFoundsave.save(function (err, result) {
+            if(result){
+                return respe.json(response.success(result,'Lost & Found Added Successfully.'));
+            }else{
+                return respe.json(response.errors(err.errors,'Error in Lost & Found Saved.'));
+            }
+        });
+    }else{
+        var errors =    { _id: {'message':'Lost & Found data is required.'}}
+        return respe.json(response.errors(errors,"Error in Lost & Found data."));
+    }
 };
 
 /***************************************************
@@ -35,17 +41,18 @@ exports.addLostFound = (reqst, respe) => {
                                             
 exports.updateLostFound = (reqst, respe) => {
 
-    var LostFoundid         	= 	reqst.query.LostFound_id;
+    var LostFoundid         	= 	reqst.body._id;
 
     if(!LostFoundid){
-        return respe.json(response.errors({},'Lost & Found Id Is Required.'));
+        var errors =    { _id: {'message':'Lost & Found id is required.'}}
+        return respe.json(response.errors(errors,"Error in Lost & Found data."));
     }else{
         
-        LostFound.findByIdAndUpdate(LostFoundid,{$set:reqst.query}, {new: true, runValidators: true}, function(err, result) {
+        LostFound.findByIdAndUpdate(LostFoundid,{$set:reqst.body}, {new: true, runValidators: true}, function(err, result) {
             if(result){
-                respe.json(response.success(result,'Lost & Found Updated successfully.'));
+               return  respe.json(response.success(result,'Lost & Found Updated successfully.'));
             }else{
-                respe.json(response.errors(err,"Error in Lost & Found update."));
+                return respe.json(response.errors(err,"Error in Lost & Found update."));
             }
         });
     }
@@ -57,15 +64,16 @@ exports.updateLostFound = (reqst, respe) => {
 
 exports.deleteLostFound = (reqst, respe) => {
 
-    var LostFoundid         	=         reqst.query.LostFound_id;
+    var LostFoundid         	=         reqst.query._id;
 	if(!LostFoundid){
-        return respe.json(response.errors({},'Lost & Found Id Is Required.'));
+        var errors =    { _id: {'message':'Lost & Found id is required.'}}
+       return  respe.json(response.errors(errors,"Error in Lost & Found data."));
     }else{
         LostFound.findByIdAndRemove(LostFoundid, function(err, result) {
     		if(result){
-                respe.json(response.success(result,'Lost & Found Deleted successfully.'));
+                return respe.json(response.success(result,'Lost & Found Deleted successfully.'));
             }else{
-                respe.json(response.errors(err,"Error in Lost & Found Deletion."));
+                return respe.json(response.errors(err,"Error in Lost & Found Deletion."));
             }
         });
     }
@@ -80,13 +88,14 @@ exports.listLostFound = (reqst, respe) => {
    var hotel_id          =         reqst.query.hotel_id;
    
     if(!hotel_id){
-        return respe.json(response.errors({},'Hotel Id Is Required.'));
+        var errors =    { hotel_id: {'message':'Hotel id is required.'}}
+        return respe.json(response.errors(errors,"Error in Hotel data."));
     }else{
         LostFound.find({hotel_id: hotel_id}, function (err, result) {
             if(result){
-                respe.json(response.success(result,'Data Found.'));
+                return respe.json(response.success(result,'Data Found.'));
             }else{
-                respe.json(response.errors(err,"Error In Lost & Found Listing."));
+                return respe.json(response.errors(err,"Error In Lost & Found Listing."));
             }
         });
     }

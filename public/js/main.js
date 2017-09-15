@@ -8,7 +8,10 @@ var app = angular.module('hoteljotApp',[
 			'LocalStorageModule',
 			'ngMdIcons'	,
 			'ngFileUpload',
-			'angularjs-datetime-picker',
+			'angularjs-datetime-picker',	
+			'colorpicker.module',
+			'ui.bootstrap',	
+			'ngSanitize',
 			])
 
 .config(['localStorageServiceProvider',
@@ -21,210 +24,271 @@ var app = angular.module('hoteljotApp',[
 app.run(['$log',function($log){
 	$log.info("Application is running");
 }]);
-
-
-
-
-
 /********************************************************************
 * Global variable and api url
 ********************************************************************/
 
-window.__API_PATH  					=   {};
+window.__API_PATH                       =   {};
 
-__API_PATH.jotList 					= '/api/get_jot';
-__API_PATH.LOGIN   					= '/api/login';
-__API_PATH.REGISTER  				= '/api/register';
-__API_PATH.GET_HOTELS  				= '/api/get_hotels';
-__API_PATH.ADD_HOTEL  				= '/api/add_hotel';
-__API_PATH.CREATE_JOT 				= '/api/create_jot';
-__API_PATH.GET_JOT      	 		= '/api/get_jot';
-__API_PATH.DELETE_HOTEL 			= '/api/delete_hotel';
-__API_PATH.STAFF_SUGGESTION 		= '/api/get_members';
-__API_PATH.UPDATE_JOT  				= '/api/update_jot';
-__API_PATH.DELETE_JOT  				= '/api/delete_jot';
+__API_PATH.jotList                      = '/api/get_jot';
+__API_PATH.UPDATE_JOT                   = '/api/update_jot';
+__API_PATH.DELETE_JOT                   = '/api/delete_jot';
+__API_PATH.CREATE_JOT                   = '/api/create_jot';
+__API_PATH.GET_JOT                      = '/api/get_jot';
+__API_PATH.ADD_COMMENT                  = '/api/add_jotactivity';
+__API_PATH.GET_COMMENT                  = '/api/get_jotactivity';
 
-__API_PATH.GET_DEPARTMENTS  		= '/api/get_departments';
-__API_PATH.ADD_DEPARTMENT  			= '/api/add_department';
-__API_PATH.UPDATE_DEPARTMENT  		= '/api/update_department';
-__API_PATH.DELETE_DEPARTMENT  		= '/api/delete_department';
+__API_PATH.LOGIN                        = '/api/login';
+__API_PATH.REGISTER                     = '/api/register';
 
-__API_PATH.FORGET_PASSWORD			= '/api/forgot_password';
-__API_PATH.PASSWORD_RESET			= '/api/resetPassword';
-__API_PATH.LOST_FOUND			    = '/api/add_lost_found';
-__API_PATH.UPLOAD_FILE			    = '/api/uploadfiledata';
-
-__API_PATH.GET_ITEMS			    = '/api/get_item';
-__API_PATH.UPDATE_ITEM			    = '/api/update_item';
-__API_PATH.ADD_ITEM			        = '/api/add_item';
-__API_PATH.DELETE_ITEM			        = '/api/delete_item';
-__API_PATH.PURCHASE			        = '/api/add_to_cart';
-
-__API_PATH.ADD_INVENTORY_CATEGORY		= '/api/add_inventory_category';
-__API_PATH.UPDATE_INVENTORY_CATEGORY	= '/api/update_inventory_category';
-__API_PATH.DELETE_INVENTORY_CATEGORY	= '/api/delete_inventory_category';
-__API_PATH.GET_INVENTORY_CATEGORY		= '/api/get_inventory_category';
-
-__API_PATH.ADD_MEMBER		        = '/api/add_member';
-__API_PATH.UPDATE_MEMBER		    = '/api/update_member';
-__API_PATH.DELETE_MEMBER		    = '/api/delete_member';
+__API_PATH.GET_HOTELS                   = '/api/get_hotels';
+__API_PATH.GET_HOTEL_DETAIL             = '/api/hotel_detail';
+__API_PATH.ADD_HOTEL                    = '/api/add_hotel';
+__API_PATH.DELETE_HOTEL                 = '/api/delete_hotel';
+__API_PATH.UPDATE_HOTEL                 = '/api/update_hotel';
 
 
+__API_PATH.STAFF_SUGGESTION             = '/api/get_members';
+
+
+
+__API_PATH.JOT_COUNT                    = '/api/hotel_notifications';
+//__API_PATH.GET_JOT_LIST                   = '/api/get_jot';
+
+__API_PATH.GET_DEPARTMENTS              = '/api/get_departments';
+__API_PATH.ADD_DEPARTMENT               = '/api/add_department';
+__API_PATH.UPDATE_DEPARTMENT            = '/api/update_department';
+__API_PATH.DELETE_DEPARTMENT            = '/api/delete_department';
+__API_PATH.CONFIGURE_DEPARTMENTS        = '/api/configure_departments';
+
+__API_PATH.FORGET_PASSWORD              = '/api/forgot_password';
+__API_PATH.PASSWORD_RESET               = '/api/resetPassword';
+
+__API_PATH.UPLOAD_FILE                  = '/api/uploadfiledata';
+
+
+__API_PATH.LOST_FOUND                   = '/api/add_lost_found';
+__API_PATH.GET_LOST_FOUND               = '/api/get_lost_found';
+__API_PATH.DELETE_LOST_FOUND            = '/api/delete_lost_found';
+__API_PATH.UPDATE_LOST_FOUND            = '/api/update_lost_found';
+
+__API_PATH.GET_ITEMS                    = '/api/get_item';
+__API_PATH.UPDATE_ITEM                  = '/api/update_item';
+__API_PATH.ADD_ITEM                     = '/api/add_item';
+__API_PATH.DELETE_ITEM                  = '/api/delete_item';
+__API_PATH.PURCHASE                     = '/api/add_to_cart';
+
+__API_PATH.ADD_INVENTORY_CATEGORY       = '/api/add_inventory_category';
+__API_PATH.UPDATE_INVENTORY_CATEGORY    = '/api/update_inventory_category';
+__API_PATH.DELETE_INVENTORY_CATEGORY    = '/api/delete_inventory_category';
+__API_PATH.GET_INVENTORY_CATEGORY       = '/api/get_inventory_category';
+
+__API_PATH.ADD_MEMBER                   = '/api/add_member';
+__API_PATH.UPDATE_MEMBER                = '/api/update_member';
+__API_PATH.DELETE_MEMBER                = '/api/delete_member';
+
+
+__API_PATH.ADD_HOTELSHIFT               = '/api/add_hotelshift';
+__API_PATH.GET_HOTELSHIFTS              = '/api/get_hotelshifts';
+__API_PATH.DELETE_HOTELSHIFTS           = '/api/delete_hotelshift';
+__API_PATH.UPDATE_HOTELSHIFTS           = '/api/update_hotelshift';
+
+__API_PATH.MEMBER_SCHEDULE_DATA         = '/api/member_schedule_data';
+__API_PATH.ADD_MEMBER_SCHEDULE          = '/api/add_member_schedule';
+
+
+
+__API_PATH.ADD_CONTACT                  = '/api/add_contact';
+__API_PATH.GET_CONTACTS                 = '/api/get_contact';
+__API_PATH.DELETE_CONTACT               = '/api/delete_contact';
+__API_PATH.UPDATE_CONTACT               = '/api/update_contact';
+
+
+__API_PATH.ADD_DOCUMENT                 = '/api/add_document';
+__API_PATH.UPDATE_DOCUMENT              = '/api/update_document';
+__API_PATH.DELETE_DOCUMENT              = '/api/delete_document';
+__API_PATH.GET_DOCUMENT                 = '/api/get_document';
+__API_PATH.MOVE_DOCUMENT                = '/api/move_document';
+__API_PATH.CONFIGURE_MEMBERS            = '/api/configure_members';
+
+__API_PATH.GET_HOTEL_STATUS             = '/api/getHotelStatus';
+
+
+__API_PATH.HEADER_MENU =  [
+    {label:"Home", id:"home", href:"/"},
+    {label:"ABOUT", id:"about-us", href:"#" ,class:"active"},
+    {label:"HOW IT WORKS", id:"work", href:'#',class:""},
+    {label:"FEATURES", id:"feature", href:'#',class:""},
+    {label:"TESTIMONALS", id:"testimonial", href:'#',class:""}
+];
+
+/*
 __API_PATH.JOT_TYPES = {
-							quick:{label:"Quick Jot",id:'quick',src:'assets/images/logo_pic.png',icontype:'image',directory:'jot'},
-							issue:{label:"Issue",id:'issue',src:'warning',icontype:'icon',directory:'jot'},
-							task:{label:"task",id:'task',src:'format_list_bulleted',icontype:'icon',directory:'jot'},
-							note:{label:"Note",id:'note',src:'insert_drive_file',icontype:'icon',directory:'jot'},
-							lost_found:{label:"Lost & Found",id:'lost_found',src:'local_drink',icontype:'icon',directory:'lost_found'},
-							vending_machine:{label:"Vending Machine",id:'vending_machine',src:'vignette',icontype:'icon',directory:'vending_machine'},
-							meeting_room:{label:"Meeting Room",id:'meeting_room',src:'group',icontype:'icon',directory:'jot'}
-						};
+                            quick:{label:"Quick Jot",id:'quick',src:'assets/images/logo_pic.png',icontype:'image',directory:'jot'},
+                            issue:{label:"Issue",id:'issue',src:'warning',icontype:'icon',directory:'jot'},
+                            task:{label:"task",id:'task',src:'task_icon.png',icontype:'icon',directory:'jot'},
+                            note:{label:"Note",id:'note',src:'insert_drive_file',icontype:'icon',directory:'jot'},
+                            lost_found:{label:"Lost & Found",id:'lost_found',src:'business',icontype:'icon',directory:'lost_found'},
+                            vending_machine:{label:"Vending Machine",id:'vending_machine',src:'local_drink',icontype:'icon',directory:'vending_machine'},
+                            meeting_room:{label:"Meeting Room",id:'meeting_room',src:'group',icontype:'icon',directory:'jot'}
+                        };*/
 
 
-/*__API_PATH.JOT_TYPES 	   = [{name:'issue',class:'',icon:'warning'},{name:'message',class:'',icon:'email'},{name:'task',class:'',icon:'format_list_bulleted'},{name:'lost & found',class:'',icon:'call_missed'},{name:'meeting room',class:'',icon:'room'},{name:'vending',class:'',icon:'shopping_cart'}];*/ 
+
+__API_PATH.JOT_TYPES  = {
+                            quick:{label:"Quick Jot",id:'quick',data:'assets/images/jot_icon.png',icontype:'image',directory:'jot',bgcolor:"#3953a8",class:"cirsularhide"},
+                            
+                            issue:{label:"Issue",id:'issue',data:'assets/images/issue_icon.png',icontype:'image',directory:'jot',bgcolor:"#53ad78",class:"onelink"},
+                           
+                            task:{label:"Task",id:'task',data:'assets/images/task_icon.png',icontype:'image',directory:'jot',bgcolor:"#aba0ef",class:"twolink"},
+                            
+                            note:{label:"Note",id:'note',data:'assets/images/note_icon.png',icontype:'image',directory:'jot',bgcolor:"#71adf7",class:"threelink"},
+
+                            messages:{label:"Messages",id:'messages',data:'assets/images/message_icon.png',icontype:'image',directory:'jot',bgcolor:"#198cc6",class:"fourlink"},
+                            
+                            lost_found:{label:"Lost & Found",id:'lost_found',data:'assets/images/lost_icon.png',icontype:'image',directory:'lost_found',bgcolor:"#e37f4b",class:"fivelink"},
+                            
+                            vending_machine:{label:"Vending Machine",id:'vending_machine',data:'assets/images/vending_icon.png',icontype:'image',directory:'vending_machine',bgcolor:"#e37f4b",class:"sixlink"},
+
+                            meeting_room:{label:"Meeting Room",id:'meeting_room',data:'assets/images/metting_icon.png',icontype:'image',directory:'jot',bgcolor:"#f8553a",class:"sevenlink"}
+                        };                        
+
+ 
 
 __API_PATH.JOT_PRIORITY   = [{name:'urgent',class:'urgent orange'},{name:'high',class:'high red'},{name:'medium',class:'medium yellow'},{name:'low',class:'low green'}]; 
 
 
-/*__API_PATH.JOT_TAB 	   = [
-{name:'Quick Jot',id:'quick',src:'assets/images/logo_pic.png',icontype:'image'},
-{name:'Issue',id:'issue',src:'warning',icontype:'icon'},
-{name:'Task',id:'task',src:'format_list_bulleted',icontype:'icon'},
-{name:'Message',id:'message',src:'insert_drive_file',icontype:'icon'},
-{name:'lost & found',id:'lost&found',src:'local_drink',icontype:'icon'},
-{name:'Vending Machine',id:'vending_machine',src:'vignette',icontype:'icon'},
-{name:'Meeting Room',id:'meeting_room',src:'group',icontype:'icon'}]; */
 
-__API_PATH.DEFAULT_CHECKLIST 	=  [
-										{
-											name   :"Prepare Room 7 AM @Jon",
-											sublist:[{name:"tea1"},{name:"tea2"}]
-										},
-										{
-											name   :"Prepare Room 7 AM @Jon2",
-											sublist:[{name:"tea3"},{name:"tea4"}]
-										}			
-									];
+__API_PATH.DEFAULT_CHECKLIST    =  [
+                                        {
+                                            name   :"Prepare Room 7 AM @Jon",
+                                            sublist:[{name:"tea1"},{name:"tea2"}]
+                                        },
+                                        {
+                                            name   :"Prepare Room 7 AM @Jon2",
+                                            sublist:[{name:"tea3"},{name:"tea4"}]
+                                        }           
+                                    ];
 
 
 
 
 __API_PATH.RECURRING_PATTERN = [
-									{
-										label 	     :"Daily",
-										id    	     :"daily",	
-										description  : "Daily Recurring"					
-									},
-									{
-										label        :"Weekly",
-										id   		 :"weekly",
-										description	 : "Recurring every week" 
-									},
-									{
-										label        :"Monthly",
-										id           :"monthly",
-										description  : "Recurring every month"
-									},
-									{
-										label        :"Yearly",
-										id           :"yearly",
-										description  : "Recurring every year"
-									}
+                                    {
+                                        label        :"Daily",
+                                        id           :"daily",  
+                                        description  : "Daily Recurring"                    
+                                    },
+                                    {
+                                        label        :"Weekly",
+                                        id           :"weekly",
+                                        description  : "Recurring every week" 
+                                    },
+                                    {
+                                        label        :"Monthly",
+                                        id           :"monthly",
+                                        description  : "Recurring every month"
+                                    },
+                                    {
+                                        label        :"Yearly",
+                                        id           :"yearly",
+                                        description  : "Recurring every year"
+                                    }
 
-								]; 
+                                ]; 
 
 
 __API_PATH.MONTH = [
-								{
-									label 	     : "January",
-									value    	 : "1"			
-								},
-								{
-									label 	     : "February",
-									value    	 : "2"			
-								},
-								{
-									label 	     : "March",
-									value    	 : "3"			
-								},
-								{
-									label 	     : "April",
-									value    	 : "4"			
-								},
-								{
-									label 	     : "May",
-									value    	 : "5"			
-								},
-								{
-									label 	     : "June",
-									value    	 : "6"			
-								},
-								{
-									label 	     : "July",
-									value    	 : "7"			
-								},
-								{
-									label 	     : "August",
-									value    	 : "8"			
-								},
-								{
-									label 	     : "September",
-									value    	 : "9"			
-								},
-								{
-									label 	     : "October",
-									value    	 : "10"			
-								},
-								{
-									label 	     : "Novemmber",
-									value    	 : "11"			
-								},
-								{
-									label 	     : "December",
-									value    	 : "12"			
-								},
+                                {
+                                    label        : "January",
+                                    value        : "1"          
+                                },
+                                {
+                                    label        : "February",
+                                    value        : "2"          
+                                },
+                                {
+                                    label        : "March",
+                                    value        : "3"          
+                                },
+                                {
+                                    label        : "April",
+                                    value        : "4"          
+                                },
+                                {
+                                    label        : "May",
+                                    value        : "5"          
+                                },
+                                {
+                                    label        : "June",
+                                    value        : "6"          
+                                },
+                                {
+                                    label        : "July",
+                                    value        : "7"          
+                                },
+                                {
+                                    label        : "August",
+                                    value        : "8"          
+                                },
+                                {
+                                    label        : "September",
+                                    value        : "9"          
+                                },
+                                {
+                                    label        : "October",
+                                    value        : "10"         
+                                },
+                                {
+                                    label        : "Novemmber",
+                                    value        : "11"         
+                                },
+                                {
+                                    label        : "December",
+                                    value        : "12"         
+                                },
 
-							];
+                            ];
 
 
 __API_PATH.WEEK_NAME = [
-							
-							{
-								label :"Monday",
-								value :'monday',
-							},
-							{
-								label  :"Tuesday",
-								value  :'tuesday'
-							},
-							{
-								label  :"Wednesday",
-								value  :'wednesday'
-							},	
-							{
-								label  :"Thursday",
-								value  :'thursday'
-							},
-							{
-								label  :"Friday",
-								value  :'friday'
-							},
-							{
-								label  :"Saturday",
-								value  :'saturday'
-							},
-							{
-								label :"Sunday",
-								value :'sunday',						
-							},		
-						];			
+                            
+                            {
+                                label :"Monday",
+                                value :'monday',
+                            },
+                            {
+                                label  :"Tuesday",
+                                value  :'tuesday'
+                            },
+                            {
+                                label  :"Wednesday",
+                                value  :'wednesday'
+                            },  
+                            {
+                                label  :"Thursday",
+                                value  :'thursday'
+                            },
+                            {
+                                label  :"Friday",
+                                value  :'friday'
+                            },
+                            {
+                                label  :"Saturday",
+                                value  :'saturday'
+                            },
+                            {
+                                label :"Sunday",
+                                value :'sunday',                        
+                            },      
+                        ];          
 
+__API_PATH.POSITION = ['Executive Assistant','General Manager','Hotel Manager','Operations Director','Operations Manager','Event Planner','Front Desk Clerk','Housekeeper'];
 
-__API_PATH.CURRENCY_LIST  =	{
+__API_PATH.CURRENCY_LIST  = {
     "USD": {
         "symbol": "$",
         "name": "US Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "USD",
@@ -233,7 +297,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "CAD": {
         "symbol": "CA$",
         "name": "Canadian Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "CAD",
@@ -242,7 +305,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "EUR": {
         "symbol": "€",
         "name": "Euro",
-        "symbol_native": "€",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "EUR",
@@ -251,8 +313,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "AED": {
         "symbol": "AED",
         "name": "United Arab Emirates Dirham",
-        "symbol_native": "د.إ.‏",
-        "decimal_digits": 2,
+            "decimal_digits": 2,
         "rounding": 0,
         "code": "AED",
         "name_plural": "UAE dirhams"
@@ -260,7 +321,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "AFN": {
         "symbol": "Af",
         "name": "Afghan Afghani",
-        "symbol_native": "؋",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "AFN",
@@ -269,8 +329,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "ALL": {
         "symbol": "ALL",
         "name": "Albanian Lek",
-        "symbol_native": "Lek",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "ALL",
         "name_plural": "Albanian lekë"
@@ -278,8 +337,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "AMD": {
         "symbol": "AMD",
         "name": "Armenian Dram",
-        "symbol_native": "դր.",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "AMD",
         "name_plural": "Armenian drams"
@@ -287,7 +345,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "ARS": {
         "symbol": "AR$",
         "name": "Argentine Peso",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "ARS",
@@ -296,7 +353,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "AUD": {
         "symbol": "AU$",
         "name": "Australian Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "AUD",
@@ -305,8 +361,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "AZN": {
         "symbol": "man.",
         "name": "Azerbaijani Manat",
-        "symbol_native": "ман.",
-        "decimal_digits": 2,
+           "decimal_digits": 2,
         "rounding": 0,
         "code": "AZN",
         "name_plural": "Azerbaijani manats"
@@ -314,8 +369,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "BAM": {
         "symbol": "KM",
         "name": "Bosnia-Herzegovina Convertible Mark",
-        "symbol_native": "KM",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "BAM",
         "name_plural": "Bosnia-Herzegovina convertible marks"
@@ -323,7 +377,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "BDT": {
         "symbol": "Tk",
         "name": "Bangladeshi Taka",
-        "symbol_native": "৳",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "BDT",
@@ -332,8 +385,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "BGN": {
         "symbol": "BGN",
         "name": "Bulgarian Lev",
-        "symbol_native": "лв.",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "BGN",
         "name_plural": "Bulgarian leva"
@@ -341,8 +393,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "BHD": {
         "symbol": "BD",
         "name": "Bahraini Dinar",
-        "symbol_native": "د.ب.‏",
-        "decimal_digits": 3,
+            "decimal_digits": 3,
         "rounding": 0,
         "code": "BHD",
         "name_plural": "Bahraini dinars"
@@ -350,8 +401,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "BIF": {
         "symbol": "FBu",
         "name": "Burundian Franc",
-        "symbol_native": "FBu",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "BIF",
         "name_plural": "Burundian francs"
@@ -359,7 +409,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "BND": {
         "symbol": "BN$",
         "name": "Brunei Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "BND",
@@ -368,8 +417,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "BOB": {
         "symbol": "Bs",
         "name": "Bolivian Boliviano",
-        "symbol_native": "Bs",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "BOB",
         "name_plural": "Bolivian bolivianos"
@@ -377,8 +425,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "BRL": {
         "symbol": "R$",
         "name": "Brazilian Real",
-        "symbol_native": "R$",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "BRL",
         "name_plural": "Brazilian reals"
@@ -386,7 +433,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "BWP": {
         "symbol": "BWP",
         "name": "Botswanan Pula",
-        "symbol_native": "P",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "BWP",
@@ -395,8 +441,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "BYR": {
         "symbol": "BYR",
         "name": "Belarusian Ruble",
-        "symbol_native": "BYR",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "BYR",
         "name_plural": "Belarusian rubles"
@@ -404,7 +449,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "BZD": {
         "symbol": "BZ$",
         "name": "Belize Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "BZD",
@@ -413,8 +457,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "CDF": {
         "symbol": "CDF",
         "name": "Congolese Franc",
-        "symbol_native": "FrCD",
-        "decimal_digits": 2,
+           "decimal_digits": 2,
         "rounding": 0,
         "code": "CDF",
         "name_plural": "Congolese francs"
@@ -422,8 +465,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "CHF": {
         "symbol": "CHF",
         "name": "Swiss Franc",
-        "symbol_native": "CHF",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0.05,
         "code": "CHF",
         "name_plural": "Swiss francs"
@@ -431,7 +473,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "CLP": {
         "symbol": "CL$",
         "name": "Chilean Peso",
-        "symbol_native": "$",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "CLP",
@@ -440,8 +481,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "CNY": {
         "symbol": "CN¥",
         "name": "Chinese Yuan",
-        "symbol_native": "CN¥",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "CNY",
         "name_plural": "Chinese yuan"
@@ -449,7 +489,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "COP": {
         "symbol": "CO$",
         "name": "Colombian Peso",
-        "symbol_native": "$",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "COP",
@@ -458,7 +497,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "CRC": {
         "symbol": "₡",
         "name": "Costa Rican Colón",
-        "symbol_native": "₡",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "CRC",
@@ -467,8 +505,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "CVE": {
         "symbol": "CV$",
         "name": "Cape Verdean Escudo",
-        "symbol_native": "CV$",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "CVE",
         "name_plural": "Cape Verdean escudos"
@@ -476,8 +513,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "CZK": {
         "symbol": "Kč",
         "name": "Czech Republic Koruna",
-        "symbol_native": "Kč",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "CZK",
         "name_plural": "Czech Republic korunas"
@@ -485,8 +521,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "DJF": {
         "symbol": "Fdj",
         "name": "Djiboutian Franc",
-        "symbol_native": "Fdj",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "DJF",
         "name_plural": "Djiboutian francs"
@@ -494,8 +529,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "DKK": {
         "symbol": "Dkr",
         "name": "Danish Krone",
-        "symbol_native": "kr",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "DKK",
         "name_plural": "Danish kroner"
@@ -503,8 +537,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "DOP": {
         "symbol": "RD$",
         "name": "Dominican Peso",
-        "symbol_native": "RD$",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "DOP",
         "name_plural": "Dominican pesos"
@@ -512,8 +545,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "DZD": {
         "symbol": "DA",
         "name": "Algerian Dinar",
-        "symbol_native": "د.ج.‏",
-        "decimal_digits": 2,
+            "decimal_digits": 2,
         "rounding": 0,
         "code": "DZD",
         "name_plural": "Algerian dinars"
@@ -521,8 +553,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "EEK": {
         "symbol": "Ekr",
         "name": "Estonian Kroon",
-        "symbol_native": "kr",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "EEK",
         "name_plural": "Estonian kroons"
@@ -530,8 +561,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "EGP": {
         "symbol": "EGP",
         "name": "Egyptian Pound",
-        "symbol_native": "ج.م.‏",
-        "decimal_digits": 2,
+            "decimal_digits": 2,
         "rounding": 0,
         "code": "EGP",
         "name_plural": "Egyptian pounds"
@@ -539,8 +569,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "ERN": {
         "symbol": "Nfk",
         "name": "Eritrean Nakfa",
-        "symbol_native": "Nfk",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "ERN",
         "name_plural": "Eritrean nakfas"
@@ -548,8 +577,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "ETB": {
         "symbol": "Br",
         "name": "Ethiopian Birr",
-        "symbol_native": "Br",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "ETB",
         "name_plural": "Ethiopian birrs"
@@ -557,7 +585,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "GBP": {
         "symbol": "£",
         "name": "British Pound Sterling",
-        "symbol_native": "£",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "GBP",
@@ -566,8 +593,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "GEL": {
         "symbol": "GEL",
         "name": "Georgian Lari",
-        "symbol_native": "GEL",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "GEL",
         "name_plural": "Georgian laris"
@@ -575,8 +601,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "GHS": {
         "symbol": "GH₵",
         "name": "Ghanaian Cedi",
-        "symbol_native": "GH₵",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "GHS",
         "name_plural": "Ghanaian cedis"
@@ -584,8 +609,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "GNF": {
         "symbol": "FG",
         "name": "Guinean Franc",
-        "symbol_native": "FG",
-        "decimal_digits": 0,
+         "decimal_digits": 0,
         "rounding": 0,
         "code": "GNF",
         "name_plural": "Guinean francs"
@@ -593,7 +617,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "GTQ": {
         "symbol": "GTQ",
         "name": "Guatemalan Quetzal",
-        "symbol_native": "Q",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "GTQ",
@@ -602,7 +625,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "HKD": {
         "symbol": "HK$",
         "name": "Hong Kong Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "HKD",
@@ -611,7 +633,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "HNL": {
         "symbol": "HNL",
         "name": "Honduran Lempira",
-        "symbol_native": "L",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "HNL",
@@ -620,8 +641,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "HRK": {
         "symbol": "kn",
         "name": "Croatian Kuna",
-        "symbol_native": "kn",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "HRK",
         "name_plural": "Croatian kunas"
@@ -629,8 +649,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "HUF": {
         "symbol": "Ft",
         "name": "Hungarian Forint",
-        "symbol_native": "Ft",
-        "decimal_digits": 0,
+         "decimal_digits": 0,
         "rounding": 0,
         "code": "HUF",
         "name_plural": "Hungarian forints"
@@ -638,8 +657,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "IDR": {
         "symbol": "Rp",
         "name": "Indonesian Rupiah",
-        "symbol_native": "Rp",
-        "decimal_digits": 0,
+         "decimal_digits": 0,
         "rounding": 0,
         "code": "IDR",
         "name_plural": "Indonesian rupiahs"
@@ -647,7 +665,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "ILS": {
         "symbol": "₪",
         "name": "Israeli New Sheqel",
-        "symbol_native": "₪",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "ILS",
@@ -656,8 +673,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "INR": {
         "symbol": "Rs",
         "name": "Indian Rupee",
-        "symbol_native": "টকা",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "INR",
         "name_plural": "Indian rupees"
@@ -665,8 +681,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "IQD": {
         "symbol": "IQD",
         "name": "Iraqi Dinar",
-        "symbol_native": "د.ع.‏",
-        "decimal_digits": 0,
+            "decimal_digits": 0,
         "rounding": 0,
         "code": "IQD",
         "name_plural": "Iraqi dinars"
@@ -674,7 +689,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "IRR": {
         "symbol": "IRR",
         "name": "Iranian Rial",
-        "symbol_native": "﷼",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "IRR",
@@ -683,8 +697,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "ISK": {
         "symbol": "Ikr",
         "name": "Icelandic Króna",
-        "symbol_native": "kr",
-        "decimal_digits": 0,
+         "decimal_digits": 0,
         "rounding": 0,
         "code": "ISK",
         "name_plural": "Icelandic krónur"
@@ -692,7 +705,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "JMD": {
         "symbol": "J$",
         "name": "Jamaican Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "JMD",
@@ -701,8 +713,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "JOD": {
         "symbol": "JD",
         "name": "Jordanian Dinar",
-        "symbol_native": "د.أ.‏",
-        "decimal_digits": 3,
+            "decimal_digits": 3,
         "rounding": 0,
         "code": "JOD",
         "name_plural": "Jordanian dinars"
@@ -710,7 +721,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "JPY": {
         "symbol": "¥",
         "name": "Japanese Yen",
-        "symbol_native": "￥",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "JPY",
@@ -719,8 +729,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "KES": {
         "symbol": "Ksh",
         "name": "Kenyan Shilling",
-        "symbol_native": "Ksh",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "KES",
         "name_plural": "Kenyan shillings"
@@ -728,7 +737,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "KHR": {
         "symbol": "KHR",
         "name": "Cambodian Riel",
-        "symbol_native": "៛",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "KHR",
@@ -737,8 +745,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "KMF": {
         "symbol": "CF",
         "name": "Comorian Franc",
-        "symbol_native": "FC",
-        "decimal_digits": 0,
+         "decimal_digits": 0,
         "rounding": 0,
         "code": "KMF",
         "name_plural": "Comorian francs"
@@ -746,7 +753,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "KRW": {
         "symbol": "₩",
         "name": "South Korean Won",
-        "symbol_native": "₩",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "KRW",
@@ -755,8 +761,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "KWD": {
         "symbol": "KD",
         "name": "Kuwaiti Dinar",
-        "symbol_native": "د.ك.‏",
-        "decimal_digits": 3,
+            "decimal_digits": 3,
         "rounding": 0,
         "code": "KWD",
         "name_plural": "Kuwaiti dinars"
@@ -764,8 +769,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "KZT": {
         "symbol": "KZT",
         "name": "Kazakhstani Tenge",
-        "symbol_native": "тңг.",
-        "decimal_digits": 2,
+           "decimal_digits": 2,
         "rounding": 0,
         "code": "KZT",
         "name_plural": "Kazakhstani tenges"
@@ -773,8 +777,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "LBP": {
         "symbol": "LB£",
         "name": "Lebanese Pound",
-        "symbol_native": "ل.ل.‏",
-        "decimal_digits": 0,
+            "decimal_digits": 0,
         "rounding": 0,
         "code": "LBP",
         "name_plural": "Lebanese pounds"
@@ -782,8 +785,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "LKR": {
         "symbol": "SLRs",
         "name": "Sri Lankan Rupee",
-        "symbol_native": "SL Re",
-        "decimal_digits": 2,
+            "decimal_digits": 2,
         "rounding": 0,
         "code": "LKR",
         "name_plural": "Sri Lankan rupees"
@@ -791,8 +793,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "LTL": {
         "symbol": "Lt",
         "name": "Lithuanian Litas",
-        "symbol_native": "Lt",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "LTL",
         "name_plural": "Lithuanian litai"
@@ -800,8 +801,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "LVL": {
         "symbol": "Ls",
         "name": "Latvian Lats",
-        "symbol_native": "Ls",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "LVL",
         "name_plural": "Latvian lati"
@@ -809,8 +809,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "LYD": {
         "symbol": "LD",
         "name": "Libyan Dinar",
-        "symbol_native": "د.ل.‏",
-        "decimal_digits": 3,
+            "decimal_digits": 3,
         "rounding": 0,
         "code": "LYD",
         "name_plural": "Libyan dinars"
@@ -818,8 +817,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "MAD": {
         "symbol": "MAD",
         "name": "Moroccan Dirham",
-        "symbol_native": "د.م.‏",
-        "decimal_digits": 2,
+            "decimal_digits": 2,
         "rounding": 0,
         "code": "MAD",
         "name_plural": "Moroccan dirhams"
@@ -827,8 +825,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "MDL": {
         "symbol": "MDL",
         "name": "Moldovan Leu",
-        "symbol_native": "MDL",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "MDL",
         "name_plural": "Moldovan lei"
@@ -836,8 +833,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "MGA": {
         "symbol": "MGA",
         "name": "Malagasy Ariary",
-        "symbol_native": "MGA",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "MGA",
         "name_plural": "Malagasy Ariaries"
@@ -845,8 +841,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "MKD": {
         "symbol": "MKD",
         "name": "Macedonian Denar",
-        "symbol_native": "MKD",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "MKD",
         "name_plural": "Macedonian denari"
@@ -854,7 +849,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "MMK": {
         "symbol": "MMK",
         "name": "Myanma Kyat",
-        "symbol_native": "K",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "MMK",
@@ -863,8 +857,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "MOP": {
         "symbol": "MOP$",
         "name": "Macanese Pataca",
-        "symbol_native": "MOP$",
-        "decimal_digits": 2,
+           "decimal_digits": 2,
         "rounding": 0,
         "code": "MOP",
         "name_plural": "Macanese patacas"
@@ -872,8 +865,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "MUR": {
         "symbol": "MURs",
         "name": "Mauritian Rupee",
-        "symbol_native": "MURs",
-        "decimal_digits": 0,
+           "decimal_digits": 0,
         "rounding": 0,
         "code": "MUR",
         "name_plural": "Mauritian rupees"
@@ -881,7 +873,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "MXN": {
         "symbol": "MX$",
         "name": "Mexican Peso",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "MXN",
@@ -890,8 +881,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "MYR": {
         "symbol": "RM",
         "name": "Malaysian Ringgit",
-        "symbol_native": "RM",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "MYR",
         "name_plural": "Malaysian ringgits"
@@ -899,8 +889,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "MZN": {
         "symbol": "MTn",
         "name": "Mozambican Metical",
-        "symbol_native": "MTn",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "MZN",
         "name_plural": "Mozambican meticals"
@@ -908,8 +897,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "NAD": {
         "symbol": "N$",
         "name": "Namibian Dollar",
-        "symbol_native": "N$",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "NAD",
         "name_plural": "Namibian dollars"
@@ -917,7 +905,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "NGN": {
         "symbol": "₦",
         "name": "Nigerian Naira",
-        "symbol_native": "₦",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "NGN",
@@ -926,8 +913,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "NIO": {
         "symbol": "C$",
         "name": "Nicaraguan Córdoba",
-        "symbol_native": "C$",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "NIO",
         "name_plural": "Nicaraguan córdobas"
@@ -935,8 +921,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "NOK": {
         "symbol": "Nkr",
         "name": "Norwegian Krone",
-        "symbol_native": "kr",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "NOK",
         "name_plural": "Norwegian kroner"
@@ -944,8 +929,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "NPR": {
         "symbol": "NPRs",
         "name": "Nepalese Rupee",
-        "symbol_native": "नेरू",
-        "decimal_digits": 2,
+           "decimal_digits": 2,
         "rounding": 0,
         "code": "NPR",
         "name_plural": "Nepalese rupees"
@@ -953,7 +937,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "NZD": {
         "symbol": "NZ$",
         "name": "New Zealand Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "NZD",
@@ -962,8 +945,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "OMR": {
         "symbol": "OMR",
         "name": "Omani Rial",
-        "symbol_native": "ر.ع.‏",
-        "decimal_digits": 3,
+            "decimal_digits": 3,
         "rounding": 0,
         "code": "OMR",
         "name_plural": "Omani rials"
@@ -971,8 +953,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "PAB": {
         "symbol": "B/.",
         "name": "Panamanian Balboa",
-        "symbol_native": "B/.",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "PAB",
         "name_plural": "Panamanian balboas"
@@ -980,8 +961,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "PEN": {
         "symbol": "S/.",
         "name": "Peruvian Nuevo Sol",
-        "symbol_native": "S/.",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "PEN",
         "name_plural": "Peruvian nuevos soles"
@@ -989,7 +969,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "PHP": {
         "symbol": "₱",
         "name": "Philippine Peso",
-        "symbol_native": "₱",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "PHP",
@@ -998,7 +977,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "PKR": {
         "symbol": "PKRs",
         "name": "Pakistani Rupee",
-        "symbol_native": "₨",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "PKR",
@@ -1007,8 +985,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "PLN": {
         "symbol": "zł",
         "name": "Polish Zloty",
-        "symbol_native": "zł",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "PLN",
         "name_plural": "Polish zlotys"
@@ -1016,7 +993,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "PYG": {
         "symbol": "₲",
         "name": "Paraguayan Guarani",
-        "symbol_native": "₲",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "PYG",
@@ -1025,8 +1001,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "QAR": {
         "symbol": "QR",
         "name": "Qatari Rial",
-        "symbol_native": "ر.ق.‏",
-        "decimal_digits": 2,
+            "decimal_digits": 2,
         "rounding": 0,
         "code": "QAR",
         "name_plural": "Qatari rials"
@@ -1034,8 +1009,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "RON": {
         "symbol": "RON",
         "name": "Romanian Leu",
-        "symbol_native": "RON",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "RON",
         "name_plural": "Romanian lei"
@@ -1043,8 +1017,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "RSD": {
         "symbol": "din.",
         "name": "Serbian Dinar",
-        "symbol_native": "дин.",
-        "decimal_digits": 0,
+           "decimal_digits": 0,
         "rounding": 0,
         "code": "RSD",
         "name_plural": "Serbian dinars"
@@ -1052,8 +1025,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "RUB": {
         "symbol": "RUB",
         "name": "Russian Ruble",
-        "symbol_native": "руб.",
-        "decimal_digits": 2,
+           "decimal_digits": 2,
         "rounding": 0,
         "code": "RUB",
         "name_plural": "Russian rubles"
@@ -1061,8 +1033,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "RWF": {
         "symbol": "RWF",
         "name": "Rwandan Franc",
-        "symbol_native": "FR",
-        "decimal_digits": 0,
+         "decimal_digits": 0,
         "rounding": 0,
         "code": "RWF",
         "name_plural": "Rwandan francs"
@@ -1070,8 +1041,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "SAR": {
         "symbol": "SR",
         "name": "Saudi Riyal",
-        "symbol_native": "ر.س.‏",
-        "decimal_digits": 2,
+            "decimal_digits": 2,
         "rounding": 0,
         "code": "SAR",
         "name_plural": "Saudi riyals"
@@ -1079,8 +1049,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "SDG": {
         "symbol": "SDG",
         "name": "Sudanese Pound",
-        "symbol_native": "SDG",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "SDG",
         "name_plural": "Sudanese pounds"
@@ -1088,8 +1057,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "SEK": {
         "symbol": "Skr",
         "name": "Swedish Krona",
-        "symbol_native": "kr",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "SEK",
         "name_plural": "Swedish kronor"
@@ -1097,7 +1065,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "SGD": {
         "symbol": "S$",
         "name": "Singapore Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "SGD",
@@ -1106,8 +1073,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "SOS": {
         "symbol": "Ssh",
         "name": "Somali Shilling",
-        "symbol_native": "Ssh",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "SOS",
         "name_plural": "Somali shillings"
@@ -1115,8 +1081,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "SYP": {
         "symbol": "SY£",
         "name": "Syrian Pound",
-        "symbol_native": "ل.س.‏",
-        "decimal_digits": 0,
+            "decimal_digits": 0,
         "rounding": 0,
         "code": "SYP",
         "name_plural": "Syrian pounds"
@@ -1124,7 +1089,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "THB": {
         "symbol": "฿",
         "name": "Thai Baht",
-        "symbol_native": "฿",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "THB",
@@ -1133,8 +1097,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "TND": {
         "symbol": "DT",
         "name": "Tunisian Dinar",
-        "symbol_native": "د.ت.‏",
-        "decimal_digits": 3,
+            "decimal_digits": 3,
         "rounding": 0,
         "code": "TND",
         "name_plural": "Tunisian dinars"
@@ -1142,8 +1105,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "TOP": {
         "symbol": "T$",
         "name": "Tongan Paʻanga",
-        "symbol_native": "T$",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "TOP",
         "name_plural": "Tongan paʻanga"
@@ -1151,8 +1113,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "TRY": {
         "symbol": "TL",
         "name": "Turkish Lira",
-        "symbol_native": "TL",
-        "decimal_digits": 2,
+         "decimal_digits": 2,
         "rounding": 0,
         "code": "TRY",
         "name_plural": "Turkish Lira"
@@ -1160,7 +1121,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "TTD": {
         "symbol": "TT$",
         "name": "Trinidad and Tobago Dollar",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "TTD",
@@ -1169,8 +1129,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "TWD": {
         "symbol": "NT$",
         "name": "New Taiwan Dollar",
-        "symbol_native": "NT$",
-        "decimal_digits": 2,
+          "decimal_digits": 2,
         "rounding": 0,
         "code": "TWD",
         "name_plural": "New Taiwan dollars"
@@ -1178,8 +1137,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "TZS": {
         "symbol": "TSh",
         "name": "Tanzanian Shilling",
-        "symbol_native": "TSh",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "TZS",
         "name_plural": "Tanzanian shillings"
@@ -1187,7 +1145,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "UAH": {
         "symbol": "₴",
         "name": "Ukrainian Hryvnia",
-        "symbol_native": "₴",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "UAH",
@@ -1196,8 +1153,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "UGX": {
         "symbol": "USh",
         "name": "Ugandan Shilling",
-        "symbol_native": "USh",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "UGX",
         "name_plural": "Ugandan shillings"
@@ -1205,7 +1161,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "UYU": {
         "symbol": "$U",
         "name": "Uruguayan Peso",
-        "symbol_native": "$",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "UYU",
@@ -1214,8 +1169,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "UZS": {
         "symbol": "UZS",
         "name": "Uzbekistan Som",
-        "symbol_native": "UZS",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "UZS",
         "name_plural": "Uzbekistan som"
@@ -1223,8 +1177,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "VEF": {
         "symbol": "Bs.F.",
         "name": "Venezuelan Bolívar",
-        "symbol_native": "Bs.F.",
-        "decimal_digits": 2,
+            "decimal_digits": 2,
         "rounding": 0,
         "code": "VEF",
         "name_plural": "Venezuelan bolívars"
@@ -1232,7 +1185,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "VND": {
         "symbol": "₫",
         "name": "Vietnamese Dong",
-        "symbol_native": "₫",
         "decimal_digits": 0,
         "rounding": 0,
         "code": "VND",
@@ -1241,8 +1193,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "XAF": {
         "symbol": "FCFA",
         "name": "CFA Franc BEAC",
-        "symbol_native": "FCFA",
-        "decimal_digits": 0,
+           "decimal_digits": 0,
         "rounding": 0,
         "code": "XAF",
         "name_plural": "CFA francs BEAC"
@@ -1250,8 +1201,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "XOF": {
         "symbol": "CFA",
         "name": "CFA Franc BCEAO",
-        "symbol_native": "CFA",
-        "decimal_digits": 0,
+          "decimal_digits": 0,
         "rounding": 0,
         "code": "XOF",
         "name_plural": "CFA francs BCEAO"
@@ -1259,8 +1209,7 @@ __API_PATH.CURRENCY_LIST  =	{
     "YER": {
         "symbol": "YR",
         "name": "Yemeni Rial",
-        "symbol_native": "ر.ي.‏",
-        "decimal_digits": 0,
+            "decimal_digits": 0,
         "rounding": 0,
         "code": "YER",
         "name_plural": "Yemeni rials"
@@ -1268,7 +1217,6 @@ __API_PATH.CURRENCY_LIST  =	{
     "ZAR": {
         "symbol": "R",
         "name": "South African Rand",
-        "symbol_native": "R",
         "decimal_digits": 2,
         "rounding": 0,
         "code": "ZAR",
@@ -1277,19 +1225,661 @@ __API_PATH.CURRENCY_LIST  =	{
     "ZMK": {
         "symbol": "ZK",
         "name": "Zambian Kwacha",
-        "symbol_native": "ZK",
-        "decimal_digits": 0,
+         "decimal_digits": 0,
         "rounding": 0,
         "code": "ZMK",
         "name_plural": "Zambian kwachas"
     }
 };
+
+
+
+
+__API_PATH.COLOR_CODE = {
+              "antiquewhite": "#faebd7",             
+              "beige": "#f5f5dc",
+              "bisque": "#ffe4c4",
+              "blanchedalmond": "#ffebcd",
+              "blue": "#0000ff",
+              "blueviolet": "#8a2be2",
+              "brown": "#a52a2a",
+              "burlywood": "#deb887",
+              "cadetblue": "#5f9ea0",
+              "chartreuse": "#7fff00",
+              "chocolate": "#d2691e",
+              "coral": "#ff7f50",
+              "cornflowerblue": "#6495ed",
+              "cornsilk": "#fff8dc",
+              "crimson": "#dc143c",
+              "cyan": "#00ffff",
+           
+              "darkcyan": "#008b8b",
+              "darkgoldenrod": "#b8860b",
+              "darkgray": "#a9a9a9",
+              
+              "darkgrey": "#a9a9a9",
+              "darkkhaki": "#bdb76b",
+              "darkmagenta": "#8b008b",           
+              "darkorange": "#ff8c00",
+              "darkorchid": "#9932cc",              
+              "darksalmon": "#e9967a",
+              "darkseagreen": "#8fbc8f",
+                          
+              "darkturquoise": "#00ced1",
+              "darkviolet": "#9400d3",
+              "deeppink": "#ff1493",
+              "deepskyblue": "#00bfff", 
+              "dodgerblue": "#1e90ff",
+              "firebrick": "#b22222",
+              "floralwhite": "#fffaf0",
+              "forestgreen": "#228b22",
+              "fuchsia": "#ff00ff",
+              "gainsboro": "#dcdcdc",
+              "ghostwhite": "#f8f8ff",
+              "gold": "#ffd700",
+              "goldenrod": "#daa520",                           
+              "greenyellow": "#adff2f",
+              "grey": "#808080",
+              "honeydew": "#f0fff0",
+              "hotpink": "#ff69b4",
+              "indianred": "#cd5c5c",
+              "ivory": "#fffff0",
+              "khaki": "#f0e68c",
+              "lavender": "#e6e6fa",
+              "lavenderblush": "#fff0f5",
+              "lawngreen": "#7cfc00",
+              "lemonchiffon": "#fffacd",
+              "lightblue": "#add8e6",
+              "lightcoral": "#f08080",
+              "lightcyan": "#e0ffff",
+              "lightgoldenrodyellow": "#fafad2",
+              "lightgray": "#d3d3d3",
+              "lightgreen": "#90ee90",
+              "lightgrey": "#d3d3d3",
+              "lightpink": "#ffb6c1",
+              "lightsalmon": "#ffa07a",
+              "lightseagreen": "#20b2aa",
+              "lightskyblue": "#87cefa",
+            
+             
+              "lightsteelblue": "#b0c4de",
+              "lightyellow": "#ffffe0",
+              "lime": "#00ff00",
+              "limegreen": "#32cd32",
+              "linen": "#faf0e6",
+              "magenta": "#ff00ff",             
+              "mediumaquamarine": "#66cdaa",
+              "mediumorchid": "#ba55d3",
+              "mediumpurple": "#9370db",
+              "mediumseagreen": "#3cb371",
+              "mediumslateblue": "#7b68ee",
+              "mediumspringgreen": "#00fa9a",
+              "mediumturquoise": "#48d1cc",
+              "mediumvioletred": "#c71585",
+              "mintcream": "#f5fffa",
+              "mistyrose": "#ffe4e1",
+              "moccasin": "#ffe4b5",
+              "navajowhite": "#ffdead",
+              "oldlace": "#fdf5e6",
+              "olive": "#808000",
+              "olivedrab": "#6b8e23",
+              "orange": "#ffa500",
+              "orangered": "#ff4500",
+              "orchid": "#da70d6",
+              "palegoldenrod": "#eee8aa",
+              "palegreen": "#98fb98",
+              "paleturquoise": "#afeeee",
+              "palevioletred": "#db7093",
+              "papayawhip": "#ffefd5",
+              "peachpuff": "#ffdab9",
+              "peru": "#cd853f",
+              "pink": "#ffc0cb",
+              "plum": "#dda0dd",
+              "powderblue": "#b0e0e6",                            
+              "red": "#ff0000",
+              "rosybrown": "#bc8f8f",
+              "royalblue": "#4169e1",
+             
+              "salmon": "#fa8072",
+              "sandybrown": "#f4a460",
+              "seagreen": "#2e8b57",
+              "seashell": "#fff5ee",
+     
+              "silver": "#c0c0c0",
+              "skyblue": "#87ceeb",
+              "slateblue": "#6a5acd", 
+              "snow": "#fffafa",
+              "springgreen": "#00ff7f",
+              "steelblue": "#4682b4",
+              "tan": "#d2b48c",
+              "teal": "#008080",
+              "thistle": "#d8bfd8",
+              "tomato": "#ff6347",
+              "turquoise": "#40e0d0",
+              "violet": "#ee82ee",
+              "wheat": "#f5deb3",
+              "white": "#ffffff",
+              "whitesmoke": "#f5f5f5",
+              "yellow": "#ffff00",
+              "yellowgreen": "#9acd32"
+            };
+
+
+__API_PATH.COUNTRY_LIST = [
+
+{"name": "Afghanistan", "code": "AF"},
+{"name": "Åland Islands", "code": "AX"},
+{"name": "Albania", "code": "AL"},
+{"name": "Algeria", "code": "DZ"},
+{"name": "American Samoa", "code": "AS"},
+{"name": "AndorrA", "code": "AD"},
+{"name": "Angola", "code": "AO"},
+{"name": "Anguilla", "code": "AI"},
+{"name": "Antarctica", "code": "AQ"},
+{"name": "Antigua and Barbuda", "code": "AG"},
+{"name": "Argentina", "code": "AR"},
+{"name": "Armenia", "code": "AM"},
+{"name": "Aruba", "code": "AW"},
+{"name": "Australia", "code": "AU"},
+{"name": "Austria", "code": "AT"},
+{"name": "Azerbaijan", "code": "AZ"},
+{"name": "Bahamas", "code": "BS"},
+{"name": "Bahrain", "code": "BH"},
+{"name": "Bangladesh", "code": "BD"},
+{"name": "Barbados", "code": "BB"},
+{"name": "Belarus", "code": "BY"},
+{"name": "Belgium", "code": "BE"},
+{"name": "Belize", "code": "BZ"},
+{"name": "Benin", "code": "BJ"},
+{"name": "Bermuda", "code": "BM"},
+{"name": "Bhutan", "code": "BT"},
+{"name": "Bolivia", "code": "BO"},
+{"name": "Bosnia and Herzegovina", "code": "BA"},
+{"name": "Botswana", "code": "BW"},
+{"name": "Bouvet Island", "code": "BV"},
+{"name": "Brazil", "code": "BR"},
+{"name": "British Indian Ocean Territory", "code": "IO"},
+{"name": "Brunei Darussalam", "code": "BN"},
+{"name": "Bulgaria", "code": "BG"},
+{"name": "Burkina Faso", "code": "BF"},
+{"name": "Burundi", "code": "BI"},
+{"name": "Cambodia", "code": "KH"},
+{"name": "Cameroon", "code": "CM"},
+{"name": "Canada", "code": "CA"},
+{"name": "Cape Verde", "code": "CV"},
+{"name": "Cayman Islands", "code": "KY"},
+{"name": "Central African Republic", "code": "CF"},
+{"name": "Chad", "code": "TD"},
+{"name": "Chile", "code": "CL"},
+{"name": "China", "code": "CN"},
+{"name": "Christmas Island", "code": "CX"},
+{"name": "Cocos (Keeling) Islands", "code": "CC"},
+{"name": "Colombia", "code": "CO"},
+{"name": "Comoros", "code": "KM"},
+{"name": "Congo", "code": "CG"},
+{"name": "Congo, The Democratic Republic of the", "code": "CD"},
+{"name": "Cook Islands", "code": "CK"},
+{"name": "Costa Rica", "code": "CR"},
+{"name": "Cote D'ivoire", "code": "CI"},
+{"name": "Croatia", "code": "HR"},
+{"name": "Cuba", "code": "CU"},
+{"name": "Cyprus", "code": "CY"},
+{"name": "Czech Republic", "code": "CZ"},
+{"name": "Denmark", "code": "DK"},
+{"name": "Djibouti", "code": "DJ"},
+{"name": "Dominica", "code": "DM"},
+{"name": "Dominican Republic", "code": "DO"},
+{"name": "Ecuador", "code": "EC"},
+{"name": "Egypt", "code": "EG"},
+{"name": "El Salvador", "code": "SV"},
+{"name": "Equatorial Guinea", "code": "GQ"},
+{"name": "Eritrea", "code": "ER"},
+{"name": "Estonia", "code": "EE"},
+{"name": "Ethiopia", "code": "ET"},
+{"name": "Falkland Islands (Malvinas)", "code": "FK"},
+{"name": "Faroe Islands", "code": "FO"},
+{"name": "Fiji", "code": "FJ"},
+{"name": "Finland", "code": "FI"},
+{"name": "France", "code": "FR"},
+{"name": "French Guiana", "code": "GF"},
+{"name": "French Polynesia", "code": "PF"},
+{"name": "French Southern Territories", "code": "TF"},
+{"name": "Gabon", "code": "GA"},
+{"name": "Gambia", "code": "GM"},
+{"name": "Georgia", "code": "GE"},
+{"name": "Germany", "code": "DE"},
+{"name": "Ghana", "code": "GH"},
+{"name": "Gibraltar", "code": "GI"},
+{"name": "Greece", "code": "GR"},
+{"name": "Greenland", "code": "GL"},
+{"name": "Grenada", "code": "GD"},
+{"name": "Guadeloupe", "code": "GP"},
+{"name": "Guam", "code": "GU"},
+{"name": "Guatemala", "code": "GT"},
+{"name": "Guernsey", "code": "GG"},
+{"name": "Guinea", "code": "GN"},
+{"name": "Guinea-Bissau", "code": "GW"},
+{"name": "Guyana", "code": "GY"},
+{"name": "Haiti", "code": "HT"},
+{"name": "Heard Island and Mcdonald Islands", "code": "HM"},
+{"name": "Holy See (Vatican City State)", "code": "VA"},
+{"name": "Honduras", "code": "HN"},
+{"name": "Hong Kong", "code": "HK"},
+{"name": "Hungary", "code": "HU"},
+{"name": "Iceland", "code": "IS"},
+{"name": "India", "code": "IN"},
+{"name": "Indonesia", "code": "ID"},
+{"name": "Iran, Islamic Republic Of", "code": "IR"},
+{"name": "Iraq", "code": "IQ"},
+{"name": "Ireland", "code": "IE"},
+{"name": "Isle of Man", "code": "IM"},
+{"name": "Israel", "code": "IL"},
+{"name": "Italy", "code": "IT"},
+{"name": "Jamaica", "code": "JM"},
+{"name": "Japan", "code": "JP"},
+{"name": "Jersey", "code": "JE"},
+{"name": "Jordan", "code": "JO"},
+{"name": "Kazakhstan", "code": "KZ"},
+{"name": "Kenya", "code": "KE"},
+{"name": "Kiribati", "code": "KI"},
+{"name": "Korea, Democratic", "code": "KP"},
+{"name": "Korea, Republic of", "code": "KR"},
+{"name": "Kuwait", "code": "KW"},
+{"name": "Kyrgyzstan", "code": "KG"},
+{"name": "Lao People", "code": "LA"},
+{"name": "Latvia", "code": "LV"},
+{"name": "Lebanon", "code": "LB"},
+{"name": "Lesotho", "code": "LS"},
+{"name": "Liberia", "code": "LR"},
+{"name": "Libyan Arab Jamahiriya", "code": "LY"},
+{"name": "Liechtenstein", "code": "LI"},
+{"name": "Lithuania", "code": "LT"},
+{"name": "Luxembourg", "code": "LU"},
+{"name": "Macao", "code": "MO"},
+{"name": "Macedonia, The Former Yugoslav Republic of", "code": "MK"},
+{"name": "Madagascar", "code": "MG"},
+{"name": "Malawi", "code": "MW"},
+{"name": "Malaysia", "code": "MY"},
+{"name": "Maldives", "code": "MV"},
+{"name": "Mali", "code": "ML"},
+{"name": "Malta", "code": "MT"},
+{"name": "Marshall Islands", "code": "MH"},
+{"name": "Martinique", "code": "MQ"},
+{"name": "Mauritania", "code": "MR"},
+{"name": "Mauritius", "code": "MU"},
+{"name": "Mayotte", "code": "YT"},
+{"name": "Mexico", "code": "MX"},
+{"name": "Micronesia, Federated States of", "code": "FM"},
+{"name": "Moldova, Republic of", "code": "MD"},
+{"name": "Monaco", "code": "MC"},
+{"name": "Mongolia", "code": "MN"},
+{"name": "Montserrat", "code": "MS"},
+{"name": "Morocco", "code": "MA"},
+{"name": "Mozambique", "code": "MZ"},
+{"name": "Myanmar", "code": "MM"},
+{"name": "Namibia", "code": "NA"},
+{"name": "Nauru", "code": "NR"},
+{"name": "Nepal", "code": "NP"},
+{"name": "Netherlands", "code": "NL"},
+{"name": "Netherlands Antilles", "code": "AN"},
+{"name": "New Caledonia", "code": "NC"},
+{"name": "New Zealand", "code": "NZ"},
+{"name": "Nicaragua", "code": "NI"},
+{"name": "Niger", "code": "NE"},
+{"name": "Nigeria", "code": "NG"},
+{"name": "Niue", "code": "NU"},
+{"name": "Norfolk Island", "code": "NF"},
+{"name": "Northern Mariana Islands", "code": "MP"},
+{"name": "Norway", "code": "NO"},
+{"name": "Oman", "code": "OM"},
+{"name": "Pakistan", "code": "PK"},
+{"name": "Palau", "code": "PW"},
+{"name": "Palestinian Territory, Occupied", "code": "PS"},
+{"name": "Panama", "code": "PA"},
+{"name": "Papua New Guinea", "code": "PG"},
+{"name": "Paraguay", "code": "PY"},
+{"name": "Peru", "code": "PE"},
+{"name": "Philippines", "code": "PH"},
+{"name": "Pitcairn", "code": "PN"},
+{"name": "Poland", "code": "PL"},
+{"name": "Portugal", "code": "PT"},
+{"name": "Puerto Rico", "code": "PR"},
+{"name": "Qatar", "code": "QA"},
+{"name": "Reunion", "code": "RE"},
+{"name": "Romania", "code": "RO"},
+{"name": "Russian Federation", "code": "RU"},
+{"name": "RWANDA", "code": "RW"},
+{"name": "Saint Helena", "code": "SH"},
+{"name": "Saint Kitts and Nevis", "code": "KN"},
+{"name": "Saint Lucia", "code": "LC"},
+{"name": "Saint Pierre and Miquelon", "code": "PM"},
+{"name": "Saint Vincent and the Grenadines", "code": "VC"},
+{"name": "Samoa", "code": "WS"},
+{"name": "San Marino", "code": "SM"},
+{"name": "Sao Tome and Principe", "code": "ST"},
+{"name": "Saudi Arabia", "code": "SA"},
+{"name": "Senegal", "code": "SN"},
+{"name": "Serbia and Montenegro", "code": "CS"},
+{"name": "Seychelles", "code": "SC"},
+{"name": "Sierra Leone", "code": "SL"},
+{"name": "Singapore", "code": "SG"},
+{"name": "Slovakia", "code": "SK"},
+{"name": "Slovenia", "code": "SI"},
+{"name": "Solomon Islands", "code": "SB"},
+{"name": "Somalia", "code": "SO"},
+{"name": "South Africa", "code": "ZA"},
+{"name": "South Georgia and the South Sandwich Islands", "code": "GS"},
+{"name": "Spain", "code": "ES"},
+{"name": "Sri Lanka", "code": "LK"},
+{"name": "Sudan", "code": "SD"},
+{"name": "Suriname", "code": "SR"},
+{"name": "Svalbard and Jan Mayen", "code": "SJ"},
+{"name": "Swaziland", "code": "SZ"},
+{"name": "Sweden", "code": "SE"},
+{"name": "Switzerland", "code": "CH"},
+{"name": "Syrian Arab Republic", "code": "SY"},
+{"name": "Taiwan, Province of China", "code": "TW"},
+{"name": "Tajikistan", "code": "TJ"},
+{"name": "Tanzania, United Republic of", "code": "TZ"},
+{"name": "Thailand", "code": "TH"},
+{"name": "Timor-Leste", "code": "TL"},
+{"name": "Togo", "code": "TG"},
+{"name": "Tokelau", "code": "TK"},
+{"name": "Tonga", "code": "TO"},
+{"name": "Trinidad and Tobago", "code": "TT"},
+{"name": "Tunisia", "code": "TN"},
+{"name": "Turkey", "code": "TR"},
+{"name": "Turkmenistan", "code": "TM"},
+{"name": "Turks and Caicos Islands", "code": "TC"},
+{"name": "Tuvalu", "code": "TV"},
+{"name": "Uganda", "code": "UG"},
+{"name": "Ukraine", "code": "UA"},
+{"name": "United Arab Emirates", "code": "AE"},
+{"name": "United Kingdom", "code": "GB"},
+{"name": "United States", "code": "US"},
+{"name": "United States Minor Outlying Islands", "code": "UM"},
+{"name": "Uruguay", "code": "UY"},
+{"name": "Uzbekistan", "code": "UZ"},
+{"name": "Vanuatu", "code": "VU"},
+{"name": "Venezuela", "code": "VE"},
+{"name": "Viet Nam", "code": "VN"},
+{"name": "Virgin Islands, British", "code": "VG"},
+{"name": "Virgin Islands, U.S.", "code": "VI"},
+{"name": "Wallis and Futuna", "code": "WF"},
+{"name": "Western Sahara", "code": "EH"},
+{"name": "Yemen", "code": "YE"},
+{"name": "Zambia", "code": "ZM"},
+{"name": "Zimbabwe", "code": "ZW"}
+];         
+
+__API_PATH.US_STATE  =     [
+    {
+        "name": "Alabama",
+        "abbreviation": "AL"
+    },
+    {
+        "name": "Alaska",
+        "abbreviation": "AK"
+    },
+    {
+        "name": "American Samoa",
+        "abbreviation": "AS"
+    },
+    {
+        "name": "Arizona",
+        "abbreviation": "AZ"
+    },
+    {
+        "name": "Arkansas",
+        "abbreviation": "AR"
+    },
+    {
+        "name": "California",
+        "abbreviation": "CA"
+    },
+    {
+        "name": "Colorado",
+        "abbreviation": "CO"
+    },
+    {
+        "name": "Connecticut",
+        "abbreviation": "CT"
+    },
+    {
+        "name": "Delaware",
+        "abbreviation": "DE"
+    },
+    {
+        "name": "District Of Columbia",
+        "abbreviation": "DC"
+    },
+    {
+        "name": "Federated States Of Micronesia",
+        "abbreviation": "FM"
+    },
+    {
+        "name": "Florida",
+        "abbreviation": "FL"
+    },
+    {
+        "name": "Georgia",
+        "abbreviation": "GA"
+    },
+    {
+        "name": "Guam",
+        "abbreviation": "GU"
+    },
+    {
+        "name": "Hawaii",
+        "abbreviation": "HI"
+    },
+    {
+        "name": "Idaho",
+        "abbreviation": "ID"
+    },
+    {
+        "name": "Illinois",
+        "abbreviation": "IL"
+    },
+    {
+        "name": "Indiana",
+        "abbreviation": "IN"
+    },
+    {
+        "name": "Iowa",
+        "abbreviation": "IA"
+    },
+    {
+        "name": "Kansas",
+        "abbreviation": "KS"
+    },
+    {
+        "name": "Kentucky",
+        "abbreviation": "KY"
+    },
+    {
+        "name": "Louisiana",
+        "abbreviation": "LA"
+    },
+    {
+        "name": "Maine",
+        "abbreviation": "ME"
+    },
+    {
+        "name": "Marshall Islands",
+        "abbreviation": "MH"
+    },
+    {
+        "name": "Maryland",
+        "abbreviation": "MD"
+    },
+    {
+        "name": "Massachusetts",
+        "abbreviation": "MA"
+    },
+    {
+        "name": "Michigan",
+        "abbreviation": "MI"
+    },
+    {
+        "name": "Minnesota",
+        "abbreviation": "MN"
+    },
+    {
+        "name": "Mississippi",
+        "abbreviation": "MS"
+    },
+    {
+        "name": "Missouri",
+        "abbreviation": "MO"
+    },
+    {
+        "name": "Montana",
+        "abbreviation": "MT"
+    },
+    {
+        "name": "Nebraska",
+        "abbreviation": "NE"
+    },
+    {
+        "name": "Nevada",
+        "abbreviation": "NV"
+    },
+    {
+        "name": "New Hampshire",
+        "abbreviation": "NH"
+    },
+    {
+        "name": "New Jersey",
+        "abbreviation": "NJ"
+    },
+    {
+        "name": "New Mexico",
+        "abbreviation": "NM"
+    },
+    {
+        "name": "New York",
+        "abbreviation": "NY"
+    },
+    {
+        "name": "North Carolina",
+        "abbreviation": "NC"
+    },
+    {
+        "name": "North Dakota",
+        "abbreviation": "ND"
+    },
+    {
+        "name": "Northern Mariana Islands",
+        "abbreviation": "MP"
+    },
+    {
+        "name": "Ohio",
+        "abbreviation": "OH"
+    },
+    {
+        "name": "Oklahoma",
+        "abbreviation": "OK"
+    },
+    {
+        "name": "Oregon",
+        "abbreviation": "OR"
+    },
+    {
+        "name": "Palau",
+        "abbreviation": "PW"
+    },
+    {
+        "name": "Pennsylvania",
+        "abbreviation": "PA"
+    },
+    {
+        "name": "Puerto Rico",
+        "abbreviation": "PR"
+    },
+    {
+        "name": "Rhode Island",
+        "abbreviation": "RI"
+    },
+    {
+        "name": "South Carolina",
+        "abbreviation": "SC"
+    },
+    {
+        "name": "South Dakota",
+        "abbreviation": "SD"
+    },
+    {
+        "name": "Tennessee",
+        "abbreviation": "TN"
+    },
+    {
+        "name": "Texas",
+        "abbreviation": "TX"
+    },
+    {
+        "name": "Utah",
+        "abbreviation": "UT"
+    },
+    {
+        "name": "Vermont",
+        "abbreviation": "VT"
+    },
+    {
+        "name": "Virgin Islands",
+        "abbreviation": "VI"
+    },
+    {
+        "name": "Virginia",
+        "abbreviation": "VA"
+    },
+    {
+        "name": "Washington",
+        "abbreviation": "WA"
+    },
+    {
+        "name": "West Virginia",
+        "abbreviation": "WV"
+    },
+    {
+        "name": "Wisconsin",
+        "abbreviation": "WI"
+    },
+    {
+        "name": "Wyoming",
+        "abbreviation": "WY"
+    }
+];
+
+
+
+
+
+__API_PATH.Hotel_STEPS  =[
+                            {label:"Basic Information"},
+                            {label:"Jots"},
+                            {label:"Departments"},
+                            {label:"Employees"},
+                            {label:"Rooms"}
+                        ]; 
+
+
+__API_PATH.DEFAULT_DEPARTMENT  = [
+                                    {department_name:"Housekeeper", abbreviation:"H/K"},
+                                    {department_name:"Electric", abbreviation:"ELEC"},
+                                    {department_name:"Mechanical", abbreviation:"MACH"},
+                                    {department_name:"Account", abbreviation:"A/C"},
+                                    {department_name:"Admin", abbreviation:"ADMIN"},
+                                    
+                                 ];
+__API_PATH.EMPLOYEE_BLANK_FIELD  = 4;
 'use strict';
 
-app.factory('AuthSrv', function () {
+app.factory('AuthSrv', function ($rootScope) {
     var auth = {
         isLogged: false
     };
+
     return auth;
 });
 'use strict';
@@ -1302,6 +1892,7 @@ app.config(['$httpProvider', function($httpProvider){
 		/* Get the application storage type default (localstorage) */
 		return {
 			request: function (config) {
+
                 config.headers = config.headers || {};
 				var token = localStorageService.get('token');
 				if (token) {
@@ -1340,13 +1931,12 @@ app.config(['$httpProvider', function($httpProvider){
    }    
   localStorageServiceProvider.setPrefix(prefix);
 }])
-.run(['$location','$rootScope','localStorageService','AuthSrv',
-	function($location, $rootScope,localStorageService,AuthSrv){   	
+.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$timeout',
+	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$timeout){   	
         
         
         $rootScope.$on("$routeChangeStart", 
-            function (event, nextRoute, currentRoute) {           
-            
+            function (event, nextRoute, currentRoute) { 
                 
                 if(nextRoute.$$route){
                     if(nextRoute.$$route.access){
@@ -1354,35 +1944,83 @@ app.config(['$httpProvider', function($httpProvider){
                    } 
                 }
                 
-                if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {                  
+                if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
                     AuthSrv.isLogged = 0;                  
                     $location.path("/");
-                }else {
+                }/*else {
                    
                     var token = localStorageService.get('token');
                     if(($location.path() === '/login' || $location.path() === '/') && token ){           
                        $location.path("/dashboard");
                     }
-                }
+                }*/
+
+                $rootScope.$watch(function(newValue, oldValue) {
+                    $rootScope.logggedin = AuthSrv.isLogged;
+                });
+
+        
+
+        });
+
+        $rootScope.$on("$routeChangeSuccess", function(event, next, current) {
+          $templateCache.removeAll(); 
+
+          /*$timeout(function() {
+            var viewHeight,windowHeightl,containerHeight;
+
+            viewHeight = document.getElementsByTagName('ng-view')[0].clientHeight;
+            windowHeight = window.innerHeight;
+            if(windowHeight > viewHeight)
+            {
+
+                containerHeight = windowHeight-70;
+            }
+
+            if(windowHeight < viewHeight)
+            {
+
+                containerHeight = viewHeight-70;
+            }
+
+
+            window.addEventListener('resize', setWindowSize);
+
+              function setWindowSize() { 
+                    $rootScope.$apply(function(){
+                        viewHeight = document.getElementsByTagName('ng-view')[0].clientHeight;
+                        windowHeight = window.innerHeight;
+                        if(windowHeight > viewHeight)
+                            {
+
+                                containerHeight = windowHeight-70;
+                            }
+
+                            if(windowHeight < viewHeight)
+                            {
+
+                                containerHeight = viewHeight-70;
+                            }
+                            $rootScope.iframeHeight = containerHeight;
+
+                    });
+              }
+          });        
+
+          $rootScope.iframeHeight = window.innerHeight-70;
+          window.addEventListener('resize', setWindowSize);
+          function setWindowSize() { 
+                $rootScope.$apply(function(){$rootScope.iframeHeight = window.innerHeight-70;});
+          }*/
         });
 
 
-        /*$rootScope.$on("$routeChangeSuccess", 
-            function (event, nextRoute, currentRoute) {
-            
-           if(nextRoute.$$route){
-                if(nextRoute.$$route.access){
-                    $rootScope.isAuth= nextRoute.$$route.access;                    
-               } 
-           }
-            
-        });*/
-    	
     	
     	/* This will logout the user from the application */
     	$rootScope.clearToken = function () {
             localStorageService.remove('token');
             localStorageService.remove('user');
+            localStorageService.remove('hotel');
             delete $rootScope.user;
             AuthSrv.isLogged = false;
             $location.path('/');
@@ -1402,34 +2040,83 @@ app.config(['$httpProvider', function($httpProvider){
 
 app.config(['$routeProvider','$locationProvider',function($routeProvider, $locationProvider){
     $routeProvider
-    .when('/',  {
-       templateUrl : "/modules/login/views/login.tpl.html",
-        controller: "loginController",
+    
+    .when("/", {
+        templateUrl: "/modules/home/views/home.html",
+        controller: "homeController",
         access: {
-            requiredLogin: false
+            requiredLogin: false,
+            headerType:'front_header',
+             sidebar: 'no',
         }
     })
 
+    .when("/about-us", {
+        templateUrl: "/modules/about/views/about-us.html",
+        controller: "aboutUsCtrl",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+            sidebar: 'no',
+        }
+    })
+
+    .when("/contact-us", {
+        templateUrl: "/modules/contact/views/contact.html",
+        controller: "contactController",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+            sidebar: 'no',
+        }
+    })
+
+
+    .when("/faq", {
+        templateUrl: "/modules/faq/views/faq.html",
+        controller : "faqController",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+             sidebar: 'no',
+        }
+    })
+
+    .when("/demo", {
+        templateUrl: "/modules/demo/views/demo.html",
+        controller: "demoController",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+            sidebar: 'no',
+        }
+    })
+
+
     .when("/login", {
-        templateUrl : "/modules/login/views/login.html",
+        templateUrl : "/modules/login/views/login.tpl.html",
         controller: "loginController",
         access: {
-            requiredLogin: false
+            requiredLogin: false,
+             sidebar: 'no',
         }
     })
      .when("/resetpassword/:token", {
         templateUrl : "/modules/login/views/resetpassword.html",
         controller  :  "resetPasswordCtlr",
         access: {
-            requiredLogin: false,
+           requiredLogin: false,
+            headerType:'front_header',
+            sidebar: 'no',
         }
-    })
+    })    
 
     .when("/register", {
         templateUrl : "/modules/register/views/register.tpl.html",
         controller  :  "registerController",
         access: {
-            requiredLogin: false
+            requiredLogin: false,
+             sidebar: 'no',
         }
     })
     .when("/dashboard", {
@@ -1438,22 +2125,35 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         access: {
             requiredLogin: true, 
             headerType:'hotel_header',
-            sidebar: 'yes',
+            sidebar: 'no',
             outside:'yes'
         }
     })
 
-   
-    .when("/dashboard/jot", {
-        templateUrl : "/modules/jot/views/dashboard-jot.html",
-        controller  :  "jotController",
+
+    .when("/dashboard/hotel-setup/:steps?", {
+        templateUrl : "/modules/dashboard/views/steps.html",
+        controller  :  "hotelSetupController",
         access: {
-            requiredLogin: true,
+           requiredLogin: false,
+            headerType:'hotel_header',
+            sidebar: 'no',
+        }
+    })
+
+
+    .when("/dashboard/hotelboard/:type?", {
+        templateUrl : "/modules/jot/views/hotelboard.html",
+        //controller  :  "dashboardController",
+        controller  :  "hotelBoardController",
+        access: {
+            requiredLogin: true, 
             headerType:'dashboard_header',
             sidebar: 'yes'
         }
     })
 
+  
     .when("/dashboard/employee", {
         templateUrl : "/modules/employee/views/employee.html",
         controller  :  "employeeController",
@@ -1464,8 +2164,9 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
     .when("/dashboard/employee_schedule", {
-        templateUrl : "/modules/employee/views/employee_schedule.html",
-        controller  :  "employeeScheduleController",
+        templateUrl : "/modules/employee/views/scheduler.html",
+        controller  :  "schedulerController",
+        controllerAs  :  "ctlr",
         access: {
             requiredLogin: true,
             headerType:'dashboard_header',
@@ -1492,26 +2193,102 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
     })
 
     .when("/dashboard/inventory_category", {
-        templateUrl : "/modules/vending_machine/views/inventory_category.html",
-        controller  :  "inventoryCatController",
+        templateUrl   : "/modules/vending_machine/views/inventory_category.html",
+        controller    : "inventoryCatController",
         access: {
             requiredLogin: true,
             headerType:'dashboard_header',
             sidebar: 'yes'
         }
     })
-   .otherwise({redirectTo: '/'});
-    $locationProvider.html5Mode(true);     
+    .when("/dashboard/lost_found", {
+        templateUrl   : "/modules/lost_found/views/lost_found_management.html",
+        controller    : "lostFoundManagementController",
+        controllerAs  : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/profile", {
+        templateUrl   : "/modules/profile/views/profile.html",
+        controller    : "profileController",
+        access: {
+            requiredLogin: true,
+            headerType:'hotel_header',
+            sidebar: 'no'
+        }
+    })
+
+    .when("/dashboard/phone_directory", {
+        templateUrl   : "/modules/phone_directory/views/phone_directory.html",
+        controller    : "phoneDirController",
+        controllerAs  : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/document_center", {
+        templateUrl   : "/modules/document_center/views/document_center.html",
+        controller    : "documentCenterController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+   .otherwise({
+    redirectTo: '/modules/error/views/404.html'
+
+    });
+        $locationProvider.html5Mode(true);     
+    }]);
+"use strict";
+
+app.controller('aboutUsCtrl',['$scope',
+	function($scope){
+}]);
+"use Strict";
+
+app.controller('contactController',['$scope',
+	function($scope){
+
 }]);
 "use strict";
 
-/**************************************
-* Login controller
-**************************************/
+app.controller('dashboardController', ['$scope','$location','localStorageService','$rootScope','$mdDialog','toastService','globalRequest',
+	function($scope,$location, localStorageService,$rootScope,$mdDialog,toastService,globalRequest) {
+
+		/*
+		*
+		* Redirect user if not hotel owner
+		*
+		*/	
+
+		var userDetail = localStorageService.get('user');
+		if(userDetail.role == 'staff')
+		{
+			$location.path('/dashboard/hotelboard');
+			return false;
+		}
 
 
-app.controller('dashboardController', ['$scope','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','toastService',
-	function($scope,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,toastService) {	
+		/*
+		*
+		* Get hotels list
+		*
+		*/
+		
+		globalRequest.getHotels();
+
+
 
 		/*
 		* Function
@@ -1520,45 +2297,11 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		*
 		*/
 
-		$scope.openAddHotelPopup = function(){
-			$mdDialog.show({
-				controller:'dashboardPopupController',	          
-				templateUrl: '/modules/dashboard/views/add-new-hotel.tpl.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				clickOutsideToClose:true,
-			})
-			.then(function(answer) {
-			}, function() {
 
-			});
-
-		};
-
-
-
-		/*
-		* Factory method
-		*
-		* Display hotels
-		*
-		*/
-
-		/*var data = {
-				"user_id":localStorageService.get('user')._id
-			};
-		var request={
-				url:window.__API_PATH.GET_HOTELS,
-				method:"POST",
-				data:data
-			};
-		
-		dashboardFactory.hotelCRUD(request).then(function(response){
-			if(response.error){
-			} else {				
-				$rootScope.hotels = response.result;
-			}
-		});*/
+		$scope.openHotelSetupWizard = function(){
+			localStorageService.remove('processingHotel');
+			$location.path('/dashboard/hotel-setup/1');	
+		};		
 
 
 		/*
@@ -1570,13 +2313,42 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 		
 
 		$scope.redirectToJot = function(hotel){
+			
+			globalRequest.getHotelStatus(hotel._id).then(function(response){				
 
-			/*var hotelData  = {
-					'hotel_id'   :hotelID,
-					'hotel_name' :hotelName
-				};*/	
-			localStorageService.set('hotel', hotel);			
-			$location.path('/dashboard/jot');
+				var completedStep;	
+
+				if(response[0].step != 'completed')
+				{
+					if(response[0].jot_types.length == 0)
+					{
+						completedStep = 2;
+
+					} else if(response[0].departments.length == 0) {
+						completedStep = 3;
+
+					} else if(response[0].members.length == 0) {
+						completedStep = 4;
+					} else {
+						completedStep = 'completed';
+					}
+				} else {
+					completedStep = 'completed';
+				}
+
+
+
+				if(completedStep == 'completed')
+				{
+					localStorageService.set('hotel', hotel);			
+					$location.path('/dashboard/hotelboard');
+				} else {
+					localStorageService.set('processingHotel',hotel);
+					$location.path('/dashboard/hotel-setup');
+				}
+
+
+			});
 		};
 
 
@@ -1605,14 +2377,11 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 					params:data
 				};
 			
-			dashboardFactory.hotelCRUD(request).then(function(response){
-				if(response.error){
-				} else {				
-					if(response.success)
-					{
-						var popup = {"message":response.message,"class":"success"};
-						toastService.alert(popup);
-					}
+			globalRequest.jotCRUD(request).then(function(response){
+				if(response.success)
+				{
+					var popup = {"message":response.message,"class":"success"};
+					toastService.alert(popup);
 				}
 			});		
 		};
@@ -1623,13 +2392,8 @@ app.controller('dashboardController', ['$scope','$location','$timeout','localSto
 
 "use strict";
 
-/**************************************
-* Login controller
-**************************************/
-
-
-app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','dashboardFactory','$rootScope','$mdDialog','$route','toastService',
-	function($scope,$http,$location,$timeout, localStorageService,dashboardFactory,$rootScope,$mdDialog,$route,toastService) {	
+app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','globalRequest','$rootScope','$mdDialog','$route','toastService',
+	function($scope,$http,$location,$timeout, localStorageService,globalRequest,$rootScope,$mdDialog,$route,toastService) {	
 
 
 		$scope.currencyList = window.__API_PATH.CURRENCY_LIST;
@@ -1685,7 +2449,7 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 						data:hotelDataObj
 					};
 
-				dashboardFactory.hotelCRUD(request).then(function(response){								
+				globalRequest.jotCRUD(request).then(function(response){								
 					$scope.hotelResult 	 = response;
 					
 					if(response.status == 1)
@@ -1711,26 +2475,532 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 
 
 
-'use strict';
+"use strict";
 
-app.factory('dashboardFactory', ['$http', function ($http) {
-	return{		
-		
-		hotelCRUD: function(obj){
-			return $http(obj).then(function(response){
-				return response.data;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
+app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$location','globalRequest','localStorageService',
+	function($scope,$rootScope,$routeParams,$location,globalRequest,localStorageService) {	
+
+		/*********   Get hotel setup wizard current hotel  ************/
+
+		var hotelData   = localStorageService.get('processingHotel');
+
+		if(!hotelData)	
+		{			
+			/*********   Redirect if no hotel is in wizard  ************/
+
+			$location.path('/dashboard/hotel-setup/1');
+			//return false;
+
+		} else {						
+
+			/**************************************************
+			* Check hotel blank steps
+			***************************************************/
+
+			globalRequest.getHotelStatus(hotelData._id).then(function(response){
+				
+				$rootScope.hotelStatus = response[0];
+
+				$scope.selectedDepartment = response[0].departments;
+				
+				var completedStep = 1;
+				var redirectPath = '/dashboard';
+
+				if(response[0].step != 'completed')
+				{
+					if(response[0].jot_types.length == 0)
+					{
+						completedStep = 2;
+
+					} else if(response[0].departments.length == 0) {
+						completedStep = 3;
+
+					} else if(response[0].members.length == 0) {
+						completedStep = 4;
+					} else {
+						completedStep = 'completed';
+					}
+					
+
+				} else {
+					
+					completedStep = 'completed';
+				}
+
+				$scope.ActiveStep = $routeParams.steps;
+
+				if(completedStep != 'completed')
+				{			
+
+					/**************************************************
+					* Redirect on step from where user left the process
+					***************************************************/
+
+					if($scope.ActiveStep)
+					{
+						if($scope.ActiveStep > completedStep)
+						{						
+							redirectPath = '/dashboard/hotel-setup/'+completedStep;
+						} else if($scope.ActiveStep <= completedStep){
+
+							redirectPath = '/dashboard/hotel-setup/'+$scope.ActiveStep;
+						}
+					} else {					
+						redirectPath = '/dashboard/hotel-setup/'+completedStep;
+					}
+				} else {
+
+					/***********************************************************			
+					* Clear the wizard procession data from localStorageService
+					* Redirect on dashboard if all steps completed
+					***********************************************************/
+
+				   localStorageService.remove('processingHotel');
+				   redirectPath = '/dashboard';
+				}
+
+
+				$location.path(redirectPath);
+
+				if(redirectPath == '/dashboard')
+				{
+					return false;
+				}
+
 			});
-		},			
-	};
+			
+		}
+
+		/*********   Get setup steps  ************/
+
+		$scope.hotelStepList = window.__API_PATH.Hotel_STEPS;
+
+		/***********************************************************			
+		* Render page template according to step in route url			
+		***********************************************************/
+		$scope.ActiveStep = $routeParams.steps;
+
+		if($scope.ActiveStep)
+		{
+			$scope.stepsTemplate = '/modules/dashboard/views/step'+$routeParams.steps+'.html';
+		}
+				
+	}
+]);
+
+"use strict";
+
+app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$location','globalRequest','localStorageService',
+	function($scope,$rootScope,$routeParams,$location,globalRequest,localStorageService) {	
+
+		$scope.currencyList = window.__API_PATH.CURRENCY_LIST;
+		var hotelData   = localStorageService.get('processingHotel');
+
+		$scope.countryList = window.__API_PATH.COUNTRY_LIST;
+		$scope.stateList = window.__API_PATH.US_STATE;
+
+
+		/************************************************
+		* Append value if hotel already exists
+		*************************************************/
+
+		if(hotelData)
+		{
+
+			globalRequest.getHotelStatus(hotelData._id).then(function(response){
+					angular.forEach(response[0],function (value,key) {					
+							$scope[key] = value;					    
+					});
+			});
+		}
+
+		/************************************************
+		* Step1 submit to create the hotel
+		*************************************************/
+
+		$scope.step1FormSubmit = function(){
+			var acceptTerm = $scope.terms;	
+			$scope.hotelResult = {class:"",message:"",status:""};
+			if(acceptTerm)
+			{
+			
+
+				 var hotelDataObj = {
+				 		user_id     	   : localStorageService.get('user')._id,
+						hotelname          : $scope.hotelname,
+						ownername          : $scope.ownername,
+						currency           : $scope.currency,
+						email              : $scope.email,
+						phone              : $scope.phone,
+						address            : $scope.address,
+						city               : $scope.city,
+						zipcode            : $scope.zipcode,
+						state              : $scope.state,
+						country            : $scope.country,
+						hotel_id		   : null
+						
+				};
+
+
+
+				var request={
+						url:window.__API_PATH.ADD_HOTEL,
+						method:"POST",
+						data:hotelDataObj
+					};
+
+				if(hotelData)
+				{
+					request.url 		  = window.__API_PATH.UPDATE_HOTEL;
+					request.method 		  = "PUT";
+					request.data.hotel_id = hotelData._id;
+				}
+				
+				globalRequest.jotCRUD(request).then(function(response){						
+					
+					localStorageService.set('processingHotel',response.result);							
+					if(response.status == 1)
+					{	var nextStep   = parseInt($routeParams.steps)+1;					
+						$location.path('/dashboard/hotel-setup/'+nextStep);
+					}		
+
+				});
+
+			} else {
+				$scope.hotelResult.class = 'Autherror';
+				$scope.hotelResult.message = 'Please accept terms and conditions.';
+				$scope.hotelResult.status = 1;
+			}
+		};		
+				
+	}
+]);
+
+"use strict";
+
+app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$location','localStorageService','globalRequest',
+	function($scope,$rootScope,$routeParams,$location,localStorageService,globalRequest) {	
+
+		
+		$scope.defaultBoards = window.__API_PATH.JOT_TYPES;
+		var processingHotel = localStorageService.get('processingHotel');
+
+		/************************************************
+		* Navigate on previous page
+		*************************************************/
+
+		$scope.navigateBack = function(){
+			var page = $routeParams.steps - 1;			
+			$location.path('/dashboard/hotel-setup/'+page);
+		};
+
+		/************************************************
+		* Step2 form submit
+		*************************************************/
+
+		$scope.step2FormSubmit = function(){
+
+			$scope.featureResult = {class:"",message:"",status:""};
+
+			var getSelectedValues = [];
+			for (var key in $scope.step2Ctlr.selectFeature) {
+				if($scope.step2Ctlr.selectFeature[key]){							
+			    	getSelectedValues.push($scope.step2Ctlr.selectFeature[key].id);
+				}
+			}
+			
+			if(getSelectedValues.length > 0)
+			{		
+
+				 var hotelDataObj = {
+				 		hotel_id     	   : processingHotel._id,
+				 		jot_types 		   : getSelectedValues						
+						
+				};
+
+				var request={
+						url:window.__API_PATH.UPDATE_HOTEL,
+						method:"PUT",
+						data:hotelDataObj
+					};
+
+				globalRequest.jotCRUD(request).then(function(response){	
+											
+					if(response.status == 1)
+					{
+						var nextStep   = parseInt($routeParams.steps) +1;
+
+						$location.path('/dashboard/hotel-setup/'+nextStep);
+					}				
+
+				});
+
+			} else {
+				$scope.featureResult.class = 'Autherror';
+				$scope.featureResult.message = 'Please Select at least one jot type.';
+				$scope.featureResult.status = 1;
+			}
+		};	
+
+
+
+				
+	}
+]);
+
+"use strict";
+
+app.controller('step3Controller', ['$scope','$routeParams','$location','localStorageService','globalRequest',
+	function($scope,$routeParams,$location,localStorageService,globalRequest) {	
+
+		var processingHotel = localStorageService.get('processingHotel');
+
+		/************************************************
+		* Navigate on previous page
+		*************************************************/
+
+		$scope.navigateBack = function(){
+			var page = $routeParams.steps - 1;			
+			$location.path('/dashboard/hotel-setup/'+page);
+		};
+
+
+		/************************************************************	
+		* Default department list
+		************************************************************/
+		if($scope.selectedDepartment.length > 0)
+		{
+			$scope.defaultDepartment = $scope.selectedDepartment;
+		} else {
+			$scope.defaultDepartment = window.__API_PATH.DEFAULT_DEPARTMENT;
+		}
+		
+
+
+		/*****************************************************
+		* Append new blank field
+		*****************************************************/
+
+		$scope.blankFieldCount = [];		
+		$scope.addmore = function(){			
+			$scope.blankFieldCount.push({department_name:"",abbreviation:""});		
+		};
+
+		/************************************************
+		* Delte Last element
+		*************************************************/
+
+		$scope.deleteDeptRow = function(dept,iterationList,ind){
+
+			$scope[iterationList].splice(ind, 1);
+
+			if(iterationList == 'defaultDepartment'){
+				delete $scope.step3Ctlr.department_name[dept.department_name]; 
+				delete $scope.step3Ctlr.abbreviation[dept.department_name]; 
+			}
+
+			if(iterationList == 'blankFieldCount'){
+				delete $scope.step3Ctlr.department_name[ind]; 
+				delete $scope.step3Ctlr.abbreviation[ind];
+			}
+
+			 
+		};
+
+
+		/************************************************
+		* Step3 form submit
+		*************************************************/
+
+		$scope.step3FormSubmit = function(){
+
+	
+			var removeKeyFromArray = [];
+			for (var key in $scope.step3Ctlr.department_name) {
+				
+				if($scope.step3Ctlr.department_name[key])
+				{
+					removeKeyFromArray.push({
+						hotel_id        : processingHotel._id,
+						department_name : $scope.step3Ctlr.department_name[key],
+						abbreviation    : $scope.step3Ctlr.abbreviation[key]
+					});
+				}
+								
+			}	
+	
+			$scope.departmentResult = {class:"",message:"",status:""};
+
+			if(removeKeyFromArray.length > 0)
+			{
+				$scope.message = ' ';		
+
+				 var hotelDataObj = {
+				 		hotel_id     	       : processingHotel._id,
+				 		departments_list 	   : removeKeyFromArray	
+				};
+
+				var request={
+						url:window.__API_PATH.CONFIGURE_DEPARTMENTS,
+						method:"POST",
+						data:hotelDataObj
+					};
+
+				globalRequest.jotCRUD(request).then(function(response){				
+											
+					if(response.status == 1)
+					{
+						var nextStep   = parseInt($routeParams.steps) +1;					
+						$location.path('/dashboard/hotel-setup/'+nextStep);
+					}				
+
+				});
+
+			} else {
+				$scope.departmentResult.class   = 'Autherror';
+				$scope.departmentResult.message = 'Please enter at least one department.';
+				$scope.departmentResult.status  = 1;
+			}
+		};
+			
+				
+	}
+]);
+"use strict";
+
+app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$location','localStorageService','globalRequest',
+	function($scope,$rootScope,$routeParams,$location,localStorageService,globalRequest) {	
+
+		var processingHotel = localStorageService.get('processingHotel');
+
+
+		/************************************************
+		* Create iteration for department
+		*************************************************/
+
+		$scope.defaultBlankField = window.__API_PATH.EMPLOYEE_BLANK_FIELD;
+		function getNumberInArray(data){
+			return new Array(data);
+		}
+		
+		$scope.getIteration = [];
+		angular.forEach($scope.selectedDepartment,function(value,kay){
+			$scope.getIteration[value._id] =  getNumberInArray($scope.defaultBlankField);
+		});	
+
+		/*****************************************************
+		* Append blank field in list of particular department
+		*****************************************************/	
+
+		$scope.addmore = function(deptID){
+			$scope.getIteration[deptID].push(1);
+
+		};
+
+
+		/************************************************
+		* Delte Last element
+		*************************************************/
+
+		$scope.deleteEmpRow = function(deptID,ind){
+			$scope.stepsCtrl[deptID+ind] = '';
+			$scope.getIteration[deptID].splice(ind, 1);
+			//var elem = document.getElementById(deptID+ind);
+			//elem.parentNode.removeChild(elem);			
+		};
+			
+
+		/************************************************
+		* Navigate on previous page
+		*************************************************/
+
+		$scope.navigateBack = function(){
+			var page = $routeParams.steps - 1;			
+			$location.path('/dashboard/hotel-setup/'+page);
+		};	
+
+
+		/************************************************
+		* Step4 form submit
+		*************************************************/
+
+		$scope.step4FormSubmit = function(){
+			var selectedEmployee = [];
+			angular.forEach($scope.stepsCtrl,function(value,key){
+				if(value.first_name)
+				{
+					value.hotel_id = processingHotel._id;
+					value.status   = 'inactive';
+					value.password = '123456';
+					selectedEmployee.push(value);
+				}
+			});
+
+			$scope.empResult = {class:"",message:"",status:""};		
+
+
+			if(selectedEmployee.length > 0)
+			{
+						
+
+				 var hotelDataObj = {
+				 		hotel_id     	       : processingHotel._id,
+				 		member_list 	       : selectedEmployee	
+				};
+
+				var request={
+						url:window.__API_PATH.CONFIGURE_MEMBERS,
+						method:"POST",
+						data:hotelDataObj
+					};
+
+				globalRequest.jotCRUD(request).then(function(response){	
+					$scope.empResult = response;
+					if(response.status == 1)
+					{	
+
+						/************************************************
+						* Mark steps completed
+						*************************************************/
+
+						var hotelrequest={
+								url:window.__API_PATH.UPDATE_HOTEL,
+								method:"PUT",
+								data:{hotel_id : processingHotel._id,step:'completed'}
+							};
+						globalRequest.jotCRUD(hotelrequest).then(function(hotelresponse){
+							if(hotelresponse.status == 1)
+							{	
+								$location.path('/dashboard/hotel-setup');
+							}	
+						});						
+					}				
+
+				});
+
+			} else {
+				$scope.empResult.class   = 'Autherror';
+				$scope.empResult.message = 'Please enter at least one employee.';
+				$scope.empResult.status  = 1;
+			}
+			
+		};
+
+			
+			
+	}
+]);
+
+"use Strict";
+
+app.controller('demoController',['$scope',
+	function($scope){
+
 }]);
 "use strict";
 
-app.controller('departmentController', ['$scope','localStorageService','globalRequest','$mdDialog',
-	function($scope,localStorageService,globalRequest,$mdDialog) {
+app.controller('departmentController', ['$scope','localStorageService','globalRequest','$mdDialog','toastService',
+	function($scope,localStorageService,globalRequest,$mdDialog,toastService) {
 		var hotel = localStorageService.get('hotel');
 
 
@@ -1742,32 +3012,22 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 			$scope.department_name = "";		
 			$scope.department_abbreviation = "";		
 			$scope.department_desc = "";
-		}
+		};
 
 		$scope.blankFields = function(){
 			$scope.blank();
 			$scope.departmentResult = "";
-		}
+		};
 
 		
 		/************************************
 		* Get department list
-		*************************************/			
-		
-		var request = {
-		            url:window.__API_PATH.GET_DEPARTMENTS,
-		            method:"GET",
-		            params:{
-		            	hotel_id    :  hotel._id		
-		            }
-		          };
-		globalRequest.jotCRUD(request).then(function(response){				
-		 	$scope.departmentList = response.result;
-		 });		
+		*************************************/	
+				
+		globalRequest.getDepartments();
 
-
-		 /************************************
-		* Add employee
+		/************************************
+		* Add Department
 		*************************************/		
 		
 
@@ -1789,6 +3049,7 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 			            	hotel_id      	   :  hotel._id,
 			            	department_name    :  departmentName,
 			            	abbreviation       :  Abbreviation,
+			            	bgcolor       	   :  $scope.bgcolor,
 			            	description        :  $scope.department_desc
 			            }
 			          };
@@ -1853,10 +3114,12 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 
 
 
+
+
 "use strict";
 
-app.controller('editDepartmentController', ['$scope','localStorageService','globalRequest','Upload','$timeout','deptDetail','$route','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,deptDetail,$route,$mdDialog) {
+app.controller('editDepartmentController', ['$scope','localStorageService','globalRequest','deptDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,deptDetail,$mdDialog) {
 		var hotel = localStorageService.get('hotel');
 
 		
@@ -1893,6 +3156,7 @@ app.controller('editDepartmentController', ['$scope','localStorageService','glob
 			            	_id      	       :  $scope._id,
 			            	department_name    :  departmentName,
 			            	abbreviation       :  Abbreviation,
+			            	bgcolor       	   :  $scope.bgcolor,
 			            	description        :  $scope.description
 			            }
 			          };
@@ -1901,7 +3165,8 @@ app.controller('editDepartmentController', ['$scope','localStorageService','glob
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
-			 		$route.reload();
+			 		globalRequest.getDepartments();
+
 			 	}
 			 	
 			});
@@ -1948,9 +3213,360 @@ app.filter('departmentfilter',function(){
 });
 "use strict";
 
-app.controller('editEmployeeController', ['$scope','localStorageService','globalRequest','Upload','$timeout','empDetail','$route','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,empDetail,$route,$mdDialog) {
+app.controller('EditDocumentController', ['$scope','$rootScope','localStorageService','globalRequest','Detail','$mdDialog','Upload','$timeout',
+	function($scope,$rootScope,localStorageService,globalRequest,Detail,$mdDialog,Upload,$timeout) {
 		var hotel = localStorageService.get('hotel');
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+		angular.forEach(Detail.detail,function (value,key) {
+		    if(key == 'tags')
+			{
+				$scope.ctrl.itemTagModel = value;
+
+			} else if(key == 'department'){
+
+				$rootScope.department = value;
+
+			} else if(key == 'files'){
+
+				$scope.filesData = value;
+
+			} else {
+				$scope[key] = value;
+			}
+		});	
+
+
+		/************************************
+		* Edit document
+		*************************************/		
+
+		$scope.editDC = function(){	
+			
+			var request = {
+		            url:window.__API_PATH.UPDATE_DOCUMENT,
+		            method:"PUT",
+		            data:{
+		            	_id      	   			:  $scope._id,
+		            	document_name   		:  $scope.document_name,
+		            	department      		:  $rootScope.department,
+		            	tags        			:  $scope.ctrl.itemTagModel,
+		            	document_description    :  $scope.document_description,
+		            	files       		    :  $scope.filesData,
+		            	upload_date				:  new Date().getTime()
+		            }
+		          };
+
+			globalRequest.jotCRUD(request).then(function(response){
+			 	$scope.docEditResult = response;
+			 	if(response.status ==1)
+			 	{
+			 		$mdDialog.cancel();
+			 		globalRequest.getDocument();
+			 	}
+
+			 });
+
+		};
+
+	/************************************
+	* Remove files by index
+	*************************************/	
+
+	$scope.removeImageIndex = function(fData){
+		$scope.filesData = $scope.filesData.filter(function( obj ) {
+				    return obj.filename != fData.filename;
+				});
+
+	};
+
+
+
+	$scope.$watch('files', function () {		
+        $scope.uploadDocument($scope.files);
+    });
+
+    $scope.$watch('file', function () {
+        if ($scope.file != null) {
+            $scope.files = [$scope.file];
+        }
+    });
+  
+
+	/*****************************************
+	* Profile image upload
+	*****************************************/	
+
+	$scope.uploadDocument = function(files, errFiles) {			
+        if (files && files.length) {	
+            Upload.upload({
+                url: window.__API_PATH.UPLOAD_FILE,
+                type:'post',
+                arrayKey: '',
+                data: {	                    
+                    hotel_id     : hotel._id,
+                    folder_name  : 'document_center',	                    
+                    file         : files
+                }
+            }).then(function (response) {
+                $timeout(function () {
+                   //$scope.filesData.push(response.data.result);
+                   Array.prototype.push.apply($scope.filesData,response.data.result);
+                   console.log($scope.filesData);
+
+                });
+            }, function (response) {
+                if (response.status > 0) {
+                    $scope.errorMsg = response.status + ': ' + response.data;
+                }
+            }, function (evt) {
+                $scope.documentProgress = 
+                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+        }
+
+    };
+
+	}
+]);
+"use strict";
+
+app.controller('documentCenterController',['$scope','$rootScope','globalRequest','localStorageService','$mdDialog','toastService','Upload','$timeout',function($scope,$rootScope,globalRequest,localStorageService,$mdDialog,toastService,Upload,$timeout){
+	var hotel = localStorageService.get('hotel');
+
+	/************************************
+	* Blank all field before open form
+	*************************************/	
+
+	$scope.blank = function(){
+		$scope.document_name 		= "";		
+		$scope.document_description = "";
+		$scope.filesData 			= "";
+		$rootScope.department 		= "";
+		$scope.documentProgress 	= -1;
+		$scope.documentResult 		= "";	
+	};
+
+	$scope.blankFields = function(){
+		$scope.blank();
+		$scope.ctrl.itemTagModel 	= [];
+	};
+
+
+	/**********************************************************
+    * Item tags 
+    **********************************************************/
+
+	var self = this;
+    self.readonly = false;	    
+    self.itemTag = [];
+    self.itemTagModel = angular.copy(self.itemTag);
+    self.editableitemTag = angular.copy(self.itemTag);
+    self.tags = [];	    
+    self.newVeg = function(chip) {
+      return {
+        name: chip,
+        type: 'unknown'
+      };
+    };
+
+    /************************************
+	* Get documents
+	*************************************/
+
+    globalRequest.getDocument();
+
+    /************************************
+	* Get department list
+	*************************************/			
+	
+	globalRequest.getDepartments();
+
+	/************************************
+	* Add documents
+	*************************************/	
+	
+	$scope.addDC = function(){	
+		var request = {
+		            url:window.__API_PATH.ADD_DOCUMENT,
+		            method:"POST",
+		            data:{
+		            	hotel_id      			:  hotel._id,
+		            	document_name   		:  $scope.document_name,
+		            	department      		:  $rootScope.department,
+		            	tags        			:  $scope.ctrl.itemTagModel,
+		            	document_description    :  $scope.document_description,
+		            	files       		    :  $scope.filesData,
+		            	upload_date				:  new Date().getTime()
+		            }
+		    };
+
+		globalRequest.jotCRUD(request).then(function(response){
+			console.log(response);
+		 	$scope.documentResult = response;
+
+		 	if(response.status == 1)
+		 	{
+		 		$scope.blankFields();				
+		 		if(!$scope.documentList)
+		 		{
+		 			$scope.documentList = [];
+		 		}
+		 		$scope.documentList.push(response.result);
+		 		
+		 	}
+		 });
+
+	};
+
+	/*****************************************
+	* Open edit Contact
+	*****************************************/	
+
+	$scope.openDocumentFileView = function(detail){
+			$mdDialog.show({
+				controller: 'documentViewController',
+				templateUrl: '/modules/document_center/views/view_files.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{Detail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+
+	};
+
+	/*****************************************
+	* Open edit Contact
+	*****************************************/	
+
+	$scope.openDocumentEditPopup = function(detail){
+			$mdDialog.show({
+				controller: 'EditDocumentController',
+				controllerAs: 'ctrl',
+				templateUrl: '/modules/document_center/views/edit_document.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{Detail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+
+	};
+
+	
+
+	/*****************************************
+	* Delete contact
+	*****************************************/	
+
+	$scope.removeDc = function(detail){
+
+		var request={
+			url:window.__API_PATH.DELETE_DOCUMENT,
+			method:"DELETE",
+			params:{_id:detail._id}
+		};
+		
+		globalRequest.jotCRUD(request).then(function(response){				
+			var popup = {"message":response.message,"class":response.class};
+			toastService.alert(popup);
+		});
+
+	};
+
+	$scope.$watch('files', function () {
+        $scope.uploadDocument($scope.files);
+    });
+
+    $scope.$watch('file', function () {
+        if ($scope.file != null) {
+            $scope.files = [$scope.file];
+        }
+    });
+  
+
+	/*****************************************
+	* Profile image upload
+	*****************************************/	
+
+	$scope.uploadDocument = function(files, errFiles) {			
+
+        if (files && files.length) {	
+            Upload.upload({
+                url: window.__API_PATH.UPLOAD_FILE,
+                type:'post',
+                arrayKey: '',
+                data: {	                    
+                    hotel_id     : hotel._id,
+                    folder_name  : 'document_center',	                    
+                    file         : files
+                }
+            }).then(function (response) {
+                $timeout(function () {
+                   $scope.filesData = response.data.result;
+                });
+            }, function (response) {
+                if (response.status > 0) {
+                    $scope.errorMsg = response.status + ': ' + response.data;
+                }
+            }, function (evt) {
+                $scope.documentProgress = 
+                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+        }
+
+    };
+	
+	
+}]);
+"use strict";
+
+app.controller('documentViewController', ['$scope','Detail',
+	function($scope,Detail) {
+		
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+		angular.forEach(Detail.detail,function (value,key) {
+		    $scope[key] = value;
+		});	
+		console.log($scope);
+	}
+]);
+
+
+
+
+"use strict";
+
+app.filter('dcDepartmentFilter',function(){
+	return function(input,scope){
+		if(input)
+		{
+
+			var searchDepartment        = scope.searchDepartment;
+			if(!searchDepartment){
+				return input;
+			}
+
+	
+			input   =   input.filter(function( obj ) {
+							if(obj.department.indexOf(searchDepartment) != -1)
+							{
+								return true;
+							}
+						});
+		}
+		return input;
+	};
+
+});
+"use strict";
+
+app.controller('editEmployeeController', ['$scope','localStorageService','globalRequest','Upload','$timeout','empDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,Upload,$timeout,empDetail,$mdDialog) {
+		var hotel = localStorageService.get('hotel');
+		$scope.position_list = window.__API_PATH.POSITION;
 
 		
 		/***********************************************
@@ -1986,13 +3602,13 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 			            	_id  		  :  $scope._id,
 			            	first_name    :  $scope.first_name || null,
 			            	last_name     :  $scope.last_name || null,
-			            	user_name     :  $scope.user_name || null,
+			            	contact_number:  $scope.contact_number || null,
 			            	email         :  $scope.email || null,
 			            	status 		  :  status,
 			            	department    :  $scope.department,
 			            	profile_image :  $scope.profileimages,
 			            	position 	  :  $scope.position,
-			            	password      :  '123456',
+			            	address 	  :  $scope.address
 			            }
 			          };
 
@@ -2001,7 +3617,7 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
-			 		$route.reload();
+			 		globalRequest.getStaff();
 			 	}
 
 			 });
@@ -2051,9 +3667,98 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 
 "use strict";
 
-app.controller('employeeController', ['$scope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','$route','toastService',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,$route,toastService) {
+app.controller('editshiftController', ['$scope','localStorageService','globalRequest','shiftDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,shiftDetail,$mdDialog) {
 		var hotel = localStorageService.get('hotel');
+
+		/*
+		* Get day list in array
+		*/
+		
+		$scope.getDay = function(num) {
+		    return new Array(num);   
+		};
+
+		/*
+		* Get color codes
+		*/
+
+		$scope.colorCodes = window.__API_PATH.COLOR_CODE;
+
+		
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+				
+
+		angular.forEach(shiftDetail.detail,function (value,key) {
+
+			if(key == 'start_time')
+			{
+
+				$scope.start_hour = value[0].hour;
+				$scope.start_min = value[0].minute;
+
+			} else if(key == 'end_time'){
+	
+				$scope.end_hour = value[0].hour;
+				$scope.end_min = value[0].minute;
+
+			} else if(key == 'bgcolor'){
+	
+				$scope.ctlr.bgcolor = value;
+
+			} else {
+				$scope[key] = value;
+			}
+		    
+		});
+
+
+		/************************************
+		* Edit employee
+		*************************************/		
+		
+
+		$scope.updateShift = function(){
+	
+			var request = {
+			            url:window.__API_PATH.UPDATE_HOTELSHIFTS,
+			            method:"PUT",
+			            data:{
+			            	_id      	    :  $scope._id,
+			            	shift_name      :  $scope.shift_name,		
+		            		department_name :  $scope.department_name,
+		            		bgcolor       	:  $scope.ctlr.bgcolor,
+		            		start_time      :  { hour:$scope.start_hour,minute:$scope.start_min},		
+		            		end_time        :  { hour:$scope.end_hour,minute:$scope.end_min},
+	
+			            }
+			          };
+			globalRequest.jotCRUD(request).then(function(response){
+			 	$scope.shiftEditResult = response;
+			 	if(response.status ==1)
+			 	{
+			 		$mdDialog.cancel();
+			 		globalRequest.getShiftTime();
+			 	}
+			 	
+			});
+
+		};		
+		
+	}
+]);
+
+
+
+
+"use strict";
+
+app.controller('employeeController', ['$scope','$rootScope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','toastService',
+	function($scope,$rootScope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,toastService) {
+		var hotel = localStorageService.get('hotel');
+		$scope.position_list = window.__API_PATH.POSITION;
 
 
 		/************************************
@@ -2063,7 +3768,7 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 		$scope.blank = function(){
 			$scope.first_name = "";
 			$scope.last_name = "";
-			$scope.user_name = "";
+			$scope.contact_number = "";
 			$scope.email = "";
 			$scope.department = "";
 			$scope.position = "";
@@ -2071,52 +3776,32 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 			$scope.address = "";
 			$scope.profile = "";
 			$scope.profileProgress = -1;
-		}
+			$scope.profileimages = '';
+		};
 
 		$scope.blankFields = function(){
 			$scope.blank();
 			$scope.memberResult = "";
-		}
+		};
 
 		/************************************
 		* Get department list
 		*************************************/			
 		
-		var request = {
-		            url:window.__API_PATH.GET_DEPARTMENTS,
-		            method:"GET",
-		            params:{
-		            	hotel_id    :  hotel._id		
-		            }
-		          };
-		globalRequest.jotCRUD(request).then(function(response){				
-		 	$scope.departmentList = response.result;
-		 });
+		globalRequest.getDepartments();
 		
 		/************************************
 		* Get employee list
 		*************************************/		
-		
-			
-			var request = {
-			            url:window.__API_PATH.STAFF_SUGGESTION,
-			            method:"GET",
-			            params:{
-			            	hotel_id    :  hotel._id		
-			            }
-			          };
-			globalRequest.jotCRUD(request).then(function(response){
-				
-			 	$scope.membersList = response.result;
-			});
+		globalRequest.getStaff();
 
-		
 		/************************************
 		* Add employee
 		*************************************/		
 		
 
 		$scope.addEmployee = function(){
+			
 			var status  = ($scope.status)?$scope.status:'inactive';			
 			var request = {
 			            url:window.__API_PATH.ADD_MEMBER,
@@ -2125,12 +3810,13 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 			            	hotel_id      :  hotel._id,
 			            	first_name    :  $scope.first_name,
 			            	last_name     :  $scope.last_name,
-			            	user_name     :  $scope.user_name,
+			            	contact_number     :  $scope.contact_number,
 			            	email         :  $scope.email,
 			            	status 		  :  status,
 			            	department    :  $scope.department,
 			            	profile_image :  $scope.profileimages,
 			            	position 	  :  $scope.position,
+			            	address 	  :  $scope.address,
 			            	role 	      :  'staff',
 			            	password      :  '123456',
 			            }
@@ -2140,11 +3826,11 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 			 	$scope.blank();
 			 	if(response.status == 1)
 			 	{
-			 		if(!$scope.membersList)
+			 		if(!$rootScope.staffList)
 			 		{
-			 			$scope.membersList = [];
+			 			$rootScope.staffList = [];
 			 		}
-			 		$scope.membersList.push(response.result);
+			 		$rootScope.staffList.push(response.result);
 			 	}
 			 });
 
@@ -2155,16 +3841,16 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 		*****************************************/	
 
 		$scope.openEditForm = function(detail){
-				$mdDialog.show({
-					controller: 'editEmployeeController',
-					templateUrl: '/modules/employee/views/edit_employee.html',
-					parent: angular.element(document.body),
-					fullscreen: $scope.customFullscreen,
-					clickOutsideToClose:true,	
-					locals:{empDetail:{detail:detail,prevScope:$scope}}				
-				}).then(function(answer) {}, function() {});
+			$mdDialog.show({
+				controller: 'editEmployeeController',
+				templateUrl: '/modules/employee/views/edit_employee.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{empDetail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
 
-			};
+		};
 
 
 		/*****************************************
@@ -2222,9 +3908,6 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 
 	    };
 
-	    /*****************************************
-		* Profile image upload
-		*****************************************/
 
 	    $scope.viewDetail = function(){
 
@@ -2238,26 +3921,506 @@ app.controller('employeeController', ['$scope','localStorageService','globalRequ
 
 "use strict";
 
-app.controller('employeeScheduleController', ['$scope','localStorageService','globalRequest',
-	function($scope,localStorageService,globalRequest) {
-		var hotel = localStorageService.get('hotel');
+app.controller('scheduleEmpController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','toastService','scheduledData',
+	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,toastService,scheduledData) {
+		var hotel 			= localStorageService.get('hotel');		
+		var date         	= new Date(scheduledData.scheduleDate);
+
+		/*
+		* Get day list in array
+		*/
+
+		$scope.getDay = function(num) {
+		    return new Array(num);   
+		};
 
 		
-		/************************************
-		* Get employee list
-		*************************************/			
-			
-			var request = {
-			            url:window.__API_PATH.STAFF_SUGGESTION,
-			            method:"GET",
-			            params:{
-			            	hotel_id    :  hotel._id		
-			            }
-			          };
-			globalRequest.jotCRUD(request).then(function(response){				
-			 	$scope.membersList = response.result;
-			 });		
+		/*****************************************************
+		* Populate start and end time on edit time schedule
+		*****************************************************/
 		
+		var matchColumnDate =  date.getDate()+''+(parseInt(date.getMonth())+1) +''+date.getFullYear();
+		angular.forEach(scheduledData.empDetail.Scheduledata,function(value,key){
+			if(value.shift_filter_date == matchColumnDate)
+			{
+				$scope.selectVal  = value.schedule_data._id;	
+				$scope.start_hour = value.schedule_data.start_time.hour;
+				$scope.start_min  = value.schedule_data.start_time.minute;
+				$scope.end_hour   = value.schedule_data.end_time.hour;
+				$scope.end_min    = value.schedule_data.end_time.minute;			
+			}
+		});
+		
+
+		/*
+		* Populate start and end time on change of shift
+		*/
+
+		$scope.onChangeSchedule = function(){
+
+			if($scope.shiftTimeList && $scope.shiftTimeList != "custom" && $scope.shiftTimeList != "off")
+			{
+				var getShift      = JSON.parse($scope.shiftTimeList);
+				$scope.start_hour = getShift.start_time[0].hour;
+				$scope.start_min  = getShift.start_time[0].minute;
+				$scope.end_hour   = getShift.end_time[0].hour;
+				$scope.end_min    = getShift.end_time[0].minute;
+			}
+			
+			if($scope.shiftTimeList == "off")
+			{
+				$scope.start_hour = $scope.start_min = $scope.end_hour= $scope.end_min= '';	
+			}
+			
+		};
+
+
+
+		/************************************
+		* Add employee schedule data
+		*************************************/
+
+
+		$scope.setSchedule = function(){
+			var isSetShift,shiftID;			
+			var monthVal 	 = date.getMonth();
+			var firstDay     = new Date(date.getFullYear(), monthVal, 1);
+			var lastDay      = new Date(date.getFullYear(), monthVal + 1, 0);
+
+			var empData 	 = scheduledData.empDetail;
+			var scheduleData = {};
+			
+			var start_hour = $scope.start_hour;
+			var start_min  = $scope.start_min;
+			var end_hour   = $scope.end_hour;
+			var end_min    = $scope.end_min;
+
+			if($scope.shiftTimeList)
+			{
+				if($scope.shiftTimeList != "custom" && $scope.shiftTimeList != "off")
+				{
+					isSetShift   = JSON.parse($scope.shiftTimeList);
+					shiftID      = isSetShift._id;
+				} else {
+					shiftID   = $scope.shiftTimeList;
+				}
+				
+				scheduleData  = {
+									_id :shiftID,
+									start_time:{hour:start_hour,minute:start_min},
+									end_time:{hour:end_hour,minute:end_min},
+							    };
+			} else {
+				scheduleData = '';
+			}
+			
+
+			var filterString =  date.getDate()+''+(parseInt(date.getMonth())+1) +''+date.getFullYear();		
+		
+			var SchedRequest = {
+		            url:window.__API_PATH.ADD_MEMBER_SCHEDULE,
+		            method:"POST",
+		            data:{
+		            	hotel_id       		:  hotel._id,		
+		            	user_id        		:  empData._id,
+		            	shift_date     		:  date.getTime(),
+		            	shift_filter_date   :  filterString,	            		
+		            	schedule_data  		:  scheduleData,		
+		            }
+		        };
+		   
+		    globalRequest.jotCRUD(SchedRequest).then(function(response){	
+			 	if(response.status == 1)
+			 	{
+			 		$rootScope.$emit("CallgetSchedule", {firstDay:firstDay,lastDay:lastDay});
+			 		$mdDialog.cancel();	
+
+			 		var popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup); 
+			 	}
+			});
+
+		};
+		
+		
+	}
+]);
+"use strict";
+
+app.controller('schedulerController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','$interval','toastService',
+	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,$interval,toastService) {
+
+		var hotel 			 = localStorageService.get('hotel');
+		var date 	   	     = new Date();
+		$scope.currentDate   = new Date(); 
+		$scope.datesData 	 = {dates : "", monthStartDate : ""};
+		$scope.position_list = window.__API_PATH.POSITION;
+
+		/*
+		* Get day list in array
+		*/
+		
+		$scope.getDay = function(num) {
+		    return new Array(num);   
+		};
+
+		/*
+		* Get color codes
+		*/
+
+		$scope.colorCodes = window.__API_PATH.COLOR_CODE;
+
+
+		/************************************
+		* Get shift timing
+		*************************************/		
+		globalRequest.getShiftTime();
+		
+
+		/************************************
+		* Get employee schedule data
+		*************************************/	
+
+		$scope.getSchedule = function(fromDate,toDate){
+
+			var from = new Date(new Date(fromDate).getFullYear(),new Date(fromDate).getMonth(),new Date(fromDate).getDate()).getTime();
+			var to = new Date(new Date(toDate).getFullYear(),new Date(toDate).getMonth(),new Date(toDate).getDate()).getTime();
+
+			$scope.hideLoader = false;
+			var GetRequest =  {
+					url:window.__API_PATH.MEMBER_SCHEDULE_DATA,
+					method:"GET",
+					params:{
+						hotel_id    :  hotel._id,
+						from_date   :  from,
+						to_date     :  to	
+					}
+				};
+
+			globalRequest.jotCRUD(GetRequest).then(function(response){				
+			 	$scope.membersList = response.result;
+			 	$scope.hideLoader = true;
+			 });
+		};
+
+
+		/**************************************************
+		* Make function broadcast to load from anywhere
+		***************************************************/
+
+		$rootScope.$on("CallgetSchedule", function(evt,data){
+           $scope.getSchedule(data.firstDay,data.lastDay);
+        });
+
+
+		/************************************
+		* Blank all field before open form
+		*************************************/
+		$scope.blank = function(){
+			$scope.shift_name = "";		
+			$scope.shift_time = "";		
+			$scope.ctlr.bgcolor = "";		
+			$scope.department_name = "";		
+		};
+
+		/**************************************************************************
+		* Get last date of week by passing the week number and month start date obj
+		***************************************************************************/
+
+		Date.prototype.getWeek = function(monthStart) {
+			var onejan = new Date(monthStart);
+			return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+		};
+
+		function getDateRangeOfWeek(monthStart,weekNo){
+			var numOfdaysPastSinceLastMonday;
+		    var d1 = new Date();
+		    numOfdaysPastSinceLastMonday = parseInt(d1.getDay()- 1);
+		    d1.setDate(d1.getDate() - numOfdaysPastSinceLastMonday);
+		    var weekNoToday = d1.getWeek(monthStart);
+		    var weeksInTheFuture = parseInt( weekNo) - parseInt(weekNoToday );
+		    d1.setDate(d1.getDate() + parseInt( 7 * weeksInTheFuture ));
+		    
+		    d1.setDate(d1.getDate() + 6);		    
+		    return d1;
+		}
+
+
+		/**************************************************************************
+		*
+		* Function 
+		*
+		* To return array of all date by passing startDate and endDate of month
+		*
+		***************************************************************************/
+
+		var AllDates  = function(startDate, endDate) {
+
+							var dates = [],
+							  currentDate = startDate,
+							  addDays = function(days) {
+							    var date = new Date(this.valueOf());
+							    date.setDate(date.getDate() + days);
+							    return date;
+							  };
+							  var i=0;						  
+
+							while (currentDate <= endDate) {
+							dates.push(currentDate);
+							currentDate = addDays.call(currentDate, 1);
+							i++;
+							}
+
+							return dates;
+						};
+
+		/*********************************************************************
+		*
+		* Set all data view and employee data on load if dataVAl found empty
+		* Call on next and prev button click
+		*
+		*********************************************************************/
+
+		$scope.UpdateCalenderViewDates 	=	function(calenderCurrentData,nav,countDate){
+			
+			var monthVal,firstDay,lastDay,year;
+
+			if(calenderCurrentData)
+			{	
+				date 	= new Date(calenderCurrentData);							
+			}	
+
+			if(nav == 'next')
+			{
+				monthVal = date.getMonth()+1;
+			} else if(nav == 'prev') {
+				monthVal = date.getMonth()-1;
+			} else {
+				monthVal = date.getMonth();
+			}
+			
+			firstDay   = new Date(date.getFullYear(), monthVal, 1);
+			lastDay    = new Date(date.getFullYear(), monthVal + 1, 0);
+
+
+			if(countDate == 'today')
+			{
+				if(!nav)
+				{
+					firstDay   = new Date();
+					lastDay    = new Date();					
+				} else {
+					$scope.activeRangeMenu = '';
+				}
+
+			} else if(countDate){
+				var WeeksMonth = firstDay.getMonth()+1;
+				var WeeksYear  = firstDay.getFullYear();					
+				var lastDateOfWeek = getDateRangeOfWeek(firstDay,countDate);
+				lastDay = lastDateOfWeek;					
+			}
+	
+
+			$scope.datesData.dates        		= AllDates(firstDay,lastDay);
+			$scope.datesData.monthStartDate     = firstDay;
+
+			/*
+			* Blank calender before load new data 
+			* Reinitialize calender data
+			*/
+			$scope.membersList 	= '';			
+			$scope.getSchedule(firstDay,lastDay);
+		};
+
+		/**************************************************
+		* Set Scheduler on page load
+		**************************************************/
+		$scope.activeRangeMenu = 2;
+		$scope.UpdateCalenderViewDates('','',2);
+
+
+		/**************************************************
+		* Set end date of calender and filter accordingly
+		**************************************************/
+
+		$scope.setVeiwRange = function(setDateValue,countDate){
+
+			$scope.activeRangeMenu = countDate;
+			$scope.UpdateCalenderViewDates(setDateValue,'',countDate);
+			
+		};
+
+
+		/**************************************************
+		* Set calender view by date range
+		**************************************************/
+
+		$scope.setVeiwRangeByDate = function(){
+			$scope.activeRangeMenu = '';
+			var scheduleFrom       = $scope.scheduleFrom;
+			var scheduleTo  	   = $scope.scheduleTo;
+
+			if(scheduleFrom && scheduleTo)
+			{
+				$scope.datesData.dates   = AllDates(scheduleFrom,scheduleTo);
+				$scope.getSchedule(scheduleFrom,scheduleTo);
+			}
+			
+		};
+
+		/************************************
+		* Show user information in popup
+		*************************************/
+
+		$scope.showUserInfo = function(memberDetail){
+			$mdDialog.show({
+					controller: 'showDetailController',
+					templateUrl: '/modules/employee/views/display_userinfo.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,	
+					locals:{empDetail:{detail:memberDetail,prevScope:$scope}}				
+				}).then(function(answer) {}, function() {});
+		};
+
+		
+
+		/************************************
+		* Add shift timing
+		*************************************/
+
+		 $scope.addshift = function(){
+		 	var shiftTimeRequest = {
+		            url:window.__API_PATH.ADD_HOTELSHIFT,
+		            method:"POST",
+		            data:{
+		            	hotel_id        :  hotel._id,		
+		            	shift_name      :  $scope.shift_name,
+		            	department_name :  $scope.department_name,
+		            	bgcolor       	:  $scope.ctlr.bgcolor,
+		            	start_time      :  { hour:$scope.start_hour,minute:$scope.start_min},		
+		            	end_time        :  { hour:$scope.end_hour,minute:$scope.end_min},			
+		            }
+		          };
+			globalRequest.jotCRUD(shiftTimeRequest).then(function(response){		
+			 	$scope.shiftListResult = response;
+				$scope.blank();
+			 	if(response.status == 1)
+			 	{
+			 		if(!$scope.shiftList)
+			 		{
+			 			$scope.shiftList = [];
+			 		}
+			 		$scope.shiftList.push(response.result);	
+
+			 		/************************************
+					* Get shift timing
+					*************************************/		
+					globalRequest.getShiftTime();
+			 	}
+			 });
+		 };	
+
+		 /*****************************************
+		 * Open shifts edit form
+		 *****************************************/	
+
+		$scope.openEditshift = function(detail){
+				$mdDialog.show({
+					controller: 'editshiftController',
+					controllerAs: 'ctlr',
+					templateUrl: '/modules/employee/views/edit_employee_shift.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,	
+					locals:{shiftDetail:{detail:detail}}				
+				}).then(function(answer) {}, function() {});
+
+		}; 
+
+
+		/*****************************************
+		 * Open shifts edit form
+		 *****************************************/	
+
+		$scope.openEmpSchedule = function(scheduleDate,empDetail){
+				$mdDialog.show({
+					controller: 'scheduleEmpController',
+					templateUrl: '/modules/employee/views/schedule_employee.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,	
+					locals:{scheduledData:{scheduleDate:scheduleDate,empDetail:empDetail}}				
+				}).then(function(answer) {}, function() {});
+
+		};
+
+		/*****************************************
+		* Delete shift
+		*****************************************/	
+
+		$scope.removeshift = function(detail){
+
+			var request={
+				url:window.__API_PATH.DELETE_HOTELSHIFTS,
+				method:"DELETE",
+				params:{_id:detail._id}
+			};
+			
+			globalRequest.jotCRUD(request).then(function(response){				
+				$mdDialog.cancel();
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+			});
+
+		};
+
+
+		/************************************
+		* Get department list
+		*************************************/			
+		
+		globalRequest.getDepartments();
+		
+
+		/*****************************************
+		* Loader icon
+		*****************************************/
+
+		var self = this;
+	      self.activated = true;
+	      self.determinateValue = 30;
+	      $interval(function() {
+
+	        self.determinateValue += 1;
+	        if (self.determinateValue > 100) {
+	          self.determinateValue = 30;
+	        }
+
+	      }, 10);
+		
+	}
+]);
+"use strict";
+
+app.controller('showDetailController', ['$scope','empDetail',
+	function($scope,empDetail) {
+		
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+		angular.forEach(empDetail.detail,function (value,key) {
+		    $scope[key] = value;
+		});	
+		
+		if($scope.profile_image)
+		{
+			$scope.image = '/images/hotel/'+$scope.hotel_id+'/profile/'+$scope.profile_image;
+		} else {
+			$scope.image = '/assets/images/default_profile.png';
+		}
+		
+		console.log($scope);
 	}
 ]);
 
@@ -2296,6 +4459,63 @@ app.filter('employeefilter',function(){
 	};
 
 });
+
+
+"use Strict";
+
+app.controller('faqController',['$scope',
+	function($scope){
+
+}]);
+"use strict";
+
+app.controller('homeController',['$scope',
+	function($scope){
+		
+  		$scope.config={
+		     navigation: false,
+		     items:1,	     
+		     navContainer: '#customNav',
+		     pagination: false,
+		     rewindNav : true
+		 };
+		 
+	 
+}]);
+"use strict";
+
+app.directive("owlCarousel", function() {
+	return {
+		restrict: 'E',
+		transclude: false,
+		link: function (scope) {
+			scope.initCarousel = function(element) {
+			  // provide any default options you want
+				var defaultOptions = {
+				};
+				var customOptions = scope.$eval($(element).attr('data-options'));
+				// combine the two options objects
+				for(var key in customOptions) {
+					defaultOptions[key] = customOptions[key];
+				}
+				// init carousel
+				$(element).owlCarousel(defaultOptions);
+			};
+		}
+	};
+});
+app.directive('owlCarouselItem', [function() {
+	return {
+		restrict: 'A',
+		transclude: false,
+		link: function(scope, element) {
+		  // wait for the last item in the ng-repeat then call init
+			if(scope.$last) {
+				scope.initCarousel(element.parent());
+			}
+		}
+	};
+}]);
 "use strict";
 
 app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout',
@@ -2500,27 +4720,17 @@ app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout',
 
 "use strict";
 
-app.controller('departmentCtlr', ['$scope','$rootScope','localStorageService','globalRequest',
-	function($scope,$rootScope,localStorageService,globalRequest) {
+app.controller('departmentCtlr', ['$scope','$rootScope','globalRequest',
+	function($scope,$rootScope,globalRequest) {
 		
 
 		/*****************************************
 		* Get department List
 		******************************************/
 
-		var hotel = localStorageService.get('hotel');
-		var request= {
-			url:window.__API_PATH.GET_DEPARTMENTS,
-			method:"GET",
-			params:{hotel_id: hotel._id}
-		};
-		globalRequest.jotCRUD(request)
-		.then(function(response){
-			$scope.departmentSuggetionList = response.result;
-		});
+	    globalRequest.getDepartments();
 
-	     
-	     /*after click on suggestion list*/                                                            
+	     /*after click on suggestion list*/                            
 	    $scope.callback = function(){	       
 	        $scope.deparmentfocus = true;
 	         
@@ -2550,17 +4760,19 @@ app.controller('dueDataCtlr', ['$scope','$rootScope',
 
 app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','$route','toastService',
 	function($scope,globalRequest,$rootScope,$mdDialog,jotData,$route,toastService) {
+
 		
-		$scope.edit_jot		   = jotData;
 		
-		$scope.jot_title	   = $scope.edit_jot.jot_data.jot_title;
-		$rootScope.assigned_to = $scope.edit_jot.jot_data.assigned_to;
-		$rootScope.due_date    = new Date($scope.edit_jot.jot_data.due_date);
-		$rootScope.priority    = $scope.edit_jot.jot_data.priority;
-		$rootScope.department  = $scope.edit_jot.jot_data.department;
+		$scope.edit_jot		   		= jotData;		
+		$scope.jot_title   			= $scope.edit_jot.jot_title;
+		$rootScope.jot_description	= $scope.edit_jot.jot_description;
+		$rootScope.jot_members		= $scope.edit_jot.jot_members;
+		$rootScope.due_date    		= new Date($scope.edit_jot.due_date);
+		$rootScope.priority    		= $scope.edit_jot.priority;
+		$rootScope.department  		= $scope.edit_jot.department;
+		$rootScope.hotel_room  		= $scope.edit_jot.hotel_room;
 
-
-
+	
 		/**************************************
 		* Edit jot popup
 		**************************************/
@@ -2576,15 +4788,34 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 		};
 
 		/**************************************
+		* Open move to dc form
+		**************************************/
+
+		$scope.moveDC = function(detail){	
+			$mdDialog.show({	
+				controller: 'moveDcController',
+				controllerAs: 'movectrl',			
+			    templateUrl: '/modules/jot/views/move_dc.html',
+				multiple: true,
+				clickOutsideToClose:true,
+				fullscreen: $scope.customFullscreen,
+				locals:{Detail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
+
+		/**************************************
 		* Change status
 		**************************************/
 
 		$scope.changeStatus = function(){
-			if($scope.edit_jot.jot_data.status == 'close')
+			if($scope.edit_jot.status == 'close')
 			{
-				$scope.edit_jot.jot_data.status = 'open';
+				$scope.edit_jot.status = 'open';
 			} else {
-				$scope.edit_jot.jot_data.status = 'close';
+				$scope.edit_jot.status = 'close';
 			}
 
 		};
@@ -2593,23 +4824,29 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 		* Update Jot
 		**************************************/
 
-		$scope.saveUpdateedJot = function(){
-			$scope.edit_jot.jot_data.jot_id      = $scope.edit_jot.jot_data._id;
-			$scope.edit_jot.jot_data.jot_title   = $scope.jot_title;
-			$scope.edit_jot.jot_data.assigned_to = $rootScope.assigned_to;
-			$scope.edit_jot.jot_data.due_date    = new Date($rootScope.due_date).getTime();
-			$scope.edit_jot.jot_data.priority    = $rootScope.priority;
-			$scope.edit_jot.jot_data.department  = $rootScope.department;
+		$scope.saveUpdatedJot = function(){
+			$scope.edit_jot.jot_id				= $scope.edit_jot._id;
+			$scope.edit_jot.jot_title			= $scope.jot_title;
+			$scope.edit_jot.jot_description		= $rootScope.jot_description;
+			$scope.edit_jot.jot_members		    = $rootScope.jot_members;
+			$scope.edit_jot.due_date    		= new Date($rootScope.due_date).getTime();
+			$scope.edit_jot.priority   		    = $rootScope.priority;
+			$scope.edit_jot.department 		 	= $rootScope.department;
+			$scope.edit_jot.hotel_room 		 	= $rootScope.hotel_room;
 		
 
 			var request={
 				url:window.__API_PATH.UPDATE_JOT,
 				method:"put",
-				data:$scope.edit_jot.jot_data
+				data:$scope.edit_jot
 			};
 
-			globalRequest.jotCRUD(request).then(function(response){				
-				$scope.result = {message:response.message,class:response.class}; 	
+			globalRequest.jotCRUD(request).then(function(response){		
+				var JotType = $scope.edit_jot.jot_type;
+				globalRequest.getJotList(JotType); 	
+				$mdDialog.cancel();
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
 			});
 		};
 
@@ -2619,7 +4856,7 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 		**************************************/
 
 		$scope.archiveJot = function(){
-			var jotid = {jot_id:$scope.edit_jot.jot_data._id};
+			var jotid = {jot_id:$scope.edit_jot._id};
 
 			var request={
 				url:window.__API_PATH.DELETE_JOT,
@@ -2628,7 +4865,8 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$route.reload();
+				var JotType = $scope.edit_jot.jot_type;
+				globalRequest.getJotList(JotType); 
 				$mdDialog.cancel();
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
@@ -2661,6 +4899,93 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 
 "use strict";
 
+app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','globalRequest','localStorageService','$location','$mdDialog',
+	function($scope,$rootScope,$routeParams,globalRequest,localStorageService,$location,$mdDialog){
+
+		/**********************************************************
+	    * Get active hotel data
+	    **********************************************************/
+
+		$scope.activeHotelData   = localStorageService.get('hotel');
+
+		/**************************************************
+		* Redirect if hotel obj not found in localstorage
+		**************************************************/
+
+		if(!$scope.activeHotelData || $scope.activeHotelData == ""){
+			$location.path('/dashboard');
+			return false;
+		}
+
+
+		/************************************
+		* Get department list
+		*************************************/			
+		
+		globalRequest.getDepartments();
+
+		/************************************
+		* Get department list
+		*************************************/			
+		
+		globalRequest.getStaff();
+
+
+		$scope.activetype = $routeParams.type;
+		if($routeParams.type)
+		{
+
+			/**************************************
+			* Get jot list
+			**************************************/		
+			var JotType = $routeParams.type;
+			globalRequest.getJotList(JotType);			
+			$scope.BoardsPage = true;
+			
+
+		} else {
+
+			/**************************************
+			* Get jot count
+			**************************************/	
+			globalRequest.getJotCount();
+			$scope.BoardsPage = false;
+		}
+
+
+		/**************************************
+		* Edit jot popup
+		**************************************/
+
+		$scope.jotEditPopup = function(jotData){			
+			$mdDialog.show({
+				controller: 'editJotCtlr',
+				templateUrl: '/modules/jot/views/edit_jot.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				locals: {jotData:jotData}
+			});
+		};
+
+		/**************************************
+		* Open comment popup
+		**************************************/
+
+		$scope.openComments = function(jotData){			
+			$mdDialog.show({
+				controller: 'jotCommentCtlr',
+				templateUrl: '/modules/jot/views/jot_comments.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				locals: {jotData:jotData}
+			});
+		};
+
+		
+	}
+]);
+"use strict";
+
 app.controller('iconCtlr', ['$scope','$rootScope','Upload','$timeout','localStorageService',
 	function($scope,$rootScope,Upload,$timeout,localStorageService) {
 
@@ -2668,9 +4993,6 @@ app.controller('iconCtlr', ['$scope','$rootScope','Upload','$timeout','localStor
 		/*****************************************
 		* Jot image upload
 		*****************************************/
-
-		
-
 		$rootScope.issueImages = '';
 		$scope.uploadFiles = function(files, errFiles) {
 			var hotel         = localStorageService.get('hotel');
@@ -2693,7 +5015,7 @@ app.controller('iconCtlr', ['$scope','$rootScope','Upload','$timeout','localStor
 	                   var uploadedImagesName = []; 
 	                    angular.forEach(result, function(data) {				
 				            if(data.status){
-				            	uploadedImagesName.push(data.filename);
+				            	uploadedImagesName.push(data);
 				            }
 				        });
 				        $rootScope.issueImages = uploadedImagesName;
@@ -2744,108 +5066,321 @@ app.controller('issueCtlr', ['$scope','$rootScope',
 
 "use strict";
 
-app.controller('jotController', ['$scope','$location','globalRequest','$rootScope','$mdDialog','localStorageService',
-	function($scope,$location,globalRequest,$rootScope,$mdDialog,localStorageService) {
+app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','$route','toastService','localStorageService','Upload','$timeout',
+	function($scope,globalRequest,$rootScope,$mdDialog,jotData,$route,toastService,localStorageService,Upload,$timeout) {
+
+		var userDetail = localStorageService.get('user');	
+		
+		
+		$scope.edit_jot		   		= jotData;		
+		$scope.jot_title   			= $scope.edit_jot.jot_title;
+		$rootScope.jot_description	= $scope.edit_jot.jot_description;
+		$rootScope.directory  		= jotData.jot_type;
+		$rootScope.jot_members		= $scope.edit_jot.jot_members;
+		$rootScope.due_date    		= new Date($scope.edit_jot.due_date);
+		$rootScope.priority    		= $scope.edit_jot.priority;
+		$rootScope.department  		= $scope.edit_jot.department;
+		$rootScope.issueImages      = '';
+		$rootScope.files      		= '';
+		$rootScope.progress      	= -1;
+		$scope.commentImages 		= '';
+
+
+
+		console.log(jotData);
+		$scope.submitComment = function(){
+			var commentRequest={
+				url:window.__API_PATH.ADD_COMMENT,
+				method:"POST",
+				data:{					
+					hotel_id 			: jotData.hotel_id, 
+					jot_id 				: jotData._id, 
+					user_id 			: userDetail._id, 
+					attachment 			: $scope.commentImages, 
+					post_date 			: new Date().getTime(), 
+					message 			: $scope.message, 
+				}
+			};
+
+			globalRequest.jotCRUD(commentRequest).then(function(response){	
+				getComments();		
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+
+				$scope.commentImages = [];
+				$scope.message 		 = "";
+				$scope.files 		 = "";
+			});
+		};
+
+		/**************************************
+		* Clear comment
+		**************************************/
+
+		$scope.cancelComment = function(){
+			$scope.commentImages = [];
+			$scope.message 		 = "";
+			$scope.files 		 = "";
+		};
+		
 
 
 		/**************************************
-		* Redirect if hotel not selected
+		* Get comments
 		**************************************/
-		
-		var hotel = localStorageService.get('hotel');
 
-		if(!hotel || hotel == ""){
-			$location.path('/dashboard');
+		function getComments(){
+
+			var getCommentRequest={
+				url:window.__API_PATH.GET_COMMENT,
+				method:"GET",
+				params:{					
+					hotel_id 			: jotData.hotel_id, 
+					jot_id 				: jotData._id
+				}
+			};
+			globalRequest.jotCRUD(getCommentRequest).then(function(response){
+				$scope.commentList = response.result;	
+	
+			});
+		}
+		getComments();
+
+
+		/*****************************************
+		* Jot image upload
+		*****************************************/
+		$scope.commentImages = '';
+		$scope.uploadFiles = function(files, errFiles,uploadType) {
+			var folder;
+			if(uploadType == "comment")
+			{
+				$scope.files  = files;
+				folder   	  = 'comments';
+			}
+
+			if(uploadType == "sidebar")
+			{
+				folder   	  = jotData.jot_type;
+			}
+
+				
+			
+	        if (files && files.length) {
+	            Upload.upload({
+	                url: window.__API_PATH.UPLOAD_FILE,
+	                type:'post',
+	                arrayKey: '',
+	                data: {	                    
+	                    hotel_id     : jotData.hotel_id,
+	                    folder_name  : folder,	                    
+	                    file         : files
+	                }
+	            }).then(function (response) {
+	                $timeout(function () {
+	                   var result = response.data.result; 
+						if(uploadType == "comment")
+						{	
+							var uploadedImagesName = []; 					
+		                    angular.forEach(result, function(data) {				
+					            if(data.status){
+					            	uploadedImagesName.push(data);
+					            }
+					        });
+					        $scope.commentImages = uploadedImagesName;
+				    	}
+
+				    	if(uploadType == "sidebar")
+						{	
+
+							angular.forEach(result, function(data) {				
+					            if(data.status){
+					            	jotData.image = jotData.image.concat(data);
+					            }
+					        });
+							jotData.image = jotData.image.filter(function(key){
+									if(key){ return key;}
+							});	
+							updateJotMethod({image:jotData.image});
+				    	}
+
+	                });
+	            }, function (response) {
+	                if (response.status > 0) {
+	                    $scope.errorMsg = response.status + ': ' + response.data;
+	                }
+	            }, function (evt) {
+	                $scope.progress = 
+	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+	            });
+	        }
+
+	    };
+
+
+
+	    /**************************************
+		* Save comment
+		**************************************/
+
+		function updateJotMethod(paramArgs){
+
+			var JotRequest={
+				url:window.__API_PATH.UPDATE_JOT,
+				method:"put",
+				data:{
+					jot_id 			: jotData._id					
+				}
+			};	
+			Object.assign(JotRequest.data, paramArgs);
+
+			globalRequest.jotCRUD(JotRequest).then(function(response){			
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+
+				var JotType = jotData.jot_type;
+				globalRequest.getJotList(JotType); 
+
+				$rootScope.issueImages   = '';
+				$rootScope.files   		 = '';
+				$rootScope.progress      = -1;
+			});
 		}
 
 		/**************************************
-		* Get jot list
-		**************************************/
-		$rootScope.task_iteration = [];
-		$rootScope.task_iteration.data = [];
-		$rootScope.task_iteration.type = [];
-		$rootScope.note_iteration = [];
-		$rootScope.note_iteration.data = [];
-		$rootScope.note_iteration.type = [];
-		$rootScope.issue_iteration = [];
-		$rootScope.issue_iteration.data = [];
-		$rootScope.issue_iteration.type = [];
-		$rootScope.others_iteration = [];
-		$rootScope.others_iteration.data = [];
-		$rootScope.others_iteration.type = [];	
-
-
-		var request= {
-			url:window.__API_PATH.GET_JOT,
-			method:"GET",
-			params:{hotel_id :hotel._id}
-		};	
-
-		globalRequest.jotCRUD(request)
-		.then(function(response){	
-
-			angular.forEach(response.result,function(value,index){
-				
-				if(value._id == 'task')
-				{
-					$rootScope.task_iteration.data  = value.jot_data;
-					$rootScope.task_iteration.type  = value._id;
-				} else if(value._id == 'note') {
-					$rootScope.note_iteration.data = value.jot_data;
-					$rootScope.note_iteration.type  = value._id;
-				} else if(value._id == 'issue') {
-					$rootScope.issue_iteration.data  = value.jot_data;
-					$rootScope.issue_iteration.type  = value._id;
-				} else {
-					$rootScope.others_iteration.data  = value.jot_data;
-					$rootScope.others_iteration.type  = value._id;
-				}  
-		
-			});
-		});
-
-
-		/**************************************
-		* Edit jot popup
+		* Cancel description
 		**************************************/
 
-		$scope.jotEditPopup = function(jotData,jotType){
-		
-			var data={jot_data:jotData,jot_type:jotType};
-			$mdDialog.show({
-				controller: 'editJotCtlr',
-				templateUrl: '/modules/jot/views/edit_jot.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				locals: {jotData:data}
-			})
-			.then(function(answer) {
-			
-			}, function() {
-			
-			});
+		$scope.cancelDesc = function(){
+
+			$rootScope.issueImages   = '';
+			$rootScope.files   		 = '';
+			$rootScope.progress      = -1;
 
 		};
 
-				
+		/**************************************
+		* Watch file upload
+		**************************************/
+
+		$rootScope.$watch('issueImages',function(){			
+			jotData.image = jotData.image.concat($rootScope.issueImages);	
+		});
+
+		/**************************************
+		* Delete attachment
+		**************************************/
+
+		$scope.deleteAttachment = function(imageHashKey){
+
+
+			jotData.image = jotData.image.filter(function(key){
+				return key.$$hashKey != imageHashKey;
+			});
+
+			var imageRequest = {
+					image           : jotData.image
+				};
+
+				console.log(jotData.image);
+				console.log(imageRequest);
+
+			updateJotMethod(imageRequest);
+		};
+
+
+
+		/**************************************
+		* Update description
+		**************************************/
+
+		$scope.saveDescription = function(){
+			jotData.image = jotData.image.filter(function(key){
+								if(key){ return key;}
+							});
+
+			var descRequest = {
+					jot_description : $rootScope.jot_description,
+					image           : jotData.image
+				};
+			updateJotMethod(descRequest);
+		};
+
+		/**************************************
+		* Update member
+		**************************************/
+
+	    $scope.saveMember = function(){
+	    	var memberRequest = {jot_members : $rootScope.jot_members};
+			updateJotMethod(memberRequest);
+
+	    };
+
+	    /**************************************
+		* Update due date
+		**************************************/
+
+	    $scope.saveDueDate = function(){
+	    	var memberRequest = {due_date : new Date($rootScope.due_date).getTime()};
+			updateJotMethod(memberRequest);
+
+	    };
+
+	    /**************************************
+		* Update department
+		**************************************/
+
+	    $scope.saveDept = function(){
+	    	var memberRequest = {department : $rootScope.department};
+			updateJotMethod(memberRequest);
+	    };
+
+	    /**************************************
+		* Update department
+		**************************************/
+
+	    $scope.savePriority = function(){
+	    	var memberRequest = {priority : $rootScope.priority};
+			updateJotMethod(memberRequest);
+	    };
+			
+
+	    /**************************************
+		* Close popup
+		**************************************/
+
+		$scope.close = function(){
+			 $mdDialog.cancel();
+		};
+		
 	}
 ]);
-
-
 "use strict";
 
-app.controller('jotPopupCtrl', ['$scope','$rootScope','$mdDialog','ActivateTab','globalRequest',
-	function($scope,$rootScope,$mdDialog,ActivateTab,globalRequest) {	
+app.controller('jotPopupCtrl', ['$scope','$rootScope','$mdDialog','ActivateTab','globalRequest','localStorageService',
+	function($scope,$rootScope,$mdDialog,ActivateTab,globalRequest,localStorageService) {	
 		/*
 		* Activate tab
 		*/
 		$scope.currentNavItem   = ActivateTab;	
 
 		/**********************************************************
+	    * Get active hotel data
+	    **********************************************************/
+
+		$scope.activeHotelData   = localStorageService.get('hotel');
+
+		/**********************************************************
 	    * Get staff list
 	    **********************************************************/
 
 		globalRequest.getStaff();
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = $scope.activeHotelData.jot_types;
 
 
 		/*
@@ -2881,6 +5416,110 @@ app.controller('jotQuickCtlr', ['$scope','$rootScope',
 
 "use strict";
 
+app.controller('messagesCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {	
+		/*
+		*
+		* Set default jot type
+		*
+		*/	
+		$rootScope.jot_type  = 'messages';
+		$rootScope.directory = 'messages';	
+	}
+]);
+
+"use strict";
+
+app.controller('moveDcController', ['$scope','$rootScope','localStorageService','globalRequest','Detail','$mdDialog','Upload','$timeout','toastService',
+	function($scope,$rootScope,localStorageService,globalRequest,Detail,$mdDialog,Upload,$timeout,toastService) {
+		var hotel = localStorageService.get('hotel');
+
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+
+		angular.forEach(Detail.detail,function (value,key) {
+
+		    if(key == 'department'){
+				$rootScope.department = value;
+			} else if(key == 'image'){
+				$scope.filesData = value;
+			} else {
+				$scope[key] = value;
+			}
+		});	
+
+	
+
+		/**********************************************************
+	    * Item tags 
+	    **********************************************************/
+
+		var self = this;
+	    self.readonly = false;	    
+	    self.itemTag = [];
+	    self.MovItemTagModel = angular.copy(self.itemTag);
+	    self.editableitemTag = angular.copy(self.itemTag);
+	    self.tags = [];	    
+	    self.newVeg = function(chip) {
+	      return {
+	        name: chip,
+	        type: 'unknown'
+	      };
+	    };
+
+
+		/************************************
+		* Edit document
+		*************************************/		
+
+		$scope.moveToDC = function(){	
+	
+			var request = {
+		            url:window.__API_PATH.MOVE_DOCUMENT,
+		            method:"POST",
+		            data:{
+		            	hotel_id      	   		:  hotel._id,
+		            	document_name   		:  $scope.mov_document_name,
+		            	department      		:  $rootScope.department,
+		            	tags        			:  $scope.movectrl.MovItemTagModel,
+		            	document_description    :  $scope.mov_document_description,
+		            	files       		    :  $scope.filesData,
+		            	upload_date				:  new Date().getTime(),
+		            	jot_id					:  $scope._id,
+		            	jot_type				:  $scope.jot_type
+		            }
+		          };
+
+			globalRequest.jotCRUD(request).then(function(response){
+				
+			 	$scope.docMoveResult = response;
+			 	if(response.status ==1)
+			 	{
+			 		$mdDialog.cancel();
+			 		var popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	}
+
+			 });
+
+		};
+
+		/************************************
+		* Remove files by index
+		*************************************/	
+
+		$scope.removeImageIndex = function(fData){
+			$scope.filesData = $scope.filesData.filter(function( obj ) {
+			    return obj.filename != fData.filename;
+			});
+
+		};
+
+	}
+]);
+"use strict";
+
 app.controller('noteCtlr', ['$scope','$rootScope',
 	function($scope,$rootScope) {	
 		/*
@@ -2892,6 +5531,7 @@ app.controller('noteCtlr', ['$scope','$rootScope',
 		$rootScope.directory = 'note';	
 	}
 ]);
+
 "use strict";
 
 app.controller('priorityCtlr', ['$scope','$rootScope','$mdDialog',
@@ -2916,6 +5556,11 @@ app.controller('priorityCtlr', ['$scope','$rootScope','$mdDialog',
 	}
 ]);
 
+"use restrict";
+
+app.controller('roomCtlr',['$scope','$rootScope',function($scope,$rootScope){
+
+}]);
 "use strict";
 
 app.controller('staffCtlr', ['$scope','$rootScope',
@@ -3031,8 +5676,8 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
             departmenttypeaheadCallback: "="
         },
         link: function(scope, elem, attrs) {
-
-            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (departmentypeahead | filterdepartment:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.department_name}}</a></li></ul></div>';
+          console.log(scope.enablefilter);
+            var template = '<div class="dropdown suggestions_list" ng-show="enabledepartmentFilter"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (departmentypeahead | filterdepartment:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.department_name}} ({{item.abbreviation}})</a></li></ul></div>';
 
             elem.bind('blur', function() {
                 $timeout(function() {
@@ -3045,6 +5690,8 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
             ******************************************/
 
             elem.bind("keydown", function($event) {
+
+                scope.enabledepartmentFilter = true;
                 if($event.keyCode == 38 && scope.active > 0) { 
                     scope.active--;
                     scope.$digest();
@@ -3064,7 +5711,7 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
               replaceWord       = replaceWord.split('#');
               replaceWord       = '#'+replaceWord[1];
 
-        			var selectedValue = "#"+item.department_name;
+        			var selectedValue = "#"+item.abbreviation;
 
     
         			var replacedValue = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);  
@@ -3124,7 +5771,7 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
             iconstaffsuggestionCallback: "="
         },
         link: function(scope, elem, attrs) {
-
+              $rootScope.clickopen = false;
               var template = '<ul class="" style="display:block;"><li ng-repeat="item in filitered = (iconstafflistsuggestion | filter:$root.filtermember) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul>';
 
               elem.bind('blur', function() {
@@ -3138,7 +5785,7 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
               ******************************************/
 
               elem.bind("keydown", function($event) {
-
+                 
                   if($event.keyCode == 38 && scope.active > 0) { 
                       scope.active--;
                       scope.$digest();
@@ -3159,6 +5806,8 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
                 var username  = item.user_name;
                     username  = username.trim();                
                 var appendValue = "@"+username+" ";
+                console.log(1);
+                console.log(appendValue);
                 $rootScope.$broadcast('addUserNameAtMousePosition',appendValue);
                 $rootScope.clickopen = false;
                 $rootScope.filtermember = '';
@@ -3189,7 +5838,208 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
     };
 }]);
 "use strict";
-app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $mdDialog,toastService,globalRequest,localStorageService) {
+
+app.directive('textareastaffsuggestion', ['$compile', '$timeout','$rootScope','replaceOccurence', function($compile, $timeout,$rootScope,replaceOccurence) {
+
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            ngModel: '=',
+            textareastaffsuggestion: '=',
+            textareadepartmentsuggestion: '=',
+            textareastaffsuggestionCallback: "="
+        },
+        link: function(scope, elem, attrs) {
+           
+              var template = '<div class="dropdown suggestions_list" ng-show="enableDescFilter"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (textareastaffsuggestion | filterstaffJotDesc:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>    <div class="dropdown suggestions_list" ng-show="enableDescFilter"><ul class="" style="display:block;" ng-hide="!ngModel.length || !descFilitered.length || selected"><li ng-repeat="item in descFilitered = (textareadepartmentsuggestion | descDepartmentFilter:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.department_name}} ({{item.abbreviation}})</a></li></ul></div>';
+
+              elem.bind('blur', function() {
+                  $timeout(function() {
+                      scope.selected = true;
+                  }, 100);
+              });
+
+              /*****************************************
+              * Navigate list item on mouse key
+              ******************************************/
+
+              elem.bind("keydown", function($event) {
+                scope.enableDescFilter = true;
+                
+
+                if($event.keyCode == 38 && scope.active > 0) { 
+                    scope.active--;
+                    scope.$digest();
+                } else if($event.keyCode == 40 ){
+                   
+                  /********** For user list  ***********/
+                   if(scope.filitered)
+                    {
+                      if(scope.active < scope.filitered.length - 1)
+                      {
+                        scope.active++;
+                        scope.$digest();
+                      }               
+                    }
+
+                    /********** For department list  ***********/
+
+                    if(scope.descFilitered)
+                    {
+                       if(scope.active < scope.descFilitered.length - 1)
+                        {
+                          scope.active++;
+                          scope.$digest();
+                        }
+                    }
+                    
+                } else if($event.keyCode == 13) { 
+
+                    /********** For user list  ***********/                 
+                    if(scope.filitered){
+                      scope.$apply(function() {
+                          scope.click(scope.filitered[scope.active]);
+                      });
+                    }
+                    /********** For department list  ***********/
+                     if(scope.descFilitered){
+                        scope.$apply(function() {
+                            scope.click(scope.descFilitered[scope.active]);
+                        });
+                      } 
+
+
+                }
+
+              });
+
+              /***************************************************
+              * Replace word with selected suggestion list item
+              ***************************************************/
+
+              scope.click = function(item) {
+                var replaceString     = scope.ngModel;
+          			var replaceWord       = scope.matchWord;
+                var selectedValue;
+                /********** For user list  ***********/
+                if(scope.filitered)
+                {
+                  replaceWord           = replaceWord.split('@');
+                  replaceWord           = '@'+replaceWord[1];
+          			  selectedValue         = "@"+item.user_name;
+                }
+
+                /********** For department list  ***********/
+                if(scope.descFilitered)
+                {    
+                  replaceWord           = replaceWord.split('#');
+                  replaceWord           = '#'+replaceWord[1];
+                  selectedValue     = "#"+item.abbreviation;
+                }
+
+          			var replacedValue     = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);
+                  
+          				scope.ngModel = replacedValue;
+          				scope.selected = item;
+
+
+                  scope.$watch(item, function(input) {
+                      $rootScope.descFocus = true; 
+                   });
+
+                  /*if(scope.textareastaffsuggestionCallback) {
+                      scope.textareastaffsuggestionCallback(item);
+                  }*/
+                  elem[0].blur();
+              };
+
+              /*********************************************
+              * Set index on mouse click on list
+              **********************************************/
+
+              scope.mouseenter = function($index) {
+                  scope.active = $index;
+              };
+
+              scope.$watch('ngModel', function(input) {
+              	
+      				    if(scope.selected && scope.selected.user_name == input) {
+                      	return;
+                  }
+                  scope.active = 0;
+                  scope.selected = false;
+              });
+
+            /*********************************************
+            * Append template under element
+            **********************************************/
+            elem.after($compile(template)(scope));
+
+            /*********************************************
+            * Add user name on click user suggestion list
+            **********************************************/
+
+            $rootScope.$on('addUserNameAtMousePosition', function(e, val) {
+                var domElement = elem[0];
+
+                if (document.selection) {
+                  domElement.focus();
+                  var sel = document.selection.createRange();
+                  sel.text = val;
+                  $timeout(function() {                        
+                      domElement.focus();
+                  });
+                  
+                } else if (domElement.selectionStart || domElement.selectionStart === 0) {
+                  var startPos = domElement.selectionStart;
+                  var endPos = domElement.selectionEnd;
+
+                  domElement.value = domElement.value.substring(0, startPos) + val + domElement.value.substring(endPos, domElement.value.length);
+
+                  $rootScope.jot_description = domElement.value;
+
+                  domElement.selectionStart = startPos + val.length;
+                  domElement.selectionEnd = startPos + val.length;
+                  $timeout(function() {                        
+                      domElement.focus();
+                  });
+                } else {
+                  
+                  domElement.value += val;       
+                  $rootScope.jot_description = domElement.value;
+
+                  $timeout(function() {                        
+                      domElement.focus();
+                  });
+                }
+
+              }); 
+
+            
+        }
+    };
+}]).directive('focusDesc', function($timeout, $parse,$rootScope) {
+      return {          
+
+          link: function(scope, element, attrs) {
+
+              var model = $parse(attrs.focusMe);
+              $rootScope.$watch(function(value) {
+                     if(value.descFocus)
+                     {            
+                      $timeout(function() {                        
+                          element[0].focus();
+                          $rootScope.descFocus = '';
+                      });                      
+                     }
+              });
+          }
+      };
+  });
+"use strict";
+
+app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $mdDialog,toastService,globalRequest,localStorageService,$routeParams) {
       return {
           
           link: function($scope, element, attrs) {
@@ -3203,16 +6053,13 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                   $event.preventDefault();
                  }
               });
-              
-              $scope.callbackTitleStaff = function(){                
-                          $rootScope.titleFocus = true; 
-              };
+                
 
               /*
               * Blank field before open form
               */
 
-              $rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.assigned_to = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = $rootScope.jot_title = $rootScope.files  =  '';
+              $rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.jot_members = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = $rootScope.jot_description = $rootScope.files = $rootScope.jot_title  =  '';
               $rootScope.progress = -1;
                            
                 
@@ -3222,6 +6069,7 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                 ******************************************************************/
 
               $scope.createJot = function(){
+
                   /*console.log($rootScope);
                   console.log($rootScope.selectedPattern);
                   return false;*/
@@ -3288,26 +6136,31 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                   }
 
                   
-                  /**
+                  /*******************************
                   ||  End task Jot Data json 
-                  **/
+                  *******************************/
 
                   $scope.message = ' ';
-
                   var hotel = localStorageService.get('hotel');
+                  
                   var jotDataArray = {
-                      jot_title      : $rootScope.jot_title,
-                      priority       : $rootScope.priority,
-                      hotel_id       : hotel.hotel_id,
-                      jot_type       : $rootScope.jot_type,
-                      due_date       : new Date($rootScope.due_date).getTime(),
-                      department     : $rootScope.department,
-                      assigned_to    : $rootScope.assigned_to,
-                      checklist      : $rootScope.checklist,  
-                      image          : $rootScope.issueImages,
-                      task_type      : task,
-                      status         : 'open'
+                      jot_title           : $rootScope.jot_title,
+                      jot_description     : $rootScope.jot_description,
+                      jot_members         : $rootScope.jot_members,
+                      priority            : $rootScope.priority,
+                      hotel_id            : hotel._id,
+                      jot_type            : $rootScope.jot_type,
+                      hotel_room          : $rootScope.hotel_room,
+                      due_date            : new Date($rootScope.due_date).getTime(),
+                      department          : $rootScope.department,                      
+                      checklist           : $rootScope.checklist,  
+                      image               : $rootScope.issueImages,
+                      task_type           : task,
+                      status              : 'open'
                   };
+
+                 /* console.log(jotDataArray);
+                  return false;*/
 
                   var request={
                     url:window.__API_PATH.CREATE_JOT,
@@ -3316,65 +6169,16 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                   };
                   
                   globalRequest.jotCRUD(request).then(function(response){
-                    var result = response.result;
+                   
                     if(response.status == 1)
                     {
+                      var JotType = $routeParams.type;
+                      globalRequest.getJotList(JotType);
                       $mdDialog.cancel();
                       var popup = {"message":response.message,"class":"success"};
                       toastService.alert(popup);
-
-                      
-                      if($rootScope.jot_type == 'task')
-                      {
-                        $rootScope.task_iteration.data.push(result);
-                      } else if($rootScope.jot_type == 'note') {
-                        $rootScope.note_iteration.data.push(result);
-                      } else if($rootScope.jot_type == 'issue') {
-                        $rootScope.issue_iteration.data.push(result);
-                      } else {
-                        $rootScope.others_iteration.data.push(result);
-                      }         
-
-                      
-                      
-
-                      /******************************************************
-                      * Jot object iteration
-                      ****************************************************/
-
-                      /*var keyFoundInObj = false;
-
-                      angular.forEach($rootScope.jots,function(value,index){*/
-                        
-
-                        /******************************************************
-                        * Check jot type(message,issue etc.) is new or already in object 
-                        ****************************************************/
-                               /* if(value._id == $rootScope.jot_type)
-                                {                 
-                                  value.jot_data.push(jotDataArray);
-                                  keyFoundInObj = true;
-                                }                   
-                            });*/
-                      
-
-                            /******************************************************
-                      * Push new jot data if  jot type(message,issue etc.) is not in jot object
-                      ****************************************************/
-                      
-                      /*if(!keyFoundInObj)
-                      {
-                        var jotDataArrayInObj = [jotDataArray];
-                              var newcreatedJot = {
-                                            "_id"   :$rootScope.jot_type,
-                                            "jot_data": jotDataArrayInObj
-                                          };
-                                                    
-                              $rootScope.jots.push(newcreatedJot);
-                            
-                          }*/
-
                     }
+                    
                   });
 
                 };
@@ -3433,152 +6237,6 @@ app.directive('jotTemplate', ['$rootScope',function($rootScope){
 }]);
 "use strict";
 
-app.directive('textareastaffsuggestion', ['$compile', '$timeout','$rootScope','replaceOccurence', function($compile, $timeout,$rootScope,replaceOccurence) {
-
-    return {
-        restrict: 'A',
-        transclude: true,
-        scope: {
-            ngModel: '=',
-            textareastaffsuggestion: '=',
-            textareastaffsuggestionCallback: "="
-        },
-        link: function(scope, elem, attrs) {
-
-              var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (textareastaffsuggestion | filterstaffJotTitle:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
-
-              elem.bind('blur', function() {
-                  $timeout(function() {
-                      scope.selected = true;
-                  }, 100);
-              });
-
-              /*****************************************
-              * Navigate list item on mouse key
-              ******************************************/
-
-              elem.bind("keydown", function($event) {
-
-                  if($event.keyCode == 38 && scope.active > 0) { 
-                      scope.active--;
-                      scope.$digest();
-                  } else if($event.keyCode == 40 && scope.active < scope.filitered.length - 1) {
-                      scope.active++;
-                      scope.$digest();
-                  } else if($event.keyCode == 13) {
-
-                      scope.$apply(function() {
-                          scope.click(scope.filitered[scope.active]);
-                      });
-                  }
-              });
-
-              /***************************************************
-              * Replace word with selected suggestion list item
-              ***************************************************/
-
-              scope.click = function(item) {
-                
-              	var replaceString     = scope.ngModel;
-          			var replaceWord       = scope.matchWord;
-                replaceWord           = replaceWord.split('@');
-                replaceWord           = '@'+replaceWord[1];
-          			var selectedValue     = "@"+item.user_name;
-
-          			var replacedValue     = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);
-                
-          				scope.ngModel = replacedValue;
-          				scope.selected = item;
-                  //scope.titleFocus = true;
-
-                  if(scope.textareastaffsuggestionCallback) {
-                      scope.textareastaffsuggestionCallback(item);
-                  }
-                  elem[0].blur();
-              };
-
-              /*********************************************
-              * Set index on mouse click on list
-              **********************************************/
-
-              scope.mouseenter = function($index) {
-                  scope.active = $index;
-              };
-
-              scope.$watch('ngModel', function(input) {
-              	
-      				    if(scope.selected && scope.selected.user_name == input) {
-                      	return;
-                  }
-                  scope.active = 0;
-                  scope.selected = false;
-              });
-
-            /*********************************************
-            * Append template under element
-            **********************************************/
-            elem.after($compile(template)(scope));
-
-            /*********************************************
-            * Add user name on click user suggestion list
-            **********************************************/
-
-            $rootScope.$on('addUserNameAtMousePosition', function(e, val) {
-                var domElement = elem[0];
-
-                if (document.selection) {
-                  domElement.focus();
-                  var sel = document.selection.createRange();
-                  sel.text = val;
-                  $timeout(function() {                        
-                      domElement.focus();
-                  });
-                  
-                } else if (domElement.selectionStart || domElement.selectionStart === 0) {
-                  var startPos = domElement.selectionStart;
-                  var endPos = domElement.selectionEnd;
-                  //var scrollTop = domElement.scrollTop;
-                  domElement.value = domElement.value.substring(0, startPos) + val + domElement.value.substring(endPos, domElement.value.length);
-                  domElement.selectionStart = startPos + val.length;
-                  domElement.selectionEnd = startPos + val.length;
-                  //domElement.scrollTop = scrollTop;
-
-                  $timeout(function() {                        
-                      domElement.focus();
-                  });
-                } else {
-                  
-                  domElement.value += val;
-                  $timeout(function() {                        
-                      domElement.focus();
-                  });
-                }
-
-              }); 
-
-            
-        }
-    };
-}]).directive('focusTitle', function($timeout, $parse,$rootScope) {
-      return {          
-
-          link: function(scope, element, attrs) {
-
-              var model = $parse(attrs.focusMe);
-              $rootScope.$watch(function(value) {
-                     if(value.titleFocus)
-                     {            
-                      $timeout(function() {                        
-                          element[0].focus();
-                          $rootScope.titleFocus = '';
-                      });                      
-                     }
-              });
-          }
-      };
-  });
-"use strict";
-
 app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', function($compile, $timeout,replaceOccurence) {
 
     return {
@@ -3591,7 +6249,7 @@ app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', func
         },
         link: function(scope, elem, attrs) {
 
-            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
+            var template = '<div class="dropdown suggestions_list" ng-show="enableStaffFilter"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
 
             elem.bind('blur', function() {
                 $timeout(function() {
@@ -3604,6 +6262,8 @@ app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', func
             ******************************************/
 
             elem.bind("keydown", function($event) {
+
+                scope.enableStaffFilter = true;
                 if($event.keyCode == 38 && scope.active > 0) { 
                     scope.active--;
                     scope.$digest();
@@ -3681,9 +6341,9 @@ app.filter("filterdepartment", function(cursorPosition) {
 			var caretPos = cursorPosition.GetCaretPosition(text);
             var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-            var detectUserName = word.match(/\#[a-z]+/gm);
+            var detectUserName = word.match(/\#[a-z]+/gmi);
 			var countAtRate    = word.match(/\#/gm);
-			
+		
 			if(detectUserName && countAtRate.length == 1)
 			{
 				var searchedString 	= [];
@@ -3696,7 +6356,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 						var listedDepartment = value.department_name;
 						listedDepartment     = listedDepartment.toLowerCase();
 						removeHash           = removeHash.toLowerCase();
-						
+
 						if(listedDepartment.startsWith(removeHash))
 						{						
 							searchedString.push(value);
@@ -3718,7 +6378,7 @@ app.filter("filterstaff", function(cursorPosition) {
 			var caretPos = cursorPosition.GetCaretPosition(text);
             var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-            var detectUserName = word.match(/\@[a-z]+/gm);
+            var detectUserName = word.match(/\@[a-z]+/gmi);
 			var countAtRate    = word.match(/\@/gm);
 			
 			if(detectUserName && countAtRate.length == 1)
@@ -3750,20 +6410,21 @@ app.filter("filterstaff", function(cursorPosition) {
 
 
 
-app.filter("filterstaffJotTitle", function(cursorPosition) {
+app.filter("filterstaffJotDesc", function(cursorPosition) {
 
          return function(input,scope) {
-         		
-	         	var text     = document.getElementById("jot_title");
+	         	var text     = document.getElementById("jot_description");
 				var caretPos = cursorPosition.GetCaretPosition(text);
 	            var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-	            var detectUserName = word.match(/\@[a-z]+/gm);
+	            var detectUserName = word.match(/\@[a-z]+/gmi);
 				var countAtRate    = word.match(/\@/gm);
 						
 				if(detectUserName)
 				{
 
+					scope.detectdepartment = false;
+					scope.detectusers 		= true;
 					var searchedString 	= [];
 					if(word.substring(0, 1) == '@')
 					{						
@@ -3786,15 +6447,53 @@ app.filter("filterstaffJotTitle", function(cursorPosition) {
 			
          };
 });
+
+
+
+
+app.filter("descDepartmentFilter", function(cursorPosition) {
+
+         return function(input,scope) {
+         		
+	         	var text     = document.getElementById("jot_description");
+				var caretPos = cursorPosition.GetCaretPosition(text);
+	            var word     = cursorPosition.ReturnWord(text.value, caretPos);
+
+	            var detectUserName = word.match(/\#[a-z]+/gmi);
+				var countAtRate    = word.match(/\#/gm);
+						
+				if(detectUserName)
+				{
+
+					scope.detectdepartment = true;
+					scope.detectusers 		= false;
+
+					var searchedString 	= [];
+					if(word.substring(0, 1) == '#')
+					{						
+						scope.matchWord = word;		
+
+						var removeAtRate = word.split("#");					
+						removeAtRate     = removeAtRate[1];
+						angular.forEach(input,function(value,key){
+							var listedstaff = value.department_name;
+							listedstaff     = listedstaff.toLowerCase();
+							removeAtRate    = removeAtRate.toLowerCase();
+							if(listedstaff.startsWith(removeAtRate))
+							{						
+								searchedString.push(value);
+							}
+						});
+					}									
+					return searchedString;
+				}
+			
+         };
+});
 "use strict";
 
-/**************************************
-* Login controller
-**************************************/
-
-
-app.controller('loginController', ['$scope','$http','$location','$timeout','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog',
-	function($scope,$http,$location,$timeout, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog) {	
+app.controller('loginController', ['$scope','$http','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','globalRequest',
+	function($scope,$http,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,globalRequest) {	
 
 
 		/*********************************************
@@ -3816,17 +6515,27 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 
 			loginFactory.login(request).then(function(response){
 				$scope.loginresult = response;
-				if(response.errors){
-					//toastService.alert({message: response.errors.message, class: 'error'});
-				} else {
-					if(response.status == 1)
+				
+				if(response.status == 1)
+				{
+					localStorageService.set('token', response.result.token);
+					localStorageService.set('user', response.result.user);
+					AuthSrv.isLogged = true;
+					$mdDialog.cancel();
+					if(response.result.user.role == 'hotelowner')
 					{
-						localStorageService.set('token', response.result.token);
-						localStorageService.set('user', response.result.user);
-						AuthSrv.isLogged = true;
 						$location.path('/dashboard');
-					}									
-				}
+					}
+
+					if(response.result.user.role == 'staff')
+					{
+						globalRequest.getHotelDetail(response.result.user.hotel_id);
+						$location.path('/dashboard/hotelboard');
+					}
+										
+					
+				}									
+				
 				
 			});				
 	               
@@ -3847,6 +6556,17 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 
 			loginFactory.login(request).then(function(response){
 					$scope.forgetresult = response;
+					if(response.status == 1)
+						{
+							
+						$rootScope.popupData = {text:response.message,action:'ok'};
+						$timeout(function() {
+						 	$mdDialog.cancel();
+						 }, 200);
+						 $timeout(function() {
+						 	$rootScope.popup = true;
+						 }, 300);	
+					 }
 			});
 
 		};
@@ -3856,11 +6576,16 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 		***********************************************/
 
 		$scope.openSignupForm = function (obj) {
-	           $location.path('/register');    
+	          $mdDialog.show({
+				templateUrl : "/modules/register/views/register.tpl.html",
+       			controller  :  "registerController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true								
+			}).then(function(answer) {}, function() {});  
 		};
 	}
 ]);
-
 "use strict";
 
 /**************************************
@@ -3869,10 +6594,24 @@ http://localhost:3000/resetpassword/0c02baa57acfbb5a51cb0a04c587b8eec2099e3d
 **************************************/
 
 
-app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location',
-	function($scope,loginFactory,$rootScope,$routeParams,$location) {	
-		console.log($routeParams);
+app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location','$mdDialog','$timeout',
+	function($scope,loginFactory,$rootScope,$routeParams,$location,$mdDialog,$timeout) {	
+
 		var token = $routeParams.token;
+
+
+		if($routeParams.expired && $routeParams.expired == 'true')
+		{
+		
+			$location.path('/');
+			$rootScope.popupData  = {
+						text:  'Link has been expired.',
+						action: 'redirect'
+			};
+			 $timeout(function() {
+			 	$rootScope.popup = true;
+			 }, 500);
+		}
 		
 		
 
@@ -3893,10 +6632,23 @@ app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$rout
 
 				loginFactory.login(request).then(function(response){
 						$scope.resetResult = response;
+						
+						if(response.status == 1)
+						{
+							
+							$timeout(function() {
+							 	$location.path('/');
+							 }, 200);
+							$rootScope.popupData = {text:response.message,action:'ok'};	
+							 $timeout(function() {
+							 	$rootScope.popup = true;
+							 }, 300);	
+						 }
 				});
 			} else {
 				$scope.resetResult.message = 'Password is not match with confirm password.';
 				$scope.resetResult.class = 'Autherror';
+				$scope.resetResult.status = 2;
 			}			
 			
 		};
@@ -3922,11 +6674,139 @@ app.factory('loginFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
+app.controller('editLostFoundController', ['$scope','localStorageService','globalRequest','Upload','$timeout','lstFndDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,Upload,$timeout,lstFndDetail,$mdDialog) {
+		var hotel = localStorageService.get('hotel');
+
+		
+
+		/**********************************************************
+	    * Item tags 
+	    **********************************************************/
+
+		var self = this;
+	    self.readonly = false;	    
+	    self.itemTag = [];
+	    self.search_tag = angular.copy(self.itemTag);
+	    self.editableitemTag = angular.copy(self.itemTag);
+	    self.tags = [];	    
+	    self.newVeg = function(chip) {
+	      return {
+	        name: chip,
+	        type: 'unknown'
+	      };
+	    };
+
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+				
+
+		angular.forEach(lstFndDetail.detail,function (value,key) {
+
+			if(key == 'date')
+			{
+				$scope[key] = new Date(value);
+			} else if(key == 'search_tag')
+			{
+				$scope.ctrl.search_tag = value.split(',');
+			}
+			else {
+				$scope[key] = value;
+			}
+		    
+		});
+
+		/*****************************************
+		* Jot image upload
+		*****************************************/
+		$scope.foundImages = '';
+		$scope.uploadFoundFiles = function(files, errFiles) {
+			$scope.files       = files;	
+			
+	        if (files && files.length) {
+	            Upload.upload({
+	                url: window.__API_PATH.UPLOAD_FILE,
+	                type:'post',
+	                arrayKey: '',
+	                data: {	                    
+	                    hotel_id     : hotel._id,
+	                    folder_name  : 'lost_found',	                    
+	                    file         : files
+	                }
+	            }).then(function (response) {
+	                $timeout(function () {
+	                   var result = response.data.result;
+	                   var uploadedImagesName = []; 
+	                    angular.forEach(result, function(data) {				
+				            if(data.status){
+				            	uploadedImagesName.push(data.filename);
+				            }
+				        });
+				        $scope.image = uploadedImagesName;
+	                });
+	            }, function (response) {
+	                if (response.status > 0) {
+	                    $scope.errorMsg = response.status + ': ' + response.data;
+	                }
+	            }, function (evt) {
+	                $scope.foundProgress = 
+	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+	            });
+	        }
+
+	    };
+
+
+
+	    /*****************************************
+		* Update found item
+		*****************************************/
+
+		$scope.editFoundItem = function(){
+
+			var DataArray = {
+			  _id  		     : $scope._id,
+			  description    : $scope.description,			 
+			  image          : $scope.image,
+			  place 		 : $scope.place,	
+			  date 	 		 : new Date($scope.date).getTime(),				  
+			  no_of_items 	 : $scope.no_of_items,				  
+			  category 	     : $scope.category,			  
+			  status 	     : $scope.status,			  
+			  contact 	     : $scope.contact,				  
+			  search_tag 	 : $scope.ctrl.search_tag,				  
+			};
+
+
+
+			var request={
+                    url:window.__API_PATH.UPDATE_LOST_FOUND,
+                    method:"PUT",
+                    data:DataArray
+                  };
+            
+           
+            globalRequest.jotCRUD(request).then(function(response){ 
+            	$scope.editlstFoundResult = response;
+                if(response.status ==1)
+			 	{
+			 		$mdDialog.cancel();
+			 		globalRequest.getFoundList();
+			 	}
+            });
+		};
+
+
+		
+	}
+]);
+"use strict";
+
 app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','localStorageService','toastService','$mdDialog',
 	function($scope,$rootScope,globalRequest,localStorageService,toastService,$mdDialog) {
 		
 		$rootScope.directory = 'lost_found';
-
 
 		globalRequest.getStaff();
 
@@ -3960,8 +6840,8 @@ app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','localSto
 			  description    : $rootScope.jot_title,
 			  hotel_id       : hotel._id,	
 			  image          : $rootScope.issueImages,
-			  lost_place 	 : $scope.lost_place,	
-			  lost_date 	 : $scope.lost_date,				  
+			  place 		 : $scope.lost_place,	
+			  date 	 		 : new Date($scope.lost_date).getTime(),			  
 			  no_of_items 	 : $scope.no_of_items,				  
 			  category 	     : $scope.lost_category,			  
 			  status 	     : $scope.lost_status,			  
@@ -3993,41 +6873,305 @@ app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','localSto
 ]);
 "use strict";
 
-app.controller('headerController', ['$scope','$location','localStorageService','headerFactory','$rootScope','$mdDialog','$route','$timeout',
-	function($scope,$location,localStorageService,headerFactory,$rootScope,$mdDialog,$route,$timeout) {	
+app.controller('lostFoundManagementController',['$scope','$rootScope','globalRequest','localStorageService','toastService','Upload','$timeout','$mdDialog',
+	function($scope,$rootScope,globalRequest,localStorageService,toastService,Upload,$timeout,$mdDialog){
+		var hotel = localStorageService.get('hotel');
 
+		/************************************
+		* Blank all field before open form
+		*************************************/
+
+		$scope.blank = function(){
+			$scope.description = "";
+			$scope.image = "";
+			$scope.foundImages = "";
+			$scope.files = "";
+			$scope.place = "";
+			$scope.date = "";
+			$scope.no_of_items = "";
+			$scope.category = "";
+			$scope.status = "";
+			$scope.ctrl.itemTagModel = [];
+			$scope.contact = "";
+			
+			$scope.foundProgress = -1;
+		};
+
+		$scope.blankFields = function(){
+			$scope.blank();
+			$scope.lstFoundResult = "";
+			
+		};
+
+
+		/**********************************************************
+	    * Item tags 
+	    **********************************************************/
+
+		var self = this;
+	    self.readonly = false;	    
+	    self.itemTag = [];
+	    self.itemTagModel = angular.copy(self.itemTag);
+	    self.editableitemTag = angular.copy(self.itemTag);
+	    self.tags = [];	    
+	    self.newVeg = function(chip) {
+	      return {
+	        name: chip,
+	        type: 'unknown'
+	      };
+	    };
+
+
+	    /*****************************************
+		* Jot image upload
+		*****************************************/
+		$scope.foundImages = '';
+		$scope.uploadFoundFiles = function(files, errFiles) {
+			$scope.files       = files;	
+			
+	        if (files && files.length) {
+	            Upload.upload({
+	                url: window.__API_PATH.UPLOAD_FILE,
+	                type:'post',
+	                arrayKey: '',
+	                data: {	                    
+	                    hotel_id     : hotel._id,
+	                    folder_name  : 'lost_found',	                    
+	                    file         : files
+	                }
+	            }).then(function (response) {
+	                $timeout(function () {
+	                   var result = response.data.result;
+	                   var uploadedImagesName = []; 
+	                    angular.forEach(result, function(data) {				
+				            if(data.status){
+				            	uploadedImagesName.push(data.filename);
+				            }
+				        });
+				        $scope.foundImages = uploadedImagesName;
+	                });
+	            }, function (response) {
+	                if (response.status > 0) {
+	                    $scope.errorMsg = response.status + ': ' + response.data;
+	                }
+	            }, function (evt) {
+	                $scope.foundProgress = 
+	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+	            });
+	        }
+
+	    };
+
+		/************************************
+		* Get lost found item list
+		*************************************/			
+		
+		globalRequest.getFoundList();
+
+
+		/*****************************************
+		* Add found item
+		*****************************************/
+
+		$scope.addfoundItem = function(){
+
+			var DataArray = {
+			  description    : $scope.description,
+			  hotel_id       : hotel._id,	
+			  image          : $scope.foundImages,
+			  place 		 : $scope.place,	
+			  date 	 		 : new Date($scope.date).getTime(),				  
+			  no_of_items 	 : $scope.no_of_items,				  
+			  category 	     : $scope.category,			  
+			  status 	     : $scope.status,			  
+			  contact 	     : $scope.contact,				  
+			  search_tag 	 : $scope.ctrl.itemTagModel,				  
+			};
+
+
+
+			var request={
+                    url:window.__API_PATH.LOST_FOUND,
+                    method:"POST",
+                    data:DataArray
+                  };
+            
+           
+            globalRequest.jotCRUD(request).then(function(response){ 
+            	$scope.lstFoundResult = response;
+                if(response.status == 1)
+                {
+                    if(!$scope.LstFndList)
+			 		{
+			 			$scope.LstFndList = [];
+			 		}
+			 		$scope.LstFndList.push(response.result);
+                    var popup = {"message":response.message,"class":"success"};
+                    toastService.alert(popup);
+                    $scope.blank();
+                }
+            });
+		};
+
+
+		/*****************************************
+		* Open edit department
+		*****************************************/	
+
+		$scope.openEditLostFound = function(detail){
+				$mdDialog.show({
+					controller: 'editLostFoundController',
+					controllerAs: 'ctrl',
+					templateUrl: '/modules/lost_found/views/edit_lost_found.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,	
+					locals:{lstFndDetail:{detail:detail,prevScope:$scope}}				
+				}).then(function(answer) {}, function() {});
+
+		};
+
+		/*****************************************
+		* Delete employee
+		*****************************************/	
+
+		$scope.removeList = function(detail){
+
+			var request={
+				url:window.__API_PATH.DELETE_LOST_FOUND,
+				method:"DELETE",
+				params:{_id:detail._id}
+			};
+			
+			globalRequest.jotCRUD(request).then(function(response){				
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+			});
+
+		};
+}]);
+"use strict";
+
+app.controller('footerController', ['$scope','$rootScope','$mdDialog','$location',
+	function($scope,$rootScope,$mdDialog,$location) {
+		//$rootScope.popup = true;
+		$scope.callClosePopup = function(){
+			$rootScope.popup = false;
+			$rootScope.popupData = {text:'',action:''};
+		};	
+
+		$scope.redirectToHome = function(){
+			$rootScope.popup = false;
+			$rootScope.popupData = {text:'',action:''};
+			$location.url($location.path());
+			
+		};
+	}
+]);
+
+
+
+"use strict";
+
+app.controller('frontHeaderController', ['$scope','$rootScope','$mdDialog','$location','anchorSmoothScroll','$timeout','$routeParams',
+	function($scope,$rootScope,$mdDialog,$location,anchorSmoothScroll,$timeout,$routeParams) {	
+
+		$scope.menus = window.__API_PATH.HEADER_MENU;
+
+		if($routeParams.verify && $routeParams.verify == 'true')
+		{
+
+			$rootScope.popupData  = {
+						text:  '<strong>Congratulations! </strong> <br>You have successfully verified the email address.<br> Please sign-in and start managing your hotels.',
+						action: 'redirect'
+			};
+		
+			 $timeout(function() {
+			 	$rootScope.popup = true;
+			 }, 300);
+		}
+
+
+
+		/******************************************
+		* Scroll page to the section
+		******************************************/
+		$scope.activemenu = $scope.menus[0].label;
+		$scope.gotoElement = function (eID){			
+			if(eID.id && eID.id != "")
+			{				
+				$location.path('/');
+				$timeout(function(){
+					anchorSmoothScroll.scrollTo(eID.id);
+				},200);    		
+	
+			}
+			$timeout(function(){
+				$scope.activemenu = eID.label;
+			},200);
+			      
+	    };
+
+	    
+
+		$scope.openLoginForm = function(){
+			$mdDialog.show({
+				templateUrl : "/modules/login/views/login.tpl.html",
+       			controller: "loginController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true							
+			}).then(function(answer) {}, function() {});
+		};
+
+
+		$scope.openRegisterFormpopup = function(){
+			$mdDialog.show({
+				templateUrl : "/modules/register/views/register.tpl.html",
+       			controller  :  "registerController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true								
+			}).then(function(answer) {}, function() {});
+		};
+
+
+	}
+]);
+
+"use strict";
+
+app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','$route','globalRequest',
+	function($scope,localStorageService,$rootScope,$mdDialog,$route,globalRequest) {	
+
+		$rootScope.userData  = localStorageService.get('user');
 		/*
 		* Jot form tab list
 		*/
 
 		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
 
+
+		/**********************************************************
+	    * Get active hotel data
+	    **********************************************************/
+
+		$scope.activeHotelData   = localStorageService.get('hotel');
+
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$rootScope.boards = $scope.activeHotelData.jot_types;
+
 		/*
-		* Factory method
 		*
-		* Display hotels
+		* Get hotels list
 		*
 		*/
 		
-		var data = {
-				"user_id":localStorageService.get('user')._id
-			};
-
-			
-		var request={
-				url:window.__API_PATH.GET_HOTELS,
-				method:"GET",
-				params:data
-			};
-		
-		
-
-		headerFactory.get(request).then(function(response){
-			if(response.error){
-			} else {				
-				$rootScope.hotels = response.result;				
-			}
-		});
+		globalRequest.getHotels();		
 
 
 		/*
@@ -4037,14 +7181,12 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		*
 		*/
 		$scope.hotel = localStorageService.get('hotel');
-		$scope.changeJotView = function(hotel){
-			/*var hotelData  = {
-				'hotel_id':hotelID,
-				'hotel_name':hotelName
-			};*/
+		$scope.changeJotView = function(hotel){				
+			globalRequest.getJotCount();
 			localStorageService.set('hotel', hotel);
-			$scope.hotel = hotel;
+			$scope.hotel = localStorageService.get('hotel');
 			$route.reload();
+			
 		};
 
 
@@ -4053,7 +7195,6 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		/**************************************
 		* Open jot popup
 		**************************************/
-		$timeout(function(){
 
 			$scope.quickTaskPopup = function(){
 				$mdDialog.show({
@@ -4066,7 +7207,7 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 				}).then(function(answer) {}, function() {});
 
 			};
-		});
+
 		
 
 
@@ -4087,9 +7228,30 @@ app.controller('headerController', ['$scope','$location','localStorageService','
 		};
 
 
+
+		$scope.openLoginForm = function(detail){
+			$mdDialog.show({
+				templateUrl : "/modules/login/views/login.tpl.html",
+       			controller: "loginController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{empDetail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+		};
+
+
 	}
 ]);
 
+"use strict";
+
+app.controller('sidebarCntroller',['$scope','$location',function($scope,$location){
+	$scope.getClass = function (path) {
+	  return ($location.path() === path) ? 'active' : '';
+	};
+
+}]);
 "use strict";
 
 app.directive('circleToggle',['$document','$rootScope',function($document,$rootScope){
@@ -4116,36 +7278,272 @@ app.directive('header',['$rootScope',function($rootScope){
 
 
 
-app.factory('headerFactory', ['$http', function ($http) {
-	return{	
+
+"use strict";
+
+app.controller('editContactController', ['$scope','localStorageService','globalRequest','Upload','$timeout','contactDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,Upload,$timeout,contactDetail,$mdDialog) {
+		var hotel = localStorageService.get('hotel');
+
+
 		
-		get: function(obj){
-			return $http(obj).then(function(response){
-				return response.data;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		},			
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+
+
+		angular.forEach(contactDetail.detail,function (value,key) {
+		    
+		     if(key == 'tags')
+			{
+				$scope.ctrl.itemTagModel = value;
+			} else {
+				$scope[key] = value;
+			}
+		});
+
+
+		/************************************
+		* Edit employee
+		*************************************/		
+		
+
+		$scope.editContactNumber = function(){	
+			
+			var request = {
+		            url:window.__API_PATH.UPDATE_CONTACT,
+		            method:"PUT",
+		            data:{
+		            	_id      	   :   $scope._id,
+		            	first_name    	:  $scope.first_name,
+		            	last_name       :  $scope.last_name,
+		            	tags        	:  $scope.ctrl.itemTagModel,
+		            	email        	:  $scope.email,
+		            	contact 		:  $scope.contact
+		            }
+		          };
+
+			globalRequest.jotCRUD(request).then(function(response){
+			 	$scope.contactEditResult = response;
+			 	if(response.status ==1)
+			 	{
+			 		$mdDialog.cancel();
+			 		globalRequest.getContactList();
+			 	}
+
+			 });
+
+		};
+		
+		
+	}
+]);
+
+
+
+
+"use strict";
+
+app.controller('phoneDirController',['$scope','globalRequest','localStorageService','$mdDialog','toastService',function($scope,globalRequest,localStorageService,$mdDialog,toastService){
+	var hotel = localStorageService.get('hotel');
+	/************************************
+	* Blank all field before open form
+	*************************************/	
+
+	$scope.blank = function(){
+		$scope.first_name = "";		
+		$scope.last_name = "";
+		$scope.email = "";
+		$scope.contact = "";
 	};
+
+	$scope.blankFields = function(){
+		$scope.blank();
+		$scope.ContactResult = "";
+	};
+
+
+	/**********************************************************
+    * Item tags 
+    **********************************************************/
+
+	var self = this;
+    self.readonly = false;	    
+    self.itemTag = [];
+    self.itemTagModel = angular.copy(self.itemTag);
+    self.editableitemTag = angular.copy(self.itemTag);
+    self.tags = [];	    
+    self.newVeg = function(chip) {
+      return {
+        name: chip,
+        type: 'unknown'
+      };
+    };
+
+	/************************************
+	* Add contact number
+	*************************************/		
+
+	 globalRequest.getContactList();
+
+	/************************************
+	* Add contact number
+	*************************************/		
+	
+
+	$scope.addContactNumber = function(){	
+
+		var request = {
+		            url:window.__API_PATH.ADD_CONTACT,
+		            method:"POST",
+		            data:{
+		            	hotel_id      	:  hotel._id,
+		            	first_name    	:  $scope.first_name,
+		            	last_name       :  $scope.last_name,
+		            	tags        	:  $scope.ctrl.itemTagModel,
+		            	email        	:  $scope.email,
+		            	contact         :  $scope.contact
+		            }
+		          };
+		globalRequest.jotCRUD(request).then(function(response){
+		 	$scope.ContactResult = response;
+
+		 	if(response.status == 1)
+		 	{
+		 		$scope.blank();
+				$scope.ctrl.itemTagModel = [];
+		 		if(!$scope.ContactList)
+		 		{
+		 			$scope.ContactList = [];
+		 		}
+		 		$scope.ContactList.push(response.result);
+		 		
+		 	}
+		 });
+
+	};
+
+
+	/*****************************************
+	* Open edit Contact
+	*****************************************/	
+
+	$scope.openEditContact = function(detail){
+			$mdDialog.show({
+				controller: 'editContactController',
+				controllerAs: 'ctrl',
+				templateUrl: '/modules/phone_directory/views/edit_contact.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{contactDetail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+
+	};
+
+
+	/*****************************************
+	* Favorite contact
+	*****************************************/
+
+	$scope.makeFavorite = function(detail){
+		var fav = 'no';
+		var message = '';
+		if(detail.favorite == 'no')
+		{
+			fav =  'yes';
+		}
+
+		if(detail.favorite == 'yes')
+		{
+			fav =  'no';
+		}
+		var request={
+			url:window.__API_PATH.UPDATE_CONTACT,
+			method:"PUT",
+			data:{_id:detail._id,favorite:fav}
+		};
+		
+		globalRequest.jotCRUD(request).then(function(response){	
+			globalRequest.getContactList();
+		});
+
+	};
+
+
+	/*****************************************
+	* Delete contact
+	*****************************************/	
+
+	$scope.removeContact = function(detail){
+
+		var request={
+			url:window.__API_PATH.DELETE_CONTACT,
+			method:"DELETE",
+			params:{_id:detail._id}
+		};
+		
+		globalRequest.jotCRUD(request).then(function(response){				
+			var popup = {"message":response.message,"class":response.class};
+			toastService.alert(popup);
+		});
+
+	};
+	
+	
 }]);
 "use strict";
 
-/**************************************
-* Register controller
-**************************************/
+app.filter('contactfilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+
+			var searchContact        = scope.searchcontact;
+
+			if(!searchContact){
+				return input;
+			}
+
+			if(searchContact)
+			{
+				var removeSpaceFromString = searchContact.replace(/\s/g,'');			
+			}
+			input   =   input.filter(function( obj ) {
+							var fullName = obj.first_name+obj.last_name;
+								if(fullName.match(new RegExp("(" + removeSpaceFromString + ")", "i")))
+								{
+									return true;
+								}							
+								
+						});
+		}
+		return input;
+
+	};
+
+});
+"use strict";
+
+app.controller('profileController',['$scope','$rootScope',function($scope,$rootScope){
 
 
-app.controller('registerController', ['$scope','registerFactory','$location',
-	function($scope,registerFactory,$location) {
+}]);
+"use strict";
+
+app.controller('registerController', ['$scope','$rootScope','registerFactory','$location','$mdDialog','$timeout',
+	function($scope,$rootScope,registerFactory,$location,$mdDialog,$timeout) {
 
 		$scope.registerUser = function (obj) {
 
 	        var dataObj = {
-					user_name   : $scope.name,
-					email       : $scope.email,
-					password    : $scope.password
+					
+					first_name  	 : $scope.first_name,
+					last_name   	 : $scope.last_name,
+					email       	 : $scope.email,
+					contact_number   : $scope.contact_number,
+					password    	 : $scope.password
 			};
 
 			var request={
@@ -4155,14 +7553,32 @@ app.controller('registerController', ['$scope','registerFactory','$location',
 				};
 
 			registerFactory.register(request).then(function(response){
-				console.log(response);
-				$scope.registerResult = response;				
+
+				$scope.registerResult   = response;
+
+				if(response.status == 1)
+				{
+					
+					$rootScope.popupData = {text:response.message,action:'ok'};
+					$timeout(function() {
+					 	$mdDialog.cancel();
+					 }, 200);
+					 $timeout(function() {
+					 	$rootScope.popup = true;
+					 }, 300);	
+				 }			
 			});       
 		};	
 
 
 		$scope.openLoginForm = function (obj) {	
-	           $location.path('/');    
+	           $mdDialog.show({
+				templateUrl : "/modules/login/views/login.tpl.html",
+       			controller: "loginController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true							
+			}).then(function(answer) {}, function() {});    
 		};	
 
 		
@@ -4188,8 +7604,8 @@ app.factory('registerFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
-app.controller('editCategoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','catDetail','$route','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,catDetail,$route,$mdDialog) {
+app.controller('editCategoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','catDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,Upload,$timeout,catDetail,$mdDialog) {
 		var hotel = localStorageService.get('hotel');
 
 		
@@ -4223,7 +7639,7 @@ app.controller('editCategoryController', ['$scope','localStorageService','global
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
-			 		$route.reload();
+			 		globalRequest.getVendingCategory();
 			 	}
 
 			 });
@@ -4237,8 +7653,8 @@ app.controller('editCategoryController', ['$scope','localStorageService','global
 
 "use strict";
 
-app.controller('editInventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','invDetail','$route','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,invDetail,$route,$mdDialog) {
+app.controller('editInventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','invDetail','$mdDialog',
+	function($scope,localStorageService,globalRequest,Upload,$timeout,invDetail,$mdDialog) {
 		var hotel = localStorageService.get('hotel');
 
 		
@@ -4286,7 +7702,7 @@ app.controller('editInventoryController', ['$scope','localStorageService','globa
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
-			 		$route.reload();
+			 		globalRequest.getVendingItems();
 			 	}
 
 			 });
@@ -4345,29 +7761,20 @@ app.controller('inventoryCatController', ['$scope','localStorageService','global
 
 		$scope.blank = function(){
 			$scope.inventory_category_name = "";		
-		}
+		};
 
 		$scope.blankFields = function(){
 			$scope.blank();
 			$scope.inverntoryResult = "";
-		}
+		};
 
 
 
 		/************************************
 		* Get Category list
 		*************************************/			
-			
-		var request = {
-		            url:window.__API_PATH.GET_INVENTORY_CATEGORY,
-		            method:"GET",
-		            params:{
-		            	hotel_id    :  hotel._id		
-		            }
-		          };
-		globalRequest.jotCRUD(request).then(function(response){				
-		 	$scope.invtList = response.result;
-		});
+		
+		globalRequest.getVendingCategory();
 
 		
 		/************************************
@@ -4451,8 +7858,8 @@ app.controller('inventoryCatController', ['$scope','localStorageService','global
 
 app.controller('inventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','$route','toastService',
 	function($scope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,$route,toastService) {
+		
 		var hotel = localStorageService.get('hotel');
-
 
 		/************************************
 		* Blank all field before open form
@@ -4467,40 +7874,31 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 			$scope.profile_image = "";
 			$scope.profile = "";
 			$scope.profileProgress = -1;
-		}
+		};
 
 		$scope.blankFields = function(){
 			$scope.blank();
 			$scope.inverntoryResult = "";
-		}
+		};
 
 		/************************************
 		* Get item list
 		*************************************/	
-			var request = {
-			            url:window.__API_PATH.GET_ITEMS,
-			            method:"GET",
-			            params:{
-			            	hotel_id    :  hotel._id		
-			            }
-			          };
-			globalRequest.jotCRUD(request).then(function(response){				
-			 	$scope.inverntoryList = response.result;
-			});
+		globalRequest.getVendingItems();
 
 
 		/************************************
 		* Get Category list
 		*************************************/			
 			
-		var request = {
+		var catRequest = {
 		            url:window.__API_PATH.GET_INVENTORY_CATEGORY,
 		            method:"GET",
 		            params:{
 		            	hotel_id    :  hotel._id		
 		            }
 		          };
-		globalRequest.jotCRUD(request).then(function(response){				
+		globalRequest.jotCRUD(catRequest).then(function(response){				
 		 	$scope.inventCatList = response.result;
 		});
 
@@ -4546,6 +7944,7 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 		*****************************************/	
 
 		$scope.openEditForm = function(detail){
+			console.log(detail);
 				$mdDialog.show({
 					controller: 'editInventoryController',
 					templateUrl: '/modules/vending_machine/views/edit_inventory.html',
@@ -4627,18 +8026,9 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 		
 		/**********************************************************
 	    * Get item category
-	    **********************************************************/	
-		$scope.productCategory  = [
-										{label:'Confectionery'},
-										{label:'Dried foods'},
-										{label:'Dumplings'},
-										{label:'Fast food'},
-										{label:'Pastes'},
-										{label:'Spreads'},
-										{label:'Noodles'},
-										{label:'Dips'},
-										{label:'Soups'}
-								   ];		
+	    **********************************************************/
+	    globalRequest.getVendingCategory();
+
 
 		/**********************************************************
 	    * Get items list
@@ -4671,7 +8061,7 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 				item.totalprice = parseInt(item.price) * 0;
 			}
 			
-			item.quantity   = quantity;
+			item.editquantity   = quantity;
 			$scope.cart.push(item);
 		};
 
@@ -4923,6 +8313,72 @@ app.filter('productfilter',function(){
 	};
 
 });
+"use Strict";
+
+app.service('anchorSmoothScroll', function(){
+    
+    this.scrollTo = function(eID) {
+
+        // This scrolling function 
+        // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
+        
+        var startY = currentYPosition();
+        var stopY = elmYPosition(eID);
+        var distance = stopY > startY ? stopY - startY : startY - stopY;
+        if (distance < 100) {
+            scrollTo(0, stopY); return;
+        }
+        var speed = Math.round(distance / 100);
+        if (speed >= 20) speed = 20;
+        var step = Math.round(distance / 25);
+        var leapY = stopY > startY ? startY + step : startY - step;
+        var timer = 0;
+        if (stopY > startY) {
+            for ( var i=startY; i<stopY; i+=step ) {
+                setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
+                leapY += step; if (leapY > stopY) leapY = stopY; timer++;
+            } return;
+        }
+        for ( var j=startY; j>stopY; j-=step ) {
+            setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
+            leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
+        }
+        
+        function currentYPosition() {
+            // Firefox, Chrome, Opera, Safari
+            if (self.pageYOffset) return self.pageYOffset;
+            // Internet Explorer 6 - standards mode
+            if (document.documentElement && document.documentElement.scrollTop)
+                return document.documentElement.scrollTop;
+            // Internet Explorer 6, 7 and 8
+            if (document.body.scrollTop) return document.body.scrollTop;
+            return 0;
+        }
+        
+        function elmYPosition(eID) {
+            var elm = document.getElementById(eID);
+            var y = elm.offsetTop;
+            var node = elm;
+            while (node.offsetParent && node.offsetParent != document.body) {
+                node = node.offsetParent;
+                y += node.offsetTop;
+            } return y;
+        }
+
+    };
+    
+});         
+"use strict";
+app.filter('bytes', function() {
+	return function(bytes, precision) {
+		if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) return '-';
+		if (typeof precision === 'undefined') precision = 1;
+		var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
+			number = Math.floor(Math.log(bytes) / Math.log(1024));
+		return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
+	};
+});
+
 "use strict";
 
 app.directive('closepopup', function($mdDialog) {
@@ -4989,6 +8445,61 @@ app.factory('cursorPosition', [function () {
 
 	};
 }]);
+"use strict";
+app.filter('digits', function() {
+return function(input) {
+   if (input < 10) { 
+          input = '0' + input;
+      }
+      return input;
+    };
+});
+"use strict";
+
+app.filter('groupBy', function(){
+		return function(list, group_by) {
+
+		var filtered = [];
+		var prev_item = null;
+		var group_changed = false;
+		// this is a new field which is added to each item where we append "_CHANGED"
+		// to indicate a field change in the list
+		var new_field = group_by + '_CHANGED';
+
+		// loop through each item in the list
+		angular.forEach(list, function(item) {
+
+			group_changed = false;
+
+			// if not the first item
+			if (prev_item !== null) {
+
+				// check if the group by field changed
+				if (prev_item[group_by] !== item[group_by]) {
+					group_changed = true;
+				}
+
+			// otherwise we have the first item in the list which is new
+			} else {
+				group_changed = true;
+			}
+
+			// if the group changed, then add a new field to the item
+			// to indicate this
+			if (group_changed) {
+				item[new_field] = true;
+			} else {
+				item[new_field] = false;
+			}
+
+			filtered.push(item);
+			prev_item = item;
+
+		});
+
+		return filtered;
+		};
+	});
 'use strict';
 
 app.factory('replaceOccurence', ['$http', function ($http) {
@@ -5006,7 +8517,7 @@ app.factory('replaceOccurence', ['$http', function ($http) {
 
 app.factory('globalRequest',['$http','localStorageService','$rootScope',function($http,localStorageService,$rootScope){
 	return{
-
+		
 		/*************************************
 		* Function for GET, POST, PUT, DELETE request
 		**************************************/
@@ -5018,6 +8529,61 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 				return {
 					errors: response.data.errors
 				};
+			});
+		},
+
+
+		getHotelStatus:function(hotelID){
+			$rootScope.hotelStatus = '';
+			var hotelstatusrequest = {
+					url:window.__API_PATH.GET_HOTEL_STATUS,
+					method:"GET",
+					params: { 
+								"hotel_id":hotelID						
+							}
+				};
+
+			return $http(hotelstatusrequest).then(function(response){	
+				return response.data.result;
+
+			}, function(response){
+				$rootScope.hotelStatus = response.data.errors;				
+			});
+		},
+
+		getHotels:function(){
+			$rootScope.hotels = '';
+			var userData   	  = localStorageService.get('user');
+			var paramsData 	  = { 
+						"user_id":userData._id						
+				};
+			var hotellistrequest={
+				url:window.__API_PATH.GET_HOTELS,
+				method:"GET",
+				params:paramsData
+			};
+
+			return $http(hotellistrequest).then(function(response){	
+				$rootScope.hotels = response.data.result;
+			}, function(response){
+				$rootScope.hotels = response.data.errors;				
+			});
+		},
+
+
+		getHotelDetail:function(hotelID){						
+			var paramsData 	  = { 
+						"hotel_id":hotelID						
+				};
+			var hotellistrequest={
+				url:window.__API_PATH.GET_HOTEL_DETAIL,
+				method:"GET",
+				params:paramsData
+			};
+
+			return $http(hotellistrequest).then(function(response){	
+				console.log(response.data.result);
+				localStorageService.set('hotel', response.data.result);
 			});
 		},
 
@@ -5036,10 +8602,283 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 			});
 		},
 
+
+		getDepartments:function(){
+			var hotel   = localStorageService.get('hotel');
+			var request = {
+						url:window.__API_PATH.GET_DEPARTMENTS,
+						method:"GET",
+						params:{hotel_id: hotel._id}
+				};
+
+			return $http(request).then(function(response){
+				$rootScope.departmentList = response.data.result;
+			}, function(response){
+				$rootScope.departmentList = response.data.errors;				
+			});
+		},
+
+		getShiftTime:function(){
+				var hotel   = localStorageService.get('hotel');
+				var request = {
+						url:window.__API_PATH.GET_HOTELSHIFTS,
+						method:"GET",
+						params:{hotel_id: hotel._id}
+				};
+
+			return $http(request).then(function(response){
+				$rootScope.shiftList = response.data.result;
+			}, function(response){
+				$rootScope.shiftList = response.data.errors;				
+			});
+		},
+
+		getVendingItems:function(){
+				var hotel   = localStorageService.get('hotel');
+				var request = {
+						url:window.__API_PATH.GET_ITEMS,
+						method:"GET",
+						params:{hotel_id: hotel._id}
+				};
+
+			return $http(request).then(function(response){
+				$rootScope.inverntoryList = response.data.result;
+			}, function(response){
+				$rootScope.inverntoryList = response.data.errors;				
+			});
+		},
+
+		getVendingCategory:function(){
+				var hotel   = localStorageService.get('hotel');
+				var request = {
+						url:window.__API_PATH.GET_INVENTORY_CATEGORY,
+						method:"GET",
+						params:{hotel_id: hotel._id}
+				};
+
+			return $http(request).then(function(response){
+				$rootScope.invtList = response.data.result;
+			}, function(response){
+				$rootScope.invtList = response.data.errors;				
+			});
+		},
+
+		getFoundList:function(){
+				var hotel   = localStorageService.get('hotel');
+				var request = {
+						url:window.__API_PATH.GET_LOST_FOUND,
+						method:"GET",
+						params:{hotel_id: hotel._id}
+				};
+
+			return $http(request).then(function(response){
+				$rootScope.LstFndList = response.data.result;
+			}, function(response){
+				$rootScope.LstFndList = response.data.errors;				
+			});
+		},
+
+		getContactList:function(){
+				var hotel   = localStorageService.get('hotel');
+
+				var request = {
+			            url:window.__API_PATH.GET_CONTACTS,
+			            method:"GET",
+			            params:{
+			            	hotel_id      	:  hotel._id
+			            }
+			          };
+
+			return $http(request).then(function(response){
+				$rootScope.ContactList = response.data.result;
+			}, function(response){
+				$rootScope.ContactList = response.data.errors;				
+			});
+		},
+
+
+		getDocument:function(){
+				var hotel   = localStorageService.get('hotel');
+
+				var request = {
+			            url:window.__API_PATH.GET_DOCUMENT,
+			            method:"GET",
+			            params:{
+			            	hotel_id      	:  hotel._id
+			            }
+			          };
+
+			return $http(request).then(function(response){
+				$rootScope.documentList = response.data.result;
+			}, function(response){
+				$rootScope.documentList = response.data.errors;				
+			});
+		},
+
+
+
+		getJotCount:function(){
+				var hotel   = localStorageService.get('hotel');
+
+				var request = {
+			            url:window.__API_PATH.JOT_COUNT,
+			            method:"GET",
+			            params:{
+			            	hotel_id      	:  hotel._id
+			            }
+			          };
+
+			return $http(request).then(function(response){
+				$rootScope.JotCount = response.data.result;			
+
+			}, function(response){
+				$rootScope.JotCount = response.data.errors;				
+			});
+		},
+
+
+		getJotList:function(JotType){
+				var hotel   	 = localStorageService.get('hotel');
+				var userDetail   = localStorageService.get('user');
+				
+				var request = {
+			            url:window.__API_PATH.GET_JOT,
+			            method:"GET",
+			            params:{
+			            	hotel_id      	:  hotel._id,
+			            	jot_type      	:  JotType,			            	
+			            	user_name  		:  userDetail.user_name
+			            }
+			          };
+
+			return $http(request).then(function(response){
+				$rootScope.JotListData = response.data.result;			
+
+			}, function(response){
+				$rootScope.JotListData = response.data.errors;				
+			});
+		},
 		
 	};
 
 }]);
+"use strict";
+
+app.directive('slideable', function () {
+    
+    return {
+        restrict:'C',
+        compile: function (element, attr) {
+            // wrap tag
+            var contents = element.html();
+            element.html('<div class="slideable_content" style="margin:0 !important; padding:0 !important" >' + contents + '</div>');
+
+            return function postLink(scope, element, attrs) {
+                // default properties
+                attrs.duration = (!attrs.duration) ? '0.7s' : attrs.duration;
+                attrs.easing = (!attrs.easing) ? 'ease-in-out' : attrs.easing;
+                element.css({
+                    'overflow': 'hidden',
+                    'height': '0px',
+                    'transitionProperty': 'height',
+                    'transitionDuration': attrs.duration,
+                    'transitionTimingFunction': attrs.easing
+                });
+            };
+        }
+    };
+})
+.directive('slideToggle', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            
+            var target = document.querySelector(attrs.slideToggle);
+          
+            attrs.expanded = false;
+            element.bind('click', function() {
+                var content = target.querySelector('.slideable_content');
+                if(!attrs.expanded) {
+                    content.style.border = '1px solid rgba(0,0,0,0)';
+                    var y = content.clientHeight+50;
+                    content.style.border = 0;
+                    target.style.height = y + 'px';
+                } else {
+                    target.style.height = '0px';
+                }
+                attrs.expanded = !attrs.expanded;
+            });
+        }
+    };
+});
+
+
+
+
+"use strict";
+app.filter('timeConvertorfilter', function() {
+	return function(input, scope) {
+		if(input)
+		{
+			var timeVal = '';
+			input = parseInt(input);
+			if(input <= 12)
+			{
+				timeVal = input+" AM";
+			} else {
+				input = input-12;				
+				timeVal = input+" PM";
+			}
+
+			return timeVal;
+		}
+
+	};
+});
+
+
+app.filter('getmeridiem', function() {
+	return function(input, scope) {
+
+
+		if(input)
+		{
+			var timeVal,hour,min;
+
+			var timeArray = input.split(':');
+
+			if(timeArray[0] != '')
+			{
+
+				if(timeArray[0] == -1)
+				{
+
+					hour 	=   timeArray[0];
+					min     =   timeArray[1];
+					timeVal = "Untill Finish";
+
+				} else {
+
+
+					if(timeArray[0] <= 12)
+					{
+						hour 	=  timeArray[0];
+						min     =   timeArray[1];
+						timeVal = hour+":"+min+" AM";
+					} else {
+						hour 	=  timeArray[0]-12;
+						min     =   timeArray[1];				
+						timeVal = hour+":"+min+" PM";
+					}
+				}	
+			}
+
+			return timeVal;
+		}
+
+	};
+});
+
 'use strict';
 
 app.factory('toastService', ['$mdToast','$timeout', function ($mdToast, $timeout) {

@@ -1,22 +1,23 @@
 <div class="dash-main-con">
 <!--middle panel -->
-<section class="dashrightsection">
+<section class="dashrightsection" ng-class="{'leftopen':$root.leftopen}">
 	
 	<div class="dash_hd_txt mar-bot20 clearfix">
 		<div class="dash_hd mar-bot0 dash_hd-left">Category</div>
 		<div class="rightfilter_right">
 			<div class="chane_pass_btn_right">
-				<md-button class="md-primary addyellobtn yellowbtn widthauto"  ng-click="invCatform = !invCatform; blankFields();" ng-class="{activebtn:invCatform}">
-		
-				{{(invCatform)?"Close":"Add Category"}}
-		    </md-button>
+				
+
+		    <md-button  slide-toggle="#vending-cat" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+					{{(invForm)?"Close":"Add Category"}}
+			</md-button>
 			</div>
 	    </div>    
 	</div>
 
 
 
-	<div class="dash_pro_inform" ng-show="invCatform">
+	<div class="dash_pro_inform slideable" id="vending-cat">
 	<form name="addInvtCatform" ng-submit="addInvtCat(addInvtCatform.$valid)" novalidate>		
 		<div class="dash_pro_inform_inner boxunoversal">
 			<div class="row">
@@ -69,7 +70,7 @@
         <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table smalltable">
           <thead>
               <tr>
-                  <th width="40%">S.No</th>
+                  <th width="40%">#</th>
                   <th width="40%">Category</th>
                   <th width="20%">Action </th>
               </tr>

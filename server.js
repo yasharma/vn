@@ -28,13 +28,7 @@ app.get(/^((?!\/(api|admin)).)*$/, function (req, res) {
 	res.sendFile(path.resolve('public/index.html'));
 });
 
-/*app.get(/((?!\/(dashboard)).)*$/, function (req, res) {
-	res.sendFile(path.resolve('public/index2.html'));
-});*/
-
-
-
 // if( process.env.NODE_ENV === 'production' ){
-app.listen(3000,function(){
-    console.log('Listening on server port:3000');
+app.listen(config.server.PORT,function(){
+    console.log('Listening on server port:'+config.server.PORT);
 });

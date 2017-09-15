@@ -1,0 +1,115 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Edit Document</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+	<div class="dash_pro_inform  lost_panel">
+
+		<div class="dash_pro_inform_inner boxunoversal">
+
+			<form name="editDCform" ng-submit="editDC(editDCform.$valid)" novalidate>
+				<div class="row mar-bot20">
+
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					    <input  ng-model="document_name" placeholder="Document Name">
+					  </md-input-container>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+					</div>
+
+					<div class="col-sm-6">						
+					    
+					    <md-chips ng-model="ctrl.itemTagModel" name="itemTag" readonly="ctrl.readonly"
+	                    md-removable="ctrl.removable" placeholder="Enter #Tag for Document" class="tag_name">
+	                    <md-chip-template>
+	                       <span class="entered_tags">{{$chip}}</span>
+	                    </md-chip-template>
+	                 </md-chips>
+
+					</div>
+
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					    <textarea ng-model="document_description" placeholder="Description"></textarea>
+					  </md-input-container>
+					</div>
+
+					<div class="col-sm-12">
+						<div class="uplaod_area"  ngf-multiple="true" ng-model="files"   ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" ngf-drop>							
+							<div class="drop_desc">
+								Drag and drop file here
+							</div>
+								<br>
+								or
+								<br>
+							<div class="select_files" ngf-select ="uploadDocument($files, $invalidFiles)" ngf-multiple="true" ngf-max-size="5MB">
+								Select files
+							</div>
+							
+						</div>
+
+						<ul class="uploadimage_list clearfix document_listed_files">
+
+							<li ng-repeat="f in filesData" ng-hide="edithide">
+
+								<!-- <ng-md-icon class="cursor closr_icon tableredtag" icon="delete_forever" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+	                  			</ng-md-icon> -->
+
+
+	                  			<span ng-switch="f.type" style="float: left;margin-right: 10px;">
+
+	                  			<img style="width:50px" ng-switch-when="image/jpeg|image/png" ng-switch-when-separator="|" src="{{'/images/hotel/'+hotel_id+'/document_center/'+f.filename}}">
+
+
+
+	                  			<ng-md-icon style="fill:#2aaae0" ng-switch-when="application/pdf" class="cursor" icon="picture_as_pdf" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+	                  			</ng-md-icon>
+
+	                  			<ng-md-icon ng-switch-default style="fill:#2aaae0" class="cursor" icon="insert_drive_file" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+	                  			</ng-md-icon>
+
+	                  			</span>							
+
+						       	<a target="_blank" href="{{'/images/hotel/'+hotel_id+'/document_center/'+f.filename}}"> {{f.filename}} </a>
+						        <span class="doc_delete_icon"> 
+
+						        <ng-md-icon class="cursor closr_icon tableredtag" icon="delete_forever" class="cursor"  size="22" ng-click="removeImageIndex(f); edithide = !edithide;">
+	                  			</ng-md-icon> 
+	                  			</span>
+						    </li> 
+  
+
+						</ul> 
+
+					</div>
+					
+					
+				</div>
+				<div class="clearfix">
+					<div class="chane_pass_btn">
+						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+					</div>					
+				</div>
+
+				<div class="message {{docEditResult.class}}" ng-if="docEditResult.status == 1">{{docEditResult.message}}
+				</div>
+
+				<div class="result {{docEditResult.class}}" ng-if="docEditResult.status==2">    
+	                <ul>
+	                  <li ng-repeat="(key,value) in docEditResult.errors">
+	                  {{value.message}}
+	                  </li>
+	                </ul>
+	            </div>
+			</form>
+		</div>
+	</div>
+</md-dialog>

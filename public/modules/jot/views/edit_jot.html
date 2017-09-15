@@ -12,31 +12,32 @@
     <md-dialog-content>
     	<div class="newhotel_dialog_form">
     		 <div class="clearfix">
-                <div class="edit_water_left">
-                    <div class="edit_water_left_inner">
-                        <textarea class="edit_water_bluetxt" ng-model="jot_title">
-                        </textarea>
+                <div class="edit_water_left quickedit">
+                    <input type="text" class="popup_jot_title" ng-model="jot_title">
+                    <div class="clearfix" ng-include="'/modules/jot/views/jot_desc.html'"></div>
+                        <div class="edit_water_left_inner">
+                        
                         <ul class="taginglist clearfix">
-                            <li>metting</li>
-                            <li>clean</li>
-                            <li>room</li>
-                            <li>change room</li>
+                            <li ng-repeat="jottag in edit_jot.assigned_departments[0].department">
+
+                            {{($root.departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
+                             </li>
                         </ul>
+
                         <ul class="tim_list clearfix">
-                            <li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>{{ edit_jot.jot_data.due_date | date: 'MMM d'}} </li>
+                            <li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>{{ edit_jot.due_date | date: 'MMM d'}} </li>
 
                             <li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
-                            <li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>2</li>
-                            <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li>
+                            <li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>{{edit_jot.image.length}}</li>
+                            <!-- <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li> -->
                         </ul>
-                        <ul class="housekepping_list clearfix">
-                            <img src="assets/images/house_keep.png"> <i>House Keeping</i>
-                        </ul>
-                    </div>
+                     
                     <div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
-                        <span class="highttag capitalize {{edit_jot.jot_data.priority}}">{{edit_jot.jot_data.priority}}</span>
+                        <span class="highttag capitalize {{edit_jot.priority}}">{{edit_jot.priority}}</span>
 
-                        <span class="yellowtag capitalize status {{edit_jot.jot_data.status == 'close'? edit_jot.jot_data.status:'Open'}}">{{edit_jot.jot_data.status == 'close'? edit_jot.jot_data.status:'Open'}}</span>
+                        <span class="yellowtag capitalize status {{edit_jot.status == 'close'? edit_jot.status:'Open'}}">
+                        {{edit_jot.status == 'close'? edit_jot.status:'Open'}}</span>
+                    </div>
                     </div>
                 </div>
                 <div class="edit_water_right">
@@ -74,19 +75,23 @@
                         <li>
                             <a href="javascript:void(0);" ng-click="changeStatus()"><ng-md-icon icon="done_all" size="20"></ng-md-icon>
                        
-                            {{edit_jot.jot_data.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
+                            {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
                         </li>
 
                         <li><a href="javascript:void(0);">
                         <ng-md-icon icon="av_timer" size="20">
                         </ng-md-icon>Set Reminder</a>
                         </li>
-                        <li><a href="javascript:;"><ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC</a></li>
+                        <li>
+                        <a href="javascript:void(0);" ng-click="moveDC(edit_jot);">
+                        <ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC
+                        </a>
+                        </li>
                     </ul>
                 </div>
              </div>
              <div class="clearfix editsavecon">
-                    <md-button class="md-primary addyellobtn bluebtn" ng-click="saveUpdateedJot()">SAVE</md-button>
+                    <md-button class="md-primary addyellobtn bluebtn" ng-click="saveUpdatedJot()">SAVE</md-button>
 
               <div class="message {{result.class}}"> {{result.message}} </div>
              </div>

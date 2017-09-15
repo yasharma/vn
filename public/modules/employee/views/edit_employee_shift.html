@@ -1,0 +1,130 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Edit Shift</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+
+<div class="dash_pro_inform">
+	<form name="updateshiftform" ng-submit="updateShift(updateshiftform.$valid)" novalidate>
+			<div class="clearfix">
+				<!-- <div class="dash_pro_inform_hd">Add Department</div> -->
+			</div>
+			<div class="dash_pro_inform_inner boxunoversal">
+				<div class="row">
+
+					<div class="col-sm-6">
+					 <div class="col-sm-12">
+						<md-input-container md-no-float class="md-block">
+					        <input  ng-model="shift_name" placeholder="Shift Name for example: (Day/Night)" ng-required="true">
+					    </md-input-container>
+					    </div>
+					     <div class="col-sm-8">
+					    <md-input-container md-no-float class="md-block selectgeneral38">
+		                <md-select ng-model="department_name" placeholder="Department">
+		                  <md-option value="">
+                				Select Department
+              				</md-option>
+		                	<md-option ng-repeat="dept in $parent.departmentList" value="{{dept.department_name}}">
+                				{{dept.department_name}}
+              				</md-option>
+		                </md-select>
+		            </md-input-container>
+		            </div>
+
+			            <div class="col-sm-4">
+			            	<md-input-container md-no-float class="md-block">
+								<input  type="text" ng-model="ctlr.bgcolor"  style="background: {{ctlr.bgcolor}}" placeholder="Select background color" ng-click="colorSwatch = !colorSwatch" autocomplete="off" />
+							</md-input-container>
+
+							<div class="colorswatch-cont" ng-show="colorSwatch" ng-class="{fullHeight:colorSwatch}">
+								<div class="color-swatch" ng-repeat="color in colorCodes" style="background-color: {{color}}" ng-click="ctlr.bgcolor = color">&nbsp;</div>
+							</div>
+			            </div>
+					</div>
+
+					<div class="col-sm-6">
+					<div class="col-sm-2">From: </div>
+						<div class="col-sm-5">
+							<md-input-container md-no-float class="md-block selectgeneral38">
+			                <md-select ng-model="start_hour" placeholder="Start Hour">
+			                 
+			                	<md-option ng-repeat="hour in getDay(23) track by $index" value="{{$index+1}}">
+	                				{{$index+1 | timeConvertorfilter:this | digits:this}}
+	              				</md-option>
+			                </md-select>
+			            </md-input-container>
+						</div>	
+
+						<div class="col-sm-5">
+							<md-input-container md-no-float class="md-block selectgeneral38">
+			                <md-select ng-model="start_min" placeholder="Start Minute">
+			                 
+			                	<md-option ng-repeat="min in getDay(60)  track by $index" value="{{$index | digits:this}}">
+	                				{{$index | digits:this}}
+	              				</md-option>
+			                </md-select>
+			            </md-input-container>
+						</div>
+
+						<div class="clearfix"></div>
+						</br>
+						<div class="col-sm-2">To: </div>
+						<div class="col-sm-5">
+						<md-input-container md-no-float class="md-block selectgeneral38">
+		                <md-select ng-model="end_hour" placeholder="End Hour">
+		                  <md-option value="-1">
+                				Untill Finish
+              				</md-option>
+
+		                	<md-option ng-repeat="hour in getDay(23) track by $index" value="{{$index+1}}">
+                				{{$index+1  | timeConvertorfilter:this | digits:this}}
+              				</md-option>
+              				
+		                </md-select>
+		            </md-input-container>
+					</div>	
+
+					<div class="col-sm-5">
+						<md-input-container md-no-float class="md-block selectgeneral38">
+		                <md-select ng-model="end_min" placeholder="End Minute">
+		                 
+		                	<md-option ng-repeat="min in getDay(60)  track by $index" value="{{$index | digits:this}}">
+                				{{$index | digits:this}}
+              				</md-option>
+		                </md-select>
+		            </md-input-container>
+					</div>
+						
+					</div>
+
+
+					<div class="clearfix"></div>
+
+					<br>
+				</div>
+				<div class="clearfix">
+					<div class="chane_pass_btn">
+						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+					</div>						
+				</div>
+
+				<div class="message {{shiftEditResult.class}}" ng-if="shiftEditResult.status == 1">{{shiftEditResult.message}}
+				</div>
+
+			<div class="result {{shiftListResult.class}}" ng-if="shiftEditResult.status==2">    
+                <ul>
+                  <li ng-repeat="(key,value) in shiftEditResult.errors">
+                  {{value.message}}
+                  </li>
+                </ul>
+            </div>
+			</div>
+		</form>	
+</div>
+
+</md-dialog>

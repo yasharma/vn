@@ -8,18 +8,8 @@ var mongoose      = require('mongoose'),
 var HotelSchema  = new Schema({
   
   image:{
-    name: {
       type: String,
-      default: 'no-image.jpg'
-    },
-    path: {
-      type: String,
-      default: 'images/'
-    },
-    original_name:  {
-      type: String,
-      default: 'no-image.jpg'
-    }
+      default: 'no-hotel.jpg'
   },
   user_id: {
     type: String,
@@ -33,21 +23,34 @@ var HotelSchema  = new Schema({
   currency: {
     type: String,
     trim: true,
-    required: 'Please select currency'
+    required: 'Please select currency.'
   },
-
   ownername: {
     type: String,
     trim: true,
-    required: 'Owner name can not be empty.',
+    required: 'Owner Entity can not be empty.',
   },
-
+  email: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    required: 'Email address can not be empty.',
+    validate: {
+      validator: function(email) {
+        return /^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
+      },
+      message: '{VALUE} is not a valid email address'
+    }
+  },
+  phone: {
+    type: Number,
+    default: false
+  },
   address: {
     type: String,
     trim: true,
-    default: false
+    required: 'Address can not be empty.',
   },
-
   city: {
     type: String,
     default: false
@@ -57,75 +60,28 @@ var HotelSchema  = new Schema({
     type: String,
     default: false
   },
-
   country: {
     type: String,
     default: false
   },
-
   zipcode: {
     type: Number,
     default: false
   },
 
-  email: {
+  jot_types: {
+    type: Array,
+    default: []
+  },
+  
+  step:{
     type: String,
-    lowercase: true,
-    trim: true,
-    unique: 'The Email address you have entered already exists.',
-    uniqueCaseInsensitive:true,
-    required: 'Email address can not be empty.',
-    validate: {
-      validator: function(email) {
-        return /^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
-      },
-      message: '{VALUE} is not a valid email address'
-    }
+    default: 1
   },
-
-  phone: {
-    type: Number,
-    default: false
-  },
-
-  no_of_guestrooms: {
-    type: Number,
-    default: false
-  },
-
-  room_no: {
-    type: Number,
-    default: false
-  },
-
-  no_of_meetingrooms: {
-    type: Number,
-    default: false
-  },
-
-  no_of_floors: {
-    type: Number,
-    default: false
-  },
-
-  no_of_employee: {
-    type: Number,
-    default: false
-  },
-
-  vending_area: {
-    type: Boolean,
-    default: false
-  },
-
-  arrangement_type: {
-    type: Boolean,
-    default: false
-  },
-
   status: {
     type: String,
-    default: false
+    enum: ['complete','inactive','incomplete'],
+    default: 'incomplete'
   },
 },{
     timestamps: {

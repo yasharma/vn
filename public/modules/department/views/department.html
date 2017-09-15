@@ -5,11 +5,14 @@
 	<div class="dash_hd_txt mar-bot20" layout="row" layout-align="space-between center">
 		<div class="dash_hd mar-bot0">Department</div>
 		<div class="rightfilter">
-			 <md-button class="md-primary addyellobtn yellowbtn" ng-class="{activebtn:slideDown}" ng-click="slideDown = (slideDown)?false:true; blankFields();" >Add department </md-button>
+
+			 <md-button  slide-toggle="#depart" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+				{{(invForm)?"Close":"Add department"}}
+			</md-button>
 	    </div>    
 	</div>
 
-	<div class="dash_pro_inform transformable" ng-show="slideDown">
+	<div class="dash_pro_inform transformable slideable" id="depart">
 		<form name="addDepartmentform" ng-submit="addDepartment(addDepartmentform.$valid)" novalidate>
 			<div class="clearfix">
 				<!-- <div class="dash_pro_inform_hd">Add Department</div> -->
@@ -22,16 +25,22 @@
 					            
 					    </md-input-container>
 					</div>
-					<div class="col-sm-6">
+					<div class="col-sm-4">
 						<md-input-container md-no-float class="md-block">
 					            <input  ng-model="department_abbreviation" placeholder="Abbreviation">
 					    </md-input-container>
+					</div>
+					<div class="col-sm-2">
+						<md-input-container md-no-float class="md-block">
+							 <input colorpicker type="text" ng-model="bgcolor"  style="background: {{bgcolor}}" placeholder="Select background color" />
+						</md-input-container>	
 					</div>
 					<div class="col-sm-12">
 						<md-input-container md-no-float class="md-block">
 							 <input  ng-model="department_desc" placeholder="Description">
 						</md-input-container>	
 					</div>
+					
 				</div>
 				<div class="clearfix">
 					<div class="chane_pass_btn">
@@ -40,7 +49,7 @@
 				</div>
 
 				<div class="message {{departmentResult.class}}" ng-if="departmentResult.status == 1">{{departmentResult.message}}
-			</div>
+				</div>
 
 			<div class="result {{departmentResult.class}}" ng-if="departmentResult.status==2">    
                 <ul>

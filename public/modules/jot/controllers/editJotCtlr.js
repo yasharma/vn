@@ -2,17 +2,19 @@
 
 app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','$route','toastService',
 	function($scope,globalRequest,$rootScope,$mdDialog,jotData,$route,toastService) {
+
 		
-		$scope.edit_jot		   = jotData;
 		
-		$scope.jot_title	   = $scope.edit_jot.jot_data.jot_title;
-		$rootScope.assigned_to = $scope.edit_jot.jot_data.assigned_to;
-		$rootScope.due_date    = new Date($scope.edit_jot.jot_data.due_date);
-		$rootScope.priority    = $scope.edit_jot.jot_data.priority;
-		$rootScope.department  = $scope.edit_jot.jot_data.department;
+		$scope.edit_jot		   		= jotData;		
+		$scope.jot_title   			= $scope.edit_jot.jot_title;
+		$rootScope.jot_description	= $scope.edit_jot.jot_description;
+		$rootScope.jot_members		= $scope.edit_jot.jot_members;
+		$rootScope.due_date    		= new Date($scope.edit_jot.due_date);
+		$rootScope.priority    		= $scope.edit_jot.priority;
+		$rootScope.department  		= $scope.edit_jot.department;
+		$rootScope.hotel_room  		= $scope.edit_jot.hotel_room;
 
-
-
+	
 		/**************************************
 		* Edit jot popup
 		**************************************/
@@ -28,15 +30,34 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 		};
 
 		/**************************************
+		* Open move to dc form
+		**************************************/
+
+		$scope.moveDC = function(detail){	
+			$mdDialog.show({	
+				controller: 'moveDcController',
+				controllerAs: 'movectrl',			
+			    templateUrl: '/modules/jot/views/move_dc.html',
+				multiple: true,
+				clickOutsideToClose:true,
+				fullscreen: $scope.customFullscreen,
+				locals:{Detail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
+
+		/**************************************
 		* Change status
 		**************************************/
 
 		$scope.changeStatus = function(){
-			if($scope.edit_jot.jot_data.status == 'close')
+			if($scope.edit_jot.status == 'close')
 			{
-				$scope.edit_jot.jot_data.status = 'open';
+				$scope.edit_jot.status = 'open';
 			} else {
-				$scope.edit_jot.jot_data.status = 'close';
+				$scope.edit_jot.status = 'close';
 			}
 
 		};
@@ -45,23 +66,29 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 		* Update Jot
 		**************************************/
 
-		$scope.saveUpdateedJot = function(){
-			$scope.edit_jot.jot_data.jot_id      = $scope.edit_jot.jot_data._id;
-			$scope.edit_jot.jot_data.jot_title   = $scope.jot_title;
-			$scope.edit_jot.jot_data.assigned_to = $rootScope.assigned_to;
-			$scope.edit_jot.jot_data.due_date    = new Date($rootScope.due_date).getTime();
-			$scope.edit_jot.jot_data.priority    = $rootScope.priority;
-			$scope.edit_jot.jot_data.department  = $rootScope.department;
+		$scope.saveUpdatedJot = function(){
+			$scope.edit_jot.jot_id				= $scope.edit_jot._id;
+			$scope.edit_jot.jot_title			= $scope.jot_title;
+			$scope.edit_jot.jot_description		= $rootScope.jot_description;
+			$scope.edit_jot.jot_members		    = $rootScope.jot_members;
+			$scope.edit_jot.due_date    		= new Date($rootScope.due_date).getTime();
+			$scope.edit_jot.priority   		    = $rootScope.priority;
+			$scope.edit_jot.department 		 	= $rootScope.department;
+			$scope.edit_jot.hotel_room 		 	= $rootScope.hotel_room;
 		
 
 			var request={
 				url:window.__API_PATH.UPDATE_JOT,
 				method:"put",
-				data:$scope.edit_jot.jot_data
+				data:$scope.edit_jot
 			};
 
-			globalRequest.jotCRUD(request).then(function(response){				
-				$scope.result = {message:response.message,class:response.class}; 	
+			globalRequest.jotCRUD(request).then(function(response){		
+				var JotType = $scope.edit_jot.jot_type;
+				globalRequest.getJotList(JotType); 	
+				$mdDialog.cancel();
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
 			});
 		};
 
@@ -71,7 +98,7 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 		**************************************/
 
 		$scope.archiveJot = function(){
-			var jotid = {jot_id:$scope.edit_jot.jot_data._id};
+			var jotid = {jot_id:$scope.edit_jot._id};
 
 			var request={
 				url:window.__API_PATH.DELETE_JOT,
@@ -80,7 +107,8 @@ app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog'
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$route.reload();
+				var JotType = $scope.edit_jot.jot_type;
+				globalRequest.getJotList(JotType); 
 				$mdDialog.cancel();
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);

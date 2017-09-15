@@ -31,9 +31,9 @@
 				</div>
 				<div class="col-sm-4">
 					<md-input-container md-no-float class="md-block">
-				            <input  ng-model="user_name" placeholder="User Name" ng-required="true">
+				            <input  ng-model="contact_number" placeholder="Contact Number" ng-required="true">
 
-				            <div ng-messages="user_name.$error">
+				            <div ng-messages="contact_number.$error">
 					            <div ng-message="required">This is required.</div>
 					        </div>
 				    </md-input-container>
@@ -52,38 +52,18 @@
 				<div class="col-sm-4">
 					<md-input-container md-no-float class="md-block">
                         <md-select ng-model="department" placeholder="Select Department" style="padding:0">
-                          <md-option ng-repeat="dept in departmentList" value="{{dept.department_name}}">
+                          <md-option ng-repeat="dept in departmentList" value="{{dept.abbreviation}}">
                             {{dept.department_name}}
                           </md-option>                         
                         </md-select>
                     </md-input-container>
 				</div>
+				
 				<div class="col-sm-4">
 					<md-input-container md-no-float class="md-block">
 				        <md-select ng-model="position" placeholder="Position" style="padding:0">
-                          <md-option value="Executive Assistant">
-                            Executive Assistant
-                          </md-option> 
-                          <md-option value="General Manager">
-                            General Manager
-                          </md-option>  
-                          <md-option value="Hotel Manager">
-                            Hotel Manager
-                          </md-option> 
-                          <md-option value="Operations Director">
-                            Operations Director
-                          </md-option> 
-                          <md-option value="Operations Manager">
-                            Operations Manager
-                          </md-option> 
-                          <md-option value="Event Planner">
-                            Event Planner
-                          </md-option>  
-                          <md-option value="Front Desk Clerk">
-                            Front Desk Clerk
-                          </md-option>
-                          <md-option value="Housekeeper">
-                            Housekeeper
+                          <md-option value="{{pos}}" ng-repeat="pos in position_list">
+                            {{pos}}
                           </md-option>                     
                         </md-select>
 				    </md-input-container>

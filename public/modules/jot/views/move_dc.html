@@ -1,0 +1,105 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar style="min-height: 75px;">
+      <div class="md-toolbar-tools" style="max-height: 75px;height: 75px;">
+        <h2>
+        	Move All Attachment To Document Center
+
+        	<div class="already_moved" ng-if="move_dc == 'yes'"><ng-md-icon icon="warning" style="fill: red" size="20"></ng-md-icon> Files have already been moved to the doucument center.</div>
+        </h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+
+      </div>
+
+</md-toolbar>
+	<div class="dash_pro_inform  lost_panel">
+
+		<div class="dash_pro_inform_inner boxunoversal">
+
+			<form name="moveToDCform" ng-submit="moveToDC(moveToDCform.$valid)" novalidate>
+				<div class="row mar-bot20">
+
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					    <input  ng-model="mov_document_name" placeholder="Document Name">
+					  </md-input-container>
+					</div>
+
+					<div class="col-sm-6">
+						<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+					</div>
+
+					<div class="col-sm-6">						
+					    
+					    <md-chips ng-model="movectrl.MovItemTagModel" name="itemTag" readonly="movectrl.readonly"
+	                    md-removable="movectrl.removable" placeholder="Enter #Tag for Document" class="tag_name">
+	                    <md-chip-template>
+	                       <span class="entered_tags">{{$chip}}</span>
+	                    </md-chip-template>
+	                 </md-chips>
+
+					</div>
+
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+					    <textarea ng-model="mov_document_description" placeholder="Description"></textarea>
+					  </md-input-container>
+					</div>
+
+					<div class="col-sm-12">
+						<ul class="uploadimage_list clearfix document_listed_files">
+
+							<li ng-repeat="f in filesData" ng-hide="edithide">
+							
+
+	                  			<span ng-switch="f.type" style="float: left;margin-right: 10px;">
+
+	                  			<img style="width:50px" ng-switch-when="image/jpeg|image/png" ng-switch-when-separator="|" src="{{'/images/hotel/'+hotel_id+'/'+jot_type+'/'+f.filename}}">
+
+
+
+	                  			<ng-md-icon style="fill:#2aaae0" ng-switch-when="application/pdf" class="cursor" icon="picture_as_pdf" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+	                  			</ng-md-icon>
+
+	                  			<ng-md-icon ng-switch-default style="fill:#2aaae0" class="cursor" icon="insert_drive_file" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+	                  			</ng-md-icon>
+
+	                  			</span>							
+
+						       	<a target="_blank" href="{{'/images/hotel/'+hotel_id+'/'+jot_type+'/'+f.filename}}"> {{f.filename}} </a>
+						        <span class="doc_delete_icon"> 
+
+						        <ng-md-icon class="cursor closr_icon tableredtag" icon="delete_forever" class="cursor"  size="22" ng-click="removeImageIndex(f); edithide = !edithide;">
+	                  			</ng-md-icon> 
+	                  			</span>
+						    </li> 
+  
+
+						</ul> 
+
+					</div>
+					
+					
+				</div>
+				<div class="clearfix">
+					<div class="chane_pass_btn">
+						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+					</div>					
+				</div>
+
+				<div class="message {{docMoveResult.class}}" ng-if="docMoveResult.status == 1">{{docMoveResult.message}}
+				</div>
+
+				<div class="result {{docMoveResult.class}}" ng-if="docMoveResult.status==2">    
+	                <ul>
+	                  <li ng-repeat="(key,value) in docMoveResult.errors">
+	                  {{value.message}}
+	                  </li>
+	                </ul>
+	            </div>
+			</form>
+		</div>
+	</div>
+</md-dialog>

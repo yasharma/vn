@@ -1,12 +1,7 @@
 "use strict";
 
-/**************************************
-* Login controller
-**************************************/
-
-
-app.controller('loginController', ['$scope','$http','$location','$timeout','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog',
-	function($scope,$http,$location,$timeout, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog) {	
+app.controller('loginController', ['$scope','$http','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','globalRequest',
+	function($scope,$http,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,globalRequest) {	
 
 
 		/*********************************************
@@ -28,17 +23,27 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 
 			loginFactory.login(request).then(function(response){
 				$scope.loginresult = response;
-				if(response.errors){
-					//toastService.alert({message: response.errors.message, class: 'error'});
-				} else {
-					if(response.status == 1)
+				
+				if(response.status == 1)
+				{
+					localStorageService.set('token', response.result.token);
+					localStorageService.set('user', response.result.user);
+					AuthSrv.isLogged = true;
+					$mdDialog.cancel();
+					if(response.result.user.role == 'hotelowner')
 					{
-						localStorageService.set('token', response.result.token);
-						localStorageService.set('user', response.result.user);
-						AuthSrv.isLogged = true;
 						$location.path('/dashboard');
-					}									
-				}
+					}
+
+					if(response.result.user.role == 'staff')
+					{
+						globalRequest.getHotelDetail(response.result.user.hotel_id);
+						$location.path('/dashboard/hotelboard');
+					}
+										
+					
+				}									
+				
 				
 			});				
 	               
@@ -59,6 +64,17 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 
 			loginFactory.login(request).then(function(response){
 					$scope.forgetresult = response;
+					if(response.status == 1)
+						{
+							
+						$rootScope.popupData = {text:response.message,action:'ok'};
+						$timeout(function() {
+						 	$mdDialog.cancel();
+						 }, 200);
+						 $timeout(function() {
+						 	$rootScope.popup = true;
+						 }, 300);	
+					 }
 			});
 
 		};
@@ -68,7 +84,13 @@ app.controller('loginController', ['$scope','$http','$location','$timeout','loca
 		***********************************************/
 
 		$scope.openSignupForm = function (obj) {
-	           $location.path('/register');    
+	          $mdDialog.show({
+				templateUrl : "/modules/register/views/register.tpl.html",
+       			controller  :  "registerController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true								
+			}).then(function(answer) {}, function() {});  
 		};
 	}
 ]);

@@ -11,8 +11,8 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
             departmenttypeaheadCallback: "="
         },
         link: function(scope, elem, attrs) {
-
-            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (departmentypeahead | filterdepartment:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.department_name}}</a></li></ul></div>';
+          console.log(scope.enablefilter);
+            var template = '<div class="dropdown suggestions_list" ng-show="enabledepartmentFilter"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (departmentypeahead | filterdepartment:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.department_name}} ({{item.abbreviation}})</a></li></ul></div>';
 
             elem.bind('blur', function() {
                 $timeout(function() {
@@ -25,6 +25,8 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
             ******************************************/
 
             elem.bind("keydown", function($event) {
+
+                scope.enabledepartmentFilter = true;
                 if($event.keyCode == 38 && scope.active > 0) { 
                     scope.active--;
                     scope.$digest();
@@ -44,7 +46,7 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
               replaceWord       = replaceWord.split('#');
               replaceWord       = '#'+replaceWord[1];
 
-        			var selectedValue = "#"+item.department_name;
+        			var selectedValue = "#"+item.abbreviation;
 
     
         			var replacedValue = replaceOccurence.replaceAll(replaceString,replaceWord, selectedValue);  

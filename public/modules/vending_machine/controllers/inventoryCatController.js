@@ -11,29 +11,20 @@ app.controller('inventoryCatController', ['$scope','localStorageService','global
 
 		$scope.blank = function(){
 			$scope.inventory_category_name = "";		
-		}
+		};
 
 		$scope.blankFields = function(){
 			$scope.blank();
 			$scope.inverntoryResult = "";
-		}
+		};
 
 
 
 		/************************************
 		* Get Category list
 		*************************************/			
-			
-		var request = {
-		            url:window.__API_PATH.GET_INVENTORY_CATEGORY,
-		            method:"GET",
-		            params:{
-		            	hotel_id    :  hotel._id		
-		            }
-		          };
-		globalRequest.jotCRUD(request).then(function(response){				
-		 	$scope.invtList = response.result;
-		});
+		
+		globalRequest.getVendingCategory();
 
 		
 		/************************************

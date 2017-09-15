@@ -1,22 +1,32 @@
-<!-- <md-dialog class="login_dialog" aria-label="login">
-  
-  <md-button class="md-icon-button login_close" arai-label="close" ng-click="close()">
-  		<ng-md-icon icon="close" style="fill:black" size="24"></ng-md-icon>
+<md-dialog class="login_dialog" aria-label="login">
+  <md-button class="md-icon-button login_close" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
   </md-button>
-    <md-dialog-content> -->
+
+    <md-dialog-content>
     <form name="SignupForm" ng-submit="registerUser(SignupForm.$valid)" novalidate>
       <div class="md-dialog-content login_content signupform">
       	<div class="pull-right rightlogin ">
         	<div class="loginHd">Register<p>Lorem ipsum dolor sit amet, consectetur</p></div>
-            <div class="form">
-            	<md-input-container class="md-block">
-			        <label>Name </label>
-			        <input required name="name" ng-model="name" ng-required="true">
-			        <ng-md-icon icon="person" class="login_icon" style="fill:gray" size="20"></ng-md-icon>
-			        <!-- <div ng-messages="name.$error">
-			            <div ng-message="required">This is required.</div>
-			        </div> -->
-		        </md-input-container>
+            <div class="form">            
+
+            <md-input-container class="md-block">
+              <label>First Name </label>
+              <input required name="first_name" ng-model="first_name" ng-required="true">
+              <ng-md-icon icon="person" class="login_icon" style="fill:gray" size="20"></ng-md-icon>         
+            </md-input-container>
+
+            <md-input-container class="md-block">
+              <label>Last Name </label>
+              <input  name="last_name" ng-model="last_name" ng-required="true">
+              <ng-md-icon icon="person" class="login_icon" style="fill:gray" size="20"></ng-md-icon>         
+            </md-input-container>
+
+            <md-input-container class="md-block">
+              <label>Contact Number </label>
+              <input required name="contact_number" ng-model="contact_number" ng-required="true">
+              <ng-md-icon icon="person" class="login_icon" style="fill:gray" size="20"></ng-md-icon>         
+            </md-input-container>
 
             <md-input-container class="md-block">
               <label>Email Address</label>
@@ -51,9 +61,9 @@
                   </li>
                 </ul>
             </div> 
-            <div class="result {{registerResult.class}}" ng-if="registerResult.status==1"> 
+            <!-- <div class="result {{registerResult.class}}" ng-if="registerResult.status==1"> 
                 {{registerResult.message}}
-            </div> 
+            </div>  -->
 
             
 
@@ -68,6 +78,6 @@
         </div>
       </div>
        </form>
-    <!-- </md-dialog-content> 
-</md-dialog> -->
+    </md-dialog-content> 
+</md-dialog>
 

@@ -12,7 +12,7 @@ app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', func
         },
         link: function(scope, elem, attrs) {
 
-            var template = '<div class="dropdown suggestions_list"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
+            var template = '<div class="dropdown suggestions_list" ng-show="enableStaffFilter"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (stafftypeahead | filterstaff:this) track by $index"  style="cursor:pointer" ng-class="{active:$index==active}" ng-click="click(item)" ng-mouseenter="mouseenter($index)"><a>{{item.first_name}} {{item.last_name}}({{item.user_name}})</a></li></ul></div>';
 
             elem.bind('blur', function() {
                 $timeout(function() {
@@ -25,6 +25,8 @@ app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', func
             ******************************************/
 
             elem.bind("keydown", function($event) {
+
+                scope.enableStaffFilter = true;
                 if($event.keyCode == 38 && scope.active > 0) { 
                     scope.active--;
                     scope.$digest();
