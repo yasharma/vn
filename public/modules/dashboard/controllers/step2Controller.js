@@ -1,11 +1,14 @@
 "use strict";
 
-app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$location','localStorageService','globalRequest',
-	function($scope,$rootScope,$routeParams,$location,localStorageService,globalRequest) {	
+app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$location','globalRequest','toastService',
+	function($scope,$rootScope,$routeParams,$location,globalRequest,toastService) {	
 
 		
 		$scope.defaultBoards = window.__API_PATH.JOT_TYPES;
-		var processingHotel = localStorageService.get('processingHotel');
+		
+
+
+		/*angular.forEach*/
 
 		/************************************************
 		* Navigate on previous page
@@ -35,11 +38,10 @@ app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$locati
 			{		
 
 				 var hotelDataObj = {
-				 		hotel_id     	   : processingHotel._id,
+				 		hotel_id     	   : $rootScope.newProcessingHotel._id,
 				 		jot_types 		   : getSelectedValues						
 						
 				};
-
 				var request={
 						url:window.__API_PATH.UPDATE_HOTEL,
 						method:"PUT",
@@ -57,10 +59,9 @@ app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$locati
 
 				});
 
-			} else {
-				$scope.featureResult.class = 'Autherror';
-				$scope.featureResult.message = 'Please Select at least one jot type.';
-				$scope.featureResult.status = 1;
+			} else {				
+				var popup = {"message":"Please Select at least one jot type.","class":""};
+				toastService.errors(popup);
 			}
 		};	
 

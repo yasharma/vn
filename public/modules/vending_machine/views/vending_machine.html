@@ -10,6 +10,7 @@
                         </div>
 
                         <div class="serchoption">
+                        <div class="col-sm-10">
                             <md-input-container md-no-float class="md-block selectgeneral38" style="margin: 0;">
                                 <md-select ng-model="itemCategory" placeholder="Select Category">
                                  <md-option value="">
@@ -21,7 +22,15 @@
                                  
                                 </md-select>
                             </md-input-container>
+                            </div>
+                            
+                            <div class="col-sm-2" style="float: right; padding: 5px 0px 0 0;cursor: pointer;" ng-click="itemCategory = searchItemName = ''" title="Reset filters">
+                                    <img src="assets/images/reset_filter.png" style="width: 30px;">
+                            </div>
+                            
                         </div> 
+
+
                     </div>
                     <!-- <div class="rangeslider_cending">
                          <rzslider rz-slider-model="slider.minValue"
@@ -35,13 +44,13 @@
                     <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table" >
                         <thead>
                             <tr>
-                                <th width="10%">#</th>
-                                <th width="25%">Item Name</th>
+                                <th width="2%">#</th>
+                                <th width="28%">Item Name</th>
                                 <th width="15%">Category</th> 
                                 <th width="10%">Price</th>
-                                <th width="10%">Available</th>
+                                <th width="8%">Available</th>
                                 <th width="15%">Quantity</th>
-                                <th width="15%">Action</th>                 
+                                <th width="22%">Action</th>                 
                             </tr>
                         </thead>
                         <tbody>
@@ -58,8 +67,8 @@
                                 <td>{{(pitem.price)?pitem.price:0 | currency}}</td>
                                 <td>{{pitem.quantity}}</td>
                                 <td>
-                                    <md-input-container md-no-float class="md-block selectgeneral">
-                                       <input type = "number" aria-label="editquantity" min="1" ng-model="editquantity" style="height: auto;padding: 0 0 0 15px;font-size: 12px;" placeholder="Quantity">
+                                    <md-input-container md-no-float class="md-block selectgeneral_edit" ng-init="editquantity = 1" style="margin: 0 !important;">
+                                       <input type = "number" aria-label="editquantity" min="1" max="{{pitem.quantity}}" ng-model="editquantity" style="height: auto;padding: 0 0 0 15px;font-size: 12px;" placeholder="Quantity">
                                     </md-input-container>
                                 </td>
                                 <td ng-if="pitem.quantity > 0">                                    
@@ -89,18 +98,14 @@
                         <div class="close_vending">
                             <ng-md-icon class="cursor" icon="close" style="fill: red" size="20" ng-click = "removeItem(cartitem._id)"></ng-md-icon> 
                         </div>
-                        <div class="sel_img" style="border:0">                       
-
+                        <div class="sel_img" style="border:0">  
                          <img src="{{(cartitem.image)?'/images/hotel/'+cartitem.hotel_id+'/inventory/'+ cartitem.image :'/assets/images/vending_default.jpg' }}">
-
                         </div>
-                        <h5><a href="javascript:void(0);">{{cartitem.item_name}}</a> </h5>
-
-                        <input type = "number" aria-label="editquantity" min="1" ng-model="cartitem.editquantity" style="height: auto;padding: 0 0 0 15px;width: 100%;font-size: 12px;" ng-change="changeItemPrice(cartitem,cartitem.editquantity)" placeholder="Quantity">
-                        <div class="clearfix">
-                            <div class="sel_price">{{cartitem.totalprice | currency}}</div>
-                           
-                        </div>
+                        <h5 class="mar-bot10">
+                        <a href="javascript:void(0);" style="font-size: 14px;color: #444;font-weight: 600;">{{cartitem.item_name}}</a> 
+                        </h5>
+                        <div class="sel_price">{{cartitem.totalprice | currency}}</div>
+                        <input type = "number" class="inputrange" aria-label="editquantity" min="1" ng-model="cartitem.editquantity" max="{{cartitem.quantity}}" ng-change="changeItemPrice(cartitem,cartitem.editquantity)" placeholder="Quantity">
                     </li>                    
                 </ul>
                 <div ng-show="!cart.length" class="itemnotfound">
@@ -132,7 +137,7 @@
                                     Card
                                     </md-radio-button>
 
-                                    <div class="payment_mode" ng-if="ctlr.paymentmode == 'card'"> 
+                                    <div class="" ng-if="ctlr.paymentmode == 'card'"> 
                                     <md-input-container md-no-float class="md-block" style="border:1px solid #ccc;margin-top:0">    
                                     <md-select ng-model="ctlr.cardtype" placeholder="Select Status" style="padding:0">
                                                 <md-option value="MasterCard">

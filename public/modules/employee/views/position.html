@@ -1,0 +1,91 @@
+<div class="dash-main-con">
+<!--middle panel -->
+<section class="dashrightsection aligninput">
+	
+	<div class="dash_hd_txt mar-bot20 clearfix">
+		<div class="dash_hd mar-bot0 dash_hd-left">Positions</div>
+		<div class="rightfilter_right">
+			<div class="chane_pass_btn_right">
+				
+
+		    <md-button  slide-toggle="#position" ng-class="{activebtn:posForm}" ng-click="posForm = !posForm; position = '' " class="md-primary addyellobtn yellowbtn widthauto custom-transition">
+					{{(posForm)?"Close":"Add Position"}}
+			</md-button>
+			</div>
+	    </div>    
+	</div>
+
+
+
+	<div class="dash_pro_inform slideable" id="position">
+	<form name="addPositionform" ng-submit="addPosition(addPositionform.$valid)" novalidate>		
+		<div class="dash_pro_inform_inner boxunoversal">
+			<div class="row">
+				<div class="col-sm-3">
+					<md-input-container  class="md-block">
+				            <input  ng-model="position" placeholder="Position Name" ng-required="true">
+				    </md-input-container>
+				</div>
+			</div> 
+			<div class="clearfix">
+				<div class="chane_pass_btn">
+					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+				</div>				
+			</div>
+		</div>
+		</form>
+	</div>
+
+
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch deptsrch_gray">
+			<div class="deptsrch_gray_top mar-bot0 clearfix">
+			<div class="positionrel inventory_filter_top">
+				<div class="vending_left_top_serch positionrel" style="float: left;width: 90%;">
+					<md-input-container  class="md-block">
+			      <input  ng-model="search_position" placeholder="Search Position" autocomplete="off">
+			  	</md-input-container>
+			  	
+				</div>
+
+				<div class="" style="float: right; padding: 10px 0px 0 5px;cursor: pointer;" ng-click="search_position = ''" title="Reset filters">
+					<img src="assets/images/reset_filter.png" style="width: 30px;">
+				</div>
+				
+			</div>
+			</div>
+		</div>
+		<div class="addmember_data_table">
+			<div class="table_div">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table smalltable">
+          <thead>
+              <tr>
+                  <th width="40%">#</th>
+                  <th width="40%">Positions</th>
+                  <th width="20%">Action </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr ng-repeat="pos in filteredpos = 
+              ( potisionList | filter:{position:search_position}) 
+              track by $index">
+                <td>{{$index+1}}</td>                   
+                <td>{{pos.position}}</td>
+                <td>
+                	<!-- <ng-md-icon class="cursor tablegreentag" icon="remove_red_eye" class="cursor"  size="22"></ng-md-icon> -->
+                	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(pos);"  title="Edit"></ng-md-icon>
+                	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22"   title="Delete" confirmed-click="removePos(pos._id,$index)" ng-confirm-title="Delete Position" ng-confirm-delete="Are you sure you want to remove this position."></ng-md-icon>
+                </td>
+              </tr>              
+          </tbody>
+        </table>
+        <div ng-show="!filteredpos.length" class="itemnotfound">
+                No position found.                
+         </div>
+      </div>
+		</div>
+	</div> 
+	
+</section>
+</div>

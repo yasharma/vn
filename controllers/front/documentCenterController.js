@@ -3,6 +3,7 @@
 const    express            =   require('express'),
          app                =   express(),
          path               =   require('path'),
+         _                  = require('lodash'),
          mongoose           =   require('mongoose'),
          bodyParser         =   require('body-parser'),
          Document           =   require(path.resolve('models/DocumentCenter')),
@@ -21,7 +22,24 @@ exports.addDocument = (reqst, respe) => {
         var Documentsave       = new Document(reqst.body);
         Documentsave.save(function (err, result) {
             if(result){
-                return respe.json(response.success(result,'Document has been Added Successfully.'));
+                var filesize        =   0;
+                if(!_.isNull(result.files)){
+                    var attachements    =   result.files;
+                    for(let i = 0; i < attachements.length; i++ ){
+                        filesize = parseInt(filesize) + parseInt(attachements[i].size);
+                    } 
+                }
+                var _result = {
+                                hotel_id                : result.hotel_id,
+                                document_name           : result.document_name,
+                                department              : result.department,
+                                document_description    : result.document_description,
+                                upload_date             : result.upload_date,
+                                tags                    : result.tags,
+                                files                   : result.files,
+                                filesize                : filesize,
+                            };
+                return respe.json(response.success(_result,'Document has been Added Successfully.'));
             }else{
                 return respe.json(response.errors(err.errors,'Error in Document Saved.'));
             }

@@ -1,12 +1,12 @@
 "use strict";
 
-app.filter('currency',function(localStorageService) {
+app.filter('currency',function($rootScope) {
 	return function(input,scope){
-		var hotel = localStorageService.get('hotel');
+		
 		var currency;
-		if(hotel.currency)
+		if($rootScope.activeHotelData.currency)
 		{
-			currency = hotel.currency;			
+			currency = $rootScope.activeHotelData.currency;			
 
 		} else {
 

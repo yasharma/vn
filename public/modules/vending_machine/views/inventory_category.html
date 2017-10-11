@@ -1,6 +1,6 @@
 <div class="dash-main-con">
 <!--middle panel -->
-<section class="dashrightsection" ng-class="{'leftopen':$root.leftopen}">
+<section class="dashrightsection aligninput" ng-class="{'leftopen':$root.leftopen}">
 	
 	<div class="dash_hd_txt mar-bot20 clearfix">
 		<div class="dash_hd mar-bot0 dash_hd-left">Category</div>
@@ -8,7 +8,7 @@
 			<div class="chane_pass_btn_right">
 				
 
-		    <md-button  slide-toggle="#vending-cat" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+		    <md-button  slide-toggle="#vending-cat" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; inventory_category_name = '';" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
 					{{(invForm)?"Close":"Add Category"}}
 			</md-button>
 			</div>
@@ -22,8 +22,8 @@
 		<div class="dash_pro_inform_inner boxunoversal">
 			<div class="row">
 				<div class="col-sm-3">
-					<md-input-container md-no-float class="md-block">
-				            <input  ng-model="inventory_category_name" placeholder="Category Name">
+					<md-input-container  class="md-block">
+				            <input  ng-model="inventory_category_name" placeholder="Category Name" ng-required="true">
 				    </md-input-container>
 				</div>
 			</div> 
@@ -32,19 +32,6 @@
 					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
 				</div>				
 			</div>
-
-
-			<div class="message {{invtResult.class}}" ng-if="invtResult.status == 1">{{invtResult.message}}
-			</div>
-
-			<div class="result {{invtResult.class}}" ng-if="invtResult.status==2">    
-                <ul>
-                  <li ng-repeat="(key,value) in invtResult.errors">
-                  {{value.message}}
-                  </li>
-                </ul>
-            </div>
-
 		</div>
 		</form>
 	</div>
@@ -55,11 +42,14 @@
 		<div class="deptsrch deptsrch_gray">
 			<div class="deptsrch_gray_top mar-bot0 clearfix">
 			<div class="positionrel inventory_filter_top">
-				<div class="vending_left_top_serch positionrel">
-					<md-input-container md-no-float class="md-block">
+				<div class="vending_left_top_serch positionrel" style="float: left;width: 90%;">
+					<md-input-container  class="md-block">
 			      <input  ng-model="search_cat_name" placeholder="Search Category" autocomplete="off">
-			  	</md-input-container>
-			  	
+			  	</md-input-container>			  	
+				</div>
+
+				<div class="" style="float: right; padding: 10px 0px 0 5px;cursor: pointer;" ng-click="search_cat_name = ''" title="Reset filters">
+					<img src="assets/images/reset_filter.png" style="width: 30px;">
 				</div>
 				
 			</div>
@@ -70,21 +60,21 @@
         <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table smalltable">
           <thead>
               <tr>
-                  <th width="40%">#</th>
-                  <th width="40%">Category</th>
-                  <th width="20%">Action </th>
+                  <th width="10%">#</th>
+                  <th width="70%">Category</th>
+                  <th width="20%" style="text-align: right;">Action </th>
               </tr>
           </thead>
           <tbody>
               <tr ng-repeat="invCat in filteredCat = 
               (invtList | filter:{inventory_category_name:search_cat_name}) 
-              track by $index" ng-hide="hideCat">
+              track by $index">
                 <td>{{$index+1}}</td>                   
                 <td>{{invCat.inventory_category_name}}</td>
-                <td>
+                <td  style="text-align: right;">
                 	<!-- <ng-md-icon class="cursor tablegreentag" icon="remove_red_eye" class="cursor"  size="22"></ng-md-icon> -->
-                	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(invCat);"></ng-md-icon>
-                	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeCat(invCat);hideCat = ! hideCat"></ng-md-icon>
+                	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(invCat);"  title="Edit"></ng-md-icon>
+                	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeCat(invCat._id,$index)" ng-confirm-title="Delete Category" ng-confirm-delete="Are you sure you want to remove this category."></ng-md-icon>
                 </td>
               </tr>              
           </tbody>

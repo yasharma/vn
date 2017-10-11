@@ -1,4 +1,4 @@
-<div ng-controller="taskDatepickerCtlr">
+<div ng-controller="taskDatepickerCtlr" class="aligninput">
     <div class="clearfix">
         <div class="col-md-12">
             <md-radio-group ng-model="data.group1">
@@ -19,7 +19,9 @@
             <div class="Selectdep_txt">If One Time Task:</div>
             <div class="clearfix">
                 <div class="recurring_task positionrel" >
-                    <md-datepicker ng-model="$root.onetime_date" md-open-on-focus md-hide-icons="triangle"  md-placeholder="Start date"></md-datepicker>
+                <md-input-container class="md-block lost_found_picker">
+                    <md-datepicker ng-model="$root.onetime_date" md-open-on-focus md-hide-icons="triangle"  md-placeholder="Select date" ></md-datepicker>
+                </md-input-container>
                 </div>
             </div>
         </div>
@@ -29,11 +31,17 @@
             <div class="col-md-12">
                 <div class="Selectdep_txt">If Recurring Task:</div>
                 <div class="clearfix">
+
                     <div class="recurring_task positionrel" >
+                     <md-input-container class="md-block lost_found_picker">
                         <md-datepicker ng-model="$root.start_recurring_date" md-open-on-focus md-hide-icons="triangle"  md-placeholder="Start date"></md-datepicker>
+                        </md-input-container>
                     </div>
+
                     <div class="recurring_task positionrel" >
+                     <md-input-container class="md-block lost_found_picker">
                         <md-datepicker ng-model="$root.end_recurring_date" md-open-on-focus md-hide-icons="triangle"  md-placeholder="End date"></md-datepicker>
+                        </md-input-container>
                     </div>
                 </div>
             </div>
@@ -61,32 +69,39 @@
 
                 </div>
 
+
                 <div class="daylisted {{patternClass}}" ng-if="$root.selectedPattern == 'monthly'">
-               
+                 <md-input-container md-no-float class="md-block">
                     <md-select ng-model="$root.monthly_recurring_date" placeholder="Select Date" class="md-no-underline">
 
                       <md-option ng-repeat="i in getDay(31) track by $index" value="{{$index+1}}">{{$index+1}}</md-option>                      
-                    </md-select>                       
+                    </md-select> 
+                    </md-input-container>                      
 
                 </div>
-
+                 </div>
 
                 <div class="daylisted {{patternClass}}" ng-if="$root.selectedPattern == 'yearly'">
                     <div class="col-md-6">
+                    <md-input-container md-no-float class="md-block">
                         <md-select ng-model="$root.yealy_month" placeholder="Select Month" class="md-no-underline">
                           <md-option ng-repeat="i in getMonth" value="{{i.value}}">{{i.label}}</md-option>                      
                         </md-select>  
+                        </md-input-container>
                     </div>   
 
                     <div class="col-md-6">
+                    <md-input-container md-no-float class="md-block">
                        <md-select ng-model="$root.yearly_day" placeholder="Select Date" class="md-no-underline">
 
                         <md-option ng-repeat="i in getDay(31) track by $index" value="{{$index+1}}">{{$index+1}}</md-option>                      
                     </md-select> 
+                    </md-input-container>
                     </div>                   
 
                 </div>
 
-        </div>
+       
     </div>
+</div>
 </div>

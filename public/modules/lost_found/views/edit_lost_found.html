@@ -12,14 +12,20 @@
 		
 		<div class="dash_pro_inform_inner boxunoversal">
 		<form name="editFoundItemform" ng-submit="editFoundItem(editFoundItemform.$valid)" novalidate>
-			<div class="row">
+			<div class="row aligninput">
+				<div class="col-sm-12">
+					
+					<md-input-container  class="md-block">
+	         			<input  ng-model="title" placeholder="Title"  ng-required="true">
+	     			</md-input-container>
+				</div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container  class="md-block">
 				            <input  ng-model="place" placeholder="Place of Items Lost/Found">
 				    </md-input-container>
 				</div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container  md-no-float class="md-block">
 		              <md-select ng-model="category" placeholder="Select Category">
 		                <md-option value="electronic">
 		                  Electronic
@@ -34,14 +40,14 @@
 				</div>
 				<div class="clearfix"></div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container  class="md-block">
              			<input type = "number" ng-model="no_of_items" placeholder="Number of item found">
          			</md-input-container>
 				</div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container md-no-float  class="md-block">
              		<md-select ng-model="status" placeholder="Status">
-                       <md-option value="processing" selected>
+                       <md-option value="processing">
                           Processing
                        </md-option>
                        <md-option  value="completed">
@@ -51,8 +57,8 @@
           </md-input-container>
 				</div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
-				        <input  type = "tel" ng-model="contact" placeholder="Contact Number">
+					<md-input-container  class="md-block">
+				        <input  type = "tel" ng-model="contact" placeholder="Contact Number"  ng-required="true">
 				  </md-input-container>
 				</div>
 
@@ -63,64 +69,75 @@
                        <span class="entered_tags">{{$chip}}</span>
                     </md-chip-template>
                  </md-chips>
-				</div>
+				</div>				
 				
 				<div class="clearfix"></div>
-				<div class="col-sm-12">
 				<br>
-					<md-input-container md-no-float class="md-block">
-             			<input  ng-model="description" placeholder="Description or Title">
-         			</md-input-container>
+				<div class="col-sm-12" ng-include="'/modules/jot/views/jot_desc.html'">
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-sm-12" ng-include="'/modules/jot/views/attachment_list.html'">
 				</div>
 				<div class="clearfix"></div>
 			</div>
 
 			<br>
 			<div class="clearfix mar-bot20 nowidth">
-					<div class="Selectdep_txt mar-bot10">Upload Images:</div>
-					<ul class="uploadimage_list clearfix">
-	          <li ng-repeat="f in files" ng-hide="hideattachment"> 
-	              <div class="imgcon positionrel">
-	                 	 
-	                   <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'">
-	              </div>
-	              <span>{{f.name}} {{f.$errorParam}}</span>
-	          </li>
+					
+						<ul class="uploadimage_list clearfix">
 
-	          <li ng-repeat="item in image" ng-if="item" ng-show="!files"> 
-	              <div class="imgcon positionrel">	                 	 
-	                   <img  src="{{'/images/hotel/'+hotel_id+'/lost_found/'+ item}}" class="width100">
-	              </div>
-	              <span>{{item}}</span>
-			 	
-	          </li>
-	          
-	          <li> 
 
-              <div class="imgcon positionrel" ngf-select ="uploadFoundFiles($files, $invalidFiles)" multiple ng-model="file"   ngf-max-size="5MB" ngf-resize="{width: 246, height: 190}">
-                      <ng-md-icon icon="attach_file" style="fill: #000" size="45"></ng-md-icon>                       
-              </div>
-              <span>Add New Image</span>
-	          </li>
-	      	</ul> 
-	      	<span class="progress" ng-show="foundProgress >= 0">
-            	<div style="background: green;text-align: center;color: #fff; width:{{foundProgress}}%" ng-bind="foundProgress + '%'"></div>
-			</span> 
-      </div>	 
+				          <li ng-repeat="f in files"> 
+				            
+
+				              <div class="imgcon positionrel" ng-switch="f.type">
+				              		                	 
+				              	<img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" ng-switch-when="image/jpeg">
+				              	<img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" ng-switch-when="image/png">
+				                  
+
+			                   <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-when="application/pdf"  icon="picture_as_pdf" class="cursor"  size="22">
+			                    </ng-md-icon>
+
+
+			                     <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-default  icon="insert_drive_file" class="cursor"  size="22">
+			                    </ng-md-icon>
+			                    
+				              </div>
+
+
+				              <span>{{f.name}} {{f.$errorParam}}</span>
+				          </li>
+
+
+
+		          <li ng-repeat="item in image" ng-if="item"> 
+		              <div class="imgcon positionrel" ng-switch="item.type">
+		              		<a href="{{'/images/hotel/'+hotel_id+'/lost_found/'+ item.filename}}" target="_blank">	                 	 
+			                   <img ng-switch-when="image/jpeg"  src="{{'/images/hotel/'+hotel_id+'/lost_found/'+ item.filename}}" class="width100">	                   
+
+			               
+			                   <img ng-switch-when="image/png"  src="{{'/images/hotel/'+hotel_id+'/lost_found/'+ item.filename}}" class="width100">
+
+			                   <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-when="application/pdf"  icon="picture_as_pdf" class="cursor"  size="22">
+		                        </ng-md-icon>
+		                        
+		                         <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-default  icon="insert_drive_file" class="cursor"  size="22">
+		                        </ng-md-icon>
+	                       </a> 
+
+		              </div>			 	
+		          </li>          
+		         
+		      	</ul>  
+
+	      </div>	 
 			<div class="clearfix">
 				<div class="chane_pass_btn">
 					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
 				</div>				
 			</div>
 
-
-			<div class="result {{editlstFoundResult.class}}" ng-if="editlstFoundResult.status==2">    
-                <ul>
-                  <li ng-repeat="(key,value) in editlstFoundResult.errors">
-                  {{value.message}}
-                  </li>
-                </ul>
-            </div>
             </form>
 		</div>
 	</div>

@@ -1,6 +1,6 @@
 <div class="dash-main-con hotelsteps" ng-controller="step1Controller">
 	<!--middle panel -->
-	<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+	<section class="dashrightsection" ng-class="{'leftopen':leftopen}" ng-style="{'padding-left': isAuth.headerType =='hotel_header'?'20px':'','margin-left': isAuth.headerType =='hotel_header'?'0':'' }">
 		<div class="dash_hd_txt" layout="row" layout-align="space-between center">
 			<div class="dash_hd">Set Up Your New Hotel</div>
 		</div>

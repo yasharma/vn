@@ -12,10 +12,10 @@
 	<div class="dash_pro_inform">
 	<form name="editInvtCatform" ng-submit="editInvtCat(editInvtCatform.$valid)" novalidate>		
 		<div class="dash_pro_inform_inner boxunoversal">
-			<div class="row">
+			<div class="row aligninput">
 				<div class="col-sm-12">
-					<md-input-container md-no-float class="md-block">
-				            <input  ng-model="inventory_category_name" placeholder="Category Name">
+					<md-input-container  class="md-block">
+				            <input  ng-model="inventory_category_name" placeholder="Category Name" ng-required="true">
 				    </md-input-container>
 				</div>
 			</div> 
@@ -24,18 +24,6 @@
 					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
 				</div>				
 			</div>
-
-
-			<div class="message {{invtEditResult.class}}" ng-if="invtEditResult.status == 1">{{invtEditResult.message}}
-			</div>
-
-			<div class="result {{invtEditResult.class}}" ng-if="invtEditResult.status==2">    
-                <ul>
-                  <li ng-repeat="(key,value) in invtEditResult.errors">
-                  {{value.message}}
-                  </li>
-                </ul>
-            </div>
 
 		</div>
 		</form>

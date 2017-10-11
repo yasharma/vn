@@ -3,7 +3,7 @@
       <div class="md-toolbar-tools custom_padding">
         <h2>
         <div class="show_profile_image">
-		<img src="{{image}}" class="cn_profile_image "> 
+		<img src="{{image}}" class="cn_profile_image" style="width: 66px;"> 
 			<label class="full_name capitalize">{{first_name}} {{last_name}}</label>
 		</div></h2>
 
@@ -17,29 +17,30 @@
 <div class="user_info">
 
 <ul>
-<!-- <li>
-	<div class="heading-left">First Name:</div>
-	<div class="desc-right capitalize">{{first_name}}</div>
-	<div class="clearfix"></div>
-</li>
 
 <li>
-	<div class="heading-left">Last Name:</div>
-	<div class="desc-right capitalize">{{last_name}}</div>
-	<div class="clearfix"></div>
-</li> -->
-<li>
 	<div class="heading-left">Email Address:</div>
-	<div class="desc-right capitalize">{{email}}</div>
+	<div class="desc-right"> <a href="mailto:{{email}}">{{email}}</a>></div>
+	<div class="clearfix"></div>
+</li>
+<li>
+	<div class="heading-left">Contact Number:</div>
+	<div class="desc-right"><a href="tel:{{contact_number}}">{{contact_number}}</a></div>
 	<div class="clearfix"></div>
 </li>
 <li>
 	<div class="heading-left">Department:</div>
-	<div class="desc-right capitalize">{{department}}</div>
+	<div class="desc-right capitalize">
+	
+	<label ng-repeat="dept in departments">
+
+		{{($root.departmentList | filter : {abbreviation : dept } : true)[0].department_name}}{{($index < departments.length-1)?",&nbsp;":''}}
+	</label>
+	</div>
 	<div class="clearfix"></div>
 </li><li>
 	<div class="heading-left">Position:</div>
-	<div class="desc-right capitalize">{{position}}</div>
+	<div class="desc-right capitalize">{{position.join(", ")}}</div>
 	<div class="clearfix"></div>
 </li>
 </li><li>

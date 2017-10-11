@@ -13,24 +13,24 @@
 	<form name="editContactNumberform" ng-submit="editContactNumber(editContactNumberform.$valid)" novalidate>
 
 			<div class="dash_pro_inform_inner boxunoversal">
-				<div class="row mar-bot20">
+				<div class="row mar-bot20 aligninput">
 					<div class="col-sm-3">
-						<md-input-container md-no-float class="md-block">
-					    <input  ng-model = "first_name" placeholder="First Name">
+						<md-input-container  class="md-block">
+					    <input  ng-model = "first_name" placeholder="First Name"  ng-required="true">
 					  </md-input-container>
 					</div>
 					<div class="col-sm-3">
-						<md-input-container md-no-float class="md-block">
-					    <input  ng-model="last_name" placeholder="Last Name">
+						<md-input-container  class="md-block">
+					    <input  ng-model="last_name" placeholder="Last Name"  ng-required="true">
 					  </md-input-container>
 					</div>
 					<div class="col-sm-3">
-						<md-input-container md-no-float class="md-block">
-					    <input  ng-model="contact" type="tel" placeholder="Contact Number">
+						<md-input-container  class="md-block">
+					    <input  ng-model="contact" type="tel" placeholder="Contact Number"  ng-required="true">
 					  </md-input-container>
 					</div>					
 					<div class="col-sm-3">
-						<md-input-container md-no-float class="md-block">
+						<md-input-container  class="md-block">
 					    <input  ng-model="email" type="email" placeholder="Email Address">
 					  </md-input-container>
 					</div>
@@ -47,19 +47,7 @@
 					<div class="chane_pass_btn">
 						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
 					</div>					
-				</div>
-
-
-				<div class="message {{contactEditResult.class}}" ng-if="contactEditResult.status == 1">{{contactEditResult.message}}
-				</div>
-
-				<div class="result {{contactEditResult.class}}" ng-if="contactEditResult.status==2">    
-	                <ul>
-	                  <li ng-repeat="(key,value) in contactEditResult.errors">
-	                  {{value.message}}
-	                  </li>
-	                </ul>
-	            </div>
+				</div>				
 			</div>
 			</form>
 	</div>

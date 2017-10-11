@@ -9,7 +9,6 @@ app.controller('documentViewController', ['$scope','Detail',
 		angular.forEach(Detail.detail,function (value,key) {
 		    $scope[key] = value;
 		});	
-		console.log($scope);
 	}
 ]);
 

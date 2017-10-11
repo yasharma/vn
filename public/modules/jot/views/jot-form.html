@@ -1,4 +1,4 @@
-<md-dialog class="newhotel_dialog">
+<md-dialog class="newhotel_dialog aligninput" style="width: auto;">
 
   <md-toolbar>
       <div class="md-toolbar-tools">
@@ -18,16 +18,17 @@
 
 
                 <md-nav-item 
-                    ng-repeat="board in $root.boards" 
-                    md-nav-click="goto($root.jotTypes[board]);" 
-                    name="{{$root.jotTypes[board]}}"
-                    value="demo" 
-                    ng-class="{currentNav : $root.activeNav == $root.jotTypes[board].id}">
+                    ng-repeat="board in $root.jotTypes" 
+
+                    md-nav-click="goto(board);" 
+                    name="{{board}}"
+                    value="jot" 
+                    ng-class="{currentNav : $root.activeNav == board.id}" ng-if="(boards | filter:board.id).length">
                   
-                    <span class="jot-type-popupimg" style='background: {{$root.jotTypes[board].bgcolor}}'>                    
-                    <img src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'">
+                    <span class="jot-type-popupimg" style='background: {{board.bgcolor}}'>                    
+                    <img src="{{board.data}}" ng-if="board.icontype == 'image'">
                     </span>
-                    <span class="tab_label">{{$root.jotTypes[board].label}}</span>
+                    <span class="tab_label">{{board.label}} </span>
                 </md-nav-item> 
           
             </md-nav-bar>

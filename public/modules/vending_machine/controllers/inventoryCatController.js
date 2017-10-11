@@ -1,25 +1,9 @@
 "use strict";
 
-app.controller('inventoryCatController', ['$scope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','$route','toastService',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,$route,toastService) {
-		var hotel = localStorageService.get('hotel');
-
-
-		/************************************
-		* Blank all field before open form
-		*************************************/	
-
-		$scope.blank = function(){
-			$scope.inventory_category_name = "";		
-		};
-
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.inverntoryResult = "";
-		};
-
-
-
+app.controller('inventoryCatController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+		
+		
 		/************************************
 		* Get Category list
 		*************************************/			
@@ -38,21 +22,32 @@ app.controller('inventoryCatController', ['$scope','localStorageService','global
 			            url:window.__API_PATH.ADD_INVENTORY_CATEGORY,
 			            method:"POST",
 			            data:{
-			            	hotel_id      			  :  hotel._id,
+			            	hotel_id      			  :  $rootScope.activeHotelData._id,
 			            	inventory_category_name   :  $scope.inventory_category_name
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.invtResult = response;
-			 	$scope.blank();
-
+				var popup;
 			 	if(response.status == 1)
 			 	{
+			 		$scope.inventory_category_name = '';
 			 		if(!$scope.invtList)
 			 		{
 			 			$scope.invtList = [];
 			 		}
 			 		$scope.invtList.push(response.result);
+
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 });
 
@@ -75,31 +70,25 @@ app.controller('inventoryCatController', ['$scope','localStorageService','global
 
 		};
 
-
 		/*****************************************
 		* Delete category
 		*****************************************/	
 
-		$scope.removeCat = function(detail){
+		$scope.removeCat = function(detail,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_INVENTORY_CATEGORY,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				$scope.invtList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
 
-		};
-
-		
+		};	
 		
 	}
 ]);
-
-
-

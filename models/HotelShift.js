@@ -14,7 +14,8 @@ var HotelShiftSchema 	= new Schema({
 	},
 	shift_name: {
         type: String,
-        trim: true,       
+        trim: true,  
+        required: 'Shift name is required.'   
     },
     department_name: {
         type: String,
@@ -24,10 +25,10 @@ var HotelShiftSchema 	= new Schema({
         default: "#fff"
 	},
 	start_time: {
-	    type: Array	   
+	    type: Object	   
 	},
     end_time: {
-        type: Array
+        type: Object
        
     }
 },{

@@ -1,7 +1,7 @@
 <div class="dash-main-con">
 
 <!--middle panel -->
-<section class="dashrightsection" ng-style="{'padding-left': isAuth.headerType =='hotel_header'?'20px':'','margin-left': isAuth.headerType =='hotel_header'?'0':'' }"  ng-class="{'leftopen':leftopen}" style="background: #f4f8f9;">
+<section class="dashrightsection" ng-style="{'padding-left': isAuth.headerType =='hotel_header'?'20px':'','margin-left': isAuth.headerType =='hotel_header'?'0':'' }"  style="background: #f4f8f9;">
 
 
 	<div class="dash_hd" style="
@@ -9,31 +9,47 @@
     color: #4ebdf6;
     border-bottom: 2px solid #4ebdf6;
     font-size: 26px;
-">Hotels</div>
+">My Hotels</div>
 	<div class="hotel_list_top">
 		
 		<div class="circle_container" ng-repeat="hotel in hotels" 
-			            ng-hide="hideHotel" ng-click="redirectToJot(hotel)">
-			<div class="circle" style="background: url('assets/images/hotel_1.png') 0 0 no-repeat; background-size: cover;">
+			             ng-click="redirectToJot(hotel)"   title="{{(hotel.step == 'completed')?'Manage your hotel':'Complete hotel setup process'}}">
+			<div class="circle" style="background: url('{{(hotel.image)?'images/hotel/'+hotel._id+'/cover/'+hotel.image:'assets/images/default-hotel.png';}}') 0 0 no-repeat; background-size: cover;">
 			  <div class="circle__inner">
 			    <div class="circle__wrapper">
-			      <div class="hover_effect">
+
+			        <div class="hover_effect">
 						<div><img class="hotel-list-icon" src="assets/images/hotet_5star.png"></div>
-						<h4 class="hotel_name">{{hotel.hotelname}} <span>{{hotel.address}}</span></h4>
+						<h4 class="hotel_name">{{hotel.hotelname}} <span class="capitalize">{{hotel.address}}</span></h4>
 					</div>
+
+
+
+					<div class="hotel_action_btn">
+						<ng-md-icon class="cursor" icon="mode_edit" style="fill: #4d4d4d"   title="Edit" ng-click="openHotelEditForm($event,hotel)" ng-if="hotel.step == 'completed'"></ng-md-icon>
+
+						<!-- <ng-md-icon class="cursor closr_icon tableredtag" confirmed-click="deleteHotel($event,hotel._id)" ng-confirm-delete-hotel="Are you sure to delete this the Hotel?"  icon="close"  class="cursor"  size="22"  title="Delete"></ng-md-icon> -->  
+
+
+						<ng-md-icon class="cursor closr_icon tableredtag" icon="close"  class="cursor"  size="22"  title="Delete"  confirmed-click="deleteHotel(hotel._id,$index)" ng-confirm-title="Delete Hotel" ng-confirm-delete="Are you sure you want to remove this hotel."></ng-md-icon> 
+
+						<ng-md-icon class="cursor" icon="subdirectory_arrow_right" style="fill: green; display: block;"  size="30"  title="{{(hotel.step == 'completed')?'Manage your hotel':'Complete hotel setup process'}}"></ng-md-icon>							
+					</div>
+
+					
 			    </div>
 			  </div>
 			</div>
 		</div>
 
-		<div class="circle_container"  ng-click="openHotelSetupWizard();" ng-if="$root.userData.role !='staff'">
+		<div class="circle_container"  ng-click="openHotelSetupWizard();" ng-if="$root.currentUser.role =='hotelowner'">
 			<div class="circle">
 			  <div class="circle__inner">
 			    <div class="circle__wrapper">
 			       <div class="dash_hotel_top_new">
 						<a href="javascript:void(0);">
 							<h3 class="text-center">+</h3>
-							<h2 class="text-center hotel_name">Add a new hotel</h2>
+							<h2 class="text-center hotel_name">Setup New Hotel</h2>
 						</a>
 					</div>
 			    </div>

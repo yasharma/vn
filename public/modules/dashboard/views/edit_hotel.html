@@ -1,0 +1,114 @@
+<md-dialog class="newhotel_dialog">
+
+  <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Update Hotel Information</h2>
+        <span flex></span>
+        <md-button aria-label="button" class="md-icon-button" ng-click="close()">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+    
+    <form name="editHotelForm" ng-submit="editNewHotel(editHotelForm.$valid)" novalidate>
+    	<div class="newhotel_dialog_form">
+    		<div class="row aligninput">
+                <div class=" col-md-3 col-sm-3">
+                    <md-input-container class="md-block" aria-label="Checkbox 1">
+                    <input  name="hotelname"  ng-model="hotelname" ng-required="true"  placeholder="Hotel Name">
+                  </md-input-container>
+                </div>
+                <div class=" col-md-3 col-sm-3">
+                    <md-input-container class="md-block">
+                    <input  ng-model="ownername" ng-required="true" placeholder="Owner Entity" ng-required="true">
+                  </md-input-container>
+                </div>
+                <div class=" col-md-3 col-sm-3">
+                    <md-input-container class="md-block" aria-label="Checkbox 1">
+                    <input  ng-model="phone" ng-required="true" placeholder="Hotel Phone Number">
+                  </md-input-container>
+                </div>
+                <div class=" col-md-3 col-sm-3">
+                    <md-input-container class="md-block" aria-label="Checkbox 1">
+                    <input  type="email"  ng-model="email" placeholder="Email Address" ng-required="true">
+                  </md-input-container>
+                </div>
+                <div class="col-md-8 col-sm-8">
+                    <md-input-container class="md-block" aria-label="Checkbox 1">
+                    <input  ng-model="address" placeholder="Address" ng-required="true">
+                  </md-input-container>
+                </div>
+
+                <div class="col-md-4 col-sm-4">
+                    
+                    <md-input-container md-no-float class="md-block" aria-label="Checkbox 1"> 
+                        <md-select ng-model="currency" placeholder="Currency" ng-required="true">
+                          <md-option ng-repeat="(key,value) in currencyList" value="{{value.symbol}}">
+                            {{value.symbol}} ({{key}})
+                          </md-option>                              
+                        </md-select>
+                        
+                    </md-input-container>
+                </div>
+                <div class="clearfix"></div>
+                <div class=" col-md-3 col-sm-3">
+                    <md-input-container class="md-block">
+                    <input  ng-model="city" placeholder="City">
+                  </md-input-container>
+                </div>
+                <div class=" col-md-3 col-sm-3">
+
+
+                  <md-input-container md-no-float class="md-block">
+                        <md-select ng-model="country" placeholder="Country" ng-change="populateState(country)">
+                          <md-option ng-repeat="country in countryList" value="{{country}}"> 
+                            {{country}}
+                          </md-option>
+                       
+                    </md-input-container>
+                </div>
+                <div class=" col-md-3 col-sm-3">
+                    <md-input-container md-no-float class="md-block">
+                        <md-select ng-model="state"  placeholder="State">
+                          <md-option ng-repeat="stateN in stateList" value="{{stateN}}"> 
+                            {{stateN}}
+                          </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div class=" col-md-3 col-sm-3">
+                    <md-input-container class="md-block" ara>
+                    <input  ng-model="zipcode" placeholder="Zipcode">
+                  </md-input-container>
+                </div>
+            
+                <div class="col-sm-12">
+                    <div class="uplaod_area" ngf-multiple="true" ng-model="files"   ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" ngf-drop>
+
+                    <img ngf-thumbnail="uploaedImgage || 'images/hotel/'+_id+'/cover/'+image" style="max-width: 100%;width: 120px;" class="inside_cover_image">   
+
+                        <div class="drop_desc">
+                            Drag and drop cover image here
+                        </div>
+                            <br>
+                            or
+                            <br>
+                        <div class="select_files" ngf-select ="uploadCover($files, $invalidFiles)" ngf-allow-dir="true" ngf-multiple="false" ngf-max-size="5MB">
+                            Select files
+                        </div>              
+                    </div>       
+                </div> 
+                </div>
+                <div class="clearfix mar-top20">            
+                    <div class="chane_pass_btn">
+                        <md-button aria-label="button" type="submit" class="md-primary addyellobtn yellowbtn">Save</md-button> 
+                    </div>
+                </div>
+
+            
+    	</div>
+        </form>
+    </md-dialog-content>
+ 
+</md-dialog>    

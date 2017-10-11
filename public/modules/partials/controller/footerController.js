@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('footerController', ['$scope','$rootScope','$mdDialog','$location',
-	function($scope,$rootScope,$mdDialog,$location) {
+app.controller('footerController', ['$scope','$rootScope','$location',
+	function($scope,$rootScope,$location) {
 		//$rootScope.popup = true;
 		$scope.callClosePopup = function(){
 			$rootScope.popup = false;

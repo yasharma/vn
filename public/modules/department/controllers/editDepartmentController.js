@@ -1,8 +1,8 @@
 "use strict";
 
-app.controller('editDepartmentController', ['$scope','localStorageService','globalRequest','deptDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,deptDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editDepartmentController', ['$scope','globalRequest','deptDetail','$mdDialog','toastService',
+	function($scope,globalRequest,deptDetail,$mdDialog,toastService) {
+		
 
 		
 		/***********************************************
@@ -37,18 +37,28 @@ app.controller('editDepartmentController', ['$scope','localStorageService','glob
 			            data:{
 			            	_id      	       :  $scope._id,
 			            	department_name    :  departmentName,
-			            	abbreviation       :  Abbreviation,
-			            	bgcolor       	   :  $scope.bgcolor,
+			            	abbreviation       :  Abbreviation,			            	
 			            	description        :  $scope.description
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.departmentEditResult = response;
+			 	var popup;
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
 			 		globalRequest.getDepartments();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
 
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 	
 			});

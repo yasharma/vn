@@ -48,7 +48,7 @@ exports.updatePhoneDirectory = (reqst, respe) => {
             if(result){
                 return respe.json(response.success(result,'Contact Updated successfully.'));
             }else{
-                return respe.json(response.errors(err,"Error in Contact update."));
+                return respe.json(response.errors(err.errors,"Error in Contact update."));
             }
         });
     }

@@ -45,9 +45,8 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
                 
                 var username  = item.user_name;
                     username  = username.trim();                
-                var appendValue = "@"+username+" ";
-                console.log(1);
-                console.log(appendValue);
+                var appendValue = "@"+username+" ";               
+                
                 $rootScope.$broadcast('addUserNameAtMousePosition',appendValue);
                 $rootScope.clickopen = false;
                 $rootScope.filtermember = '';

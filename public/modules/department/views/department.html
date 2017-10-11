@@ -1,12 +1,12 @@
 <div class="dash-main-con">
 <!--middle panel -->
-<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
 	
 	<div class="dash_hd_txt mar-bot20" layout="row" layout-align="space-between center">
 		<div class="dash_hd mar-bot0">Department</div>
 		<div class="rightfilter">
 
-			 <md-button  slide-toggle="#depart" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+			 <md-button  slide-toggle="#depart" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
 				{{(invForm)?"Close":"Add department"}}
 			</md-button>
 	    </div>    
@@ -18,25 +18,21 @@
 				<!-- <div class="dash_pro_inform_hd">Add Department</div> -->
 			</div>
 			<div class="dash_pro_inform_inner boxunoversal">
-				<div class="row">
+				<div class="row ">
 					<div class="col-sm-6">
-						<md-input-container md-no-float class="md-block">
-					            <input  ng-model="department_name" placeholder="Department Name">
+						<md-input-container  class="md-block">
+					            <input  ng-model="department_name" placeholder="Department Name" ng-required="true">
 					            
 					    </md-input-container>
 					</div>
-					<div class="col-sm-4">
-						<md-input-container md-no-float class="md-block">
+					<div class="col-sm-6">
+						<md-input-container  class="md-block">
 					            <input  ng-model="department_abbreviation" placeholder="Abbreviation">
 					    </md-input-container>
 					</div>
-					<div class="col-sm-2">
-						<md-input-container md-no-float class="md-block">
-							 <input colorpicker type="text" ng-model="bgcolor"  style="background: {{bgcolor}}" placeholder="Select background color" />
-						</md-input-container>	
-					</div>
+					
 					<div class="col-sm-12">
-						<md-input-container md-no-float class="md-block">
+						<md-input-container  class="md-block">
 							 <input  ng-model="department_desc" placeholder="Description">
 						</md-input-container>	
 					</div>
@@ -48,16 +44,7 @@
 					</div>						
 				</div>
 
-				<div class="message {{departmentResult.class}}" ng-if="departmentResult.status == 1">{{departmentResult.message}}
-				</div>
-
-			<div class="result {{departmentResult.class}}" ng-if="departmentResult.status==2">    
-                <ul>
-                  <li ng-repeat="(key,value) in departmentResult.errors">
-                  {{value.message}}
-                  </li>
-                </ul>
-            </div>
+				
 			</div>
 		</form>
 	</div>
@@ -67,29 +54,41 @@
 
 	<div class="clearfix depart_midle">
 		<div class="deptsrch">
-			<div class="vending_left_top_serch positionrel">
-			  <md-input-container md-no-float class="md-block">
+			<div class="vending_left_top_serch positionrel" style="float: left;width: 90%;">
+			  <md-input-container  class="md-block">
 			      <input  ng-model="searchDepartment" placeholder="Search Department" autocomplete="off">
 			  </md-input-container>			 
+			</div>
+
+
+			<div class="" style="float: right; padding: 10px 0px 0 5px;cursor: pointer;" ng-click="searchDepartment = ''" title="Reset filters">
+				<img src="assets/images/reset_filter.png" style="width: 30px;">
 			</div>
 		</div>
 		<div class="deptsrch_data">
 			 <ul class="deptsrch_data_list clearfix">
-			 		<li ng-repeat="department in filtereddepartment = (departmentList | departmentfilter:this)" ng-hide="hideDept">
+			 		<li ng-repeat="department in filtereddepartment = (departmentList | departmentfilter:this)">
 			 			<div class="deptsrch_data_title">
 			 				<ng-md-icon icon="home" style="fill: #7b7b7b" size="20"></ng-md-icon> 
 			 				{{department.department_name}}
 			 		
                   	<span class="icon_btn">
-	                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditDepartment(department);">
+	                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditDepartment(department);"  title="Edit">
 				 		</ng-md-icon>
 
-	                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeDepartment(department);hideDept = ! hideDept">
+	                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeDepartment(department._id,$index)" ng-confirm-title="Delete Department" ng-confirm-delete="Are you sure you want to remove this department.">
 	                  	</ng-md-icon>
                   	</span>
 			 			</div>
 			 			<div class="deptsrch_data_para">
-			 				<p>{{department.description}}</p>
+			 				<p title="{{department.description}}">
+			 				{{ department.description | limitTo: 80 }}
+			 				<a href="javaScript:void(0)" title="{{department.description}}" ng-if="department.description.length > 80" style="color: #4ebdf6;"> ...view more</a>
+			 				</p>
+
+			 				<p ng-if="!department.description.length" style="height: 33px;">
+			 					Description is missing write short description for this department.
+			 				</p>
 			 				<span>{{department.abbreviation}}</span>
 			 			</div>
 			 		</li>

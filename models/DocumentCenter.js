@@ -12,17 +12,14 @@ var DocumentCenterSchema    = new Schema({
     hotel_id: {
         type: ObjectId
     },
-    
     document_name: {
         type: String,
         trim: true,
-        required:"Document name can not be empty."
+        required:"Document name is required."
     },
-
     document_description: {
         type: String,
     },
-
     department: {
         type: String,
     },
@@ -33,7 +30,6 @@ var DocumentCenterSchema    = new Schema({
     },
     moved_data: {
         type: Array,
-        default: []
     },
     upload_date:{
         type: Number

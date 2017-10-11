@@ -1,46 +1,18 @@
 "use strict";
 
-app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$location','localStorageService','globalRequest',
-	function($scope,$rootScope,$routeParams,$location,localStorageService,globalRequest) {	
+app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$location','globalRequest','toastService',
+	function($scope,$rootScope,$routeParams,$location,globalRequest,toastService) {	
 
-		var processingHotel = localStorageService.get('processingHotel');
+		
+		function isEmpty(obj) {
+		    for(var prop in obj) {
+		        if(obj.hasOwnProperty(prop))
+		            return false;
+		    }
 
-
-		/************************************************
-		* Create iteration for department
-		*************************************************/
-
-		$scope.defaultBlankField = window.__API_PATH.EMPLOYEE_BLANK_FIELD;
-		function getNumberInArray(data){
-			return new Array(data);
+		    return JSON.stringify(obj) === JSON.stringify({});
 		}
 		
-		$scope.getIteration = [];
-		angular.forEach($scope.selectedDepartment,function(value,kay){
-			$scope.getIteration[value._id] =  getNumberInArray($scope.defaultBlankField);
-		});	
-
-		/*****************************************************
-		* Append blank field in list of particular department
-		*****************************************************/	
-
-		$scope.addmore = function(deptID){
-			$scope.getIteration[deptID].push(1);
-
-		};
-
-
-		/************************************************
-		* Delte Last element
-		*************************************************/
-
-		$scope.deleteEmpRow = function(deptID,ind){
-			$scope.stepsCtrl[deptID+ind] = '';
-			$scope.getIteration[deptID].splice(ind, 1);
-			//var elem = document.getElementById(deptID+ind);
-			//elem.parentNode.removeChild(elem);			
-		};
-			
 
 		/************************************************
 		* Navigate on previous page
@@ -51,6 +23,94 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 			$location.path('/dashboard/hotel-setup/'+page);
 		};	
 
+		/************************************************
+		* Add new employee in list
+		*************************************************/
+		$scope.addedEmployee = [];
+		$scope.addNewEmp = function(){
+
+			var errorRestrict = false;
+			var errors = '<ul class="mdToast-error-list">';
+			if(!$scope.newfield)
+			{
+				
+				errors += '<li>First name is required.</li>';
+				errors += '<li>Last name is required.</li>';
+				errors += '<li>Contact number is required.</li>';
+				errors += '<li>Please select department.</li>';
+				errorRestrict = true;
+
+			} else {
+
+				if(!$scope.newfield.newfield_first_name)
+				{
+					
+					errors += '<li>First name is required.</li>';
+					errorRestrict = true;
+				}
+
+				if(!$scope.newfield.newfield_last_name)
+				{
+					errors += '<li>Last name is required.</li>';
+					errorRestrict = true;
+				}				
+
+				if(!$scope.newfield.newfield_contact_number)
+				{
+					errors += '<li>Contact number is required.</li>';
+					errorRestrict = true;
+				}
+
+				if(!$scope.newfield.newDepartment)
+				{
+					errors += '<li>Please select department.</li>';
+					errorRestrict = true;
+				}
+
+				
+				angular.forEach($scope.addedEmployee,function(value,key){
+					
+					if(value.email == $scope.newfield.newfield_email)
+					{						
+						errors += '<li>Email address already exists for this hotel.</li>';
+						errorRestrict = true;
+					}
+
+					if(value.contact_number == $scope.newfield.newfield_contact_number)
+					{						
+						errors += '<li>Contact Number already exists for this hotel.</li>';
+						errorRestrict = true;
+					}
+
+				});	
+				
+
+			}	
+
+			if(!errorRestrict)
+			{					
+
+				$scope.addedEmployee.push({
+					first_name     : $scope.newfield.newfield_first_name, 
+					last_name      : $scope.newfield.newfield_last_name,
+					department     : $scope.newfield.newDepartment,
+					email          : $scope.newfield.newfield_email,
+					contact_number : $scope.newfield.newfield_contact_number, 
+				});
+				
+				$scope.newfield.newfield_first_name = '';
+				$scope.newfield.newfield_last_name = '';
+				$scope.newfield.newDepartment = '';
+				$scope.newfield.newfield_email = '';
+				$scope.newfield.newfield_contact_number = '';
+			} else {
+				var popup = {"message":errors,"class":""};
+				toastService.errors(popup);
+			}
+
+			
+		};
+
 
 		/************************************************
 		* Step4 form submit
@@ -58,25 +118,29 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 
 		$scope.step4FormSubmit = function(){
 			var selectedEmployee = [];
-			angular.forEach($scope.stepsCtrl,function(value,key){
-				if(value.first_name)
+
+			angular.forEach($scope.stepsCtrl.selected_emp,function(value,key){
+				if($scope.stepsCtrl.selected_emp[key])
 				{
-					value.hotel_id = processingHotel._id;
-					value.status   = 'inactive';
-					value.password = '123456';
+					value.hotel_id = $rootScope.newProcessingHotel._id;
+					var departmentlist = [];
+					angular.forEach(value.department,function(depValue,deptKey){
+						departmentlist.push(depValue.abbreviation);
+					});
+					value.department   = departmentlist;
 					selectedEmployee.push(value);
 				}
+
 			});
+					
 
-			$scope.empResult = {class:"",message:"",status:""};		
-
-
+				
+			
 			if(selectedEmployee.length > 0)
-			{
-						
+			{					
 
 				 var hotelDataObj = {
-				 		hotel_id     	       : processingHotel._id,
+				 		hotel_id     	       : $rootScope.newProcessingHotel._id,
 				 		member_list 	       : selectedEmployee	
 				};
 
@@ -87,7 +151,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 					};
 
 				globalRequest.jotCRUD(request).then(function(response){	
-					$scope.empResult = response;
+					
 					if(response.status == 1)
 					{	
 
@@ -98,8 +162,9 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 						var hotelrequest={
 								url:window.__API_PATH.UPDATE_HOTEL,
 								method:"PUT",
-								data:{hotel_id : processingHotel._id,step:'completed'}
+								data:{hotel_id : $rootScope.newProcessingHotel._id,step:'completed'}
 							};
+
 						globalRequest.jotCRUD(hotelrequest).then(function(hotelresponse){
 							if(hotelresponse.status == 1)
 							{	
@@ -111,14 +176,12 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 				});
 
 			} else {
-				$scope.empResult.class   = 'Autherror';
-				$scope.empResult.message = 'Please enter at least one employee.';
-				$scope.empResult.status  = 1;
+				
+				var popup = {"message":"Please enter at least one employee.","class":""};
+				toastService.errors(popup);
 			}
 			
-		};
-
-			
+		};			
 			
 	}
 ]);

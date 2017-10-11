@@ -10,12 +10,11 @@ var mongoose      = require('mongoose'),
 var UserSchema  = new Schema({
  
   profile_image:{
-    type: Array,
-    default: [] 
+    type: String
   },
   first_name: {
         type: String,
-        validate: {
+        /*validate: {
           isAsync: true,
           validator: function(v, cb) {
             setTimeout(function() {
@@ -25,12 +24,12 @@ var UserSchema  = new Schema({
             }, 5);
           },
           message: 'Error in first name.'
-        },
+        },*/
         required: [true, 'First name is required']
       },
   last_name: {
         type: String,
-        validate: {
+        /*validate: {
           isAsync: true,
           validator: function(v, cb) {
             setTimeout(function() {
@@ -40,7 +39,7 @@ var UserSchema  = new Schema({
             }, 5);
           },
           message: 'Error in last name.'
-        },
+        },*/
         required: [true, 'Last name is required']
       },
   contact_number: {
@@ -62,15 +61,19 @@ var UserSchema  = new Schema({
     type: String,
     lowercase: true,
     trim: true,
-    unique: 'The Email address you have entered already exists.',
-    uniqueCaseInsensitive:true,
-    required: 'Email address is required.',
     validate: {
       validator: function(email) {
         return /^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
       },
       message: '{VALUE} is not a valid email address'
-    }
+    },
+    required: [function (email) {
+        if(this.role == 'hotelowner' ){
+            return true;
+        } else {
+            return false;
+        }
+      }, 'Email address is required.']
   },
   user_name: {
     type: String,
@@ -102,8 +105,7 @@ var UserSchema  = new Schema({
         type: String
   },
   department: {
-    type: String,
-    default: false
+    type: Array,
   },
   position: {
     type: String,
@@ -111,12 +113,10 @@ var UserSchema  = new Schema({
     default: false
   },
   hotel_id: {
-      type: ObjectId,
+      type: Array,
   },
   address: {
     type: String,
-    trim: true,
-    default: false
   },
   salt: { 
     type: String 
@@ -134,16 +134,15 @@ UserSchema.pre('save', function(next) {
     if (this.isModified('password') || this.isNew) {
 
         if(this.isNew){
-            user.emailVerificationKey   = crypto.createHash('md5').update((user.email + Math.floor((Math.random() * 1000) + 1))).digest("hex");
-            user.hotel_id               = mongoose.Types.ObjectId(user.hotel_id);
-            let firstname               = user.first_name;
-            let lastname                = user.last_name;
-            let random                  = Math.floor(10 + Math.random() * 90);
-            user.user_name              = firstname.charAt(0) + lastname + random;
+            //user.emailVerificationKey   = crypto.createHash('md5').update((user.first_name + Math.floor((Math.random() * 1000) + 1))).digest("hex");
         }
-        user.salt = crypto.randomBytes(16).toString('hex');
-        user.password = this.hashPassword(config.salt, user.password);
-        next();
+        
+        user.salt         = crypto.randomBytes(16).toString('hex');
+        user.password     = this.hashPassword(config.salt, user.password);
+        user.status       = 'active';
+        user.email_verify = 'verified';
+        
+        return next();
     } else {
         return next();
     }
@@ -152,6 +151,7 @@ UserSchema.pre('save', function(next) {
 /**
  * Create instance method for hashing a password
  */
+ 
 UserSchema.methods.hashPassword = function(salt, password) {
     if (salt && password) {
         return crypto.createHmac('sha512', salt).update(password).digest('base64');

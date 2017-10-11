@@ -34,9 +34,14 @@ exports.uploadfiledata = (reqst, respe) => {
             var folder_name         = fields.folder_name;
             let filedata            = files.file;
 
-            if(filedata){
+            if(!_.isNull(filedata)){
                   
-                var newdir      = './public/images/hotel/'+hotel_id+'/'+folder_name;
+                if(!_.isEmpty(hotel_id)){
+                    var newdir      = './public/images/hotel/'+hotel_id+'/'+folder_name;
+                }else{
+                    var newdir      = './public/images/'+folder_name;
+                }
+                
                 var newpath     = newdir.replace(/\/$/, '').split('/');
                 
                 for (var i = 1; i <= newpath.length; i++) {

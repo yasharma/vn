@@ -1,19 +1,26 @@
 "use strict";
 
-app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','globalRequest','localStorageService','$location','$mdDialog',
-	function($scope,$rootScope,$routeParams,globalRequest,localStorageService,$location,$mdDialog){
+app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','globalRequest','localStorageService','$location','$mdDialog','$route',
+	function($scope,$rootScope,$routeParams,globalRequest,localStorageService,$location,$mdDialog,$route){
 
 		/**********************************************************
 	    * Get active hotel data
 	    **********************************************************/
+	    $rootScope.bglayout = false;
+		//$scope.activeHotelData   = localStorageService.get('hotel');
 
-		$scope.activeHotelData   = localStorageService.get('hotel');
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = $rootScope.activeHotelData.jot_types;
 
 		/**************************************************
 		* Redirect if hotel obj not found in localstorage
 		**************************************************/
 
-		if(!$scope.activeHotelData || $scope.activeHotelData == ""){
+		if(!$rootScope.activeHotelData || $rootScope.activeHotelData == ""){
 			$location.path('/dashboard');
 			return false;
 		}
@@ -40,6 +47,7 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 			* Get jot list
 			**************************************/		
 			var JotType = $routeParams.type;
+			$rootScope.JotListData = '';
 			globalRequest.getJotList(JotType);			
 			$scope.BoardsPage = true;
 			
@@ -58,15 +66,20 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 		* Edit jot popup
 		**************************************/
 
-		$scope.jotEditPopup = function(jotData){			
-			$mdDialog.show({
-				controller: 'editJotCtlr',
-				templateUrl: '/modules/jot/views/edit_jot.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				locals: {jotData:jotData}
-			});
+		$scope.jotEditPopup = function(jotData){
+			$scope.edit_jot		   		= jotData;		
+			$scope.jot_title   			= jotData.jot_title;
+			$rootScope.jot_description	= jotData.jot_description;
+			$rootScope.jot_members		= jotData.jot_members;
+			$rootScope.due_date    		= new Date(jotData.due_date);
+			$rootScope.priority    		= jotData.priority;
+			$rootScope.department  		= jotData.department;
+			$rootScope.hotel_room  		= jotData.hotel_room;
+			
+			
 		};
+
+
 
 		/**************************************
 		* Open comment popup
@@ -75,11 +88,65 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 		$scope.openComments = function(jotData){			
 			$mdDialog.show({
 				controller: 'jotCommentCtlr',
+				controllerAs: 'ctlr',
 				templateUrl: '/modules/jot/views/jot_comments.html',
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,
 				locals: {jotData:jotData}
 			});
+		};
+
+		/**************************************
+		* Appned Department of click of icon
+		**************************************/
+
+		$scope.selectDept = function(depatAbbr){
+			var checkAlreadyExists = $rootScope.department.match(/\#[a-z,0-9,_\/.-]+/gmi);
+            var match = -1;
+            if(checkAlreadyExists)
+            {
+              match = checkAlreadyExists.indexOf('#'+depatAbbr);
+            }
+             if(match > -1)
+            {
+              return false;
+            }
+            
+			$rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
+		};
+
+		/**************************************
+		* Update item list
+		**************************************/
+
+		$scope.updateItemList = function(item){
+
+			var itemIndex = $scope.boards.indexOf(item);
+			if(itemIndex > -1)
+			{
+				$scope.boards.splice(itemIndex, 1);
+			} else {
+				$scope.boards.push(item);
+			}
+
+			var hotelDataObj = {
+				 		hotel_id     	   : $rootScope.activeHotelData._id,
+				 		jot_types 		   : $scope.boards
+				};
+
+			var request={
+						url:window.__API_PATH.UPDATE_HOTEL,
+						method:"PUT",
+						data:hotelDataObj
+				};
+
+			globalRequest.jotCRUD(request).then(function(response){	
+				localStorageService.set('hotel',response.result);
+				window.location.reload();
+			});
+
+
 		};
 
 		

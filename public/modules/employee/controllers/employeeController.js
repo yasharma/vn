@@ -1,8 +1,8 @@
 "use strict";
 
-app.controller('employeeController', ['$scope','$rootScope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','toastService',
-	function($scope,$rootScope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,toastService) {
-		var hotel = localStorageService.get('hotel');
+app.controller('employeeController', ['$scope','$rootScope','globalRequest','$timeout','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$timeout,$mdDialog,toastService) {
+		
 		$scope.position_list = window.__API_PATH.POSITION;
 
 
@@ -15,7 +15,7 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 			$scope.last_name = "";
 			$scope.contact_number = "";
 			$scope.email = "";
-			$scope.department = "";
+			$scope.departments = "";
 			$scope.position = "";
 			$scope.status = "";
 			$scope.address = "";
@@ -24,10 +24,7 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 			$scope.profileimages = '';
 		};
 
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.memberResult = "";
-		};
+
 
 		/************************************
 		* Get department list
@@ -41,41 +38,58 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 		globalRequest.getStaff();
 
 		/************************************
+		* Get position list
+		*************************************/			
+		
+		globalRequest.getPositionList();
+
+		/************************************
 		* Add employee
 		*************************************/		
 		
 
 		$scope.addEmployee = function(){
+
 			
 			var status  = ($scope.status)?$scope.status:'inactive';			
 			var request = {
 			            url:window.__API_PATH.ADD_MEMBER,
 			            method:"POST",
 			            data:{
-			            	hotel_id      :  hotel._id,
-			            	first_name    :  $scope.first_name,
-			            	last_name     :  $scope.last_name,
-			            	contact_number     :  $scope.contact_number,
-			            	email         :  $scope.email,
-			            	status 		  :  status,
-			            	department    :  $scope.department,
-			            	profile_image :  $scope.profileimages,
-			            	position 	  :  $scope.position,
-			            	address 	  :  $scope.address,
-			            	role 	      :  'staff',
-			            	password      :  '123456',
+			            	hotel_id         :  $rootScope.activeHotelData._id,
+			            	first_name       :  $scope.first_name,
+			            	last_name        :  $scope.last_name,
+			            	contact_number   :  $scope.contact_number,
+			            	email            :  $scope.email,
+			            	status 		     :  status,
+			            	departments      :  $scope.departments,
+			            	profile_image    :  $scope.profileimages,
+			            	position 	     :  $scope.position,
+			            	address 	     :  $scope.address
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.memberResult = response;
-			 	$scope.blank();
+		 		var popup;
 			 	if(response.status == 1)
 			 	{
+			 		$scope.blank();
 			 		if(!$rootScope.staffList)
 			 		{
 			 			$rootScope.staffList = [];
 			 		}
 			 		$rootScope.staffList.push(response.result);
+
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 });
 
@@ -102,16 +116,16 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 		* Delete employee
 		*****************************************/	
 
-		$scope.removeEmployee = function(detail){
+		$scope.removeEmployee = function(empID,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_MEMBER,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:empID}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				$rootScope.staffList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
@@ -124,39 +138,38 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 
 		$scope.uploadprofileImage = function(files, errFiles) {
 			$scope.profile = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'profile',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   console.log(response);
-	                   $scope.profileimages = response.data.result[0].filename;
-	                   
+			globalRequest.uploadFiles($rootScope.activeHotelData._id,'profile',files).then(function (response) {	        
+	                $timeout(function () {	                   
+	                   $scope.profileimages = response.result[0].filename;
 	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.profileProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
 	            });
-	        }
-
 	    };
 
+	    /*****************************************
+		* Invite employee to login
+		*****************************************/
 
-	    $scope.viewDetail = function(){
+	    $scope.sendInvitation = function(empData){
+	    	//var edata = 'http://localhost:3000/api/invitation/'+empData.signupVerificationKey;
+	    	var edata = '';
+	    	edata 	 += 'employee_id='+empData._id;
+	    	edata 	 += '&hotel_id='+$rootScope.activeHotelData._id;
+	    	edata 	 += '&first_name='+empData.first_name;
+	    	edata    += '&last_name='+empData.last_name;
+	    	edata    += '&email='+empData.email;
+	    	edata    += '&profile_image='+empData.profile_image;
+	    	edata    += '&formtype=invitation';
+	    	edata    += '&contact_number='+empData.contact_number;
+	    	edata    += '&token='+empData.signupVerificationKey;
+	    	edata     = window.btoa(edata);
+	    	var url   = 'http://localhost:3000/invitation/'+edata;
 
+	    	console.log(url);
 	    };
+
+	    /*$scope.viewDetail = function(){
+
+	    };*/
 		
 	}
 ]);

@@ -1,14 +1,13 @@
 <div ng-controller="step2Controller as step2Ctlr">
+<div class="dash_hd">You can add or remove the features as per your hotel need</div>
 
-<form name="step2Form" ng-submit="step2FormSubmit(step2Form.$valid)" novalidate ng-show="!forget">
-	<ul class="step_hotel_list_edit noshadow clearfix">
+<form name="step2Form" ng-submit="step2FormSubmit(step2Form.$valid)" novalidate ng-show="!forget">	<ul class="step_hotel_list_edit noshadow clearfix">
 
 	<li ng-repeat="(key,value) in defaultBoards">
 	
-		<div class="Quick_jotnum numberdigit">
+		<div class="Quick_jotnum">
 
-
-			<md-checkbox aria-label="Checkbox" ng-model="step2Ctlr.selectFeature[value.id]" class="cssCheck" id="{{value.id}}" ng-true-value="{{value}}" ng-false-value="false"  ng-checked="{{(($root.hotelStatus.jot_types | filter:value.id)[0] == value.id)}}">
+			<md-checkbox aria-label="Checkbox" ng-model="step2Ctlr.selectFeature[value.id]" class="roundeSelectField" id="{{value.id}}" ng-true-value="{{value}}" ng-false-value="false"  ng-checked="{{(($root.hotelStatus.jot_types)[0])?(($root.hotelStatus.jot_types | filter:value.id)[0] == value.id):(value.default)?true:false}}">
 		    </md-checkbox>
 
 		</div>
@@ -19,12 +18,8 @@
 	</li>
 	
 	</ul>
-	<div class="result {{featureResult.class}}" ng-if="featureResult.status == 1">
-            {{featureResult.message}}
-      </div>
-	<div class="clearfix mar-top20">
 	
-
+	<div class="clearfix mar-top20">
 	<div class="chane_pass_btn">
 		<md-button  ng-click="navigateBack()" class="md-primary addyellobtn graybtn" >PREVIOUS</md-button>
 	</div>	

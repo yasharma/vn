@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('phoneDirController',['$scope','globalRequest','localStorageService','$mdDialog','toastService',function($scope,globalRequest,localStorageService,$mdDialog,toastService){
-	var hotel = localStorageService.get('hotel');
+app.controller('phoneDirController',['$scope','$rootScope','globalRequest','$mdDialog','toastService',function($scope, $rootScope, globalRequest,$mdDialog,toastService){
+	var hotel = $rootScope.activeHotelData;
 	/************************************
 	* Blank all field before open form
 	*************************************/	
@@ -11,13 +11,8 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 		$scope.last_name = "";
 		$scope.email = "";
 		$scope.contact = "";
+		$scope.ctrl.itemTagModel = [];
 	};
-
-	$scope.blankFields = function(){
-		$scope.blank();
-		$scope.ContactResult = "";
-	};
-
 
 	/**********************************************************
     * Item tags 
@@ -61,9 +56,8 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 		            	contact         :  $scope.contact
 		            }
 		          };
-		globalRequest.jotCRUD(request).then(function(response){
-		 	$scope.ContactResult = response;
-
+		globalRequest.jotCRUD(request).then(function(response){	 	
+			var popup;
 		 	if(response.status == 1)
 		 	{
 		 		$scope.blank();
@@ -73,7 +67,19 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 		 			$scope.ContactList = [];
 		 		}
 		 		$scope.ContactList.push(response.result);
+
+		 		popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
 		 		
+		 	} else {
+
+		 		var errors = '<ul class="mdToast-error-list">';
+				angular.forEach(response.errors,function(value,key){
+					errors += '<li>'+value.message+'</li>';
+				});
+				errors += '</ul>';
+				popup = {"message":errors,"class":""};
+				toastService.errors(popup);
 		 	}
 		 });
 
@@ -122,6 +128,9 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 		
 		globalRequest.jotCRUD(request).then(function(response){	
 			globalRequest.getContactList();
+			var popup = {"message":response.message,"class":response.class};
+			toastService.alert(popup);
+
 		});
 
 	};
@@ -131,15 +140,20 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 	* Delete contact
 	*****************************************/	
 
-	$scope.removeContact = function(detail){
+	$scope.removeContact = function(detail,index){
 
 		var request={
 			url:window.__API_PATH.DELETE_CONTACT,
 			method:"DELETE",
-			params:{_id:detail._id}
+			params:{_id:detail}
 		};
 		
-		globalRequest.jotCRUD(request).then(function(response){				
+		globalRequest.jotCRUD(request).then(function(response){	
+
+			if(response.status)
+			{
+				$scope.ContactList.splice(index, 1);
+			}			
 			var popup = {"message":response.message,"class":response.class};
 			toastService.alert(popup);
 		});

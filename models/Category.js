@@ -1,12 +1,12 @@
 var mongoose      = require('mongoose'),
   Schema          = mongoose.Schema,
+  ObjectId        = Schema.ObjectId,
   path            = require('path'),
   config          = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 
 var CategorySchema  = new Schema({
   hotel_id: {
-    type: String,
-    default: false
+    type: ObjectId,
   },
   inventory_category_name: {
     type: String,
@@ -21,6 +21,16 @@ var CategorySchema  = new Schema({
     timestamps: {
         createdAt: 'created',
         updatedAt: 'updated'
+    }
+});
+
+CategorySchema.pre('save', function(next) {
+    let category = this;
+    if (this.isModified('hotel_id')  || this.isNew) {
+        category.hotel_id   = mongoose.Types.ObjectId(category.hotel_id);
+        next();
+    }else{
+      return next();
     }
 });
 

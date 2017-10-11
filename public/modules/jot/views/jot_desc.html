@@ -1,11 +1,9 @@
 <div class="clearfix">
     <div class="jot_textarea">
-
         <md-input-container class="md-block">
 
-            <textarea md-no-float class="md-block" ng-model="$root.jot_description" rows="5" aria-label="textarea" ng-required="true" id="jot_description" focus-desc="descFocus"  textareastaffsuggestion ="$root.staffList" textareadepartmentsuggestion ="$root.departmentList"  textareastaffsuggestion-callback="callbackdescStaff"  my-text="">
-            </textarea>   
-                                 
+            <textarea md-no-float class="md-block" ng-model="$root.jot_description" rows="5" aria-label="textarea" ng-required="true" id="jot_description" focus-desc="descFocus"  textareastaffsuggestion ="$root.staffList" textareadepartmentsuggestion ="$root.departmentList"  textareastaffsuggestion-callback="callbackdescStaff"  my-text="" style="max-height: 150px;">
+            </textarea>                                    
         </md-input-container>
         <div class="clearfix icon_list" ng-include="'/modules/jot/views/icons.html'"></div>
 

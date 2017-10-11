@@ -1,11 +1,11 @@
 "use strict";
 
-app.factory('globalRequest',['$http','localStorageService','$rootScope',function($http,localStorageService,$rootScope){
+app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload','$timeout',function($http,localStorageService,$rootScope,Upload,$timeout){
 	return{
 		
-		/*************************************
+		/**************************************************
 		* Function for GET, POST, PUT, DELETE request
-		**************************************/
+		**************************************************/
 
 		jotCRUD: function(obj){
 			return $http(obj).then(function(response){
@@ -15,6 +15,40 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 					errors: response.data.errors
 				};
 			});
+		},
+
+
+		uploadFiles: function(hotelID,directoryName,files){
+		
+			var fileArgs;
+
+			if(hotelID)
+			{
+				fileArgs = {	                    
+								hotel_id     : hotelID,
+								folder_name  : directoryName,	                    
+								file         : files
+							};
+			} else {
+				fileArgs = {	
+								folder_name  : directoryName,	                    
+								file         : files
+							};
+			}		
+
+
+			if (files) {				
+	          return  Upload.upload({
+	                url: window.__API_PATH.UPLOAD_FILE,
+	                type:'post',
+	                arrayKey: '',
+	                data: fileArgs
+	            }).then(function (response) {
+	                return $timeout(function () {           
+	                   return response.data;	                   
+	                });
+	            });
+	        }
 		},
 
 
@@ -28,6 +62,7 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 							}
 				};
 
+			
 			return $http(hotelstatusrequest).then(function(response){	
 				return response.data.result;
 
@@ -47,7 +82,7 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 				method:"GET",
 				params:paramsData
 			};
-
+		
 			return $http(hotellistrequest).then(function(response){	
 				$rootScope.hotels = response.data.result;
 			}, function(response){
@@ -67,8 +102,7 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 			};
 
 			return $http(hotellistrequest).then(function(response){	
-				console.log(response.data.result);
-				localStorageService.set('hotel', response.data.result);
+				return response.data;				
 			});
 		},
 
@@ -84,6 +118,26 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 				$rootScope.staffList = response.data.result;
 			}, function(response){
 				$rootScope.staffList = response.data.errors;				
+			});
+		},
+
+
+		getPositionList:function(){
+				var hotel   = localStorageService.get('hotel');
+
+				var request = {
+			            url:window.__API_PATH.GET_POSITION,
+			            method:"GET",
+			            params:{
+			            	hotel_id      	:  hotel._id
+			            }
+			          };
+
+			return $http(request).then(function(response){
+				$rootScope.potisionList = response.data.result;			
+
+			}, function(response){
+				$rootScope.potisionList = response.data.errors;				
 			});
 		},
 
@@ -204,12 +258,14 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 
 		getJotCount:function(){
 				var hotel   = localStorageService.get('hotel');
+				var user   = localStorageService.get('user');
 
 				var request = {
 			            url:window.__API_PATH.JOT_COUNT,
 			            method:"GET",
 			            params:{
-			            	hotel_id      	:  hotel._id
+			            	hotel_id      	:  hotel._id,
+			            	contact_number  :  user.contact_number
 			            }
 			          };
 
@@ -232,7 +288,7 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 			            params:{
 			            	hotel_id      	:  hotel._id,
 			            	jot_type      	:  JotType,			            	
-			            	user_name  		:  userDetail.user_name
+			            	contact_number  :  userDetail.contact_number
 			            }
 			          };
 
@@ -243,6 +299,10 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 				$rootScope.JotListData = response.data.errors;				
 			});
 		},
+
+
+		
+
 		
 	};
 

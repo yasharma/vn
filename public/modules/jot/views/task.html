@@ -1,12 +1,30 @@
 <form name="createJotForm" ng-submit="createJot(createJotForm.$valid)" novalidate ng-init='outsource={assigned_to:"",department:""}' jot-form-submit-directives>
 
 	<div class="col-md-12 clearfix" ng-include="'/modules/jot/views/jot_title.html'"></div>
-	<div class="col-md-12 clearfix" ng-include="'/modules/jot/views/jot_desc.html'"></div>
-	<div class="clearfix col-md-7 pull-right" ng-include="'/modules/jot/views/priority.html'"></div>
+	<div class="col-md-12 clearfix" style="height: 170px" ng-include="'/modules/jot/views/jot_desc.html'"></div>
+	<div class="clearfix col-md-7 pull-right newhotel_dialog_form_top" ng-include="'/modules/jot/views/priority.html'"></div>
 	<div class="clearfix" ng-include="'/modules/jot/views/task_datepicker.html'"></div>
-	<div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+	<br>
+	<div class="clearfix col-md-12 newhotel_dialog_form_top" ng-include="'/modules/jot/views/staff.html'"></div>
+	<div class="clearfix"></div>
+	<ul class="quick_member_list" style="margin: 0px 0px 15px 16px">
+	  <li ng-repeat="member in $root.staffList"  title="{{member.first_name+' '+member.last_name}}">
+	    <div class="quick_member" ng-click="selectStaff(member.user_name)">
+	    {{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+	    </div>
+	    </li>	    
+	</ul>
+	<div class="clearfix"></div>
+	
 	<div class="col-md-12">
-	<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+	<div class="clearfix newhotel_dialog_form_top" ng-include="'/modules/jot/views/department.html'"></div>
+	<div class="clearfix"></div>
+	<ul class="taginglist min_height29 clearfix" style="margin: 0px 0px 20px 0px">
+      <li ng-repeat="dept in $root.departmentList"  title="{{dept.department_name}}" ng-click="selectDept(dept.abbreviation)">        
+        {{dept.abbreviation}}        
+        </li>
+    </ul>
+    <div class="clearfix"></div>
 	<div class="clearfix" ng-include="'/modules/jot/views/rooms.html'"></div>
 	</div>
 	

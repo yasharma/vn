@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('circleToggle',['$document','$rootScope',function($document,$rootScope){
+app.directive('circleToggle',['$document',function($document){
 
 	return{
 		link: function(scope,element){

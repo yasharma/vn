@@ -1,20 +1,12 @@
 "use strict";
 
-/**************************************
-* Login controller
-http://localhost:3000/resetpassword/0c02baa57acfbb5a51cb0a04c587b8eec2099e3d
-**************************************/
-
-
 app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location','$mdDialog','$timeout',
 	function($scope,loginFactory,$rootScope,$routeParams,$location,$mdDialog,$timeout) {	
 
 		var token = $routeParams.token;
-
-
 		if($routeParams.expired && $routeParams.expired == 'true')
 		{
-		
+			$mdDialog.cancel();
 			$location.path('/');
 			$rootScope.popupData  = {
 						text:  'Link has been expired.',

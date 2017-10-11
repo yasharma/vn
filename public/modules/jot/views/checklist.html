@@ -1,3 +1,176 @@
+<div ng-controller="checklistCtlr as ctlr" class="aligninput">
+	
+
+
+	<!-- Start main checklist -->
+
+	<ul class="parantchecklist">
+	    <br>
+	    <li ng-repeat="checklistParent in $root.checklist track by $index" ng-init="parentIndex = $index">            
+
+	    		<ng-md-icon icon="check_box" style="fill: #ccc" size="24"></ng-md-icon>
+	          	<label ng-click="ctlr.editParent[parentIndex] = !ctlr.editParent[parentIndex]; ChangedParenrItem = checklistParent.checklist_name" ng-hide="ctlr.editParent[parentIndex]">{{checklistParent.checklist_name}}   </label>	
+	          	 <!-- Start edit checklist name -->	 
+
+			        <div class="clearfix sublists_container editList" ng-show="ctlr.editParent[parentIndex]">
+						<md-input-container class="md-block" style="margin-top: 0;">
+						    <input aria-label="Checklist subitem"
+						    md-no-float class="md-block" ng-model="ChangedParenrItem">
+						</md-input-container>					
+					
+						<div class="pull-left">
+						    <md-button  ng-click="editParentList(parentIndex,ChangedParenrItem)" class="md-primary addyellobtn bluebtn">Save</md-button>
+						</div>
+						<div class="pull-left">
+						    <md-button ng-click="ctlr.editParent[parentIndex] = false;" class="md-primary addyellobtn bluebtn">Cancel</md-button>
+						</div>
+
+						<div class="pull-left">
+							
+						    <md-button ng-click="deleteChecklist(parentIndex)" class="md-primary addyellobtn bluebtn">Delete</md-button>
+							
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				<!-- End edit checklist name -->	
+
+
+				<div class="clearfix"></div>
+	          	<div class="col-sm-11" style="padding-left: 3px;padding-right: 0;">
+                <div class="checklist_loader_container">
+               
+                	<div class="checklist_loader" style="width: {{(100/checklistParent.item_list.length)*((checklistParent.item_list | filter:{status:1}).length)}}%"></div>
+
+                </div>  
+                </div>
+                <div class="col-sm-1" style="padding-right: 0;margin: 9px 0;text-align: right;">
+                {{
+              		(checklistParent.item_list.length == 0)
+              		? '0'
+              		: (100/checklistParent.item_list.length)*((checklistParent.item_list | filter:{status:1}).length)  | number:0
+              	}}%
+                 </div>
+                <div class="clearfix"></div>
+
+
+
+		        <!-- Start Sub item of checklist -->
+		        
+				<ul class="sublist">
+				    <li ng-repeat="subItem in checklistParent.item_list"> 
+				    		{{parentIndex}} - {{$index}}
+				            <md-checkbox aria-label ="checklist"  ng-model="ctlr.sublist[parentIndex][$index]" ng-true-value='true' ng-false-value="false" ng-change="storeChecklist(parentIndex,$index,ctlr.sublist[parentIndex][$index])">
+					        </md-checkbox>
+
+					        <label ng-click="ctlr.editList[parentIndex][$index] = !ctlr.editList[parentIndex][$index]; ChangedSubItem = subItem.name;" ng-hide="ctlr.editList[parentIndex][$index]">{{subItem.name}}</label>
+
+
+					        <!-- Start edit sublist item -->
+
+					        <div class="clearfix sublists_container editList" ng-show="ctlr.editList[parentIndex][$index]">
+								<md-input-container class="md-block"  style="margin-top: 0;">
+								    <input aria-label="Checklist subitem"
+								    md-no-float class="md-block" ng-model="ChangedSubItem">
+								</md-input-container>						
+							
+								<div class="pull-left">
+								    <md-button  ng-click="editSubItem(parentIndex,subItem.name,ChangedSubItem,$index)" class="md-primary addyellobtn bluebtn">Save</md-button>
+								</div>
+								<div class="pull-left">
+								    <md-button ng-click="ctlr.editList[parentIndex][$index] = false;" class="md-primary addyellobtn bluebtn">Cancel</md-button>
+								</div>
+
+								<div class="pull-left">
+								    <md-button ng-click="deleteSublistItem(parentIndex,subItem.name,$index)" class="md-primary addyellobtn bluebtn">Delete</md-button>
+								</div>
+							</div>
+
+							<!-- End edit sublist item -->
+
+
+				    </li>
+				</ul>
+				<!-- End Sub item of checklist -->
+				<div class="sublists">
+				<div class="">
+
+
+
+				<!-- Start add sub item in checklist -->	
+				
+					<a href="javascript:void(0)" ng-click="subitemOnOff = !subitemOnOff;" ng-hide="subitemOnOff">Add an item...</a>
+
+					 <div class="clearfix sublists_container" ng-show="subitemOnOff">
+						<md-input-container class="md-block">
+						    <input aria-label="Checklist subitem"
+						    md-no-float class="md-block" ng-model="ctlr.checklist_subitem[$index]" placeholder="Add an Item...">
+						</md-input-container>
+						
+					
+					<div class="pull-left">
+					    <md-button ng-click="addChecklistSubitem($index,ctlr.checklist_subitem[$index])" class="md-primary addyellobtn bluebtn">Add</md-button>
+					</div>
+
+					<div class="pull-left">
+					    <md-button ng-click="subitemOnOff = false; ctlr.checklist_subitem[$index] = ''" class="md-primary addyellobtn bluebtn">Cancel</md-button>
+					</div>
+					</div>
+				</div>
+				</div>
+				<!-- End add sub item in checklist -->
+	        <div class="clearfix"></div>
+	    </li>
+	</ul> 
+	<!-- End main checklist -->
+
+
+	<div class="add_checklist">
+		
+		 <md-button class="md-primary width200 addyellobtn bluebtn" ng-click="showChecklistAdd = ! showChecklistAdd">
+		 Add Check List
+		 </md-button>
+			<div class="checklist_container" ng-show="showChecklistAdd">
+			<div class="quick_edit_small_section_header">
+                     <span class="quick_edit_section_title"> Create Check List</span>
+                    <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showChecklistAdd = false"></ng-md-icon> 
+                    </div>
+
+				<div class="clearfix">
+					<md-input-container class="md-block">
+					    <input aria-label="Checklist Title"
+					    md-no-float class="md-block" ng-model="checklist_heading">					    
+					</md-input-container>				
+
+				</div>
+				<div class="pull-left">
+				    <md-button class="md-primary addyellobtn bluebtn" ng-click="addchecklist();">Save</md-button>
+				</div>
+			</div>
+
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+
+
+
+
+
+
 <div ng-controller="checklistCtlr">
 	<div class="Selectdep_txt">Add Check List</div>
 	<div class="Check_list_btn_chk">
@@ -51,3 +224,19 @@
 		</div>
 	</div>
 </div>
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -9,9 +9,12 @@ var app = angular.module('hoteljotApp',[
 			'ngMdIcons'	,
 			'ngFileUpload',
 			'angularjs-datetime-picker',	
-			'colorpicker.module',
 			'ui.bootstrap',	
 			'ngSanitize',
+			'angular-nicescroll',
+			'cp.ngConfirm',
+			'vAccordion',
+			'ngCookies',
 			])
 
 .config(['localStorageServiceProvider',

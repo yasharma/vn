@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('documentCenterController',['$scope','$rootScope','globalRequest','localStorageService','$mdDialog','toastService','Upload','$timeout',function($scope,$rootScope,globalRequest,localStorageService,$mdDialog,toastService,Upload,$timeout){
-	var hotel = localStorageService.get('hotel');
+app.controller('documentCenterController',['$scope','$rootScope','globalRequest','$mdDialog','toastService','$timeout',function($scope,$rootScope,globalRequest,$mdDialog,toastService,$timeout){
+	
 
 	/************************************
 	* Blank all field before open form
@@ -10,7 +10,7 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
 	$scope.blank = function(){
 		$scope.document_name 		= "";		
 		$scope.document_description = "";
-		$scope.filesData 			= "";
+		$scope.fileData 			= "";		
 		$rootScope.department 		= "";
 		$scope.documentProgress 	= -1;
 		$scope.documentResult 		= "";	
@@ -55,36 +55,122 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
 	* Add documents
 	*************************************/	
 	
-	$scope.addDC = function(){	
-		var request = {
-		            url:window.__API_PATH.ADD_DOCUMENT,
-		            method:"POST",
-		            data:{
-		            	hotel_id      			:  hotel._id,
-		            	document_name   		:  $scope.document_name,
-		            	department      		:  $rootScope.department,
-		            	tags        			:  $scope.ctrl.itemTagModel,
-		            	document_description    :  $scope.document_description,
-		            	files       		    :  $scope.filesData,
-		            	upload_date				:  new Date().getTime()
-		            }
-		    };
+	$scope.addDC = function(){
 
-		globalRequest.jotCRUD(request).then(function(response){
-			console.log(response);
-		 	$scope.documentResult = response;
+		/*********************************************
+		* Check files exists in scope to upload
+		* if yes, upload doument
+		* if no, save the information without files
+		*********************************************/
 
-		 	if(response.status == 1)
-		 	{
-		 		$scope.blankFields();				
-		 		if(!$scope.documentList)
-		 		{
-		 			$scope.documentList = [];
-		 		}
-		 		$scope.documentList.push(response.result);
-		 		
-		 	}
-		 });
+		var popup;
+		if ($scope.fileData && $scope.fileData.length) {
+
+
+			globalRequest.uploadFiles($rootScope.activeHotelData._id,'document_center',$scope.fileData).then(function (response) {			
+                $timeout(function () {
+	                if(response.status == 1)
+	                {
+	                   /*********************************************
+						* Save document information
+						*********************************************/
+
+	                   var request = {
+						            url:window.__API_PATH.ADD_DOCUMENT,
+						            method:"POST",
+						            data:{
+						            	hotel_id      			:  $rootScope.activeHotelData._id,
+						            	document_name   		:  $scope.document_name,
+						            	department      		:  $rootScope.department,
+						            	tags        			:  $scope.ctrl.itemTagModel,
+						            	document_description    :  $scope.document_description,
+						            	files       		    :  response.result,
+						            	upload_date				:  new Date().getTime()
+						            }
+						    };
+
+						globalRequest.jotCRUD(request).then(function(dcresponse){
+						 	var popup;
+						 	if(dcresponse.status == 1)
+						 	{
+						 		$scope.blankFields();				
+						 		if(!$scope.documentList)
+						 		{
+						 			$scope.documentList = [];
+						 		}
+						 		$scope.documentList.push(dcresponse.result);
+						 		popup = {"message":dcresponse.message,"class":dcresponse.class};
+								toastService.alert(popup);
+						 		
+						 	}  else {
+						 		var errors = '<ul class="mdToast-error-list">';
+								angular.forEach(dcresponse.errors,function(value,key){
+									errors += '<li>'+value.message+'</li>';
+								});
+								errors += '</ul>';
+								popup = {"message":errors,"class":""};
+								toastService.errors(popup);
+						 	}
+						 });
+					}  else {
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(response.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+                });
+            });            
+
+
+		} else {
+
+			/*************************************************
+			* Save document information if no files in scope
+			*************************************************/
+
+			var request = {
+			            url:window.__API_PATH.ADD_DOCUMENT,
+			            method:"POST",
+			            data:{
+			            	hotel_id      			:  $rootScope.activeHotelData._id,
+			            	document_name   		:  $scope.document_name,
+			            	department      		:  $rootScope.department,
+			            	tags        			:  $scope.ctrl.itemTagModel,
+			            	document_description    :  $scope.document_description,			            	
+			            	upload_date				:  new Date().getTime()
+			            }
+			    };
+
+			globalRequest.jotCRUD(request).then(function(response){
+			 	
+			 	if(response.status == 1)
+			 	{
+			 		$scope.blankFields();				
+			 		if(!$scope.documentList)
+			 		{
+			 			$scope.documentList = [];
+			 		}
+			 		$scope.documentList.push(response.result);
+
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 		
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 });
+		}
+		
 
 	};
 
@@ -127,15 +213,20 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
 	* Delete contact
 	*****************************************/	
 
-	$scope.removeDc = function(detail){
+	$scope.removeDc = function(detail,index){
 
 		var request={
 			url:window.__API_PATH.DELETE_DOCUMENT,
 			method:"DELETE",
-			params:{_id:detail._id}
+			params:{_id:detail}
 		};
 		
-		globalRequest.jotCRUD(request).then(function(response){				
+		globalRequest.jotCRUD(request).then(function(response){	
+
+			if(response.status == 1)
+			{
+				$scope.documentList.splice(index, 1);
+			}			
 			var popup = {"message":response.message,"class":response.class};
 			toastService.alert(popup);
 		});
@@ -154,36 +245,22 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
   
 
 	/*****************************************
-	* Profile image upload
+	* Append selected files in scope variable 
 	*****************************************/	
 
-	$scope.uploadDocument = function(files, errFiles) {			
-
-        if (files && files.length) {	
-            Upload.upload({
-                url: window.__API_PATH.UPLOAD_FILE,
-                type:'post',
-                arrayKey: '',
-                data: {	                    
-                    hotel_id     : hotel._id,
-                    folder_name  : 'document_center',	                    
-                    file         : files
-                }
-            }).then(function (response) {
-                $timeout(function () {
-                   $scope.filesData = response.data.result;
-                });
-            }, function (response) {
-                if (response.status > 0) {
-                    $scope.errorMsg = response.status + ': ' + response.data;
-                }
-            }, function (evt) {
-                $scope.documentProgress = 
-                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });
-        }
-
+	$scope.uploadDocument = function(files, errFiles) {	
+		$scope.fileData = 	files;
     };
+
+    /*****************************************
+	* delete  file from scope variable 
+	*****************************************/
+
+    $scope.deleteAttachment = function(hashKey){
+		$scope.fileData = $scope.fileData.filter(function(key){
+			return key.$$hashKey != hashKey;
+		});
+	};
 	
 	
 }]);

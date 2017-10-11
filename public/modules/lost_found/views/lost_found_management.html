@@ -1,15 +1,16 @@
 <div class="dash-main-con">
-<section class="dashrightsection" ng-class="{'leftopen':$root.leftopen}">
+<section class="dashrightsection aligninput" ng-class="{'leftopen':$root.leftopen}">
 	
-	<div class="dash_hd_txt mar-bot20 clearfix">	
-	<div class="dash_hd mar-bot0">Lost/Found</div>	
+	<div class="dash_hd_txt mar-bot10 clearfix">	
+		<div class="dash_hd mar-bot0 rightfilter_left">Lost & Found</div>
 		<div class="rightfilter_right">
-			<div class="chane_pass_btn_right">
-				<md-button  slide-toggle="#lst-fnd" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
-				{{(invForm)?"Close":"Add LOST/Found"}}
-			</md-button>
-			</div>
-	    </div>    
+				<div class="chane_pass_btn_right">
+					<md-button  slide-toggle="#lst-fnd" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+					{{(invForm)?"Close":"Add LOST & Found"}}
+				</md-button>
+				</div>
+		    </div>	
+		    <div class="clearfix"></div>
 	</div>
 
 
@@ -19,13 +20,20 @@
 		<div class="dash_pro_inform_inner boxunoversal">
 		<form name="addfoundItemform" ng-submit="addfoundItem(addfoundItemform.$valid)" novalidate>
 			<div class="row">
+
+				<div class="col-sm-12">
+				
+					<md-input-container  class="md-block">
+	         			<input  ng-model="title" placeholder="Title"  ng-required="true">
+	     			</md-input-container>
+				</div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container  class="md-block">
 				            <input  ng-model="place" placeholder="Place of Items Lost/Found">
 				    </md-input-container>
 				</div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container md-no-float  class="md-block">
 		              <md-select ng-model="category" placeholder="Select Category">
 		                <md-option value="electronic">
 		                  Electronic
@@ -40,25 +48,25 @@
 				</div>
 				<div class="clearfix"></div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container  class="md-block">
              			<input type = "number" ng-model="no_of_items" placeholder="Number of item found">
          			</md-input-container>
 				</div>
 				<div class="col-sm-4">
 					<md-input-container md-no-float class="md-block">
-             		<md-select ng-model="status" placeholder="Status">
-                       <md-option value="processing" selected>
-                          Processing
-                       </md-option>
-                       <md-option  value="completed">
-                          Completed
-                       </md-option>
-                    </md-select>
-          </md-input-container>
+		             		<md-select ng-model="status" placeholder="Status">
+		                       <md-option value="processing" selected>
+		                          Processing
+		                       </md-option>
+		                       <md-option  value="completed">
+		                          Completed
+		                       </md-option>
+		                    </md-select>
+		          </md-input-container>
 				</div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
-				        <input  type = "tel" ng-model="contact" placeholder="Contact Number">
+					<md-input-container  class="md-block">
+				        <input  type = "tel" ng-model="contact" placeholder="Contact Number"  ng-required="true">
 				  </md-input-container>
 				</div>
 
@@ -72,54 +80,42 @@
 				</div>
 				
 				<div class="clearfix"></div>
-				<div class="col-sm-12">
 				<br>
-					<md-input-container md-no-float class="md-block">
-             			<input  ng-model="description" placeholder="Description or Title">
-         			</md-input-container>
+				<div class="col-sm-12" ng-include="'/modules/jot/views/jot_desc.html'">
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-sm-12" ng-include="'/modules/jot/views/attachment_list.html'">
 				</div>
 				<div class="clearfix"></div>
 			</div>
 
 			<br>
-			<div class="clearfix mar-bot20 nowidth">
-					<div class="Selectdep_txt mar-bot10">Upload Images:</div>
-					<ul class="uploadimage_list clearfix">
-	          <li ng-repeat="f in files" ng-hide="hideattachment"> 
-	              <div class="imgcon positionrel">
-	                 	 
-	                   <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'">
-	              </div>
-	              <span>{{f.name}} {{f.$errorParam}}</span>
-	          </li>
-	          
-	          <li> 
-
-              <div class="imgcon positionrel" ngf-select ="uploadFoundFiles($files, $invalidFiles)" multiple ng-model="file"   ngf-max-size="5MB" ngf-resize="{width: 246, height: 190}">
-                      <ng-md-icon icon="attach_file" style="fill: #000" size="45"></ng-md-icon>                       
-              </div>
-              <span>Add New Image</span>
-	          </li>
-	      	</ul> 
-	      	<span class="progress" ng-show="foundProgress >= 0">
-            	<div style="background: green;text-align: center;color: #fff; width:{{foundProgress}}%" ng-bind="foundProgress + '%'"></div>
-			</span> 
-      </div>	 
+				 
 			<div class="clearfix">
 				<div class="chane_pass_btn">
 					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
 				</div>				
 			</div>
-
-
-			<div class="result {{lstFoundResult.class}}" ng-if="lstFoundResult.status==2">    
-                <ul>
-                  <li ng-repeat="(key,value) in lstFoundResult.errors">
-                  {{value.message}}
-                  </li>
-                </ul>
-            </div>
 		</div>
+	</div>
+
+	<div class="top_tab_panel clearfix" style="margin-bottom: 10px;">		
+
+
+
+		<div class="all_option">
+			<ul class="all_option_list">
+				<li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
+					<a href="{{(board.id == 'lost_found')?'/dashboard/lost_found':(board.id == 'vending_machine')?'/dashboard/inventory':'/dashboard/hotelboard/'+board.id}}">
+						<span class="txtdrop">{{board.label}}</span>
+						<div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
+							<img src="{{board.data}}" ng-if="board.icontype == 'image'">
+						</div>
+					</a>
+				</li>				
+			</ul>
+		</div>
+		<br>
 	</div>
 
 
@@ -127,23 +123,26 @@
 		<div class="lost_iemslist">
 		 	<ul class="lost_iemslist_det">
 		 		<li ng-repeat="item in LstFndList" ng-hide="hidelist">
+
+
 		 			<div class="lost_image_top">
 
 			 			<div class="lost_image positionrel">
-			 				<img src="{{(item.image[0])?'/images/hotel/'+item.hotel_id+'/lost_found/'+ item.image[0] :'/assets/images/found_default.jpg' }}" class="width100">
+			 				<img src="{{ ((item.image | filter:{type:('image/jpeg' || 'image/png')})[0])? '/images/hotel/'+item.hotel_id+'/lost_found/'+ (item.image | filter:{type:('image/jpeg' || 'image/png')})[0].filename:'/assets/images/found_default.jpg' }}" class="width100">
+
 			 				<span class="highttag {{item.status}} capitalize" ng-if="item.status">{{item.status}}</span>
 
 			 				<span class="found_icon_btn">
-			                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditLostFound(item);">
+			                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditLostFound(item);"  title="Edit">
 						 		</ng-md-icon>
 
-			                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeList(item);hidelist = ! hidelist">
+			                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeList(item._id,$index)" ng-confirm-title="Delete Item" ng-confirm-delete="Are you sure you want to remove this item.">
 			                  	</ng-md-icon>
 		                  	</span>
 			 			</div>
 		 			</div>
 		 			<div class="lost_image_midle">
-		 				<div class="lost_hd">{{item.description}}</div>
+		 				<div class="lost_hd">{{item.title}}</div>
 		 				<ul>
 		 					<li><span>Date</span> {{item.date  | date: 'MMM d, y'}}</li>
 		 					<li><span>Place</span> {{item.place}}</li>

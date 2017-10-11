@@ -6,14 +6,21 @@ const
     _ 				= require('lodash'),
     uniqueValidator = require('mongoose-unique-validator'),
     config          = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
-    Schema          = mongoose.Schema;
+    Schema          = mongoose.Schema,
+    ObjectId    	= Schema.ObjectId;
 
 var LostFoundSchema 	= new Schema({
 	
-    description: {
+    
+	title: {
 	    type: String,
 	    trim: true,
-	    required:"Description/Title shoud not be blank."
+	    required:"Title should not be blank."
+	},
+	description: {
+	    type: String,
+	    trim: true,
+	    required:"Description  should not be blank."
 	},
 	image:{
 	    type: Array,
@@ -24,10 +31,8 @@ var LostFoundSchema 	= new Schema({
 	    trim: true,
 	},
 	hotel_id: {
-	    type: String,
-	    trim: true,
-	    default: false
-	},
+	    type: ObjectId,
+	  },
 	date: {
 	    type: Number,
 	},
@@ -57,6 +62,16 @@ var LostFoundSchema 	= new Schema({
         createdAt: 'created',
         updatedAt: 'updated'
     },
+});
+
+LostFoundSchema.pre('save', function(next) {
+    let lostfound = this;
+    if (this.isModified('hotel_id')  || this.isNew) {
+        lostfound.hotel_id   = mongoose.Types.ObjectId(lostfound.hotel_id);
+        next();
+    }else{
+      return next();
+    }
 });
 
 LostFoundSchema.set('autoIndex', config.db.autoIndex);

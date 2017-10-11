@@ -3,11 +3,17 @@
 app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$location','globalRequest','localStorageService',
 	function($scope,$rootScope,$routeParams,$location,globalRequest,localStorageService) {	
 
-		/*********   Get hotel setup wizard current hotel  ************/
+		$rootScope.newProcessingHotel   = localStorageService.get('processingHotel');
+		
+		/*********   Get hotel setup wizard current hotel  ************/		
+		
+		if($rootScope.currentUser.role != 'hotelowner')
+		{
+			$location.path('/dashboard');
+			return;
+		}
 
-		var hotelData   = localStorageService.get('processingHotel');
-
-		if(!hotelData)	
+		if(!$rootScope.newProcessingHotel)	
 		{			
 			/*********   Redirect if no hotel is in wizard  ************/
 
@@ -20,7 +26,7 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 			* Check hotel blank steps
 			***************************************************/
 
-			globalRequest.getHotelStatus(hotelData._id).then(function(response){
+			globalRequest.getHotelStatus($rootScope.newProcessingHotel._id).then(function(response){
 				
 				$rootScope.hotelStatus = response[0];
 

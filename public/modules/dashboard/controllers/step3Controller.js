@@ -1,9 +1,8 @@
 "use strict";
 
-app.controller('step3Controller', ['$scope','$routeParams','$location','localStorageService','globalRequest',
-	function($scope,$routeParams,$location,localStorageService,globalRequest) {	
+app.controller('step3Controller', ['$scope','$rootScope','$routeParams','$location','localStorageService','globalRequest','toastService',
+	function($scope,$rootScope,$routeParams,$location,localStorageService,globalRequest,toastService) {	
 
-		var processingHotel = localStorageService.get('processingHotel');
 
 		/************************************************
 		* Navigate on previous page
@@ -18,43 +17,77 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 		/************************************************************	
 		* Default department list
 		************************************************************/
-		if($scope.selectedDepartment.length > 0)
+		if($scope.selectedDepartment)
 		{
-			$scope.defaultDepartment = $scope.selectedDepartment;
+			if($scope.selectedDepartment.length > 0)
+			{
+				$scope.defaultDepartment = $scope.selectedDepartment;
+			} else {
+				$scope.defaultDepartment = window.__API_PATH.DEFAULT_DEPARTMENT;
+			}
+
 		} else {
 			$scope.defaultDepartment = window.__API_PATH.DEFAULT_DEPARTMENT;
-		}
+		}		
 		
 
-
-		/*****************************************************
-		* Append new blank field
-		*****************************************************/
-
-		$scope.blankFieldCount = [];		
-		$scope.addmore = function(){			
-			$scope.blankFieldCount.push({department_name:"",abbreviation:""});		
-		};
-
 		/************************************************
-		* Delte Last element
+		* Add new department into default list
 		*************************************************/
 
-		$scope.deleteDeptRow = function(dept,iterationList,ind){
+		$scope.addNewDepartment = function(){
 
-			$scope[iterationList].splice(ind, 1);
+			var errors = '<ul class="mdToast-error-list">';
+			var errorRestrict = false;
 
-			if(iterationList == 'defaultDepartment'){
-				delete $scope.step3Ctlr.department_name[dept.department_name]; 
-				delete $scope.step3Ctlr.abbreviation[dept.department_name]; 
+			/************** Check empty field  **************/
+
+			if(!$scope.new_department_name)
+			{
+				
+				errors += '<li>Department name is required.</li>';
+				errorRestrict = true;
 			}
 
-			if(iterationList == 'blankFieldCount'){
-				delete $scope.step3Ctlr.department_name[ind]; 
-				delete $scope.step3Ctlr.abbreviation[ind];
+			if(!$scope.new_abbreviation)
+			{
+				errors += '<li>Abbreviation is required.</li>';
+				errorRestrict = true;
 			}
 
-			 
+			/************** Check deplicate value  **************/
+
+			angular.forEach($scope.defaultDepartment,function(value,key){
+				if(value.department_name == $scope.new_department_name)
+				{
+					
+					errors += '<li>Department name already exists.</li>';
+					errorRestrict = true;
+				}
+
+				if(value.abbreviation == $scope.new_abbreviation)
+				{					
+					errors += '<li>Abbreviation already exists.</li>';
+					errorRestrict = true;
+				}
+			});
+
+			/************** Create array  **************/
+
+			if(!errorRestrict)
+			{
+				$scope.defaultDepartment.push({
+					department_name : $scope.new_department_name,
+					abbreviation : $scope.new_abbreviation,
+					checked:true
+				});
+				$scope.new_department_name = '';
+				$scope.new_abbreviation = '';
+			} else {
+				var popup = {"message":errors,"class":""};
+				toastService.errors(popup);
+			}
+
 		};
 
 
@@ -64,20 +97,15 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 
 		$scope.step3FormSubmit = function(){
 
-	
 			var removeKeyFromArray = [];
-			for (var key in $scope.step3Ctlr.department_name) {
-				
-				if($scope.step3Ctlr.department_name[key])
+			for (var key in $scope.step3Ctlr.department_select) {
+				if($scope.step3Ctlr.department_select[key])
 				{
-					removeKeyFromArray.push({
-						hotel_id        : processingHotel._id,
-						department_name : $scope.step3Ctlr.department_name[key],
-						abbreviation    : $scope.step3Ctlr.abbreviation[key]
-					});
+					$scope.step3Ctlr.department_select[key].hotel_id =  $rootScope.newProcessingHotel._id;
+					removeKeyFromArray.push($scope.step3Ctlr.department_select[key]);
 				}
 								
-			}	
+			}		
 	
 			$scope.departmentResult = {class:"",message:"",status:""};
 
@@ -86,7 +114,7 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 				$scope.message = ' ';		
 
 				 var hotelDataObj = {
-				 		hotel_id     	       : processingHotel._id,
+				 		hotel_id     	       : $rootScope.newProcessingHotel._id,
 				 		departments_list 	   : removeKeyFromArray	
 				};
 
@@ -106,10 +134,9 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 
 				});
 
-			} else {
-				$scope.departmentResult.class   = 'Autherror';
-				$scope.departmentResult.message = 'Please enter at least one department.';
-				$scope.departmentResult.status  = 1;
+			} else {				
+				var popup = {"message":"Please select at least one department.","class":""};
+				toastService.errors(popup);
 			}
 		};
 			

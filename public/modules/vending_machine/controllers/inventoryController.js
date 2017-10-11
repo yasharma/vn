@@ -1,9 +1,15 @@
 "use strict";
 
-app.controller('inventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','$route','toastService',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,$route,toastService) {
+app.controller('inventoryController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,toastService) {
 		
-		var hotel = localStorageService.get('hotel');
+		var hotel = $rootScope.activeHotelData;
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = hotel.jot_types;
 
 		/************************************
 		* Blank all field before open form
@@ -20,10 +26,6 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 			$scope.profileProgress = -1;
 		};
 
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.inverntoryResult = "";
-		};
 
 		/************************************
 		* Get item list
@@ -68,17 +70,70 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.inverntoryResult = response;
-			 	$scope.blank();
+			 	var popup;
+			 	
 			 	if(response.status == 1)
 			 	{
-			 		if(!$scope.inverntoryList)
-			 		{
-			 			$scope.inverntoryList = [];
-			 		}
+			 		var itemID = response.result._id;
+			 		
+			 		/****************************
+		            * Upload file if exists
+		            ****************************/
 
-			 		$scope.inverntoryList.push(response.result);
+		            if($scope.profile && $scope.profile.length > 0)
+		            {
+
+		            	globalRequest.uploadFiles(hotel._id,'inventory',$scope.profile).then(function(fileRasponse){
+		                    if(fileRasponse.status == 1)
+		                    {	                    	
+
+		                        var updateRequest={
+		                            url:window.__API_PATH.UPDATE_ITEM,
+		                            method:"PUT",
+		                            data:{  
+		                              _id  		     : itemID,
+		                              image   		 : fileRasponse.result[0].filename						  
+		                            }
+		                        };
+
+
+			                      /****************************
+			                      * Update files in lost found 
+			                      ****************************/
+
+			                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+			                        if(updateResponse.status == 1)
+			                        {
+			                            $scope.profile = '';
+			                            globalRequest.getVendingItems();
+			                            popup = {"message":response.message,"class":"success"};
+										toastService.alert(popup);
+										$scope.blank();
+			                        }
+
+			                      });  
+			                    }
+			                });
+
+				    } else {
+				    	$scope.profile = '';
+                        globalRequest.getVendingItems();
+                        popup = {"message":response.message,"class":"success"};
+						toastService.alert(popup);
+						$scope.blank();
+				    }
+
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
+
 			 });
 
 		};
@@ -88,32 +143,32 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 		*****************************************/	
 
 		$scope.openEditForm = function(detail){
-			console.log(detail);
-				$mdDialog.show({
-					controller: 'editInventoryController',
-					templateUrl: '/modules/vending_machine/views/edit_inventory.html',
-					parent: angular.element(document.body),
-					fullscreen: $scope.customFullscreen,
-					clickOutsideToClose:true,	
-					locals:{invDetail:{detail:detail,prevScope:$scope}}				
-				}).then(function(answer) {}, function() {});
+			
+			$mdDialog.show({
+				controller: 'editInventoryController',
+				templateUrl: '/modules/vending_machine/views/edit_inventory.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{invDetail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
 
-			};
+		};
 
 
 		/*****************************************
 		* Delete Item
 		*****************************************/	
 
-		$scope.removeItem = function(detail){
+		$scope.removeItem = function(detail,index){
 			var request={
 				url:window.__API_PATH.DELETE_ITEM,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				$scope.inverntoryList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
@@ -126,33 +181,6 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 
 		$scope.uploadprofileImage = function(files, errFiles) {
 			$scope.profile = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'inventory',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   console.log(response);
-	                   $scope.profileimages = response.data.result[0].filename;
-	                   
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.profileProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
-
 	    };
 
 	

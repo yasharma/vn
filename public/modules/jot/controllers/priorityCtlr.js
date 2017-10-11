@@ -1,6 +1,6 @@
 "use strict";
 
-app.controller('priorityCtlr', ['$scope','$rootScope','$mdDialog',
+app.controller('priorityCtlr', ['$scope','$rootScope',
 	function($scope,$rootScope) {
 
 		/*

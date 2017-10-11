@@ -1,8 +1,8 @@
 "use strict";
 
-app.controller('moveDcController', ['$scope','$rootScope','localStorageService','globalRequest','Detail','$mdDialog','Upload','$timeout','toastService',
-	function($scope,$rootScope,localStorageService,globalRequest,Detail,$mdDialog,Upload,$timeout,toastService) {
-		var hotel = localStorageService.get('hotel');
+app.controller('moveDcController', ['$scope','$rootScope','globalRequest','Detail','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,Detail,$mdDialog,toastService) {
+		var hotel = $rootScope.activeHotelData;
 
 		/***********************************************
 		* Pass edited employee value in current scope

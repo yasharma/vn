@@ -1,0 +1,37 @@
+<md-dialog class="login_dialog" aria-label="invitation">
+    <md-dialog-content>
+    <form name="inviteSighInForm" ng-submit="inviteSignINUser(inviteSighInForm.$valid)" novalidate>
+      <div class="md-dialog-content login_content invite_content">
+      	<div class="rightlogin ">
+        	<div class="loginHd">Login</div>
+            <div class="form">
+
+                <md-input-container class="md-block">
+                  <label>Mobile Number / Email Address </label>
+                  <input required name="invite_login" data-ng-model="invite_login" ng-required="true">
+                  <ng-md-icon icon="person" class="login_icon" style="fill:gray" size="20"></ng-md-icon>           
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>Password</label>
+                    <input required type="password" name="invite_signinpassword" data-ng-model="invite_signinpassword" ng-required="true">
+                    <ng-md-icon icon="lock" class="login_icon" style="fill:gray" size="20"></ng-md-icon>
+                </md-input-container>           
+                <div class="md-block"> 
+                  <md-button type="submit" class="md-primary getloginbtn" aria-label="signup" >Login</md-button>
+                </div>  
+            </div>         
+
+            <div class="result {{registerResult.class}}" ng-if="registerResult.status==2">    
+                <ul>
+                  <li ng-repeat="(key,value) in registerResult.errors">
+                  {{value.message}}
+                  </li>
+                </ul>
+            </div> 
+            <div class="result {{loginresult.class}}">{{loginresult.message}}  </div> 
+        </div>       	
+      </div>
+       </form>
+    </md-dialog-content> 
+</md-dialog>
+

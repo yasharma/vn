@@ -1,19 +1,18 @@
 <div class="dash-main-con">
 
-<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
 
-	<div class="dash_hd_txt mar-bot20 clearfix">
-		<div class="dash_hd mar-bot0 dash_hd-left">Inventory</div>
+	<div class="dash_hd_txt mar-bot10 clearfix" style="margin-bottom: 20px;">
+		<div class="dash_hd mar-bot0 rightfilter_left">Inventory</div>	
 		<div class="rightfilter_right">
-			<div class="chane_pass_btn_right">
-				<!-- <md-button ng-click="invForm = !invForm; blankFields();" ng-class="{activebtn:invForm}" class="md-primary addyellobtn yellowbtn widthauto">					
-				{{(invForm)?"Close":"Add items"}}
-				</md-button> -->
-				<md-button  slide-toggle="#inv" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+			<div class="chane_pass_btn_right">			
+				<md-button  slide-toggle="#inv"  ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
 				{{(invForm)?"Close":"Add items"}}
 				</md-button>
 			</div>
-	    </div>    
+			</div>
+	
+		    
 	</div>
 
 <!-- ng-show="invForm" -->
@@ -22,27 +21,27 @@
 		<form name="addItemform" ng-submit="addItem(addItemform.$valid)" novalidate>
 			<div class="row">
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
-				            <input  ng-model="item_name" placeholder="Item">
+					<md-input-container  class="md-block">
+				            <input  ng-model="item_name" placeholder="Item" ng-required="true">
 				    </md-input-container>
 				</div>
 				<div class="col-sm-4">
 					
 			              
-			              <md-input-container md-no-float class="md-block">
+			              <md-input-container  class="md-block">
 				            <input type="number" min="0"  ng-model="quantity" placeholder="Quantity">
 				    </md-input-container>
           			
 				</div>
 	
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container  class="md-block">
 				            <input  type="number" min="0" ng-model="price" placeholder="Price">
 				    </md-input-container>
 				</div>
 				<div class="col-sm-8" class="md-block">
-					<md-input-container md-no-float class="md-block">
-				    <md-select ng-model="category" placeholder="Select Category">
+					<md-input-container md-no-float  class="md-block">
+				    <md-select md-no-float ng-model="category" placeholder="Select Category">
 			                <md-option ng-repeat="invCat in inventCatList" value="{{invCat.inventory_category_name}}">
 			                  {{invCat.inventory_category_name}}
 			                </md-option>			                
@@ -51,7 +50,7 @@
 				</div>	
 
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container  class="md-block">
 				            <input  ng-model="sku_code" placeholder="Sku Code">
 				    </md-input-container>
 				</div>
@@ -68,7 +67,7 @@
 							Change your item photo
 						</span>
 					</div>
-					<input type="file" ngf-select ="uploadprofileImage($files, $invalidFiles)" ngf-resize="{width: 90, height: 90}" ng-model="profile_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
+					<input type="file" ngf-accept="'image/*'" ngf-select ="uploadprofileImage($files, $invalidFiles)" ngf-resize="{width: 90, height: 90}" ng-model="profile_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
 				</div>				
 				<span class="progress" ng-show="profileProgress >= 0">
 				     <div style="background: green;text-align: center;color: #fff; width:{{profileProgress}}%" ng-bind="profileProgress + '%'"></div>
@@ -98,7 +97,23 @@
 	</div>
 
 
+<div class="top_tab_panel clearfix" style="margin-bottom: 10px;">
 
+
+		<div class="all_option">
+			<ul class="all_option_list">
+				<li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
+					<a href="{{(board.id == 'lost_found')?'/dashboard/lost_found':(board.id == 'vending_machine')?'/dashboard/inventory':'/dashboard/hotelboard/'+board.id}}">
+						<span class="txtdrop">{{board.label}}</span>
+						<div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
+							<img src="{{board.data}}" ng-if="board.icontype == 'image'">
+						</div>
+					</a>
+				</li>				
+			</ul>
+		</div>
+		<br>
+	</div>
 
 
 
@@ -107,27 +122,36 @@
 	<div class="clearfix depart_midle">
 		<div class="deptsrch deptsrch_gray">
 			<div class="deptsrch_gray_top mar-bot0 clearfix">
-			<div class="positionrel inventory_filter_top">
-				<div class="vending_left_top_serch positionrel">
-					<md-input-container md-no-float class="md-block">
-			      <input  ng-model="search_item_name" placeholder="Search item" autocomplete="off">
-			  	</md-input-container>
-			  	
-				</div>
+				<div class="positionrel inventory_filter_top">
+					<div class="row ">
+						<div class="col-sm-8">
+							<div class="vending_left_top_serch positionrel">
+								<md-input-container  class="md-block">
+						      <input  ng-model="search_item_name" placeholder="Search item" autocomplete="off">
+						  	</md-input-container>
+						  	
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div class="selectwhite">
+					          <md-input-container md-no-float class="md-block selectgeneral48">
+					              <md-select md-no-float ng-model="search_category" placeholder="Select Category">
+					             			 <md-option value="">
+							                  Select Category
+							                </md-option>
+							                <md-option ng-repeat="invCat in inventCatList" value="{{invCat.inventory_category_name}}">
+							                  {{invCat.inventory_category_name}}
+							                </md-option>			                
+							              </md-select>
+					          </md-input-container>
+							</div>
+						</div>
 
-				<div class="selectwhite inventory_filter">
-	          <md-input-container md-no-float class="md-block selectgeneral38">
-	              <md-select ng-model="search_category" placeholder="Select Category">
-	             			 <md-option value="">
-			                  Select Category
-			                </md-option>
-			                <md-option ng-repeat="invCat in inventCatList" value="{{invCat.inventory_category_name}}">
-			                  {{invCat.inventory_category_name}}
-			                </md-option>			                
-			              </md-select>
-	          </md-input-container>
-  				</div>
-			</div>
+						<div class="col-sm-1" style=" padding:10px 10px 0 5px;text-align:right; cursor: pointer;" ng-click="search_category = search_item_name  = ''" title="Reset filters">
+							<img src="assets/images/reset_filter.png" style="width: 30px;">
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="addmember_data_table">
@@ -135,8 +159,8 @@
         <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table">
           <thead>
               <tr>
-                  <th width="10%">#</th>
-                  <th width="15%">Item Name</th>
+                  <th width="3%">#</th>
+                  <th width="22%">Item Name</th>
                   <th width="15%">Category</th>
                   <th width="15%">Sku Code</th>
                   <th width="15%">Available</th>
@@ -149,7 +173,7 @@
               <tr  ng-repeat="invent in filteredInvent = 
               (inverntoryList | filter:{item_name:search_item_name}| 
               filter:(!!search_category || undefined) &&{category: search_category}: true) 
-              track by $index" ng-hide="hideItem">
+              track by $index">
                   <td>{{$index+1}}</td>
                   <td>
                     <span class="invent_img">
@@ -163,9 +187,9 @@
                   <td><span class="tablebluetag">{{invent.updated | date : 'dd MMM, yyyy h:m a'}}</span></td>
                   <td>{{(invent.price)?invent.price:0 | currency}}</td>
                   <td>
-                  	<!-- <ng-md-icon class="cursor tablegreentag" icon="remove_red_eye" class="cursor"  size="22"></ng-md-icon> -->
-                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(invent)"></ng-md-icon>
-                  	<ng-md-icon class="cursor closr_icon tableredtag" ng-click="removeItem(invent);hideItem = ! hideItem" icon="close" class="cursor"  size="22"></ng-md-icon>
+   
+                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(invent)"  title="Edit"></ng-md-icon>
+                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22"  title="Delete" confirmed-click="removeItem(invent._id,$index)" ng-confirm-title="Delete Item" ng-confirm-delete="Are you sure you want to remove this item."></ng-md-icon>
                   </td>
               </tr>              
           </tbody>

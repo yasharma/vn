@@ -5,6 +5,8 @@ const    express            =   require('express'),
          path               =   require('path'),
          mongoose           =   require('mongoose'),
          bodyParser         =   require('body-parser'),
+         _                  =   require('lodash'),
+         async              =   require('async'),
          Vending            =   require(path.resolve('models/Vending')),
          Category           =   require(path.resolve('models/Category')),
          Cart               =   require(path.resolve('models/Cart')),
@@ -20,13 +22,18 @@ const    express            =   require('express'),
 exports.addItem = (reqst, respe) => {
 
     var Vendingsave       = new Vending(reqst.body);
-    Vendingsave.save(function (err, result) {
-        if(result){
-            return respe.json(response.success(result,'Item has been Added Successfully.'));
-        }else{
-            return respe.json(response.errors(err.errors,'Error in item Saved.'));
-        }
-    });
+    if(reqst.body){
+        Vendingsave.save(function (err, result) {
+            if(result){
+                return respe.json(response.success(result,'Item has been Added Successfully.'));
+            }else{
+                return respe.json(response.errors(err.errors,'Error in item Saved.'));
+            }
+        });
+    }else{
+        var errors =    { _id: {'message':'Item data is required.'}}
+        return respe.json(response.errors(errors,"Error in Item data."));
+    }
 };
 
 /***************************************************
@@ -50,6 +57,7 @@ exports.updateItem = (reqst, respe) => {
         });
     }
 };
+
 
 /***************************************************
 ****** Function to Delete Existing Vending *******
@@ -101,15 +109,44 @@ exports.listItem = (reqst, respe) => {
 
 exports.addCart = (reqst, respe) => {
    
-    var Cartsave       = new Cart(reqst.body);
-    Cartsave.save(function (err, result) {
-        if(result){
-            return respe.json(response.success(result,'Item has been sold.'));
-        }else{
-            return respe.json(response.errors(err.errors,'Something went wrong.'));
-        }
-    });
+    if(!_.isEmpty(reqst.body)){
+
+        async.waterfall([
+            
+                function updateVending(callback) {
+                        
+                    var vendingdata                 =       reqst.body.items;
+                    _.forEach(vendingdata,  function(inventory) {
+                        let updatedQty              = parseInt(inventory.quantity) - parseInt(inventory.editquantity);
+                        let itemId                  = inventory._id;
+                        Vending.update({_id: ObjectId(itemId)},{$set:{quantity: updatedQty}}, function(){});  
+                        
+                    });
+                    callback(null, reqst.body);
+                },
+                function saveCart(documentdata, callback) {
+
+                        var Cartsave       = new Cart(documentdata);
+                        Cartsave.save(function (err, result) {
+                            if(result){
+                                 callback(null,result);
+                            }else{
+                                callback(err.errors,null);
+                            }
+                        });
+                }], function (err, result) {
+                if(err){
+                    var errors =    { _id: {'message':'Error in Cart save.'}}
+                    return respe.json(response.errors(errors,"Error in Cart save."));
+                }
+                return respe.json(response.success(result, 'Cart data has been saved successfully.')); 
+            });
+    }else{
+        var errors =    { _id: {'message':'Cart data is required.'}}
+        return respe.json(response.errors(errors,"Cart data is required."));
+    }
 };
+
 
 /************************************************
 *** Function to add new Vending category ********
@@ -117,14 +154,21 @@ exports.addCart = (reqst, respe) => {
    
 exports.addCategory = (reqst, respe) => {
 
-    var Categorysave       = new Category(reqst.body);
-    Categorysave.save(function (err, result) {
-        if(result){
-            return respe.json(response.success(result,'Category has been Added Successfully.'));
-        }else{
-            return respe.json(response.errors(err.errors,'Error in category Saved.'));
-        }
-    });
+    if(!_.isEmpty(reqst.body)){
+
+        var Categorysave       = new Category(reqst.body);
+
+        Categorysave.save(function (err, result) {
+            if(result){
+                return respe.json(response.success(result,'Category has been Added Successfully.'));
+            }else{
+                return respe.json(response.errors(err.errors,'Error in category Saved.'));
+            }
+        });
+    }else{
+        var errors =    { _id: {'message':'Category data is required.'}}
+        return respe.json(response.errors(errors,"Error in Category data."));
+    }
 };
 
 /**********************************************************
@@ -138,7 +182,7 @@ exports.updateCategory = (reqst, respe) => {
         var errors =    { _id: {'message':'Category id is required.'}}
         return respe.json(response.errors(errors,"Error in Category data."));
     }else{
-        Category.findByIdAndUpdate(category_id,{$set:reqst.body}, {new: true, runValidators: true}, function(err, result) {
+        Category.findByIdAndUpdate(category_id,{$set:reqst.body},{new: true,runValidators:true},function(err, result) {
             if(result){
               return respe.json(response.success(result,'Category Updated successfully.'));
             }else{
@@ -180,7 +224,7 @@ exports.listCategory = (reqst, respe) => {
         var errors =    { hotel_id: {'message':'Hotel id is required.'}}
         return respe.json(response.errors(errors,"Error in Hotel data."));
     }else{
-        Category.find({hotel_id: hotel_id}, function (err, result) {
+        Category.find({hotel_id: ObjectId(hotel_id)}, function (err, result) {
             if(result){
                 return respe.json(response.success(result,'Data Found.'));
             }else{

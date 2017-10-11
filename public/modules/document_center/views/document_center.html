@@ -1,5 +1,5 @@
 <div class="dash-main-con">
-	<section class="dashrightsection" ng-class="{'leftopen':$root.leftopen}">
+	<section class="dashrightsection aligninput" ng-class="{'leftopen':$root.leftopen}">
 	
 	<div class="dash_hd_txt mar-bot20 clearfix">
 		<div class="dash_hd mar-bot0 dash_hd-left">Document Center</div>
@@ -21,17 +21,16 @@
 				<div class="row mar-bot20">
 
 					<div class="col-sm-6">
-						<md-input-container md-no-float class="md-block">
-					    <input  ng-model="document_name" placeholder="Document Name">
+						<md-input-container  class="md-block">
+					    <input  ng-model="document_name" placeholder="Document Name"  ng-required="true">
 					  </md-input-container>
 					</div>
 
 					<div class="col-sm-6">
-						<div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+						<div class="clearfix newhotel_dialog_form_top" ng-include="'/modules/jot/views/department.html'"></div>
 					</div>
 
-					<div class="col-sm-6">						
-					    
+					<div class="col-sm-6">	
 					    <md-chips ng-model="ctrl.itemTagModel" name="itemTag" readonly="ctrl.readonly"
 	                    md-removable="ctrl.removable" placeholder="Enter #Tag for Document" class="tag_name">
 	                    <md-chip-template>
@@ -42,7 +41,7 @@
 					</div>
 
 					<div class="col-sm-6">
-						<md-input-container md-no-float class="md-block">
+						<md-input-container  class="md-block">
 					    <textarea ng-model="document_description" placeholder="Description"></textarea>
 					  </md-input-container>
 					</div>
@@ -61,15 +60,41 @@
 							
 						</div>
 
-						<ul class="uploadimage_list clearfix">
+						<!-- <ul class="uploadimage_list clearfix">
 						    <li ng-repeat="f in files" ng-hide="hideattachment"> 
 						        {{f.name}}                  
 						    </li>               
-						</ul> 
-						<span class="progress" ng-show="documentProgress >= 0">
+						</ul> --> 
+						<!-- <span class="progress" ng-show="documentProgress >= 0">
 						    <div style="background: green;text-align: center;color: #fff; width:{{documentProgress}}%" ng-bind="documentProgress + '%'"></div>
-						</span>
+						</span> -->
 					</div>
+						<br>
+						<div class="clearfix"></div>
+						<ul class="uploadimage_list_edit col-sm-12 mar-top20 clearfix">
+						    <li  ng-repeat="f in fileData"> 
+						        <div class="uploadimage_list_edit_img" style="height:100%" ng-switch="f.type">
+						            <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" style="max-width:100%" ng-switch-when="image/jpeg">
+
+						             <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" style="max-width:100%" ng-switch-when="image/png">
+
+						            <ng-md-icon style="fill:#2aaae0" ng-switch-when="application/pdf" class="cursor" icon="picture_as_pdf" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+		                  			</ng-md-icon>
+
+		                  			<ng-md-icon ng-switch-default style="fill:#2aaae0" class="cursor" icon="insert_drive_file" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+		                  			</ng-md-icon>
+						        </div>
+
+
+						        <div class="uploadimage_list_edit_itxt">
+						        	<strong>{{f.name}} {{f.$errorParam}}</strong>
+						        	<div class="attachment_list_icon">
+						                <a href="javaScript:void(0)" ng-click="deleteAttachment(f.$$hashKey);">Delete</a>
+						        	</div>
+						        </div>
+						        <div class="clearfix"></div>                     
+						    </li> 
+						</ul>
 					
 					
 				</div>
@@ -78,17 +103,7 @@
 						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
 					</div>					
 				</div>
-
-				<div class="message {{documentResult.class}}" ng-if="documentResult.status == 1">{{documentResult.message}}
-				</div>
-
-				<div class="result {{documentResult.class}}" ng-if="documentResult.status==2">    
-	                <ul>
-	                  <li ng-repeat="(key,value) in documentResult.errors">
-	                  {{value.message}}
-	                  </li>
-	                </ul>
-	            </div>
+			
 			</form>
 		</div>
 	</div>
@@ -97,24 +112,35 @@
 		<div class="deptsrch">
 			<div class="deptsrch_gray_top mar-bot0 clearfix">
 				<div class="positionrel inventory_filter_top">
+				<div class="row ">
+				<div class="col-sm-8">
 					<div class="vending_left_top_serch positionrel">
-						<md-input-container md-no-float class="md-block">
+						<md-input-container  class="md-block">
 				      <input  ng-model="searchDCName" autocomplete="off" placeholder="Search by document name">
 				  	</md-input-container>
 				  	
 					</div>
-					<div class="selectwhite inventory_filter">
-		          <md-input-container md-no-float class="md-block selectgeneral38">
-		              <md-select ng-model="searchDepartment" placeholder="Filter">
-		                <md-option value="">
-		                  Select
-		                </md-option>
-		                <md-option ng-repeat="dept in departmentList" value="{{dept.department_name}}">
-                            				{{dept.department_name}}
-                        </md-option>
-		              </md-select>          
-		          </md-input-container>
+					</div>
+					<div class="col-sm-3">
+					<div class="selectwhite">
+			          <md-input-container md-no-float class="md-block selectgeneral48">
+			              <md-select ng-model="searchDepartment" placeholder="Filter">
+			                <md-option value="">
+			                  Select
+			                </md-option>
+			                <md-option ng-repeat="dept in departmentList" value="{{dept.abbreviation}}">
+	                            				{{dept.department_name}}
+	                        </md-option>
+			              </md-select>          
+			          </md-input-container>
+		  			</div>
 	  			</div>
+
+	  			<div class="col-sm-1" style=" padding:10px 10px 0 5px;text-align:right; cursor: pointer;" ng-click="searchDepartment = searchDCName  = ''" title="Reset filters">
+							<img src="assets/images/reset_filter.png" style="width: 30px;">
+						</div>	
+
+				</div>
 				</div>
 			</div>
 		</div>
@@ -127,22 +153,34 @@
 						<span class="capitalize">
 						<ng-md-icon class="cursor" icon="insert_drive_file" style="fill: #a3a3a3" size="24"></ng-md-icon> 
 						 {{docs.document_name}}
-						 <label>- {{docs.filesize | bytes}}</label></span>
+						 <label ng-show="docs.filesize">- {{docs.filesize | bytes}}</label></span>
 
 						<span> 
-						<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openDocumentEditPopup(docs);">
+						<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openDocumentEditPopup(docs);" title="Edit">
 				 		</ng-md-icon>
 
-						<ng-md-icon ng-click="openDocumentFileView(docs)" class="cursor" icon="more_horiz" style="fill: #313942" size="24"></ng-md-icon> 
+						<ng-md-icon ng-click="openDocumentFileView(docs)" class="cursor edit_icon tablebluetag" icon="file_download" style="fill: #4ebdf6" size="20" title="View Files"></ng-md-icon> 
 
-						<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeDc(docs);hideDc = !hideDc">
+						<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeDc(docs._id,$index)" ng-confirm-title="Delete Document" ng-confirm-delete="Are you sure you want to remove this document.">
 	                  	</ng-md-icon>
 
 						</span>
 					</div>
 					<div class="doc_center_col_mid">
-						<p>{{docs.document_description}}</p>
-						<ul class="taginglist clearfix">
+
+					
+
+						<p title="{{docs.document_description}}" ng-if="docs.document_description.length">
+
+			 				{{ docs.document_description | limitTo: 80 }}
+			 				<a href="javaScript:void(0)" title="{{docs.document_description}}" ng-if="docs.document_description.length > 80" style="color: #4ebdf6;"> ...view more</a>
+			 			</p>
+
+		 				<p ng-if="!docs.document_description.length" style="height: 33px;">
+		 					Description is missing write short description for this document.
+		 				</p>
+
+						<ul class="taginglist clearfix" style="margin-left: 0px;">
 							<li ng-repeat="tag in docs.tags" style="background: #4ebdf6">
 									{{tag}}
 							</li>

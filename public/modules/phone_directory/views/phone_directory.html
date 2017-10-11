@@ -1,11 +1,11 @@
 <div class="dash-main-con">
-	<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+	<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
 		
 		<div class="dash_hd_txt mar-bot20 clearfix">
 			<div class="dash_hd mar-bot0 dash_hd-left">Add Contact</div>
 			<div class="rightfilter_right">
 				<div class="chane_pass_btn_right">					
-			     <md-button  slide-toggle="#ContactNum" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">				
+			     <md-button  slide-toggle="#ContactNum" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">				
 					{{(invForm)?"Close":"Add Contact"}}
 				</md-button>
 				</div>
@@ -18,22 +18,22 @@
 			<div class="dash_pro_inform_inner boxunoversal">
 				<div class="row mar-bot20">
 					<div class="col-sm-3">
-						<md-input-container md-no-float class="md-block">
-					    <input  ng-model = "first_name" placeholder="First Name">
+						<md-input-container  class="md-block">
+					    <input  ng-model = "first_name" placeholder="First Name"  ng-required="true">
 					  </md-input-container>
 					</div>
 					<div class="col-sm-3">
-						<md-input-container md-no-float class="md-block">
-					    <input  ng-model="last_name" placeholder="Last Name">
+						<md-input-container  class="md-block">
+					    <input  ng-model="last_name" placeholder="Last Name"  ng-required="true">
 					  </md-input-container>
 					</div>
 					<div class="col-sm-3">
-						<md-input-container md-no-float class="md-block">
-					    <input  ng-model="contact" type="tel" placeholder="Contact Number">
+						<md-input-container  class="md-block">
+					    <input  ng-model="contact" type="tel" placeholder="Contact Number"  ng-required="true">
 					  </md-input-container>
 					</div>					
 					<div class="col-sm-3">
-						<md-input-container md-no-float class="md-block">
+						<md-input-container  class="md-block">
 					    <input  ng-model="email" type="email" placeholder="Email Address">
 					  </md-input-container>
 					</div>
@@ -52,18 +52,7 @@
 						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
 					</div>					
 				</div>
-
-
-				<div class="message {{ContactResult.class}}" ng-if="ContactResult.status == 1">{{ContactResult.message}}
-				</div>
-
-				<div class="result {{ContactResult.class}}" ng-if="ContactResult.status==2">    
-	                <ul>
-	                  <li ng-repeat="(key,value) in ContactResult.errors">
-	                  {{value.message}}
-	                  </li>
-	                </ul>
-	            </div>
+				
 			</div>
 			</form>
 		</div>
@@ -72,28 +61,37 @@
 			<div class="deptsrch">
 				<div class="deptsrch_gray_top mar-bot0 clearfix">
 					<div class="positionrel inventory_filter_top">
+					<div class="row ">
+					<div class="col-sm-8">
 						<div class="vending_left_top_serch positionrel">
-							<md-input-container md-no-float class="md-block">
+							<md-input-container  class="md-block">
 					      <input  ng-model="searchcontact" placeholder="Search contact by name" autocomplete="off">
 					  	</md-input-container>
 					  	
 						</div>	
-
-						<div class="selectwhite inventory_filter">
-				          <md-input-container md-no-float class="md-block selectgeneral38">
+						</div>
+						<div class="col-sm-3">
+						<div class="selectwhite">
+				          <md-input-container md-no-float class="md-block selectgeneral48">
 				              <md-select ng-model="searchFavorite" placeholder="Filter">
 				                <md-option value="">
 				                  All
 				                </md-option>
 				                <md-option value="yes">
 				                  Favorite
-				                </md-option>
-				               <!--  <md-option value="no">
-				                  Non-Favorite
-				                </md-option> -->
+				                </md-option>				               
 				              </md-select>          
 				          </md-input-container>
-			  			</div>					
+			  			</div>	
+			  			</div>
+
+
+
+			  			<div class="col-sm-1" style=" padding:10px 10px 0 5px;text-align:right; cursor: pointer;" ng-click="searchFavorite = searchcontact  = ''" title="Reset filters">
+							<img src="assets/images/reset_filter.png" style="width: 30px;">
+						</div>
+			  			</div>
+
 					</div>
 				</div>
 			</div>
@@ -110,11 +108,11 @@
 							</span>
 
 							<span> 
-								<ng-md-icon class="cursor"  style="fill:#ff651a" icon="{{(contList.favorite == 'yes' )?'favorite':'favorite_border'}}" size="22" ng-click="makeFavorite(contList);"></ng-md-icon>
+								<ng-md-icon class="cursor"  style="fill:#ff651a" icon="{{(contList.favorite == 'yes' )?'favorite':'favorite_border'}}" size="22" ng-click="makeFavorite(contList);"  title="{{(contList.favorite == 'yes' )?'Remove from favourite list':'Add to favourite list'}}"></ng-md-icon>
 
-								 <ng-md-icon class="cursor" icon="mode_edit" style="fill: #4d4d4d" size="21" ng-click="openEditContact(contList);"></ng-md-icon>  
+								 <ng-md-icon class="cursor" icon="mode_edit" style="fill: #4d4d4d" size="21" ng-click="openEditContact(contList);"  title="Edit"></ng-md-icon>  
 
-								 <ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeContact(contList);hidecontact = ! hidecontact"></ng-md-icon>
+								 <ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22"  title="Delete" confirmed-click="removeContact(contList._id,$index)" ng-confirm-title="Delete Contact" ng-confirm-delete="Are you sure you want to remove this contact."></ng-md-icon>
 							 </span>
 						</div>
 
@@ -127,7 +125,7 @@
 								<ng-md-icon ng-if="contList.email" class="" icon="email" size="18"></ng-md-icon>  {{contList.email}}
 							</div>
 						
-							<ul class="taginglist clearfix" ng-if="contList.tags.length">
+							<ul class="taginglist clearfix" ng-if="contList.tags.length"  style="margin-left: 0px;">
 								<li ng-repeat="tag in contList.tags" style="background: #4ebdf6">
 									{{tag}}
 								</li>

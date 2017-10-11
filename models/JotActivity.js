@@ -17,7 +17,7 @@ var JotActivity  = new Schema({
   },
   message: {
     type: String,
-    required: 'Activity message is required.',
+    /*required: 'Activity message is required.',*/
   },
   attachment: {
     type: Array,

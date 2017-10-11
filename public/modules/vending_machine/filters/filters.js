@@ -5,16 +5,12 @@ app.filter('productfilter',function(){
 
 		if(input)
 		{
-			/*var minPrice 		= scope.slider.minValue;
-			var maxPrice 		= scope.slider.maxValue;*/
 			var searchItemName  = scope.searchItemName;
 			var itemCategory 	= scope.itemCategory;
 
 			
 			input   =   input.filter(function( obj ) {
-						/*if(obj.price >= minPrice && obj.price <= maxPrice)
-						{*/
-
+					
 							if(!searchItemName && !itemCategory)
 							{
 								return true;
@@ -44,7 +40,6 @@ app.filter('productfilter',function(){
 							       return true;
 							    }
 							}
-						/*}*/
 					});
 		}
 		return input;

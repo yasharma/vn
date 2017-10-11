@@ -1,9 +1,21 @@
 "use strict";
 
-app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','$route','globalRequest',
-	function($scope,localStorageService,$rootScope,$mdDialog,$route,globalRequest) {	
+app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','$window','globalRequest','$timeout','$location',
+	function($scope,localStorageService,$rootScope,$mdDialog,$window,globalRequest,$timeout,$location) {	
 
-		$rootScope.userData  = localStorageService.get('user');
+	
+		
+		/*******************************************************
+		* Callback function to close jot circle on outside click
+		*******************************************************/
+
+		$scope.circleToggle = function(){			
+				$scope.logocircle = false;
+				$timeout(function() {				
+				   $rootScope.$apply();
+				});								
+		};
+
 		/*
 		* Jot form tab list
 		*/
@@ -11,18 +23,18 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
 
 
-		/**********************************************************
-	    * Get active hotel data
-	    **********************************************************/
-
-		$scope.activeHotelData   = localStorageService.get('hotel');
+			
 
 
-		/************************************************
-		* Get list of Jot types selected by current user
-		*************************************************/
+	    if($rootScope.activeHotelData)
+	    {
 
-		$rootScope.boards = $scope.activeHotelData.jot_types;
+			/************************************************
+			* Get list of Jot types selected by current user
+			*************************************************/
+
+			$scope.boards =  $rootScope.activeHotelData.jot_types;
+		}
 
 		/*
 		*
@@ -39,12 +51,13 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		* Set hotel id in local storage and redirect to jot related to selected hotel
 		*
 		*/
-		$scope.hotel = localStorageService.get('hotel');
+		
+
 		$scope.changeJotView = function(hotel){				
 			globalRequest.getJotCount();
 			localStorageService.set('hotel', hotel);
-			$scope.hotel = localStorageService.get('hotel');
-			$route.reload();
+			$rootScope.activeHotelData = localStorageService.get('hotel');
+			$window.location.reload();
 			
 		};
 
@@ -75,15 +88,16 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		**************************************/
 
 		$rootScope.openFormByType = function(formType){
-			
+			$scope.circleToggle();
 			$mdDialog.show({
 				controller: 'jotPopupCtrl',
 				templateUrl: '/modules/jot/views/jot-form.html',
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,				
 				locals: {ActivateTab:formType}
-			}).then(function(answer) {}, function() {});
-
+			}).then(function(answer) {}, function() {
+				
+			});
 		};
 
 

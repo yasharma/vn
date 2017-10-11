@@ -1,10 +1,12 @@
+<div class="newhotel_dialog_form pad15">
  <div class="EditMode" ng-controller="dueDataCtlr">
-    <md-input-container md-no-float class="md-block">
+    <md-input-container md-no-float class="md-block date">
         <label>Set Due Date</label>        
 
         <input ng-model="$root.due_date" string-to-timestamp  datetime-picker hour="23" minute='59' style="padding-left: 22px;width: 100%;"/>
-        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20"></ng-md-icon>
+        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20" class="calendr_icon" ></ng-md-icon>
     </md-input-container>     
 
+</div>
 </div>
 

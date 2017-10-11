@@ -1,4 +1,4 @@
-<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
 
 
 
@@ -18,62 +18,75 @@
 
 
 	<div class="dash_pro_inform transformable slideable" id="makeshift">
-		<form name="addshiftform" ng-submit="addshift(addshiftform.$valid)" novalidate>
-			<div class="clearfix">
-				<!-- <div class="dash_pro_inform_hd">Add Department</div> -->
-			</div>
+		<form name="addshiftform" ng-submit="addshift(addshiftform.$valid)" novalidate ng-init="start_time={hour:'',minute:'',meridiem:''}; end_time={hour:'',minute:'',meridiem:''}">
+			
 			<div class="dash_pro_inform_inner boxunoversal">
-				<div class="row">
+				<div class="row aligninput">
 
 					<div class="col-sm-6">
 						<div class="col-sm-12">
-							<md-input-container md-no-float class="md-block">
+							<md-input-container class="md-block">
 								<input  ng-model="shift_name" placeholder="Shift Name for example: (Day/Night)" ng-required="true">
 							</md-input-container>
 						</div>
 						<div class="col-sm-8">
-							<md-input-container md-no-float class="md-block selectgeneral38">
-								<md-select ng-model="department_name" placeholder="Department">
-									<md-option value="">
+							
+
+							<md-input-container md-no-float class="md-block">
+								 <md-select ng-model="department_name" placeholder="Department" style="padding:0">
+		                          <md-option value="">
 										Select Department
 									</md-option>
 									<md-option ng-repeat="dept in departmentList" value="{{dept.department_name}}">
 										{{dept.department_name}}
-									</md-option>
-								</md-select>
+									</md-option>                     
+		                        </md-select>
 							</md-input-container>
+
+
+
 						</div>
 
-						<div class="col-sm-4" style="position: releative">
-							<md-input-container md-no-float class="md-block">
-								<input  type="text" ng-model="ctlr.bgcolor"  style="background: {{ctlr.bgcolor}}" placeholder="Select background color" ng-click="colorSwatch = !colorSwatch" autocomplete="off" />							
+						<div class="col-sm-4" style="position: releative" outside-click-color-swatch="swatchToggle">
+						
+							<md-input-container class="md-block">
+								<input  type="text" ng-model="ctlr.bgcolor"  style="background: {{ctlr.bgcolor}}" placeholder="Background color" ng-click="colorSwatch = !colorSwatch" autocomplete="off" />							
 							</md-input-container>
 
-							<div class="colorswatch-cont" ng-show="colorSwatch" ng-class="{fullHeight:colorSwatch}">
+							<div class="colorswatch-cont" ng-show="colorSwatch" ng-class="{fullHeight:colorSwatch}" >
 								<div class="color-swatch" ng-repeat="color in colorCodes" style="background-color: {{color}}" ng-click="ctlr.bgcolor = color">&nbsp;</div>
 							</div> 
 						</div>
 					</div>
 
 					<div class="col-sm-6">
-						<div class="col-sm-2">From: </div>
-						<div class="col-sm-5">
-							<md-input-container md-no-float class="md-block selectgeneral38">
-								<md-select ng-model="start_hour" placeholder="Start Hour">
-									
-									<md-option ng-repeat="hour in getDay(23) track by $index" value="{{$index+1}}" ng-selected="$index == 8">
-										{{$index+1 | timeConvertorfilter:this | digits:this}}
+						<div class="col-sm-2" style="padding-top: 15px;">Start Time: </div>
+						<div class="col-sm-4">
+							<md-input-container  md-no-float class="md-block">
+								<md-select ng-model="start_time.hour" placeholder="Start Hour">
+									<md-option ng-repeat="hour in getDay(12) track by $index" value="{{$index+1}}" ng-selected="$index == 8">
+										{{$index+1}}
 									</md-option>
 								</md-select>
 							</md-input-container>
 						</div>	
 
-						<div class="col-sm-5">
-							<md-input-container md-no-float class="md-block selectgeneral38">
-								<md-select ng-model="start_min" placeholder="Start Minute">
+						<div class="col-sm-3">
+							<md-input-container  md-no-float class="md-block">
+								<md-select ng-model="start_time.minute" placeholder="Start Minute">
 									
-									<md-option ng-repeat="min in getDay(60)  track by $index" value="{{$index | digits:this}}" ng-selected="$index == 0">
-										{{$index | digits:this}}
+									<md-option ng-repeat="min in [00,15,30,45,60]  track by $index" value="{{min}}" ng-selected="$index == 0">
+										{{min | digits:this}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</div>
+
+						<div class="col-sm-3">
+							<md-input-container  md-no-float class="md-block">
+								<md-select ng-model="start_time.meridiem" placeholder="AM/PM">
+									<md-option ng-repeat="md in ['AM','PM']" value="{{md}}" ng-selected="$index == 0">
+										{{md}}
 									</md-option>
 								</md-select>
 							</md-input-container>
@@ -81,31 +94,44 @@
 
 						<div class="clearfix"></div>
 					</br>
-					<div class="col-sm-2">To: </div>
-					<div class="col-sm-5">
-						<md-input-container md-no-float class="md-block selectgeneral38">
-							<md-select ng-model="end_hour" placeholder="End Hour">
+
+
+
+					<div class="col-sm-2"  style="padding-top: 15px;">End Time: </div>
+					<div class="col-sm-4">
+						<md-input-container  md-no-float class="md-block">
+							<md-select ng-model="end_time.hour" placeholder="End Hour">
 								<md-option value="-1" ng-selected="true">
 									Untill Finish
 								</md-option>
 
-								<md-option ng-repeat="hour in getDay(23) track by $index" value="{{$index+1}}">
-									{{$index+1  | timeConvertorfilter:this | digits:this}}
+								<md-option ng-repeat="hour in getDay(12) track by $index" value="{{$index+1}}">
+									{{$index+1}}
 								</md-option>
 							</md-select>
 						</md-input-container>
 					</div>	
 
-					<div class="col-sm-5">
-						<md-input-container md-no-float class="md-block selectgeneral38">
-							<md-select ng-model="end_min" placeholder="End Minute">
-								
-								<md-option ng-repeat="min in getDay(60)  track by $index" value="{{$index | digits:this}}" ng-selected="$index == 0">
-									{{$index | digits:this}}
-								</md-option>
-							</md-select>
-						</md-input-container>
-					</div>
+					<div class="col-sm-3">
+							<md-input-container  md-no-float class="md-block">
+								<md-select ng-model="end_time.minute" placeholder="Start Minute">
+									
+									<md-option ng-repeat="min in [00,15,30,45,60]  track by $index" value="{{min}}" ng-selected="$index == 0">
+										{{min | digits:this}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</div>
+
+						<div class="col-sm-3">
+							<md-input-container  md-no-float class="md-block">
+								<md-select ng-model="end_time.meridiem" placeholder="AM/PM">
+									<md-option ng-repeat="md in ['AM','PM']" value="{{md}}" ng-selected="$index == 1">
+										{{md}}
+									</md-option>
+								</md-select>
+							</md-input-container>
+						</div>
 					
 				</div>
 
@@ -120,16 +146,7 @@
 				</div>						
 			</div>
 
-			<div class="message {{shiftListResult.class}}" ng-if="shiftListResult.status == 1">{{shiftListResult.message}}
-			</div>
-
-			<div class="result {{shiftListResult.class}}" ng-if="shiftListResult.status==2">    
-				<ul>
-					<li ng-repeat="(key,value) in shiftListResult.errors">
-						{{value.message}}
-					</li>
-				</ul>
-			</div>
+			
 		</div>
 	</form>
 
@@ -146,19 +163,19 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="shift in shiftList track by $index" ng-hide="hideshift">
+				<tr ng-repeat="shift in shiftList track by $index">
 					<td>{{$index+1}}</td>                   
 					<td>{{shift.shift_name}}</td>
 					<td>{{shift.department_name}}</td>
 					<td>
-						{{shift.start_time[0].hour+":"+shift.start_time[0].minute | getmeridiem:this}} - 
+						{{shift.start_time.hour+":"+shift.start_time.minute +' '+ shift.start_time.meridiem}} - 
 
-						{{shift.end_time[0].hour +":"+shift.end_time[0].minute | getmeridiem:this}}
+						{{(shift.end_time.hour == -1)?"Untill Finish":shift.end_time.hour +":"+shift.end_time.minute +' '+ shift.end_time.meridiem}}
 					</td>
 					<td>
 						<!-- <ng-md-icon class="cursor tablegreentag" icon="remove_red_eye" class="cursor"  size="22"></ng-md-icon> -->
-						<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditshift(shift);"></ng-md-icon>
-						<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeshift(shift);hideshift = ! hideshift"></ng-md-icon>
+						<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditshift(shift);"  title="Edit"></ng-md-icon>
+						<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeshift(shift._id,$index)" ng-confirm-title="Delete Shift" ng-confirm-delete="Are you sure you want to remove this shift."></ng-md-icon>
 					</td>
 				</tr>              
 			</tbody>
@@ -175,29 +192,36 @@
 <div class="clearfix depart_midle">
 	<div class="deptsrch deptsrch_gray">
 		<div class="deptsrch_gray_top clearfix">
+
 			<div class="montfilter">
 				<ul class="clearfix">
-					<li><a href="javascript:void(0);" ng-class="{active:activeRangeMenu == 'today'}" ng-click="setVeiwRange(datesData.monthStartDate,'today');">Today</a></li>
+					<li><a href="javascript:void(0);" ng-class="{active:activeRangeMenu == 'today'}" ng-click="setVeiwRange('today');">Today</a></li>
 
-					<li><a href="javascript:void(0);" ng-class="{active:activeRangeMenu == 1}"  ng-click="setVeiwRange(datesData.monthStartDate,1);">Week</a></li>
+					<li><a href="javascript:void(0);" ng-class="{active:activeRangeMenu == 1}"  ng-click="setVeiwRange(1);">Week</a></li>
 
-					<li><a href="javascript:void(0);" ng-class="{active:activeRangeMenu == 2}"  ng-click="setVeiwRange(datesData.monthStartDate,2);">2 Week</a></li>
+					<li><a href="javascript:void(0);" ng-class="{active:activeRangeMenu == 2}"  ng-click="setVeiwRange(2);">2 Week</a></li>
 
-					<li><a href="javascript:void(0);"  ng-class="{active:activeRangeMenu == 4}"   ng-click="setVeiwRange(datesData.monthStartDate,4);">4 Week</a></li>
+					<li><a href="javascript:void(0);"  ng-class="{active:activeRangeMenu == 4}"   ng-click="setVeiwRange(4);">4 Week</a></li>
 
-					<li><a href="javascript:void(0);"  ng-class="{active:!activeRangeMenu}"  ng-click="setVeiwRange(datesData.monthStartDate,'');" >Month</a></li>
+					<li><a href="javascript:void(0);"  ng-class="{active:activeRangeMenu == 'fullmonth'}"  ng-click="setVeiwRange('fullmonth');" >Month</a></li>
 				</ul>
 			</div>
+
+			<div class="" style="float: right; padding: 5px 0px 0 5px;cursor: pointer;" ng-click="scheduleFrom = searchEmployee =  scheduleTo = search_departmentwise = searchPosition = ''; setVeiwRangeByDate('');" title="Reset filters">
+				<img src="assets/images/reset_filter.png" style="width: 30px;">
+			</div>
+
 			<div class="right_montfilter">
 				<ul class="clearfix">
 					<li>
 						<div class="recurring_task_fil positionrel" >
-							<md-datepicker md-open-on-focus md-hide-icons="triangle"  ng-model="scheduleFrom" ng-change="setVeiwRangeByDate()" md-placeholder="From Date"></md-datepicker>
+							<md-datepicker md-open-on-focus md-hide-icons="triangle"  ng-model="scheduleFrom" ng-change="setVeiwRangeByDate('start')" md-placeholder="From Date"  ></md-datepicker>
 						</div>
 					</li>
+				
 					<li>
 						<div class="recurring_task_fil positionrel" >
-							<md-datepicker md-open-on-focus md-hide-icons="triangle"  ng-model="scheduleTo" ng-change="setVeiwRangeByDate()" md-placeholder="To Date"></md-datepicker>
+							<md-datepicker md-open-on-focus md-hide-icons="triangle"  ng-model="scheduleTo" ng-change="setVeiwRangeByDate('end')" md-placeholder="To Date" md-min-date="endRange.min"  md-max-date="endRange.max"></md-datepicker>
 						</div>
 					</li>
 					<li>
@@ -207,7 +231,7 @@
 									<md-option value="">
 										Select Department
 									</md-option>
-									<md-option ng-repeat="dept in departmentList" value="{{dept.department_name}}">
+									<md-option ng-repeat="dept in departmentList" value="{{dept.abbreviation}}">
 										{{dept.department_name}}
 									</md-option>
 								</md-select>
@@ -221,8 +245,8 @@
 									<md-option value="">
 										Select
 									</md-option>
-									<md-option  ng-repeat="pos in position_list" value="{{pos}}">
-										{{pos}}
+									<md-option  ng-repeat="pos in potisionList" value="{{pos.position}}">
+										{{pos.position}}
 									</md-option> 
 								</md-select>
 							</md-input-container>
@@ -231,10 +255,11 @@
 					
 				</ul>
 			</div>
+
 			
 		</div>
 		<div class="vending_left_top_serch positionrel">
-			<md-input-container md-no-float class="md-block">
+			<md-input-container  class="md-block">
 				<input  ng-model="searchEmployee" placeholder="Search Employee" autocomplete="off">
 			</md-input-container>			 
 		</div>
@@ -249,17 +274,18 @@
 		</div> -->
 		<div class="deptsrch_data_table">
 			<div class="deptsrch_data_table_mon">
-				<span class="schedule_arrow left_arrow" ng-click="UpdateCalenderViewDates(datesData.monthStartDate,'prev',activeRangeMenu);">
+				<span class="schedule_arrow left_arrow" ng-click="UpdateCalenderViewDates(datesData.monthStartDate,'prev');">
 					<ng-md-icon icon="keyboard_arrow_left" style="fill: #000" size="45"></ng-md-icon>  
 				</span>
-				<label ng-if="!(scheduleFrom && scheduleTo)">
+				<label ng-if="!(scheduleRange)">
 					{{datesData.monthStartDate | date:"MMMM, y"}}
 				</label>
 
-				<label  ng-if="scheduleFrom && scheduleTo">
-					{{scheduleFrom | date:"dd MMMM, y"}} - {{scheduleTo | date:"dd MMMM, y"}}
+				<label  ng-if="scheduleRange">
+					{{dateLabel.from | date:"dd MMMM, y"}} - {{dateLabel.to | date:"dd MMMM, y"}}
 				</label>
-				<span class="schedule_arrow right_arrow" ng-click="UpdateCalenderViewDates(datesData.monthStartDate,'next',activeRangeMenu);">
+
+				<span class="schedule_arrow right_arrow" ng-click="UpdateCalenderViewDates(datesData.monthStartDate,'next');">
 					<ng-md-icon icon="keyboard_arrow_right" style="fill: #000" size="45"></ng-md-icon>  
 				</span>
 			</div>
@@ -271,80 +297,147 @@
 						<tr>						
 							<th><div class="tab_div">Name</div></th>
 							<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
 							<th ng-repeat-start="d in datesData.dates  track by $index" ng-class="{saturday:d.getDay() == 6,sunday:d.getDay() == 0,today:d.getDate() == currentDate.getDate()}">
 							<div class="tab_div">
 							{{d   | date: 'EEE MMM d '}}
 							</div>
 							</th>
-
 							<th ng-repeat-end ng-if="d.getDay() == 0" style="background: #eee;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 
 						</tr>
 					</thead>
 
 							<tbody>
-								<tr ng-repeat-start ="member in list = (membersList |
-								employeefilter:this | 
-								filter:(!!search_departmentwise || undefined) && {department: search_departmentwise} |
-								filter:(!!searchPosition || undefined) && {position:searchPosition}  | orderBy:'department' | groupBy:'department')  track by $index" ng-show="list.length">
-								<td class="table_dept_head" colspan="1" ng-show="member.department_CHANGED" style="background: {{(($parent.departmentList |filter:{department_name:member.department}:true)[0].bgcolor)?($parent.departmentList |filter:{department_name:member.department}:true)[0].bgcolor:'#eee'}}">
-									{{member.department}}
-								</td>
-							</tr>
-							
-							<tr ng-repeat-end>
-								<td class="table_schedule_name" style="background: {{($parent.departmentList |filter:{department_name:member.department}:true)[0].bgcolor }}">
-									<div class="tab_div capitalize" ng-click="showUserInfo(member);">
-										{{member.first_name}} {{member.last_name}}
-										
-									</div>
-								</td>
 
+								<!--***********************************
+						        * Department iteration
+						        ************************************-->
+								<tr ng-repeat-start ="dept in $root.departmentList | filter:(!!search_departmentwise || undefined) && {abbreviation: search_departmentwise}">
+									<td class="table_dept_head" colspan="1" style="background:#b6e4fb;color:#444">
+									{{dept.department_name}}
+									</td>
+								</tr>
+
+								<!--***********************************
+						        * Employee iteration for department
+						        ************************************-->
+								<tr ng-repeat-end ng-repeat-start= "member in list = (membersList |
+								employeefilter:this | 
+								filter:(!!searchPosition || undefined) && {position:searchPosition} | filter:{departments:dept.abbreviation})  track by $index">
+									<td class="table_schedule_name" style="background: #eee;border-bottom: 1px solid #ccc;">
+
+										
+										<div class="capitalize" ng-click="showUserInfo(member);" style="text-align: left;padding-left: 12px;">
+											<label class="schedule_user_image">
+											<img src="{{(member.profile_image)?'/images/hotel/'+member.hotel_id+'/profile/'+member.profile_image: '/assets/images/default_profile.png'}}" style="width: 35px;"> 
+											</label>
+											{{member.first_name}} {{member.last_name}}
+											
+										</div>
+									</td>
 								
-								<td>
-									<td ng-repeat-start="d in datesData.dates track by $index" style="position: relative;background:{{($parent.shiftList | filter:{_id:((member.Scheduledata
-										| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+''+d.getFullYear()}:true)[0].schedule_data._id)?(member.Scheduledata
-										| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+''+d.getFullYear()}:true)[0].schedule_data._id:''}:true)[0].bgcolor}}">
+									<td></td>
+
+									<td ng-repeat-start="d in datesData.dates track by $index" 
+									style="position: relative;
+									       background:{{	
+											($parent.shiftList | 
+											filter:{_id:((member.Scheduledata | 
+												filter:{ shift_filter_date:d.getDate()+''+(d.getMonth()+1)+''+d.getFullYear(),department:dept.abbreviation
+												}:true)[0].schedule_data._id)
+											? (member.Scheduledata | 
+												filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+''+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data._id:''}:true)[0].bgcolor
+											}}">
+										
+										<!-- {{(member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].department}} -->
+
+										<!-- {{ctlr}} -->
+
+										<md-checkbox aria-label="Checkbox" ng-model="multipleSchedule" name="multipleSchedule" ng-true-value="true" ng-change="storeFieldValue(d,member,dept,multipleSchedule)" ng-false-value="false" class="schedule_checkbox multipleSchedule" ng-hide='(((member.Scheduledata | filter:{shift_filter_date:d.getDate()+""+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data._id))'  title="Select to schedule multiple employee"></md-checkbox>	
 
 										<div class="tab_div">
-											<a class="addsche" href="javascript:void(0);" ng-click="openEmpSchedule(d,member);" ng-hide='((member.Scheduledata | filter:{shift_filter_date:d.getDate()+""+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].schedule_data.start_time.hour)'>
+
+											<a class="addsche" href="javascript:void(0);" ng-click="openEmpSchedule(d,member,dept);" ng-hide='(((member.Scheduledata | filter:{shift_filter_date:d.getDate()+""+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data._id))'  title="Click here to schedule">
 												+
 											</a>
+												
 											
-											<a class="timeScheduled capitalize" href="javascript:void(0);" style="color:#000"   ng-hide='!((member.Scheduledata | filter:{shift_filter_date:d.getDate()+""+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].schedule_data.start_time.hour)' 
+											<a class="timeScheduled capitalize" href="javascript:void(0);" style="color:#000"   ng-hide='!((member.Scheduledata | filter:{shift_filter_date:d.getDate()+""+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data.start_time.hour)' 
 
-											ng-click="openEmpSchedule(d,member);">
-											<!-- {{d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear()}} -->
+											ng-click="openEmpSchedule(d,member,dept);" title="{{
+											(member.Scheduledata | filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+''+d.getFullYear()}:true)[0].schedule_data.note}}">	
 
 
-
+											
 											{{
-											(member.Scheduledata
-											| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].schedule_data.start_time.hour
-											+":"+
-											(member.Scheduledata
-											| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].schedule_data.start_time.minute | getmeridiem:this
-										}} - 
-										{{
-										(member.Scheduledata
-										| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].schedule_data.end_time.hour 
-										+":"+
-										(member.Scheduledata
-										| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].schedule_data.end_time.minute | getmeridiem:this
-									}}
+												(member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data.start_time.hour
+												+":"+
+
+												(member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data.start_time.minute
+												+":"+
+
+												(member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data.start_time.meridiem
+											}} 
+											- 											
+											{{
+												((member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data.end_time.hour == -1)
+												?"Untill Finish"
+												:(member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data.end_time.hour 
+												+":"+
+												(member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data.end_time.minute
+												+":"+
+													
+												(member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+""+d.getFullYear(),department:dept.abbreviation}:true)[0].schedule_data.end_time.meridiem
+											}}
+
+										
 								</a>
-							
+
+
+
+
+
+								<a class="timeScheduled capitalize" href="javascript:void(0);" style="color:#ff4500"   ng-show='(member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+""+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].schedule_data._id == "onleave" &&  (member.Scheduledata
+												| filter:{shift_filter_date:d.getDate()+""+(d.getMonth()+1)+""+d.getFullYear()}:true)[0].department == dept.abbreviation' 
+
+								ng-click="openEmpSchedule(d,member,dept);" title="{{
+											(member.Scheduledata | filter:{shift_filter_date:d.getDate()+''+(d.getMonth()+1)+''+d.getFullYear()}:true)[0].schedule_data.note}}">
+											On leave
+										
+								</a>							
 		           				</div>
+					           </td>
 
-		           </td>
-		           <td ng-repeat-end ng-if="d.getDay() == 0"></td>
-		       </tr>
+					           <!--***********************************
+						        * Space after sunday 
+						        ************************************-->
+					           <td ng-repeat-end ng-if="d.getDay() == 0"> </td>					           
+					        </tr>
+
+
+					        <!--***********************************
+					        * If no employee found in department 
+					        ************************************-->
+					        <tr ng-repeat-end>
+					       	   <td colspan="{{datesData.dates.length+3}}" ng-if="list.length == 0">					       	 	
+					       	 	 <div class="itemnotfound" style="text-align: left;padding-left:20px">
+									You have not added any employee in this department.               
+								 </div>
+					       	    </td>
+					        </tr>
 		   </tbody>
-		</table>		
-
-		<div ng-show="!list.length" ng-if="!list.length && hideLoader" class="itemnotfound">
-			No employee found.                
-		</div>	
+		</table>	
+			  
 
 		<div ng-hide="hideLoader" layout="row" layout-sm="column"  layout-align="space-around">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>

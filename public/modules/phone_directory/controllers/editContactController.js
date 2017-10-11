@@ -1,11 +1,9 @@
 "use strict";
 
-app.controller('editContactController', ['$scope','localStorageService','globalRequest','Upload','$timeout','contactDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,contactDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editContactController', ['$scope','globalRequest','contactDetail','$mdDialog','toastService',
+	function($scope,globalRequest,contactDetail,$mdDialog,toastService) {
 
 
-		
 		/***********************************************
 		* Pass edited employee value in current scope
 		***********************************************/
@@ -43,11 +41,22 @@ app.controller('editContactController', ['$scope','localStorageService','globalR
 		          };
 
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.contactEditResult = response;
+				var popup;
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
 			 		globalRequest.getContactList();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 
 			 });

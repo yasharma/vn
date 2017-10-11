@@ -1,11 +1,13 @@
+<div class="newhotel_dialog_form pad15">
 <div class="clearfix EditMode" ng-controller="priorityCtlr"> 
-    <div class="pull-right text-right" >
+    <div class="pull-right text-right newhotel_dialog_form_none" >
         <span class="jot_prity_txt">Set Priority:</span>
-        <ul class="jot_prity clearfix pull-right">
+        <ul class="jot_prity clearfix pull-right newhotel_dialog_form_none">
            <li ng-repeat="jotPriority in jotPriorityList">
-            <a href="javascript:void(0);" ng-class="{active : $root.priority === jotPriority.name}" class="{{jotPriority.class}}" ng-click='selectPriority($event,jotPriority.name)'>{{jotPriority.name}}</a>
+            <a href="javascript:void(0);" ng-class="{active : $root.priority === jotPriority.name}"  ng-click='selectPriority($event,jotPriority.name)'>{{jotPriority.name}}</a>
          </li>
           <input type="hidden" name="priority" value="{{$root.priority}}" ng-model="$root.priority">
         </ul>
     </div>
+</div>
 </div>

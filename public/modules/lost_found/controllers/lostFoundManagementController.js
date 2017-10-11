@@ -1,18 +1,36 @@
 "use strict";
 
-app.controller('lostFoundManagementController',['$scope','$rootScope','globalRequest','localStorageService','toastService','Upload','$timeout','$mdDialog',
-	function($scope,$rootScope,globalRequest,localStorageService,toastService,Upload,$timeout,$mdDialog){
-		var hotel = localStorageService.get('hotel');
+app.controller('lostFoundManagementController',['$scope','$rootScope','globalRequest','toastService','$mdDialog',
+	function($scope,$rootScope,globalRequest,toastService,$mdDialog){
+
+		var hotel = $rootScope.activeHotelData;
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = hotel.jot_types;
+
+		/************************************
+		* Get employee list
+		*************************************/		
+		globalRequest.getStaff();
+
+		/*****************************************
+		* Get department List
+		******************************************/
+
+	    globalRequest.getDepartments();
 
 		/************************************
 		* Blank all field before open form
 		*************************************/
 
 		$scope.blank = function(){
-			$scope.description = "";
+			$rootScope.jot_description = "";
 			$scope.image = "";
 			$scope.foundImages = "";
-			$scope.files = "";
+			$rootScope.files = "";
 			$scope.place = "";
 			$scope.date = "";
 			$scope.no_of_items = "";
@@ -20,16 +38,8 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 			$scope.status = "";
 			$scope.ctrl.itemTagModel = [];
 			$scope.contact = "";
-			
 			$scope.foundProgress = -1;
 		};
-
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.lstFoundResult = "";
-			
-		};
-
 
 		/**********************************************************
 	    * Item tags 
@@ -49,46 +59,6 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 	    };
 
 
-	    /*****************************************
-		* Jot image upload
-		*****************************************/
-		$scope.foundImages = '';
-		$scope.uploadFoundFiles = function(files, errFiles) {
-			$scope.files       = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'lost_found',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   var result = response.data.result;
-	                   var uploadedImagesName = []; 
-	                    angular.forEach(result, function(data) {				
-				            if(data.status){
-				            	uploadedImagesName.push(data.filename);
-				            }
-				        });
-				        $scope.foundImages = uploadedImagesName;
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.foundProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
-
-	    };
-
 		/************************************
 		* Get lost found item list
 		*************************************/			
@@ -103,7 +73,8 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 		$scope.addfoundItem = function(){
 
 			var DataArray = {
-			  description    : $scope.description,
+			  description    : $rootScope.jot_description,
+			  title          : $scope.title,
 			  hotel_id       : hotel._id,	
 			  image          : $scope.foundImages,
 			  place 		 : $scope.place,	
@@ -115,8 +86,6 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 			  search_tag 	 : $scope.ctrl.itemTagModel,				  
 			};
 
-
-
 			var request={
                     url:window.__API_PATH.LOST_FOUND,
                     method:"POST",
@@ -125,18 +94,69 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
             
            
             globalRequest.jotCRUD(request).then(function(response){ 
-            	$scope.lstFoundResult = response;
+            	var popup;
+            	
                 if(response.status == 1)
                 {
-                    if(!$scope.LstFndList)
-			 		{
-			 			$scope.LstFndList = [];
-			 		}
-			 		$scope.LstFndList.push(response.result);
-                    var popup = {"message":response.message,"class":"success"};
-                    toastService.alert(popup);
-                    $scope.blank();
-                }
+                	var lostFoundID = response.result._id;
+
+                	/****************************
+		            * Upload file if exists
+		            ****************************/
+
+		            if($rootScope.files && $rootScope.files.length > 0)
+		            {
+
+		            	globalRequest.uploadFiles(hotel._id,'lost_found',$rootScope.files).then(function(fileRasponse){
+		                    if(fileRasponse.status == 1)
+		                    {
+				                    	
+
+		                        var updateRequest={
+		                            url:window.__API_PATH.UPDATE_LOST_FOUND,
+		                            method:"PUT",
+		                            data:{  
+		                              _id  		     : lostFoundID,
+		                              image   		 : fileRasponse.result							  
+		                            }
+		                        };
+
+
+			                      /****************************
+			                      * Update files in lost found 
+			                      ****************************/
+
+			                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+			                        if(updateResponse.status == 1)
+			                        {
+			                            $rootScope.files = '';
+			                            globalRequest.getFoundList();
+			                            popup = {"message":response.message,"class":"success"};
+										toastService.alert(popup);
+										$scope.blank();
+			                        }
+
+			                      });  
+			                    }
+			                });
+
+				    } else {
+				    	globalRequest.getFoundList();
+				    	popup = {"message":response.message,"class":"success"};
+	                    toastService.alert(popup);
+	                    $scope.blank();
+
+				    }
+                }  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
             });
 		};
 
@@ -162,15 +182,20 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 		* Delete employee
 		*****************************************/	
 
-		$scope.removeList = function(detail){
+		$scope.removeList = function(detail,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_LOST_FOUND,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
-			globalRequest.jotCRUD(request).then(function(response){				
+			globalRequest.jotCRUD(request).then(function(response){	
+				if(response.status == 1)
+				{
+					$scope.LstFndList.splice(index, 1);
+				}
+							
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});

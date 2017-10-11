@@ -29,9 +29,11 @@ module.exports = {
 	  	{ url: '/register', 				method: ctrls.userController.register, 							type: 'POST'	},
 	  	{ url: '/verify/:hashkey', 			method: ctrls.userController.verify, 							type: 'GET'		},
 	  	{ url: '/login', 					method: ctrls.userController.login, 							type: 'POST'	},
+	  	{ url: '/edit_profile', 			method: ctrls.userController.editProfile, 							type: 'PUT'	},
 	  	{ url: '/forgot_password', 			method: ctrls.userController.forgotPassword, 					type: 'POST'	},
 	  	{ url: '/resetpassword/:token', 	method: ctrls.userController.validateResetToken, 				type: 'GET'		},
 	  	{ url: '/resetpassword',        	method: ctrls.userController.resetPassword, 					type: 'POST'	},
+	  	{ url: '/changePassword',        	method: ctrls.userController.changePassword, 					type: 'POST'	},
 	  	
 	  	/* Hotel's Route*/
 	  	{ url: '/hotel_notifications', 		method: ctrls.hotelController.getJotNotification, 				type: 'GET'		},
@@ -53,6 +55,13 @@ module.exports = {
 	  	{ url: '/update_department', 		method: ctrls.hotelController.updateDepartment,					type: 'PUT'		},
 	  	{ url: '/delete_department', 		method: ctrls.hotelController.deleteDepartment,					type: 'DELETE'	},
 	  	{ url: '/get_departments',   		method: ctrls.hotelController.listDepartment, 					type: 'GET'		},
+	  	
+
+	  	/* Hotel's Department Positions Route*/
+	  	{ url: '/add_position',   			method: ctrls.hotelController.addDepartmentPosition, 			type: 'POST'	},
+	  	{ url: '/update_position', 			method: ctrls.hotelController.updateDepartmentPosition,			type: 'PUT'		},
+	  	{ url: '/delete_position', 			method: ctrls.hotelController.deleteDepartmentPosition,			type: 'DELETE'	},
+	  	{ url: '/get_position',   			method: ctrls.hotelController.listDepartmentPosition, 			type: 'GET'		},
 	  	
 	  	/* Jot's Route*/
 
@@ -77,7 +86,10 @@ module.exports = {
 	  	{ url: '/update_member', 			method: ctrls.memberController.updateMember, 					type: 'PUT'		},
 	  	{ url: '/delete_member', 			method: ctrls.memberController.deleteMember, 					type: 'DELETE'	},
 	  	{ url: '/get_members', 	 			method: ctrls.memberController.listMember, 						type: 'GET'		},
-
+	  	{ url: '/checkusercontact',        	method: ctrls.memberController.checkUsercontact, 				type: 'POST'	},
+	  	{ url: '/updateuserhotels',        	method: ctrls.memberController.UpdateUserHotelDetails, 			type: 'POST'	},
+	  	{ url: '/member_signup',       		method: ctrls.memberController.memberSignUp, 					type: 'POST'	},
+	  	
 	  	/* Vending Routes */
 
 	  	{ url: '/add_item',    				method: ctrls.vendingController.addItem, 						type: 'POST'	},
@@ -106,6 +118,7 @@ module.exports = {
 	  	{ url: '/get_inventory_category',    method: ctrls.vendingController.listCategory, 					type: 'GET'		},
 	  	
 	  	{ url: '/add_member_schedule',  	 method: ctrls.memberController.addSchedule, 					type: 'POST'	},
+	  	{ url: '/add_multipleschedule',  	 method: ctrls.memberController.addMultipleSchedule, 			type: 'POST'	},
 		{ url: '/member_schedule_data',  	 method: ctrls.memberController.MemberScheduleData, 			type: 'GET'		},
 	  	{ url: '/uploadfiledata',   		 method: ctrls.uploadFilesController.uploadfiledata ,			type: 'POST'	},
 	  	

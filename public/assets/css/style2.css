@@ -1,0 +1,452 @@
+.wizard_department_list{
+    display: block;
+    color: #444;
+}
+
+.uplaod_area{position: relative;}
+
+.inside_cover_image {
+    position: absolute;
+    width: 180px;
+    left: 40px;
+    top: 12px;
+}
+
+ul.emp_info_field li {
+    width: 100%;
+    float: none;
+    margin: 0;
+}
+
+.emp_dept_field {
+    background: #eee;
+    margin-right: 10px;
+    padding: 2px 10px;
+    font-weight: normal;
+}
+
+.result.ng-binding {
+    padding: 0 0 9px 0;
+}
+
+.dash_step_panel ul li.active::after, .dash_step_panel ul li.completed::after {
+    width: 100%;
+}
+
+textarea#jot_description {
+    border: 1px solid #dddddd !important;
+}
+
+.invite_content .rightlogin {
+    width: 100%;
+}
+
+.uploadimage_list {
+    margin-top: 30px;
+}
+td.table_dept_head {
+    /* font-weight: 700; */
+    font-size: 16px;
+    text-align: left;
+    padding-left: 15px !important;
+}
+
+.schedule_checkbox {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+}
+
+td:hover .schedule_checkbox,.schedule_checkbox[aria-checked="true"] {
+    display: block;
+}
+
+.deptsrch_data_table_lay tr th, .deptsrch_data_table_lay tbody tr td {
+    padding: 22px 15px 16px 10px;
+}
+
+.roundeSelectField {
+    position: absolute;
+    right: 14px;
+    top: 17px;
+    z-index: 9;
+}
+
+.roundeSelectField .md-container {
+    background: #fff;
+}
+
+.step_emp_tab_content_inner {
+    background: #eee !important;
+    margin: 25px 0;
+    padding: 0 20px 20px 20px;
+}
+
+.registration_image {
+    margin: auto;
+    height: 150px;
+    width: 150px;
+}
+md-dialog {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+md-dialog md-dialog-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.loginHd.register_head {
+    font-size: 25px;
+    text-align: center;
+}
+
+.loginHd.register_head p {
+    font-size: 16px;
+}
+
+.registration_image .hover_de {
+    background: rgba(0, 0, 0, 0.3) none repeat scroll 0 0;
+    bottom: 0;
+    color: #fff;
+    font-size: 13px;
+    left: 0;
+    opacity: 1;
+    padding: 28px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    z-index: 1;
+}
+
+
+.quick_edit_buttons {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    min-width: 200px;
+    margin-left: 10px;
+    z-index: 99;
+}
+
+
+
+
+.quick_edit_buttons_list > li
+{
+    margin-bottom: 7px;
+    position: relative;
+}
+
+.quick_edit_buttons_list > li > a {
+    display: inline-block;
+    transition: all 0.5s ease;
+    text-decoration: none;
+    -ms-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    line-height: 20px;
+    background: rgba(0,0,0,0.6);
+    color: #e6e6e6;
+    padding: 6px 9pt 6px 8px;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+
+.quick_edit_buttons_list > li > a:hover, .quick_edit_buttons_list > li > a:focus {
+    margin-left: 5px;
+    background: #000;
+    color: #fff;
+}
+
+.md-dialog-container.ng-scope {
+    z-index: 99;
+}
+
+.quick_edit_title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+
+.quick_edit_save {
+    position: absolute;
+    z-index: 99;
+    margin-top: 17px;
+    border-radius: 3px;
+    width: 100px;
+    left: 0;
+}
+
+
+.quick_edit_small_section {
+    width: 350px;
+    position: absolute;
+    background: #fff;
+    padding: 0;
+    left: 0;
+    border: 2px solid #eee;
+    top: 100%;
+    margin: 5px 0 0 0;
+    z-index: 9;
+    border-radius: 3px;
+}
+
+.quick_edit_small_section_header {
+    text-align: center;
+    padding: 10px 0px;
+    border-bottom: 1px solid #eee;
+    width: 90%;
+    margin: auto auto 15px auto;
+}
+.quick_edit_section_title {
+    color: #444;
+    font-size: 16px;
+}
+
+.quick_close_btn {
+    position: absolute;
+    right: 10px;
+}
+
+.quick_member_list {
+    margin: 0 16px;
+    position: relative;
+    top: -5px;
+}
+
+.quick_member_list li {
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    vertical-align: top;
+}
+
+.quick_member {
+    background: #4ebdf6;
+    border-radius: 100%;
+    text-align: center;
+    display: block;
+    padding: 5px 0;
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.selectedicon {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+}
+
+.quick_member.selected {
+    background: rgba(0,0,0,0.5);
+}
+.md-select-menu-container.md-active {
+    z-index: 99;
+}
+
+.checklist_container {
+    width: 350px;
+    background: #fff;
+    padding: 10px;
+    position: absolute;
+        z-index: 9;
+}
+.width200 {
+    width: 200px;
+}
+
+.parantchecklist > li {
+    margin-bottom: 14px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 25px;
+}
+
+.parantchecklist .sublist {
+    margin-left: 30px;
+}
+
+.sublists {
+    margin-left: 28px;
+    padding: 10px;
+    background: #ddd;   
+}
+
+.sublists_container{
+     padding: 10px 0px;
+}
+.pull-left {
+    margin-right: 5px;
+}
+
+.sublists_container.editList {
+    display: inline-block;
+    vertical-align: top;
+    padding: 0 0 10px 0;
+}
+
+.checklist_loader_container {
+    width: 100%;
+    height: 10px;
+    margin: 12px 0;
+    background: #ddd;
+    border-radius: 10px;
+}
+
+.checklist_loader {
+    background: green;
+    width: 0%;
+    height: 10px;
+    border-radius: 10px;
+}
+
+#popupmenu_container0 {
+    margin-left: -7px;
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+}
+.width199{width: 199px !important;}
+
+
+
+.editpopup .recurring_task {
+    width: 100%;
+}
+
+.editpopup .Pattern > li > a {
+    font-size: 10px;
+}
+
+.min_height27 {
+    height: 27px;
+}
+.taginglist {
+    margin: 0px 18px 10px 18px;
+}
+
+.md-select-value{border: 0  !important;}
+
+.Quick_jot_list .md-button._md-nav-button {
+    padding: 12px 32px;
+}
+
+.new_mesge_list > li:nth-child(4n) .quick_edit_buttons {
+    left: auto;
+    right: 100%;
+}
+
+.new_mesge_list > li:nth-child(4n) .quick_edit_small_section {
+    left: auto;
+    right: 0;
+    text-align: left;
+}
+
+.new_mesge_list > li:nth-child(4n) .quick_edit_buttons_list > li {
+    text-align: right;
+    margin-right: 10px;
+}
+
+.new_mesge_list > li:nth-child(4n) .quick_edit_buttons_list > li {
+    text-align: right;
+    margin-right: 10px;
+}
+
+.ng-confirm .ng-confirm-box div.ng-confirm-title-c {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+
+.themeColorClass {
+    background: #ffbb42 !important;
+}
+
+.mdToast-error-list {
+    margin: 10px 5px;
+}
+.mdToast-error-list li {
+    padding: 4px 0 0 0;
+    list-style: disc;
+}
+
+.md-toast-error button.md-action {
+    top: 0;
+    position: absolute;
+    right: 8px;
+}
+.accord_minus{
+    display: none
+}
+.is-expanded .accord_plus{
+    display: none
+}
+.is-expanded .accord_minus{
+    display: inline-block;
+}
+/*v-pane {
+    background: #fff;
+}*/
+
+.vAccordion--default v-pane-header::after, .vAccordion--default v-pane-header::before {
+    display:none;
+}
+
+.accord_heading{
+    padding-left: 20px;
+}
+.accord_icon {
+    position: relative;
+    top: -5px;
+    left: 10px;
+}
+
+.vAccordion--default v-pane-header {
+    padding: 11px 0;
+    margin-bottom: 0;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+v-pane-content {
+    color: #fff;
+}
+
+
+v-pane.is-expanded {
+    background: #4ebdf6;
+}
+.vAccordion--default v-pane.is-expanded>v-pane-header {
+    border-bottom-color: #fff;
+    background: #4ebdf6;
+}
+
+
+.is-expanded .accord_heading {
+    color: #fff;
+}
+
+v-pane{
+    margin-bottom: 15px;
+}
+md-dialog {
+    border-radius: 5px;
+}
+md-toolbar {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}

@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService','globalRequest',
-	function($scope,$rootScope,localStorageService,globalRequest) {
+app.controller('vendingMachineCtlr', ['$scope','$rootScope','globalRequest',
+	function($scope,$rootScope,globalRequest) {
 		
 		/**********************************************************
 	    * Get item category
@@ -11,21 +11,25 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 
 		/**********************************************************
 	    * Get items list
-	    **********************************************************/				
-		var hotel = localStorageService.get('hotel');	
-		$scope.products = '';			
-		var request={
-                url:window.__API_PATH.GET_ITEMS,
-                method:"GET",
-                params:{hotel_id:hotel._id}
-              };
+	    **********************************************************/	
 
-        globalRequest.jotCRUD(request).then(function(response){        	
-        	if(response.status == 1)
-            {
-              $scope.products = response.result;
-            }
-        });
+		var hotel = $rootScope.activeHotelData;
+		function getItemList(){
+			$scope.products = '';			
+			var request={
+	                url:window.__API_PATH.GET_ITEMS,
+	                method:"GET",
+	                params:{hotel_id:hotel._id}
+	              };
+
+	        globalRequest.jotCRUD(request).then(function(response){        	
+	        	if(response.status == 1)
+	            {
+	              $scope.products = response.result;
+	            }
+	        });
+		}
+		getItemList();
 
         /**********************************************************
 	    * Add item in cart
@@ -114,48 +118,20 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 			return match;
 		};
 
-
-
-		/**********************************************************
-	    * Range slider
-	    **********************************************************/
-
-		/*$scope.slider = {
-		  minValue: 0,
-		  maxValue: 10000,		 
-		  options: {
-		    translate: function(value) {
-		      return '$' + value;
-		    },
-		    showSelectionBar: true,		    
-		    getPointerColor: function(value) {
-	            if (value <= 1000)
-	                return 'red';
-	            if (value <= 5000)
-	                return 'orange';
-	            if (value <= 10000)
-	                return 'green';
-	            return '#2AE02A';
-	        }
-		  }		  
-		};
-		$timeout(function () {
-            $scope.$broadcast('rzSliderForceRender');
-        },300);*/
-
+		
         /**********************************************************
 	    * Submit vending machine cart data
 	    **********************************************************/
 
         $scope.submitVendingDetail = function() {
         	var payment,paymentMode,cardType,cardOwner,roomNumber,paymentData,cartTags;        	
-        	var cartErrors = {itemerror:"",tagerror:"",paymenterror:"",error:false};
-        	payment        = $scope.payment_status;
-        	paymentMode    = $scope.ctlr.paymentmode;
-        	cardType 	   = $scope.ctlr.cardtype;
-        	cardOwner 	   = $scope.ctlr.cardowner;
-        	roomNumber 	   = $scope.ctlr.payment_room_number;
-        	cartTags       = $scope.cart_tags;
+        	var cartErrors    = {itemerror:"",tagerror:"",paymenterror:"",error:false};
+        	payment           = $scope.payment_status;
+        	paymentMode       = $scope.ctlr.paymentmode;
+        	cardType 	      = $scope.ctlr.cardtype;
+        	cardOwner 	   	  = $scope.ctlr.cardowner;
+        	roomNumber 		  = $scope.ctlr.payment_room_number;
+        	cartTags       	  = $scope.cart_tags;
         	$scope.cartErrors = '';
 
        		if($scope.cart.length == 0)
@@ -185,6 +161,7 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
        		}
         	
         	paymentData = {	payment_status:payment,detail:''};
+
         	if(payment == 'paid')
         	{
         		if(paymentMode == 'card')
@@ -229,11 +206,10 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 			 	$scope.ctlr.cardtype = '';
 			 	$scope.ctlr.payment_room_number = '';
 			 	$scope.payment_status = '';
+			 	$scope.cart = [];
+			 	getItemList();
 			 });	          
         	
         };
 	}
 ]);
-
-
-

@@ -7,9 +7,10 @@ const   express     = require('express'),
         bodyParser  = require('body-parser'),
         async       = require('async'),
         fs          = require('fs-extra'),
-        _          = require('lodash'),
+        _           = require('lodash'),
         Document    = require(path.resolve('models/DocumentCenter')),
         Jot         = require(path.resolve('models/Jot')),
+        Employee    = require(path.resolve('models/Employee')),
         JotActivity = require(path.resolve('models/JotActivity')),
         User        = require(path.resolve('models/User')),
         response    = require(path.resolve('./config/lib/response')),
@@ -37,7 +38,7 @@ exports.addJot = (reqst, respe) => {
     
 
     var AtRateTagReg    = /(?:^assignedMembersArr|)@([a-zA-Z_0-9]+)/g;
-    var HashTagReg      = /(?:^|)#([a-zA-Z_0-9/-]+)/g;
+    var HashTagReg      = /(?:^|)#([a-zA-Z_0-9&/-]+)/g;
 
     var member,jotmembers,depttags, AssignedMembers = [];
     var jotdepartments, AssignedDepartments = [];
@@ -118,7 +119,7 @@ exports.updateJot = (reqst, respe) => {
     var data            = {};
     var Jotid           = reqst.body.jot_id;
     var AtRateTagReg    = /(?:^|)@([a-zA-Z_0-9]+)/g;
-    var HashTagReg      = /(?:^|)#([a-zA-Z_0-9/-]+)/g;
+    var HashTagReg      = /(?:^|)#([a-zA-Z_0-9&/-]+)/g;
 
     var jotmembers, member, depttags,jotdepartments, AssignedMembers = [], AssignedDepartments = [];
 
@@ -163,13 +164,15 @@ exports.updateJot = (reqst, respe) => {
         reqst.body.assigned_members                     =   uniqueMember;
     }
 
-    if(AssignedDepartments){
+    if(AssignedDepartments.length > 0){
        
-        var AssignedDeptArr = AssignedDepartments;
-        var uniqueDept = AssignedDeptArr.filter(function(elem, index, self) {
+        var AssignedDeptArr         = AssignedDepartments;
+        var uniqueDept              = AssignedDeptArr.filter(function(elem, index, self) {
                 return index == self.indexOf(elem);
             });
         reqst.body.assigned_departments     =   uniqueDept;
+    }else{
+        delete reqst.body.assigned_departments;
     }
 
     if(reqst.body.image == ''){
@@ -185,11 +188,12 @@ exports.updateJot = (reqst, respe) => {
             if(result){
                 return respe.json(response.success(result,'Jot Updated successfully.'));
             }else{
-                return respe.json(response.errors(err,"Error In Jot Update."));
+                return respe.json(response.errors(err.errors,"Error In Jot Update."));
             }
         });
     }
 };
+
 
 /****************************************
 **** Function to Delete Existing Jot ****
@@ -225,7 +229,7 @@ exports.listJot = (reqst, respe) => {
 
     var data            = {};
     var jot_type        = reqst.query.jot_type;
-    var assigned_to     = reqst.query.user_name;
+    var assigned_to     = reqst.query.contact_number;
     var hotel_id        = reqst.query.hotel_id;
       
    
@@ -235,71 +239,86 @@ exports.listJot = (reqst, respe) => {
     }else{
 
 
-        User.findOne({'user_name': assigned_to},{role: 1, position: 1, email: 1, department: 1, status: 1,hotel_id: 1 }, function (err, userdata) {
+        User.findOne({'contact_number': assigned_to},{role: 1, email: 1, status: 1, hotel_id: 1 }, function (err, userdata) {
 
-            if(!_.isEmpty(userdata)){
+            if(!_.isNull(userdata)){
 
                 var condition = '';
-
-                if(userdata.role === 'staff'){
-                    condition = {
+                var UserRole  = userdata.role;
+                condition = {
                                     "hotel_id": ObjectId(hotel_id),
                                     "jot_type": jot_type,
-                                    $or:[{  "assigned_members"      :   { $in:  [assigned_to] } },
-                                         {  "assigned_departments"    :   { $in:  [userdata.department] } }]
-                                };
-                }else{
-                    condition = {
-                        "hotel_id": ObjectId(hotel_id),
-                        "jot_type": jot_type,
-                    };
-                }
-            
-                Jot.find(condition, function (err, result) {
+                };
+                if(UserRole === 'staff'){             
+                    Employee.findOne({contact_number: assigned_to,hotel_id: ObjectId(hotel_id) },{user_name: 1, contact_number: 1,departments: 1}, function (err, employee){
 
+                        if(!_.isNull(employee)){
 
-                    if(result.length > 0){
+                            var assigenedUserName = employee.user_name;
+                            var assigenedUserDept = employee.departments;
+                                    
+                            condition = {
+                                            "hotel_id": ObjectId(hotel_id),
+                                            "jot_type": jot_type,
+                                            $or:[
+                                                    { "assigned_members"      : { $in:[assigenedUserName] } },
+                                                    { "assigned_departments"  : { $in:  assigenedUserDept } }
+                                                ]
+                            };
+                                   
+                            Jot.find(condition, function (err, result) {
 
-                        var MyJotArray                      =       [];
-                        var CloseJotArray                   =       [];
-                        var MyDepartmentJotArray            =       [];
-                        let _result                         =       [];
+                                if(result.length > 0){
 
-                        if(userdata.role === 'staff'){
+                                    var MyJotArray                      =       [];
+                                    var CloseJotArray                   =       [];
+                                    var MyDepartmentJotArray            =       [];
+                                    let _result                         =       [];
 
-                            for(var i = 0; i < result.length; i++){
-                                
-                                var assignedMembersArr      = result[i].assigned_members;
-                                var assignedMemberDeptArr   = result[i].assigned_departments;
-                                
-                                if( result[i].status === 'complete'){
-                                    CloseJotArray.push(result[i]);
-                                }else{
-                                    if((assignedMembersArr.indexOf(assigned_to) === 0 && assignedMemberDeptArr.indexOf(userdata.department) === 0) || (assignedMembersArr.indexOf(assigned_to) === 0)){
-                                        MyJotArray.push(result[i]);
-                                    }else{
-                                        MyDepartmentJotArray.push(result[i]);
+                                    if(UserRole === 'staff'){
+
+                                        for(var i = 0; i < result.length; i++){
+                                                
+                                            var assignedMembersArr      = result[i].assigned_members;
+                                            var assignedMemberDeptArr   = result[i].assigned_departments;
+                                                
+                                            if( result[i].status === 'close'){
+                                                CloseJotArray.push(result[i]);
+                                            }else{
+                                                if((assignedMembersArr.indexOf(assigenedUserName) === 0 && assignedMemberDeptArr.indexOf(assigenedUserDept) === 0) || (assignedMembersArr.indexOf(assigenedUserName) === 0)){
+                                                        MyJotArray.push(result[i]);
+                                                }else{
+                                                    MyDepartmentJotArray.push(result[i]);
+                                                }
+                                            }
+                                        }
+                                        _result = {
+                                                    my: MyJotArray,
+                                                    department: MyDepartmentJotArray,
+                                                    closed: CloseJotArray
+                                        };
                                     }
+                                    
+                                    respe.json(response.success(_result,'Jot Data Found.'));
+                                }else{
+                                    respe.json(response.errors(err,"Error In Jot Listing."));
                                 }
-                            }
-                            _result = {
-                                        my: MyJotArray,
-                                        department: MyDepartmentJotArray,
-                                        closed: CloseJotArray
-                                    };
+                            });    
                         }else{
-                            _result = result;
+                            respe.json(response.errors({},"Error In Jot Listing."));
                         }
-                    
-                        respe.json(response.success(_result,'Jot Data Found.'));
-
-                    }else{
-                         respe.json(response.errors(err,"Error In Jot Listing."));
-                    }
-                });
-
+                    });
+                }else{
+                    Jot.find(condition, function (err, ownerjot) {
+                        if(!_.isNull(ownerjot)){
+                            respe.json(response.success(ownerjot,'Jot Data Found.'));
+                        }else{
+                            respe.json(response.errors(err,"Error In Jot Listing."));
+                        }
+                    });
+                }
             }else{
-                 respe.json(response.errors(err,"Error In Jot Listing."));
+                respe.json(response.errors(err,"Error In Jot Listing."));
             }
         });
     }
@@ -414,10 +433,10 @@ exports.moveDocument = (reqst, respe) => {
 
 exports.addJotActivity = (reqst, respe) => {
 
-    if(!reqst.body.message){
+    /*if(!reqst.body.message){
         var errors =    { message: {'message':'Activity message can not be empty.'}}
         return respe.json(response.errors(errors,"Activity message can not be empty."));
-    }
+    }*/
 
     var JotActivitysave      =   new JotActivity(reqst.body);
 
@@ -445,13 +464,13 @@ exports.listJotActivity = (reqst, respe) => {
     }else{
 
             JotActivity.aggregate([
-                        {$match  :    {'jot_id': ObjectId(jot_id),'hotel_id': ObjectId(hotel_id)}},
+                        {$match  :  {   'jot_id': ObjectId(jot_id),'hotel_id': ObjectId(hotel_id)}},
                         {$lookup :  {
-                                        from: "users",
-                                        localField: "user_id",
-                                        foreignField: "_id", 
-                                        as: "userdata" 
-                                }
+                                            from: "users",
+                                            localField: "user_id",
+                                            foreignField: "_id", 
+                                            as: "userdata" 
+                                    }
                         },
                         {$project: 
                                     {

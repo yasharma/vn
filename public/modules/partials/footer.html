@@ -1,12 +1,12 @@
 <div ng-controller="footerController">
-<div class="frontfoter">
+<div class="frontfoter" ng-if="isAuth.footer=='yes'">
 	<div class="frontfoter_inner">
 		<div class="container clearfix">
 			<div class="left_newfotter">
 				<div class="fotter_links_new">
 					<ul class="clearfix">
 						<li><a href="/contact-us">Contact Us</a></li>
-						<li><a href="javascript:;">help &amp; faq</a></li>
+						<li><a href="/faq">help &amp; faq</a></li>
 						<li><a href="/demo">Request a demo</a></li>
 						<li><a href="javascript:;">Privacy Policy</a></li>
 						<li><a href="javascript:;">Terms and Conditions</a></li>
@@ -17,8 +17,10 @@
 		</div>
 	</div>
 </div>
+
 <!-- ng-style="{'top':($root.popup)?'50%':'-100%'}" -->
 <div class="bglayout" ng-show="$root.popup"></div>
+
 <div class="custom-popup"  ng-style="{'top':($root.popup)?'50%':'-100%'}">
 	<div class="check" ng-class="{scaledown:$root.popup}"> ✔ </div>
 
@@ -28,4 +30,5 @@
 	<button id="ok" ng-if="$root.popupData.action == 'ok'" ng-click="callClosePopup();"> OK </button>
 	<button id="ok" ng-if="$root.popupData.action == 'redirect'" ng-click="redirectToHome()">OK </button>
 </div>
+
 </div>

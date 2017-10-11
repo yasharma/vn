@@ -21,23 +21,19 @@ var JotSchema  = new Schema({
 
   due_date: {
     type: Number, 
-    default: false 
   },
   start_date: {
     type: Number, 
-    default: false 
+
   },
   end_date: {
     type: Number, 
-    default: false 
   },
   priority: {
     type: String,
-    default: false
   },
   jot_type: {
     type: String,
-    default: false
   },
   assigned_members: {
     type: Array,

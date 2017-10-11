@@ -35,6 +35,12 @@ app.config(['$httpProvider', function($httpProvider){
 
     $httpProvider.interceptors.push(interceptor);
 }])
+
+.config(['$qProvider', function ($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}])
+
+
 .config(['localStorageServiceProvider', function (localStorageServiceProvider) {
    
    var hostname = window.location.hostname, prefix;
@@ -44,15 +50,21 @@ app.config(['$httpProvider', function($httpProvider){
             break;
         default:
             prefix = 'default';
-   }    
-  localStorageServiceProvider.setPrefix(prefix);
+   }  
+ // localStorageServiceProvider.setPrefix(prefix).setStorageType('sessionStorage');
+ localStorageServiceProvider.setPrefix(prefix);
+
 }])
 .run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$timeout',
-	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$timeout){   	
-        
+	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$timeout){   	        
         
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) { 
+
+                $rootScope.currentPage          = $location.$$path;
+                $rootScope.activeHotelData      = localStorageService.get('hotel');
+                $rootScope.currentUser          = localStorageService.get('user');
+                
                 
                 if(nextRoute.$$route){
                     if(nextRoute.$$route.access){
@@ -74,6 +86,10 @@ app.config(['$httpProvider', function($httpProvider){
                 $rootScope.$watch(function(newValue, oldValue) {
                     $rootScope.logggedin = AuthSrv.isLogged;
                 });
+
+
+                $rootScope.$broadcast('handleSidebar');
+                
 
         
 

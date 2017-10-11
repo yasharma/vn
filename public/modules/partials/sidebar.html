@@ -1,111 +1,79 @@
-<!--left menu -->
+<!-- <close-on-outside-click> -->
+<div ng-controller="sidebarCntroller">
 
-		<div class="toogle_menu clearfix">
-			<a href="javascript:;" class="clearfix">
-			<span>dashboard</span>
-			<ng-md-icon icon="menu" ng-click="$root.leftopen=!$root.leftopen" class="cursor" style="fill:white" size="24"></ng-md-icon> 
+<div class="toogle_menu_list" ng-if="isAuth.outside != 'yes'" outside-click-sidebar='closeSidebar'>
+	<ul>				
+
+		<!-- <li title="Add/View Employee" >
+			<a href="javaScript:void(0);" ng-class="getClass('/dashboard/Preference')">	
+				<ng-md-icon icon="settings" class="cursor"  size="24"></ng-md-icon> 
+				<span>My Preference </span>						
+			</a>	
+								
+		</li> -->
+
+		<li title="Add/View Employee" >
+			<a href="javaScript:void(0);" ng-click="sideEmp = !sideEmp">	
+				<ng-md-icon icon="group_add" class="cursor"  size="24"></ng-md-icon> 
+				<span>Employees</span>
+				<ng-md-icon icon="{{(sideEmp)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 9px;" class="cursor expand_icon"  size="24"></ng-md-icon>
 			</a>
-		</div>
-		<div class="toogle_menu_list" ng-if="isAuth.outside != 'yes'" ng-controller="sidebarCntroller">
-			<ul>
-				<!-- <li>
-					<a href="javascript">	
-						<ng-md-icon icon="call" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Phone Directory</span>
-					</a>
-					<ul class="sub_menu">
-						<li><a href="javascript">View &amp; Add Member </a></li>
-						<li><a href="javascript">View &amp; Create Group</a></li>
-					</ul>
-				</li> -->
+			<ul class="sub_menu" ng-show="sideEmp">
+				<li><a href="/dashboard/employee" ng-class="getClass('/dashboard/employee')">Manage Employees</a></li>
+				<li><a href="/dashboard/employee_schedule"  ng-class="getClass('/dashboard/employee_schedule')">Schedule Employees</a></li>
+				<li><a href="/dashboard/position" ng-class="getClass('/dashboard/position')">Manage Positions</a></li>
+			</ul>						
+		</li>
 
-				<li title="Dashboard">
-					<a href="/dashboard">	
-						<ng-md-icon icon="home" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Dashboard</span>
-					</a>
-				</li>
 
-				<li title="Add/View Department">
-					<a href="/dashboard/department" ng-class="getClass('/dashboard/department')">	
-						<ng-md-icon icon="portrait" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Add/View Department</span>
-					</a>
-				</li>
-				
-				<li title="Add/View Employee" >
-					<a href="/dashboard/employee" ng-class="getClass('/dashboard/employee')">	
-						<ng-md-icon icon="group_add" class="cursor"  size="24"></ng-md-icon> 
-						<span>Add/View Employee</span>
-					</a>						
-				</li>
 
-				<li title="Employee Schedule">
-					<a href="/dashboard/employee_schedule" ng-class="getClass('/dashboard/employee_schedule')">	
-						<ng-md-icon icon="date_range" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Employee Schedule</span>
-					</a>
-				</li>
+		<li title="Add/View Department">
+			<a href="/dashboard/department" ng-class="getClass('/dashboard/department')">	
+				<ng-md-icon icon="portrait" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Departments</span>
+			</a>					
+		</li>			
 
-				
-				<li title="Inventory Category">
-					<a href="/dashboard/inventory_category" ng-class="getClass('/dashboard/inventory_category')">	
-						<ng-md-icon icon="shop" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Inventory Category</span>
-					</a>			
-				
-				<li title="Add/View Inventory">
-					<a href="/dashboard/inventory" ng-class="getClass('/dashboard/inventory')">	
-						<ng-md-icon icon="local_drink" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Add/View Inventory</span>
-					</a>
-				</li>
+		
+		<li title="Inventory Category">
+			<a href="javascript:void(0);" ng-click="sideinv = !sideinv">	
+				<ng-md-icon icon="shop" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Inventory</span>
+				<ng-md-icon icon="{{(sideinv)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 9px;"  size="24"></ng-md-icon>
+			</a>
 
-				</li><li title="Lost & Found Management">
-					<a href="/dashboard/lost_found" ng-class="getClass('/dashboard/lost_found')">	
-						<ng-md-icon icon="business" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Lost & Found Management</span>
-					</a>
-				</li>
 
-				</li><li title="Phone Directory">
-					<a href="/dashboard/phone_directory" ng-class="getClass('/dashboard/phone_directory')">	
-						<ng-md-icon icon="contact_phone" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Phone Directory</span>
-					</a>
-				</li>
+			<ul class="sub_menu" ng-show="sideinv">
+				<li><a href="/dashboard/inventory" ng-class="getClass('/dashboard/inventory')">Manage Inventory</a></li>					
+				<li ><a href="/dashboard/inventory_category" ng-class="getClass('/dashboard/inventory_category')">Manage Category</a></li>
+			</ul>	
+		
 
-				</li><li title="Document Center">
-					<a href="/dashboard/document_center" ng-class="getClass('/dashboard/document_center')">	
-						<ng-md-icon icon="folder_open" class="cursor" style="" size="24"></ng-md-icon> 
-						<span>Document Center</span>
-					</a>
-				</li>
+		</li>
 
-				<!-- <li>
-					<a href="javascript">	
-						<ng-md-icon icon="email" class="cursor"  size="24"></ng-md-icon> 
-						<span>message</span>
-					</a>	
-				</li>
-				<li>
-					<a href="javascript">	
-						<ng-md-icon icon="insert_drive_file" class="cursor"  size="24"></ng-md-icon> 
-						<span>report</span>
-					</a>
-				</li> -->
-				<!-- <li>
-					<a href="javascript">
-						<ng-md-icon icon="business" class="cursor"  size="24"></ng-md-icon> 
-						<span>alert for hotels</span>
-					</a>
-				</li>
-				<li>
-					<a href="javascript">
-						<ng-md-icon icon="settings" class="cursor"  size="24"></ng-md-icon> 
-						<span>Settings</span>
-					</a>
-				</li> -->
-			</ul>
-		</div>
+		<li title="Lost & Found Management">
+			<a href="/dashboard/lost_found" ng-class="getClass('/dashboard/lost_found')">	
+				<ng-md-icon icon="business" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Lost & Found Management</span>
+			</a>
+		</li>
+
+		</li><li title="Phone Directory">
+			<a href="/dashboard/phone_directory" ng-class="getClass('/dashboard/phone_directory')">	
+				<ng-md-icon icon="contact_phone" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Phone Directory</span>
+			</a>
+		</li>
+
+		</li><li title="Document Center">
+			<a href="/dashboard/document_center" ng-class="getClass('/dashboard/document_center')">	
+				<ng-md-icon icon="folder_open" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Document Center</span>
+			</a>
+		</li>
+		
+	</ul>
+</div>
+</div>
+<!-- </close-on-outside-click> -->
 <!--middle panel -->

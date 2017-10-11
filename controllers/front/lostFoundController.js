@@ -52,7 +52,7 @@ exports.updateLostFound = (reqst, respe) => {
             if(result){
                return  respe.json(response.success(result,'Lost & Found Updated successfully.'));
             }else{
-                return respe.json(response.errors(err,"Error in Lost & Found update."));
+                return respe.json(response.errors(err.errors,"Error in Lost & Found update."));
             }
         });
     }
@@ -91,7 +91,7 @@ exports.listLostFound = (reqst, respe) => {
         var errors =    { hotel_id: {'message':'Hotel id is required.'}}
         return respe.json(response.errors(errors,"Error in Hotel data."));
     }else{
-        LostFound.find({hotel_id: hotel_id}, function (err, result) {
+        LostFound.find({hotel_id: ObjectId(hotel_id)}, function (err, result) {
             if(result){
                 return respe.json(response.success(result,'Data Found.'));
             }else{

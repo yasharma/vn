@@ -9,7 +9,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 			var caretPos = cursorPosition.GetCaretPosition(text);
             var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-            var detectUserName = word.match(/\#[a-z]+/gmi);
+            var detectUserName = word.match(/\#[a-z,0-9,_\/.-]+/gmi);
 			var countAtRate    = word.match(/\#/gm);
 		
 			if(detectUserName && countAtRate.length == 1)
@@ -22,10 +22,13 @@ app.filter("filterdepartment", function(cursorPosition) {
 					scope.matchWord = word;						
 					angular.forEach(input,function(value,key){
 						var listedDepartment = value.department_name;
+						var abbreviation     = value.abbreviation;
+
 						listedDepartment     = listedDepartment.toLowerCase();
+						abbreviation         = abbreviation.toLowerCase();
 						removeHash           = removeHash.toLowerCase();
 
-						if(listedDepartment.startsWith(removeHash))
+						if(listedDepartment.startsWith(removeHash) || abbreviation.startsWith(removeHash))
 						{						
 							searchedString.push(value);
 						}
@@ -46,7 +49,7 @@ app.filter("filterstaff", function(cursorPosition) {
 			var caretPos = cursorPosition.GetCaretPosition(text);
             var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-            var detectUserName = word.match(/\@[a-z]+/gmi);
+            var detectUserName = word.match(/\@[a-z,0-9,_\/.-]+/gmi);
 			var countAtRate    = word.match(/\@/gm);
 			
 			if(detectUserName && countAtRate.length == 1)
@@ -60,14 +63,21 @@ app.filter("filterstaff", function(cursorPosition) {
 					scope.matchWord = word;
 					
 					angular.forEach(input,function(value,key){
-						var listedstaff = value.user_name;
+
+						var first_name  = value.first_name;
+						var last_name   = value.last_name;
+						var user_name   = value.user_name;
+						user_name       = user_name.toLowerCase();
+						var listedstaff = first_name+last_name;
+						
 						listedstaff     = listedstaff.toLowerCase();
 						removeAtRate    = removeAtRate.toLowerCase();
 						
-						if(listedstaff.startsWith(removeAtRate))
+						if(listedstaff.startsWith(removeAtRate) || user_name.startsWith(removeAtRate))
 						{						
 							searchedString.push(value);
 						}
+
 					});		
 				}		
 				return searchedString;
@@ -85,7 +95,7 @@ app.filter("filterstaffJotDesc", function(cursorPosition) {
 				var caretPos = cursorPosition.GetCaretPosition(text);
 	            var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-	            var detectUserName = word.match(/\@[a-z]+/gmi);
+	            var detectUserName = word.match(/\@[a-z,0-9,_\/.-]+/gmi);
 				var countAtRate    = word.match(/\@/gm);
 						
 				if(detectUserName)
@@ -101,10 +111,17 @@ app.filter("filterstaffJotDesc", function(cursorPosition) {
 						var removeAtRate = word.split("@");					
 						removeAtRate     = removeAtRate[1];
 						angular.forEach(input,function(value,key){
-							var listedstaff = value.user_name;
+							var first_name  = value.first_name;
+							var last_name   = value.last_name;
+							var user_name   = value.user_name;
+							user_name       = user_name.toLowerCase();
+							var listedstaff = first_name+last_name;
+
+
 							listedstaff     = listedstaff.toLowerCase();
 							removeAtRate    = removeAtRate.toLowerCase();
-							if(listedstaff.startsWith(removeAtRate))
+
+							if(listedstaff.startsWith(removeAtRate) || user_name.startsWith(removeAtRate))
 							{						
 								searchedString.push(value);
 							}
@@ -127,7 +144,7 @@ app.filter("descDepartmentFilter", function(cursorPosition) {
 				var caretPos = cursorPosition.GetCaretPosition(text);
 	            var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-	            var detectUserName = word.match(/\#[a-z]+/gmi);
+	            var detectUserName = word.match(/\#[a-z,0-9,_\/.-]+/gmi);
 				var countAtRate    = word.match(/\#/gm);
 						
 				if(detectUserName)
@@ -144,10 +161,14 @@ app.filter("descDepartmentFilter", function(cursorPosition) {
 						var removeAtRate = word.split("#");					
 						removeAtRate     = removeAtRate[1];
 						angular.forEach(input,function(value,key){
-							var listedstaff = value.department_name;
-							listedstaff     = listedstaff.toLowerCase();
-							removeAtRate    = removeAtRate.toLowerCase();
-							if(listedstaff.startsWith(removeAtRate))
+							var department_name = value.department_name;
+							var abbreviation    = value.abbreviation;
+
+							department_name     = department_name.toLowerCase();
+							abbreviation        = abbreviation.toLowerCase();
+
+							removeAtRate        = removeAtRate.toLowerCase();
+							if(department_name.startsWith(removeAtRate) || abbreviation.startsWith(removeAtRate))
 							{						
 								searchedString.push(value);
 							}
@@ -156,5 +177,27 @@ app.filter("descDepartmentFilter", function(cursorPosition) {
 					return searchedString;
 				}
 			
+         };
+});
+
+app.filter("checklistFilter", function() {
+         return function(input,scope) {         		
+         		var totalComplete = 0;
+	         	angular.forEach(input,function(value,key){
+	         		var completeSub = 0;
+	         		angular.forEach(value.item_list,function(value1,key1){
+	         			if(value1.status == 1)
+	         			{
+	         				completeSub = completeSub+1;
+	         			}	         			
+	         		});
+
+	         		if(value.item_list.length == completeSub)
+	         		{
+	         			totalComplete = totalComplete+1; 
+	         		}
+	         	});
+
+	         	return totalComplete+'/'+input.length;
          };
 });

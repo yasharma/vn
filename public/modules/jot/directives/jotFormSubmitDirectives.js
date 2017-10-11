@@ -1,10 +1,10 @@
 "use strict";
 
-app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $mdDialog,toastService,globalRequest,localStorageService,$routeParams) {
+app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastService,globalRequest,$routeParams) {
       return {
           
           link: function($scope, element, attrs) {
-
+            var hotel = $rootScope.activeHotelData;
             /***************************************************
             * Prevent form submit on enter key
             ***************************************************/
@@ -22,6 +22,45 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
 
               $rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.jot_members = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = $rootScope.jot_description = $rootScope.files = $rootScope.jot_title  =  '';
               $rootScope.progress = -1;
+
+
+
+              /**************************************
+              * Appned staff member of click of icon
+              **************************************/
+
+              $scope.selectStaff = function(userName){
+                var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi);
+                var match = -1;
+                if(checkAlreadyExists)
+                {
+                  match = checkAlreadyExists.indexOf('@'+userName);
+                }
+                 if(match > -1)
+                {
+                  return false;
+                }
+                $rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+              };
+
+              /**************************************
+              * Appned Department of click of icon
+              **************************************/
+
+              $scope.selectDept = function(depatAbbr){
+                 var checkAlreadyExists = $rootScope.department.match(/\#[a-z,0-9,_\/.-]+/gmi);
+                var match = -1;
+                if(checkAlreadyExists)
+                {
+                  match = checkAlreadyExists.indexOf('#'+depatAbbr);
+                }
+                 if(match > -1)
+                {
+                  return false;
+                }
+
+                $rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
+              };
                            
                 
 
@@ -88,21 +127,20 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                              };
                     }
 
-                     task = {
+                    task = {
                       type       : 'recurring',
                       start_date : new Date($rootScope.start_recurring_date).getTime(),
                       end_date   : new Date($rootScope.end_recurring_date).getTime(),
                       pattern: pattern
                     };
-                  }
-
-                  
+                  }                  
                   /*******************************
                   ||  End task Jot Data json 
                   *******************************/
+                
 
                   $scope.message = ' ';
-                  var hotel = localStorageService.get('hotel');
+                  
                   
                   var jotDataArray = {
                       jot_title           : $rootScope.jot_title,
@@ -112,15 +150,14 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                       hotel_id            : hotel._id,
                       jot_type            : $rootScope.jot_type,
                       hotel_room          : $rootScope.hotel_room,
-                      due_date            : new Date($rootScope.due_date).getTime(),
+                      due_date            : new Date($rootScope.due_date).getTime() || '',
                       department          : $rootScope.department,                      
-                      checklist           : $rootScope.checklist,  
-                      image               : $rootScope.issueImages,
+                      checklist           : $rootScope.checklist,                        
                       task_type           : task,
                       status              : 'open'
                   };
 
-                 /* console.log(jotDataArray);
+                  /*console.log($rootScope.checklist);
                   return false;*/
 
                   var request={
@@ -130,14 +167,67 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                   };
                   
                   globalRequest.jotCRUD(request).then(function(response){
-                   
+                    
+                    
                     if(response.status == 1)
                     {
-                      var JotType = $routeParams.type;
-                      globalRequest.getJotList(JotType);
-                      $mdDialog.cancel();
-                      var popup = {"message":response.message,"class":"success"};
-                      toastService.alert(popup);
+                      var jotID = response.result._id;
+
+                      /****************************
+                      * Upload file if exists
+                      ****************************/
+
+                      if($rootScope.files && $rootScope.files.length > 0)
+                      {
+                     
+                        globalRequest.uploadFiles(hotel._id,$rootScope.directory,$rootScope.files).then(function(fileRasponse){
+                            if(fileRasponse.status == 1)
+                            {
+                              var updateRequest={
+                                    url:window.__API_PATH.UPDATE_JOT,
+                                    method:"PUT",
+                                    data:{
+                                      jot_id : jotID,
+                                      image  : fileRasponse.result
+                                    }
+                                  };
+
+
+                              /****************************
+                              * Update files in jot 
+                              ****************************/
+
+                              globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+                                if(updateResponse.status == 1)
+                                {
+                                  $rootScope.files = [];
+                                  var JotType = $routeParams.type;
+                                  globalRequest.getJotList(JotType);
+                                  $mdDialog.cancel();
+                                  var popup = {"message":response.message,"class":"success"};
+                                  toastService.alert(popup);
+                                }
+
+                              });  
+                            }
+                        });
+                      } else {
+
+                          var JotType = $routeParams.type;
+                          globalRequest.getJotList(JotType);
+                          $mdDialog.cancel();
+                          var popup = {"message":response.message,"class":"success"};
+                          toastService.alert(popup);
+                      }
+                    } else {
+                        
+                        var errors = '<ul class="mdToast-error-list">';
+                        angular.forEach(response.errors,function(value,key){
+                          errors += '<li>'+value.message+'</li>';
+                        });
+                        errors += '</ul>';
+                        var errorpopup = {"message":errors,"class":""};
+                        toastService.errors(errorpopup);
                     }
                     
                   });

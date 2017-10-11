@@ -1,4 +1,4 @@
-<md-dialog class="schedule_container">
+<md-dialog class="schedule_container newhotel_dialog aligninput dash_pro_inform">
 	<md-toolbar>
 		<div class="md-toolbar-tools">
 			<h2>Schedule</h2>
@@ -8,13 +8,13 @@
 			</md-button>
 		</div>
 	</md-toolbar>
-	<div class="dash-main-con">
+	<div>
 		<div class="scheduling_field">
 
 			<div class="fields">
-				<div class="col-sm-6 field_label"> Select Shift </div>
+				<div class="col-sm-2 field_label"> Select Shift </div>
 
-				<div class="col-sm-6"> 
+				<div class="col-sm-10"> 
 					<md-input-container md-no-float class="md-block">
 						<md-select ng-model="shiftTimeList" placeholder="Time" ng-change="onChangeSchedule()">
 							<md-option value=""">
@@ -23,17 +23,19 @@
 
 							<md-option ng-repeat="shift in $parent.shiftList  track by $index" value="{{shift}}" style="background:{{shift.bgcolor}}" ng-selected="{{(selectVal == shift._id)}}">		
 
-								{{shift.start_time[0].hour+":"+shift.start_time[0].minute | getmeridiem:this}} - 
+								{{shift.start_time.hour+":"+shift.start_time.minute +' '+ shift.start_time.meridiem}} -
 
-								{{shift.end_time[0].hour +":"+shift.end_time[0].minute | getmeridiem:this}}
+                                {{(shift.end_time.hour == -1)?"Untill Finish":shift.end_time.hour +":"+shift.end_time.minute +' '+ shift.end_time.meridiem}}
+
+                                {{'('+shift.shift_name+')'}}
 							</md-option>	
 
-							<md-option value="custom" style="background:#98d4ed" ng-selected="{{(selectVal == 'custom')}}">
+							<md-option value="custom"  ng-selected="{{(selectVal == 'custom')}}">
 								Custom
 							</md-option>
-			            <!-- <md-option value="off" style="background:#86f47b">
-                				Off
-                			</md-option> -->		                       
+			                <md-option value="onleave" style="background:#ff4500" ng-selected="{{(selectVal == 'onleave')}}">
+                				On Leave
+                			</md-option>		                       
                 		</md-select>
                 	</md-input-container>
                 </div>
@@ -41,31 +43,42 @@
             </div>
 
 
-            <div ng-class="{pattern_disable:shiftTimeList != 'custom'}">
+            <div ng-class="{pattern_disable:dateValue != 'custom'}">
 
             	<div class="fields">
-            		<div class="col-sm-2 field_label"> From </div>
+            		<div class="col-sm-2 field_label"> Start Time </div>
 
-            		<div class="col-sm-5"> 
-            			<md-input-container md-no-float class="md-block selectgeneral38">
-            				<md-select ng-model="start_hour" placeholder="Start Hour">
-            					<md-option ng-repeat="hour in getDay(23) track by $index" value="{{$index+1}}">
-            						{{$index+1 | timeConvertorfilter:this | digits:this}}
+            		<div class="col-sm-4"> 
+            			<md-input-container md-no-float class="md-block selectgeneral40">
+            				<md-select ng-model="shiftTime.start_time.hour" placeholder="Start Hour">
+            					<md-option ng-repeat="hour in getDay(12) track by $index" value="{{$index+1}}">
+            						{{$index+1 | digits:this}}
             					</md-option>
             				</md-select>
             			</md-input-container>
             		</div>
 
-            		<div class="col-sm-5"> 
-            			<md-input-container md-no-float class="md-block selectgeneral38">
-            				<md-select ng-model="start_min" placeholder="Start Minute">
+            		<div class="col-sm-3"> 
+            			<md-input-container md-no-float class="md-block selectgeneral40">
+            				<md-select ng-model="shiftTime.start_time.minute" placeholder="Start Minute">
             					
-            					<md-option ng-repeat="min in getDay(60)  track by $index" value="{{$index | digits:this}}">
-            						{{$index | digits:this}}
-            					</md-option>
+            					<md-option ng-repeat="min in [00,15,30,45,60]  track by $index" value="{{min}}">
+                                        {{min | digits:this}}
+                                 </md-option>
             				</md-select>
             			</md-input-container>
             		</div>
+
+                    <div class="col-sm-3">
+                            <md-input-container md-no-float class="md-block selectgeneral40">
+                                <md-select ng-model="shiftTime.start_time.meridiem" placeholder="AM/PM">
+                                    <md-option ng-repeat="md in ['AM','PM']" value="{{md}}">
+                                        {{md}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                     </div>
+
             		<div class="clearfix"></div>
             	</div>
 
@@ -73,37 +86,56 @@
 
 
             	<div class="fields">
-            		<div class="col-sm-2 field_label"> To </div>
+            		<div class="col-sm-2 field_label"> End Time </div>
 
-            		<div class="col-sm-5"> 
-            			<md-input-container md-no-float class="md-block selectgeneral38">
-            				<md-select ng-model="end_hour" placeholder="End Hour">
+            		<div class="col-sm-4"> 
+            			<md-input-container md-no-float class="md-block selectgeneral40">
+            				<md-select ng-model="shiftTime.end_time.hour" placeholder="End Hour">
             					<md-option value="-1">
             						Untill Finish
             					</md-option>
 
-            					<md-option ng-repeat="hour in getDay(23) track by $index" value="{{$index+1}}">
-            						{{$index+1  | timeConvertorfilter:this | digits:this}}
+            					<md-option ng-repeat="hour in getDay(12) track by $index" value="{{$index+1}}">
+            						{{$index+1 | digits:this}}
             					</md-option>
             				</md-select>
             			</md-input-container>
             		</div>
 
-            		<div class="col-sm-5"> 
-            			<md-input-container md-no-float class="md-block selectgeneral38">
-            				<md-select ng-model="end_min" placeholder="End Minute">
+            		<div class="col-sm-3"> 
+            			<md-input-container md-no-float class="md-block selectgeneral40">
+            				<md-select ng-model="shiftTime.end_time.minute" placeholder="End Minute">
             					
-            					<md-option ng-repeat="min in getDay(60)  track by $index" value="{{$index | digits:this}}" ng-selected="$index == 0">
-            						{{$index | digits:this}}
-            					</md-option>
+            				   <md-option ng-repeat="min in [00,15,30,45,60]  track by $index" value="{{min}}">
+                                        {{min | digits:this}}
+                               </md-option>
             				</md-select>
             			</md-input-container>
             		</div>
-            		<div class="clearfix"></div>
+
+                    <div class="col-sm-3">
+                            <md-input-container md-no-float class="md-block selectgeneral40">
+                                <md-select ng-model="shiftTime.end_time.meridiem" placeholder="AM/PM">
+                                    <md-option ng-repeat="md in ['AM','PM']" value="{{md}}">
+                                        {{md}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                     </div>
+            		<div class="clearfix"></div>                    
             	</div>
             </div>
             <div class="fields">
-            	<br>
+                <br>                
+
+                    <md-input-container class="md-block">
+                        <textarea class="md-block limitheight150" ng-model="note" rows="5" aria-label="textarea" style="border: 1px solid #eee !important;    height: 150px;" placeholder="Write a short note here...">
+                        </textarea>   
+                                             
+                    </md-input-container>             
+            </div>
+            <div class="fields">
+
             	<div class="chane_pass_btn">
             		<md-button type="submit" ng-click="setSchedule();" class="md-primary addyellobtn yellowbtn">submit</md-button>  
             	</div>

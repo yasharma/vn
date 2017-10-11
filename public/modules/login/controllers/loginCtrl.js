@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('loginController', ['$scope','$http','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','globalRequest',
-	function($scope,$http,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,globalRequest) {	
+app.controller('loginController', ['$scope','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','$cookies',
+	function($scope,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,$cookies) {	
 
 
 		/*********************************************
@@ -23,25 +23,32 @@ app.controller('loginController', ['$scope','$http','$location','localStorageSer
 
 			loginFactory.login(request).then(function(response){
 				$scope.loginresult = response;
-				
 				if(response.status == 1)
 				{
+					/*if(remember && remember == 1)
+					{
+
+					}*/
+
+					 /*var now = new Date().toString();
+					 var expiry;					 
+					 expiry = now;
+					 
+					  console.log("about to put cookie");
+					  $cookies.put('sample', "Abc", {expires: expiry});*/
+					   
+										
+
+					/*$cookies.put('hoteljot',response.result.token,[{
+			            expires: 'test'
+			        }]);*/
+
 					localStorageService.set('token', response.result.token);
 					localStorageService.set('user', response.result.user);
 					AuthSrv.isLogged = true;
-					$mdDialog.cancel();
-					if(response.result.user.role == 'hotelowner')
-					{
-						$location.path('/dashboard');
-					}
+				    $mdDialog.cancel();
+					$location.path('/dashboard');
 
-					if(response.result.user.role == 'staff')
-					{
-						globalRequest.getHotelDetail(response.result.user.hotel_id);
-						$location.path('/dashboard/hotelboard');
-					}
-										
-					
 				}									
 				
 				

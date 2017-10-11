@@ -1,8 +1,8 @@
 "use strict";
 
-app.controller('departmentController', ['$scope','localStorageService','globalRequest','$mdDialog','toastService',
-	function($scope,localStorageService,globalRequest,$mdDialog,toastService) {
-		var hotel = localStorageService.get('hotel');
+app.controller('departmentController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+		
 
 
 		/************************************
@@ -13,12 +13,7 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 			$scope.department_name = "";		
 			$scope.department_abbreviation = "";		
 			$scope.department_desc = "";
-		};
-
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.departmentResult = "";
-		};
+		};	
 
 		
 		/************************************
@@ -47,25 +42,35 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 			            url:window.__API_PATH.ADD_DEPARTMENT,
 			            method:"POST",
 			            data:{
-			            	hotel_id      	   :  hotel._id,
+			            	hotel_id      	   :  $rootScope.activeHotelData._id,
 			            	department_name    :  departmentName,
-			            	abbreviation       :  Abbreviation,
-			            	bgcolor       	   :  $scope.bgcolor,
+			            	abbreviation       :  Abbreviation,			            	
 			            	description        :  $scope.department_desc
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.departmentResult = response;
-				$scope.blank();
+			 	var popup;
+				
 			 	if(response.status == 1)
 			 	{
+			 		$scope.blank();
 			 		if(!$scope.departmentList)
 			 		{
 			 			$scope.departmentList = [];
 			 		}
 			 		$scope.departmentList.push(response.result);
 			 		
-			 		$scope.department_name = $scope.department_abbreviation = $scope.department_desc = '';			 		
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);		 		
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 });
 
@@ -93,16 +98,16 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 		* Delete department
 		*****************************************/	
 
-		$scope.removeDepartment = function(detail){
+		$scope.removeDepartment = function(detail,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_DEPARTMENT,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				$scope.departmentList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});

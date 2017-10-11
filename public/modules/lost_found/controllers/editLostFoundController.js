@@ -1,10 +1,10 @@
 "use strict";
 
-app.controller('editLostFoundController', ['$scope','localStorageService','globalRequest','Upload','$timeout','lstFndDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,lstFndDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editLostFoundController', ['$scope','$rootScope','globalRequest','lstFndDetail','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,lstFndDetail,$mdDialog,toastService) {
+		var hotel = $rootScope.activeHotelData;
 
-		
+		$rootScope.files = '';
 
 		/**********************************************************
 	    * Item tags 
@@ -27,7 +27,6 @@ app.controller('editLostFoundController', ['$scope','localStorageService','globa
 		* Pass edited employee value in current scope
 		***********************************************/
 				
-
 		angular.forEach(lstFndDetail.detail,function (value,key) {
 
 			if(key == 'date')
@@ -36,6 +35,9 @@ app.controller('editLostFoundController', ['$scope','localStorageService','globa
 			} else if(key == 'search_tag')
 			{
 				$scope.ctrl.search_tag = value.split(',');
+			}else if(key == 'description')
+			{
+				$rootScope.jot_description = value;
 			}
 			else {
 				$scope[key] = value;
@@ -43,87 +45,132 @@ app.controller('editLostFoundController', ['$scope','localStorageService','globa
 		    
 		});
 
-		/*****************************************
-		* Jot image upload
-		*****************************************/
-		$scope.foundImages = '';
-		$scope.uploadFoundFiles = function(files, errFiles) {
-			$scope.files       = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'lost_found',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   var result = response.data.result;
-	                   var uploadedImagesName = []; 
-	                    angular.forEach(result, function(data) {				
-				            if(data.status){
-				            	uploadedImagesName.push(data.filename);
-				            }
-				        });
-				        $scope.image = uploadedImagesName;
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.foundProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
-
-	    };
-
-
-
+	
 	    /*****************************************
 		* Update found item
 		*****************************************/
 
 		$scope.editFoundItem = function(){
 
-			var DataArray = {
-			  _id  		     : $scope._id,
-			  description    : $scope.description,			 
-			  image          : $scope.image,
-			  place 		 : $scope.place,	
-			  date 	 		 : new Date($scope.date).getTime(),				  
-			  no_of_items 	 : $scope.no_of_items,				  
-			  category 	     : $scope.category,			  
-			  status 	     : $scope.status,			  
-			  contact 	     : $scope.contact,				  
-			  search_tag 	 : $scope.ctrl.search_tag,				  
-			};
+	 		/****************************
+            * Upload file if exists
+            ****************************/
+
+            var popup;
+
+            if($rootScope.files && $rootScope.files.length > 0)
+            {
+
+            	globalRequest.uploadFiles(hotel._id,'lost_found',$rootScope.files).then(function(fileRasponse){
+                    if(fileRasponse.status == 1)
+                    {
+                    	var mergeImages      = lstFndDetail.detail.image.concat(fileRasponse.result);
+
+                        var updateRequest={
+                            url:window.__API_PATH.UPDATE_LOST_FOUND,
+                            method:"PUT",
+                            data:{  
+                              _id  		     : $scope._id,
+							  description    : $rootScope.jot_description,			 
+							  title    		 : $scope.title,			 
+							  place 		 : $scope.place,	
+							  date 	 		 : new Date($scope.date).getTime(),			
+							  image  		 : mergeImages,		  
+							  no_of_items 	 : $scope.no_of_items,				  
+							  category 	     : $scope.category,			  
+							  status 	     : $scope.status,			  
+							  contact 	     : $scope.contact,				  
+							  search_tag 	 : $scope.ctrl.search_tag,
+                            }
+                        };
 
 
+                      /****************************
+                      * Update files in lost found 
+                      ****************************/
 
-			var request={
-                    url:window.__API_PATH.UPDATE_LOST_FOUND,
-                    method:"PUT",
-                    data:DataArray
-                  };
-            
-           
-            globalRequest.jotCRUD(request).then(function(response){ 
-            	$scope.editlstFoundResult = response;
-                if(response.status ==1)
-			 	{
-			 		$mdDialog.cancel();
-			 		globalRequest.getFoundList();
-			 	}
-            });
+                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+                        if(updateResponse.status == 1)
+                        {
+                          $rootScope.files = '';
+                          globalRequest.getFoundList();
+                          $mdDialog.cancel();
+		                  popup = {"message":updateResponse.message,"class":"success"};
+		                  toastService.alert(popup);
+                        }  else {
+
+					 		var errors = '<ul class="mdToast-error-list">';
+							angular.forEach(updateResponse.errors,function(value,key){
+								errors += '<li>'+value.message+'</li>';
+							});
+							errors += '</ul>';
+							popup = {"message":errors,"class":""};
+							toastService.errors(popup);
+					 	}
+
+                      });  
+                    }  else {
+
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(fileRasponse.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+                });
+
+            } else {
+
+            	/****************************
+                * If no attachment uploaded
+                ****************************/
+
+
+            	var DataArray = {
+					  _id  		     : $scope._id,
+					  description    : $rootScope.jot_description,				 
+					  title          : $scope.title,			 
+					  place 		 : $scope.place,	
+					  date 	 		 : new Date($scope.date).getTime(),				  
+					  no_of_items 	 : $scope.no_of_items,				  
+					  category 	     : $scope.category,			  
+					  status 	     : $scope.status,			  
+					  contact 	     : $scope.contact,				  
+					  search_tag 	 : $scope.ctrl.search_tag,				  
+					};
+
+					var request={
+	                    url:window.__API_PATH.UPDATE_LOST_FOUND,
+	                    method:"PUT",
+	                    data:DataArray
+	                  };
+    
+   
+					globalRequest.jotCRUD(request).then(function(response){ 
+						
+						if(response.status ==1)
+						{
+							globalRequest.getFoundList();
+							$mdDialog.cancel();
+							popup = {"message":response.message,"class":"success"};
+							toastService.alert(popup);
+						}  else {
+
+					 		var errors = '<ul class="mdToast-error-list">';
+							angular.forEach(response.errors,function(value,key){
+								errors += '<li>'+value.message+'</li>';
+							});
+							errors += '</ul>';
+							popup = {"message":errors,"class":""};
+							toastService.errors(popup);
+					 	}
+					});
+            }	
+
+
 		};
 
-
-		
 	}
 ]);

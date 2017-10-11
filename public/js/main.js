@@ -9,9 +9,12 @@ var app = angular.module('hoteljotApp',[
 			'ngMdIcons'	,
 			'ngFileUpload',
 			'angularjs-datetime-picker',	
-			'colorpicker.module',
 			'ui.bootstrap',	
 			'ngSanitize',
+			'angular-nicescroll',
+			'cp.ngConfirm',
+			'vAccordion',
+			'ngCookies',
 			])
 
 .config(['localStorageServiceProvider',
@@ -24,6 +27,270 @@ var app = angular.module('hoteljotApp',[
 app.run(['$log',function($log){
 	$log.info("Application is running");
 }]);
+window.countryList = new Array("Afghanistan", "Albania", "Algeria", "American Samoa", "Angola", "Anguilla", "Antartica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Ashmore and Cartier Island", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Clipperton Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo, Democratic Republic of the", "Congo, Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czeck Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Europa Island", "Falkland Islands (Islas Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern and Antarctic Lands", "Gabon", "Gambia, The", "Gaza Strip", "Georgia", "Germany", "Ghana", "Gibraltar", "Glorioso Islands", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard Island and McDonald Islands", "Holy See (Vatican City)", "Honduras", "Hong Kong", "Howland Island", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Ireland, Northern", "Israel", "Italy", "Jamaica", "Jan Mayen", "Japan", "Jarvis Island", "Jersey", "Johnston Atoll", "Jordan", "Juan de Nova Island", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia, Former Yugoslav Republic of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Man, Isle of", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States of", "Midway Islands", "Moldova", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcaim Islands", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romainia", "Russia", "Rwanda", "Saint Helena", "Saint Kitts and Nevis", "Saint Lucia", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Scotland", "Senegal", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and South Sandwich Islands", "Spain", "Spratly Islands", "Sri Lanka", "Sudan", "Suriname", "Svalbard", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Tobago", "Toga", "Tokelau", "Tonga", "Trinidad", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "Uruguay", "USA", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Virgin Islands", "Wales", "Wallis and Futuna", "West Bank", "Western Sahara", "Yemen", "Yugoslavia", "Zambia", "Zimbabwe");
+
+
+var s_a = [];
+s_a[0] = "";
+s_a[1] = "Badakhshan|Badghis|Baghlan|Balkh|Bamian|Farah|Faryab|Ghazni|Ghowr|Helmand|Herat|Jowzjan|Kabol|Kandahar|Kapisa|Konar|Kondoz|Laghman|Lowgar|Nangarhar|Nimruz|Oruzgan|Paktia|Paktika|Parvan|Samangan|Sar-e Pol|Takhar|Vardak|Zabol";
+s_a[2] = "Berat|Bulqize|Delvine|Devoll (Bilisht)|Diber (Peshkopi)|Durres|Elbasan|Fier|Gjirokaster|Gramsh|Has (Krume)|Kavaje|Kolonje (Erseke)|Korce|Kruje|Kucove|Kukes|Kurbin|Lezhe|Librazhd|Lushnje|Malesi e Madhe (Koplik)|Mallakaster (Ballsh)|Mat (Burrel)|Mirdite (Rreshen)|Peqin|Permet|Pogradec|Puke|Sarande|Shkoder|Skrapar (Corovode)|Tepelene|Tirane (Tirana)|Tropoje (Bajram Curri)|Vlore";
+s_a[3] = "Adrar|Ain Defla|Ain Temouchent|Alger|Annaba|Batna|Bechar|Bejaia|Biskra|Blida|Bordj Bou Arreridj|Bouira|Boumerdes|Chlef|Constantine|Djelfa|El Bayadh|El Oued|El Tarf|Ghardaia|Guelma|Illizi|Jijel|Khenchela|Laghouat|M'Sila|Mascara|Medea|Mila|Mostaganem|Naama|Oran|Ouargla|Oum el Bouaghi|Relizane|Saida|Setif|Sidi Bel Abbes|Skikda|Souk Ahras|Tamanghasset|Tebessa|Tiaret|Tindouf|Tipaza|Tissemsilt|Tizi Ouzou|Tlemcen";
+s_a[4] = "Eastern|Manu'a|Rose Island|Swains Island|Western";
+s_a[5] = "Andorra la Vella|Bengo|Benguela|Bie|Cabinda|Canillo|Cuando Cubango|Cuanza Norte|Cuanza Sul|Cunene|Encamp|Escaldes-Engordany|Huambo|Huila|La Massana|Luanda|Lunda Norte|Lunda Sul|Malanje|Moxico|Namibe|Ordino|Sant Julia de Loria|Uige|Zaire";
+s_a[6] = "Anguilla";
+s_a[7] = "Antartica";
+s_a[8] = "Barbuda|Redonda|Saint George|Saint John|Saint Mary|Saint Paul|Saint Peter|Saint Philip";
+s_a[9] = "Antartica e Islas del Atlantico Sur|Buenos Aires|Buenos Aires Capital Federal|Catamarca|Chaco|Chubut|Cordoba|Corrientes|Entre Rios|Formosa|Jujuy|La Pampa|La Rioja|Mendoza|Misiones|Neuquen|Rio Negro|Salta|San Juan|San Luis|Santa Cruz|Santa Fe|Santiago del Estero|Tierra del Fuego|Tucuman";
+s_a[10] = "Aragatsotn|Ararat|Armavir|Geghark'unik'|Kotayk'|Lorri|Shirak|Syunik'|Tavush|Vayots' Dzor|Yerevan";
+s_a[11] = "Aruba";
+s_a[12] = "Ashmore and Cartier Island";
+s_a[13] = "Australian Capital Territory|New South Wales|Northern Territory|Queensland|South Australia|Tasmania|Victoria|Western Australia";
+s_a[14] = "Burgenland|Kaernten|Niederoesterreich|Oberoesterreich|Salzburg|Steiermark|Tirol|Vorarlberg|Wien";
+s_a[15] = "Abseron Rayonu|Agcabadi Rayonu|Agdam Rayonu|Agdas Rayonu|Agstafa Rayonu|Agsu Rayonu|Ali Bayramli Sahari|Astara Rayonu|Baki Sahari|Balakan Rayonu|Barda Rayonu|Beylaqan Rayonu|Bilasuvar Rayonu|Cabrayil Rayonu|Calilabad Rayonu|Daskasan Rayonu|Davaci Rayonu|Fuzuli Rayonu|Gadabay Rayonu|Ganca Sahari|Goranboy Rayonu|Goycay Rayonu|Haciqabul Rayonu|Imisli Rayonu|Ismayilli Rayonu|Kalbacar Rayonu|Kurdamir Rayonu|Lacin Rayonu|Lankaran Rayonu|Lankaran Sahari|Lerik Rayonu|Masalli Rayonu|Mingacevir Sahari|Naftalan Sahari|Naxcivan Muxtar Respublikasi|Neftcala Rayonu|Oguz Rayonu|Qabala Rayonu|Qax Rayonu|Qazax Rayonu|Qobustan Rayonu|Quba Rayonu|Qubadli Rayonu|Qusar Rayonu|Saatli Rayonu|Sabirabad Rayonu|Saki Rayonu|Saki Sahari|Salyan Rayonu|Samaxi Rayonu|Samkir Rayonu|Samux Rayonu|Siyazan Rayonu|Sumqayit Sahari|Susa Rayonu|Susa Sahari|Tartar Rayonu|Tovuz Rayonu|Ucar Rayonu|Xacmaz Rayonu|Xankandi Sahari|Xanlar Rayonu|Xizi Rayonu|Xocali Rayonu|Xocavand Rayonu|Yardimli Rayonu|Yevlax Rayonu|Yevlax Sahari|Zangilan Rayonu|Zaqatala Rayonu|Zardab Rayonu";
+s_a[16] = "Acklins and Crooked Islands|Bimini|Cat Island|Exuma|Freeport|Fresh Creek|Governor's Harbour|Green Turtle Cay|Harbour Island|High Rock|Inagua|Kemps Bay|Long Island|Marsh Harbour|Mayaguana|New Providence|Nicholls Town and Berry Islands|Ragged Island|Rock Sound|San Salvador and Rum Cay|Sandy Point";
+s_a[17] = "Al Hadd|Al Manamah|Al Mintaqah al Gharbiyah|Al Mintaqah al Wusta|Al Mintaqah ash Shamaliyah|Al Muharraq|Ar Rifa' wa al Mintaqah al Janubiyah|Jidd Hafs|Juzur Hawar|Madinat 'Isa|Madinat Hamad|Sitrah";
+s_a[18] = "Barguna|Barisal|Bhola|Jhalokati|Patuakhali|Pirojpur|Bandarban|Brahmanbaria|Chandpur|Chittagong|Comilla|Cox's Bazar|Feni|Khagrachari|Lakshmipur|Noakhali|Rangamati|Dhaka|Faridpur|Gazipur|Gopalganj|Jamalpur|Kishoreganj|Madaripur|Manikganj|Munshiganj|Mymensingh|Narayanganj|Narsingdi|Netrokona|Rajbari|Shariatpur|Sherpur|Tangail|Bagerhat|Chuadanga|Jessore|Jhenaidah|Khulna|Kushtia|Magura|Meherpur|Narail|Satkhira|Bogra|Dinajpur|Gaibandha|Jaipurhat|Kurigram|Lalmonirhat|Naogaon|Natore|Nawabganj|Nilphamari|Pabna|Panchagarh|Rajshahi|Rangpur|Sirajganj|Thakurgaon|Habiganj|Maulvi bazar|Sunamganj|Sylhet";
+s_a[19] = "Bridgetown|Christ Church|Saint Andrew|Saint George|Saint James|Saint John|Saint Joseph|Saint Lucy|Saint Michael|Saint Peter|Saint Philip|Saint Thomas";
+s_a[20] = "Brestskaya (Brest)|Homyel'skaya (Homyel')|Horad Minsk|Hrodzyenskaya (Hrodna)|Mahilyowskaya (Mahilyow)|Minskaya|Vitsyebskaya (Vitsyebsk)";
+s_a[21] = "Antwerpen|Brabant Wallon|Brussels Capitol Region|Hainaut|Liege|Limburg|Luxembourg|Namur|Oost-Vlaanderen|Vlaams Brabant|West-Vlaanderen";
+s_a[22] = "Belize|Cayo|Corozal|Orange Walk|Stann Creek|Toledo";
+s_a[23] = "Alibori|Atakora|Atlantique|Borgou|Collines|Couffo|Donga|Littoral|Mono|Oueme|Plateau|Zou";
+s_a[24] = "Devonshire|Hamilton|Hamilton|Paget|Pembroke|Saint George|Saint Georges|Sandys|Smiths|Southampton|Warwick";
+s_a[25] = "Bumthang|Chhukha|Chirang|Daga|Geylegphug|Ha|Lhuntshi|Mongar|Paro|Pemagatsel|Punakha|Samchi|Samdrup Jongkhar|Shemgang|Tashigang|Thimphu|Tongsa|Wangdi Phodrang";
+s_a[26] = "Beni|Chuquisaca|Cochabamba|La Paz|Oruro|Pando|Potosi|Santa Cruz|Tarija";
+s_a[27] = "Federation of Bosnia and Herzegovina|Republika Srpska";
+s_a[28] = "Central|Chobe|Francistown|Gaborone|Ghanzi|Kgalagadi|Kgatleng|Kweneng|Lobatse|Ngamiland|North-East|Selebi-Pikwe|South-East|Southern";
+s_a[29] = "Acre|Alagoas|Amapa|Amazonas|Bahia|Ceara|Distrito Federal|Espirito Santo|Goias|Maranhao|Mato Grosso|Mato Grosso do Sul|Minas Gerais|Para|Paraiba|Parana|Pernambuco|Piaui|Rio de Janeiro|Rio Grande do Norte|Rio Grande do Sul|Rondonia|Roraima|Santa Catarina|Sao Paulo|Sergipe|Tocantins";
+s_a[30] = "Anegada|Jost Van Dyke|Tortola|Virgin Gorda";
+s_a[31] = "Belait|Brunei and Muara|Temburong|Tutong";
+s_a[32] = "Blagoevgrad|Burgas|Dobrich|Gabrovo|Khaskovo|Kurdzhali|Kyustendil|Lovech|Montana|Pazardzhik|Pernik|Pleven|Plovdiv|Razgrad|Ruse|Shumen|Silistra|Sliven|Smolyan|Sofiya|Sofiya-Grad|Stara Zagora|Turgovishte|Varna|Veliko Turnovo|Vidin|Vratsa|Yambol";
+s_a[33] = "Bale|Bam|Banwa|Bazega|Bougouriba|Boulgou|Boulkiemde|Comoe|Ganzourgou|Gnagna|Gourma|Houet|Ioba|Kadiogo|Kenedougou|Komandjari|Kompienga|Kossi|Koupelogo|Kouritenga|Kourweogo|Leraba|Loroum|Mouhoun|Nahouri|Namentenga|Naumbiel|Nayala|Oubritenga|Oudalan|Passore|Poni|Samentenga|Sanguie|Seno|Sissili|Soum|Sourou|Tapoa|Tuy|Yagha|Yatenga|Ziro|Zondomo|Zoundweogo";
+s_a[34] = "Ayeyarwady|Bago|Chin State|Kachin State|Kayah State|Kayin State|Magway|Mandalay|Mon State|Rakhine State|Sagaing|Shan State|Tanintharyi|Yangon";
+s_a[35] = "Bubanza|Bujumbura|Bururi|Cankuzo|Cibitoke|Gitega|Karuzi|Kayanza|Kirundo|Makamba|Muramvya|Muyinga|Mwaro|Ngozi|Rutana|Ruyigi";
+s_a[36] = "Banteay Mean Cheay|Batdambang|Kampong Cham|Kampong Chhnang|Kampong Spoe|Kampong Thum|Kampot|Kandal|Kaoh Kong|Keb|Kracheh|Mondol Kiri|Otdar Mean Cheay|Pailin|Phnum Penh|Pouthisat|Preah Seihanu (Sihanoukville)|Preah Vihear|Prey Veng|Rotanah Kiri|Siem Reab|Stoeng Treng|Svay Rieng|Takev";
+s_a[37] = "Adamaoua|Centre|Est|Extreme-Nord|Littoral|Nord|Nord-Ouest|Ouest|Sud|Sud-Ouest";
+s_a[38] = "Alberta|British Columbia|Manitoba|New Brunswick|Newfoundland|Northwest Territories|Nova Scotia|Nunavut|Ontario|Prince Edward Island|Quebec|Saskatchewan|Yukon Territory";
+s_a[39] = "Boa Vista|Brava|Maio|Mosteiros|Paul|Porto Novo|Praia|Ribeira Grande|Sal|Santa Catarina|Santa Cruz|Sao Domingos|Sao Filipe|Sao Nicolau|Sao Vicente|Tarrafal";
+s_a[40] = "Creek|Eastern|Midland|South Town|Spot Bay|Stake Bay|West End|Western";
+s_a[41] = "Bamingui-Bangoran|Bangui|Basse-Kotto|Gribingui|Haut-Mbomou|Haute-Kotto|Haute-Sangha|Kemo-Gribingui|Lobaye|Mbomou|Nana-Mambere|Ombella-Mpoko|Ouaka|Ouham|Ouham-Pende|Sangha|Vakaga";
+s_a[42] = "Batha|Biltine|Borkou-Ennedi-Tibesti|Chari-Baguirmi|Guera|Kanem|Lac|Logone Occidental|Logone Oriental|Mayo-Kebbi|Moyen-Chari|Ouaddai|Salamat|Tandjile";
+s_a[43] = "Aisen del General Carlos Ibanez del Campo|Antofagasta|Araucania|Atacama|Bio-Bio|Coquimbo|Libertador General Bernardo O'Higgins|Los Lagos|Magallanes y de la Antartica Chilena|Maule|Region Metropolitana (Santiago)|Tarapaca|Valparaiso";
+s_a[44] = "Anhui|Beijing|Chongqing|Fujian|Gansu|Guangdong|Guangxi|Guizhou|Hainan|Hebei|Heilongjiang|Henan|Hubei|Hunan|Jiangsu|Jiangxi|Jilin|Liaoning|Nei Mongol|Ningxia|Qinghai|Shaanxi|Shandong|Shanghai|Shanxi|Sichuan|Tianjin|Xinjiang|Xizang (Tibet)|Yunnan|Zhejiang";
+s_a[45] = "Christmas Island";
+s_a[46] = "Clipperton Island";
+s_a[47] = "Direction Island|Home Island|Horsburgh Island|North Keeling Island|South Island|West Island";
+s_a[48] = "Amazonas|Antioquia|Arauca|Atlantico|Bolivar|Boyaca|Caldas|Caqueta|Casanare|Cauca|Cesar|Choco|Cordoba|Cundinamarca|Distrito Capital de Santa Fe de Bogota|Guainia|Guaviare|Huila|La Guajira|Magdalena|Meta|Narino|Norte de Santander|Putumayo|Quindio|Risaralda|San Andres y Providencia|Santander|Sucre|Tolima|Valle del Cauca|Vaupes|Vichada";
+// <!-- -->
+s_a[49] = "Anjouan (Nzwani)|Domoni|Fomboni|Grande Comore (Njazidja)|Moheli (Mwali)|Moroni|Moutsamoudou";
+s_a[50] = "Bandundu|Bas-Congo|Equateur|Kasai-Occidental|Kasai-Oriental|Katanga|Kinshasa|Maniema|Nord-Kivu|Orientale|Sud-Kivu";
+s_a[51] = "Bouenza|Brazzaville|Cuvette|Kouilou|Lekoumou|Likouala|Niari|Plateaux|Pool|Sangha";
+s_a[52] = "Aitutaki|Atiu|Avarua|Mangaia|Manihiki|Manuae|Mauke|Mitiaro|Nassau Island|Palmerston|Penrhyn|Pukapuka|Rakahanga|Rarotonga|Suwarrow|Takutea";
+s_a[53] = "Alajuela|Cartago|Guanacaste|Heredia|Limon|Puntarenas|San Jose";
+s_a[54] = "Abengourou|Abidjan|Aboisso|Adiake'|Adzope|Agboville|Agnibilekrou|Ale'pe'|Bangolo|Beoumi|Biankouma|Bocanda|Bondoukou|Bongouanou|Bouafle|Bouake|Bouna|Boundiali|Dabakala|Dabon|Daloa|Danane|Daoukro|Dimbokro|Divo|Duekoue|Ferkessedougou|Gagnoa|Grand Bassam|Grand-Lahou|Guiglo|Issia|Jacqueville|Katiola|Korhogo|Lakota|Man|Mankono|Mbahiakro|Odienne|Oume|Sakassou|San-Pedro|Sassandra|Seguela|Sinfra|Soubre|Tabou|Tanda|Tiassale|Tiebissou|Tingrela|Touba|Toulepleu|Toumodi|Vavoua|Yamoussoukro|Zuenoula";
+s_a[55] = "Bjelovarsko-Bilogorska Zupanija|Brodsko-Posavska Zupanija|Dubrovacko-Neretvanska Zupanija|Istarska Zupanija|Karlovacka Zupanija|Koprivnicko-Krizevacka Zupanija|Krapinsko-Zagorska Zupanija|Licko-Senjska Zupanija|Medimurska Zupanija|Osjecko-Baranjska Zupanija|Pozesko-Slavonska Zupanija|Primorsko-Goranska Zupanija|Sibensko-Kninska Zupanija|Sisacko-Moslavacka Zupanija|Splitsko-Dalmatinska Zupanija|Varazdinska Zupanija|Viroviticko-Podravska Zupanija|Vukovarsko-Srijemska Zupanija|Zadarska Zupanija|Zagreb|Zagrebacka Zupanija";
+s_a[56] = "Camaguey|Ciego de Avila|Cienfuegos|Ciudad de La Habana|Granma|Guantanamo|Holguin|Isla de la Juventud|La Habana|Las Tunas|Matanzas|Pinar del Rio|Sancti Spiritus|Santiago de Cuba|Villa Clara";
+s_a[57] = "Famagusta|Kyrenia|Larnaca|Limassol|Nicosia|Paphos";
+s_a[58] = "Brnensky|Budejovicky|Jihlavsky|Karlovarsky|Kralovehradecky|Liberecky|Olomoucky|Ostravsky|Pardubicky|Plzensky|Praha|Stredocesky|Ustecky|Zlinsky";
+s_a[59] = "Arhus|Bornholm|Fredericksberg|Frederiksborg|Fyn|Kobenhavn|Kobenhavns|Nordjylland|Ribe|Ringkobing|Roskilde|Sonderjylland|Storstrom|Vejle|Vestsjalland|Viborg";
+s_a[60] = "'Ali Sabih|Dikhil|Djibouti|Obock|Tadjoura";
+s_a[61] = "Saint Andrew|Saint David|Saint George|Saint John|Saint Joseph|Saint Luke|Saint Mark|Saint Patrick|Saint Paul|Saint Peter";
+s_a[62] = "Azua|Baoruco|Barahona|Dajabon|Distrito Nacional|Duarte|El Seibo|Elias Pina|Espaillat|Hato Mayor|Independencia|La Altagracia|La Romana|La Vega|Maria Trinidad Sanchez|Monsenor Nouel|Monte Cristi|Monte Plata|Pedernales|Peravia|Puerto Plata|Salcedo|Samana|San Cristobal|San Juan|San Pedro de Macoris|Sanchez Ramirez|Santiago|Santiago Rodriguez|Valverde";
+// <!-- -->
+s_a[63] = "Azuay|Bolivar|Canar|Carchi|Chimborazo|Cotopaxi|El Oro|Esmeraldas|Galapagos|Guayas|Imbabura|Loja|Los Rios|Manabi|Morona-Santiago|Napo|Orellana|Pastaza|Pichincha|Sucumbios|Tungurahua|Zamora-Chinchipe";
+s_a[64] = "Ad Daqahliyah|Al Bahr al Ahmar|Al Buhayrah|Al Fayyum|Al Gharbiyah|Al Iskandariyah|Al Isma'iliyah|Al Jizah|Al Minufiyah|Al Minya|Al Qahirah|Al Qalyubiyah|Al Wadi al Jadid|As Suways|Ash Sharqiyah|Aswan|Asyut|Bani Suwayf|Bur Sa'id|Dumyat|Janub Sina'|Kafr ash Shaykh|Matruh|Qina|Shamal Sina'|Suhaj";
+s_a[65] = "Ahuachapan|Cabanas|Chalatenango|Cuscatlan|La Libertad|La Paz|La Union|Morazan|San Miguel|San Salvador|San Vicente|Santa Ana|Sonsonate|Usulutan";
+s_a[66] = "Annobon|Bioko Norte|Bioko Sur|Centro Sur|Kie-Ntem|Litoral|Wele-Nzas";
+s_a[67] = "Akale Guzay|Barka|Denkel|Hamasen|Sahil|Semhar|Senhit|Seraye";
+
+s_a[68] = "Harjumaa (Tallinn)|Hiiumaa (Kardla)|Ida-Virumaa (Johvi)|Jarvamaa (Paide)|Jogevamaa (Jogeva)|Laane-Virumaa (Rakvere)|Laanemaa (Haapsalu)|Parnumaa (Parnu)|Polvamaa (Polva)|Raplamaa (Rapla)|Saaremaa (Kuessaare)|Tartumaa (Tartu)|Valgamaa (Valga)|Viljandimaa (Viljandi)|Vorumaa (Voru)";
+
+s_a[69] = "Adis Abeba (Addis Ababa)|Afar|Amara|Dire Dawa|Gambela Hizboch|Hareri Hizb|Oromiya|Sumale|Tigray|YeDebub Biheroch Bihereseboch na Hizboch";
+
+s_a[70] = "Europa Island";
+s_a[71] = "Falkland Islands (Islas Malvinas)";
+s_a[72] = "Bordoy|Eysturoy|Mykines|Sandoy|Skuvoy|Streymoy|Suduroy|Tvoroyri|Vagar";
+s_a[73] = "Central|Eastern|Northern|Rotuma|Western";
+s_a[74] = "Aland|Etela-Suomen Laani|Ita-Suomen Laani|Lansi-Suomen Laani|Lappi|Oulun Laani";
+s_a[75] = "Alsace|Aquitaine|Auvergne|Basse-Normandie|Bourgogne|Bretagne|Centre|Champagne-Ardenne|Corse|Franche-Comte|Haute-Normandie|Ile-de-France|Languedoc-Roussillon|Limousin|Lorraine|Midi-Pyrenees|Nord-Pas-de-Calais|Pays de la Loire|Picardie|Poitou-Charentes|Provence-Alpes-Cote d'Azur|Rhone-Alpes";
+s_a[76] = "French Guiana";
+s_a[77] = "Archipel des Marquises|Archipel des Tuamotu|Archipel des Tubuai|Iles du Vent|Iles Sous-le-Vent";
+s_a[78] = "Adelie Land|Ile Crozet|Iles Kerguelen|Iles Saint-Paul et Amsterdam";
+s_a[79] = "Estuaire|Haut-Ogooue|Moyen-Ogooue|Ngounie|Nyanga|Ogooue-Ivindo|Ogooue-Lolo|Ogooue-Maritime|Woleu-Ntem";
+s_a[80] = "Banjul|Central River|Lower River|North Bank|Upper River|Western";
+s_a[81] = "Gaza Strip";
+s_a[82] = "Abashis|Abkhazia or Ap'khazet'is Avtonomiuri Respublika (Sokhumi)|Adigenis|Ajaria or Acharis Avtonomiuri Respublika (Bat'umi)|Akhalgoris|Akhalk'alak'is|Akhalts'ikhis|Akhmetis|Ambrolauris|Aspindzis|Baghdat'is|Bolnisis|Borjomis|Ch'khorotsqus|Ch'okhatauris|Chiat'ura|Dedop'listsqaros|Dmanisis|Dushet'is|Gardabanis|Gori|Goris|Gurjaanis|Javis|K'arelis|K'ut'aisi|Kaspis|Kharagaulis|Khashuris|Khobis|Khonis|Lagodekhis|Lanch'khut'is|Lentekhis|Marneulis|Martvilis|Mestiis|Mts'khet'is|Ninotsmindis|Onis|Ozurget'is|P'ot'i|Qazbegis|Qvarlis|Rust'avi|Sach'kheris|Sagarejos|Samtrediis|Senakis|Sighnaghis|T'bilisi|T'elavis|T'erjolis|T'et'ritsqaros|T'ianet'is|Tqibuli|Ts'ageris|Tsalenjikhis|Tsalkis|Tsqaltubo|Vanis|Zestap'onis|Zugdidi|Zugdidis";
+s_a[83] = "Baden-Wuerttemberg|Bayern|Berlin|Brandenburg|Bremen|Hamburg|Hessen|Mecklenburg-Vorpommern|Niedersachsen|Nordrhein-Westfalen|Rheinland-Pfalz|Saarland|Sachsen|Sachsen-Anhalt|Schleswig-Holstein|Thueringen";
+s_a[84] = "Ashanti|Brong-Ahafo|Central|Eastern|Greater Accra|Northern|Upper East|Upper West|Volta|Western";
+s_a[85] = "Gibraltar";
+s_a[86] = "Ile du Lys|Ile Glorieuse";
+s_a[87] = "Aitolia kai Akarnania|Akhaia|Argolis|Arkadhia|Arta|Attiki|Ayion Oros (Mt. Athos)|Dhodhekanisos|Drama|Evritania|Evros|Evvoia|Florina|Fokis|Fthiotis|Grevena|Ilia|Imathia|Ioannina|Irakleion|Kardhitsa|Kastoria|Kavala|Kefallinia|Kerkyra|Khalkidhiki|Khania|Khios|Kikladhes|Kilkis|Korinthia|Kozani|Lakonia|Larisa|Lasithi|Lesvos|Levkas|Magnisia|Messinia|Pella|Pieria|Preveza|Rethimni|Rodhopi|Samos|Serrai|Thesprotia|Thessaloniki|Trikala|Voiotia|Xanthi|Zakinthos";
+s_a[88] = "Avannaa (Nordgronland)|Kitaa (Vestgronland)|Tunu (Ostgronland)";
+s_a[89] = "Carriacou and Petit Martinique|Saint Andrew|Saint David|Saint George|Saint John|Saint Mark|Saint Patrick";
+s_a[90] = "Basse-Terre|Grande-Terre|Iles de la Petite Terre|Iles des Saintes|Marie-Galante";
+s_a[91] = "Guam";
+s_a[92] = "Alta Verapaz|Baja Verapaz|Chimaltenango|Chiquimula|El Progreso|Escuintla|Guatemala|Huehuetenango|Izabal|Jalapa|Jutiapa|Peten|Quetzaltenango|Quiche|Retalhuleu|Sacatepequez|San Marcos|Santa Rosa|Solola|Suchitepequez|Totonicapan|Zacapa";
+s_a[93] = "Castel|Forest|St. Andrew|St. Martin|St. Peter Port|St. Pierre du Bois|St. Sampson|St. Saviour|Torteval|Vale";
+s_a[94] = "Beyla|Boffa|Boke|Conakry|Coyah|Dabola|Dalaba|Dinguiraye|Dubreka|Faranah|Forecariah|Fria|Gaoual|Gueckedou|Kankan|Kerouane|Kindia|Kissidougou|Koubia|Koundara|Kouroussa|Labe|Lelouma|Lola|Macenta|Mali|Mamou|Mandiana|Nzerekore|Pita|Siguiri|Telimele|Tougue|Yomou";
+s_a[95] = "Bafata|Biombo|Bissau|Bolama-Bijagos|Cacheu|Gabu|Oio|Quinara|Tombali";
+s_a[96] = "Barima-Waini|Cuyuni-Mazaruni|Demerara-Mahaica|East Berbice-Corentyne|Essequibo Islands-West Demerara|Mahaica-Berbice|Pomeroon-Supenaam|Potaro-Siparuni|Upper Demerara-Berbice|Upper Takutu-Upper Essequibo";
+s_a[97] = "Artibonite|Centre|Grand'Anse|Nord|Nord-Est|Nord-Ouest|Ouest|Sud|Sud-Est";
+s_a[98] = "Heard Island and McDonald Islands";
+s_a[99] = "Holy See (Vatican City)";
+s_a[100] = "Atlantida|Choluteca|Colon|Comayagua|Copan|Cortes|El Paraiso|Francisco Morazan|Gracias a Dios|Intibuca|Islas de la Bahia|La Paz|Lempira|Ocotepeque|Olancho|Santa Barbara|Valle|Yoro";
+s_a[101] = "Hong Kong";
+s_a[102] = "Howland Island";
+s_a[103] = "Bacs-Kiskun|Baranya|Bekes|Bekescsaba|Borsod-Abauj-Zemplen|Budapest|Csongrad|Debrecen|Dunaujvaros|Eger|Fejer|Gyor|Gyor-Moson-Sopron|Hajdu-Bihar|Heves|Hodmezovasarhely|Jasz-Nagykun-Szolnok|Kaposvar|Kecskemet|Komarom-Esztergom|Miskolc|Nagykanizsa|Nograd|Nyiregyhaza|Pecs|Pest|Somogy|Sopron|Szabolcs-Szatmar-Bereg|Szeged|Szekesfehervar|Szolnok|Szombathely|Tatabanya|Tolna|Vas|Veszprem|Veszprem|Zala|Zalaegerszeg";
+s_a[104] = "Akranes|Akureyri|Arnessysla|Austur-Bardhastrandarsysla|Austur-Hunavatnssysla|Austur-Skaftafellssysla|Borgarfjardharsysla|Dalasysla|Eyjafjardharsysla|Gullbringusysla|Hafnarfjordhur|Husavik|Isafjordhur|Keflavik|Kjosarsysla|Kopavogur|Myrasysla|Neskaupstadhur|Nordhur-Isafjardharsysla|Nordhur-Mulasys-la|Nordhur-Thingeyjarsysla|Olafsfjordhur|Rangarvallasysla|Reykjavik|Saudharkrokur|Seydhisfjordhur|Siglufjordhur|Skagafjardharsysla|Snaefellsnes-og Hnappadalssysla|Strandasysla|Sudhur-Mulasysla|Sudhur-Thingeyjarsysla|Vesttmannaeyjar|Vestur-Bardhastrandarsysla|Vestur-Hunavatnssysla|Vestur-Isafjardharsysla|Vestur-Skaftafellssysla";
+s_a[105] = "Andaman and Nicobar Islands|Andhra Pradesh|Arunachal Pradesh|Assam|Bihar|Chandigarh|Chhattisgarh|Dadra and Nagar Haveli|Daman and Diu|Delhi|Goa|Gujarat|Haryana|Himachal Pradesh|Jammu and Kashmir|Jharkhand|Karnataka|Kerala|Lakshadweep|Madhya Pradesh|Maharashtra|Manipur|Meghalaya|Mizoram|Nagaland|Orissa|Pondicherry|Punjab|Rajasthan|Sikkim|Tamil Nadu|Tripura|Uttar Pradesh|Uttaranchal|West Bengal";
+s_a[106] = "Aceh|Bali|Banten|Bengkulu|East Timor|Gorontalo|Irian Jaya|Jakarta Raya|Jambi|Jawa Barat|Jawa Tengah|Jawa Timur|Kalimantan Barat|Kalimantan Selatan|Kalimantan Tengah|Kalimantan Timur|Kepulauan Bangka Belitung|Lampung|Maluku|Maluku Utara|Nusa Tenggara Barat|Nusa Tenggara Timur|Riau|Sulawesi Selatan|Sulawesi Tengah|Sulawesi Tenggara|Sulawesi Utara|Sumatera Barat|Sumatera Selatan|Sumatera Utara|Yogyakarta";
+s_a[107] = "Ardabil|Azarbayjan-e Gharbi|Azarbayjan-e Sharqi|Bushehr|Chahar Mahall va Bakhtiari|Esfahan|Fars|Gilan|Golestan|Hamadan|Hormozgan|Ilam|Kerman|Kermanshah|Khorasan|Khuzestan|Kohgiluyeh va Buyer Ahmad|Kordestan|Lorestan|Markazi|Mazandaran|Qazvin|Qom|Semnan|Sistan va Baluchestan|Tehran|Yazd|Zanjan";
+s_a[108] = "Al Anbar|Al Basrah|Al Muthanna|Al Qadisiyah|An Najaf|Arbil|As Sulaymaniyah|At Ta'mim|Babil|Baghdad|Dahuk|Dhi Qar|Diyala|Karbala'|Maysan|Ninawa|Salah ad Din|Wasit";
+s_a[109] = "Carlow|Cavan|Clare|Cork|Donegal|Dublin|Galway|Kerry|Kildare|Kilkenny|Laois|Leitrim|Limerick|Longford|Louth|Mayo|Meath|Monaghan|Offaly|Roscommon|Sligo|Tipperary|Waterford|Westmeath|Wexford|Wicklow";
+s_a[110] = "Antrim|Ards|Armagh|Ballymena|Ballymoney|Banbridge|Belfast|Carrickfergus|Castlereagh|Coleraine|Cookstown|Craigavon|Derry|Down|Dungannon|Fermanagh|Larne|Limavady|Lisburn|Magherafelt|Moyle|Newry and Mourne|Newtownabbey|North Down|Omagh|Strabane";
+s_a[111] = "Central|Haifa|Jerusalem|Northern|Southern|Tel Aviv";
+s_a[112] = "Abruzzo|Basilicata|Calabria|Campania|Emilia-Romagna|Friuli-Venezia Giulia|Lazio|Liguria|Lombardia|Marche|Molise|Piemonte|Puglia|Sardegna|Sicilia|Toscana|Trentino-Alto Adige|Umbria|Valle d'Aosta|Veneto";
+s_a[113] = "Clarendon|Hanover|Kingston|Manchester|Portland|Saint Andrew|Saint Ann|Saint Catherine|Saint Elizabeth|Saint James|Saint Mary|Saint Thomas|Trelawny|Westmoreland";
+s_a[114] = "Jan Mayen";
+s_a[115] = "Aichi|Akita|Aomori|Chiba|Ehime|Fukui|Fukuoka|Fukushima|Gifu|Gumma|Hiroshima|Hokkaido|Hyogo|Ibaraki|Ishikawa|Iwate|Kagawa|Kagoshima|Kanagawa|Kochi|Kumamoto|Kyoto|Mie|Miyagi|Miyazaki|Nagano|Nagasaki|Nara|Niigata|Oita|Okayama|Okinawa|Osaka|Saga|Saitama|Shiga|Shimane|Shizuoka|Tochigi|Tokushima|Tokyo|Tottori|Toyama|Wakayama|Yamagata|Yamaguchi|Yamanashi";
+s_a[116] = "Jarvis Island";
+s_a[117] = "Jersey";
+s_a[118] = "Johnston Atoll";
+s_a[119] = "'Amman|Ajlun|Al 'Aqabah|Al Balqa'|Al Karak|Al Mafraq|At Tafilah|Az Zarqa'|Irbid|Jarash|Ma'an|Madaba";
+s_a[120] = "Juan de Nova Island";
+s_a[121] = "Almaty|Aqmola|Aqtobe|Astana|Atyrau|Batys Qazaqstan|Bayqongyr|Mangghystau|Ongtustik Qazaqstan|Pavlodar|Qaraghandy|Qostanay|Qyzylorda|Shyghys Qazaqstan|Soltustik Qazaqstan|Zhambyl";
+s_a[122] = "Central|Coast|Eastern|Nairobi Area|North Eastern|Nyanza|Rift Valley|Western";
+s_a[123] = "Abaiang|Abemama|Aranuka|Arorae|Banaba|Banaba|Beru|Butaritari|Central Gilberts|Gilbert Islands|Kanton|Kiritimati|Kuria|Line Islands|Line Islands|Maiana|Makin|Marakei|Nikunau|Nonouti|Northern Gilberts|Onotoa|Phoenix Islands|Southern Gilberts|Tabiteuea|Tabuaeran|Tamana|Tarawa|Tarawa|Teraina";
+s_a[124] = "Chagang-do (Chagang Province)|Hamgyong-bukto (North Hamgyong Province)|Hamgyong-namdo (South Hamgyong Province)|Hwanghae-bukto (North Hwanghae Province)|Hwanghae-namdo (South Hwanghae Province)|Kaesong-si (Kaesong City)|Kangwon-do (Kangwon Province)|Namp'o-si (Namp'o City)|P'yongan-bukto (North P'yongan Province)|P'yongan-namdo (South P'yongan Province)|P'yongyang-si (P'yongyang City)|Yanggang-do (Yanggang Province)";
+s_a[125] = "Ch'ungch'ong-bukto|Ch'ungch'ong-namdo|Cheju-do|Cholla-bukto|Cholla-namdo|Inch'on-gwangyoksi|Kangwon-do|Kwangju-gwangyoksi|Kyonggi-do|Kyongsang-bukto|Kyongsang-namdo|Pusan-gwangyoksi|Soul-t'ukpyolsi|Taegu-gwangyoksi|Taejon-gwangyoksi|Ulsan-gwangyoksi";
+s_a[126] = "Al 'Asimah|Al Ahmadi|Al Farwaniyah|Al Jahra'|Hawalli";
+s_a[127] = "Batken Oblasty|Bishkek Shaary|Chuy Oblasty (Bishkek)|Jalal-Abad Oblasty|Naryn Oblasty|Osh Oblasty|Talas Oblasty|Ysyk-Kol Oblasty (Karakol)";
+s_a[128] = "Attapu|Bokeo|Bolikhamxai|Champasak|Houaphan|Khammouan|Louangnamtha|Louangphabang|Oudomxai|Phongsali|Salavan|Savannakhet|Viangchan|Viangchan|Xaignabouli|Xaisomboun|Xekong|Xiangkhoang";
+s_a[129] = "Aizkraukles Rajons|Aluksnes Rajons|Balvu Rajons|Bauskas Rajons|Cesu Rajons|Daugavpils|Daugavpils Rajons|Dobeles Rajons|Gulbenes Rajons|Jekabpils Rajons|Jelgava|Jelgavas Rajons|Jurmala|Kraslavas Rajons|Kuldigas Rajons|Leipaja|Liepajas Rajons|Limbazu Rajons|Ludzas Rajons|Madonas Rajons|Ogres Rajons|Preilu Rajons|Rezekne|Rezeknes Rajons|Riga|Rigas Rajons|Saldus Rajons|Talsu Rajons|Tukuma Rajons|Valkas Rajons|Valmieras Rajons|Ventspils|Ventspils Rajons";
+s_a[130] = "Beyrouth|Ech Chimal|Ej Jnoub|El Bekaa|Jabal Loubnane";
+s_a[131] = "Berea|Butha-Buthe|Leribe|Mafeteng|Maseru|Mohales Hoek|Mokhotlong|Qacha's Nek|Quthing|Thaba-Tseka";
+s_a[132] = "Bomi|Bong|Grand Bassa|Grand Cape Mount|Grand Gedeh|Grand Kru|Lofa|Margibi|Maryland|Montserrado|Nimba|River Cess|Sinoe";
+s_a[133] = "Ajdabiya|Al 'Aziziyah|Al Fatih|Al Jabal al Akhdar|Al Jufrah|Al Khums|Al Kufrah|An Nuqat al Khams|Ash Shati'|Awbari|Az Zawiyah|Banghazi|Darnah|Ghadamis|Gharyan|Misratah|Murzuq|Sabha|Sawfajjin|Surt|Tarabulus|Tarhunah|Tubruq|Yafran|Zlitan";
+s_a[134] = "Balzers|Eschen|Gamprin|Mauren|Planken|Ruggell|Schaan|Schellenberg|Triesen|Triesenberg|Vaduz";
+s_a[135] = "Akmenes Rajonas|Alytaus Rajonas|Alytus|Anyksciu Rajonas|Birstonas|Birzu Rajonas|Druskininkai|Ignalinos Rajonas|Jonavos Rajonas|Joniskio Rajonas|Jurbarko Rajonas|Kaisiadoriu Rajonas|Kaunas|Kauno Rajonas|Kedainiu Rajonas|Kelmes Rajonas|Klaipeda|Klaipedos Rajonas|Kretingos Rajonas|Kupiskio Rajonas|Lazdiju Rajonas|Marijampole|Marijampoles Rajonas|Mazeikiu Rajonas|Moletu Rajonas|Neringa Pakruojo Rajonas|Palanga|Panevezio Rajonas|Panevezys|Pasvalio Rajonas|Plunges Rajonas|Prienu Rajonas|Radviliskio Rajonas|Raseiniu Rajonas|Rokiskio Rajonas|Sakiu Rajonas|Salcininku Rajonas|Siauliai|Siauliu Rajonas|Silales Rajonas|Silutes Rajonas|Sirvintu Rajonas|Skuodo Rajonas|Svencioniu Rajonas|Taurages Rajonas|Telsiu Rajonas|Traku Rajonas|Ukmerges Rajonas|Utenos Rajonas|Varenos Rajonas|Vilkaviskio Rajonas|Vilniaus Rajonas|Vilnius|Zarasu Rajonas";
+s_a[136] = "Diekirch|Grevenmacher|Luxembourg";
+s_a[137] = "Macau";
+s_a[138] = "Aracinovo|Bac|Belcista|Berovo|Bistrica|Bitola|Blatec|Bogdanci|Bogomila|Bogovinje|Bosilovo|Brvenica|Cair (Skopje)|Capari|Caska|Cegrane|Centar (Skopje)|Centar Zupa|Cesinovo|Cucer-Sandevo|Debar|Delcevo|Delogozdi|Demir Hisar|Demir Kapija|Dobrusevo|Dolna Banjica|Dolneni|Dorce Petrov (Skopje)|Drugovo|Dzepciste|Gazi Baba (Skopje)|Gevgelija|Gostivar|Gradsko|Ilinden|Izvor|Jegunovce|Kamenjane|Karbinci|Karpos (Skopje)|Kavadarci|Kicevo|Kisela Voda (Skopje)|Klecevce|Kocani|Konce|Kondovo|Konopiste|Kosel|Kratovo|Kriva Palanka|Krivogastani|Krusevo|Kuklis|Kukurecani|Kumanovo|Labunista|Lipkovo|Lozovo|Lukovo|Makedonska Kamenica|Makedonski Brod|Mavrovi Anovi|Meseista|Miravci|Mogila|Murtino|Negotino|Negotino-Poloska|Novaci|Novo Selo|Oblesevo|Ohrid|Orasac|Orizari|Oslomej|Pehcevo|Petrovec|Plasnia|Podares|Prilep|Probistip|Radovis|Rankovce|Resen|Rosoman|Rostusa|Samokov|Saraj|Sipkovica|Sopiste|Sopotnika|Srbinovo|Star Dojran|Staravina|Staro Nagoricane|Stip|Struga|Strumica|Studenicani|Suto Orizari (Skopje)|Sveti Nikole|Tearce|Tetovo|Topolcani|Valandovo|Vasilevo|Veles|Velesta|Vevcani|Vinica|Vitoliste|Vranestica|Vrapciste|Vratnica|Vrutok|Zajas|Zelenikovo|Zileno|Zitose|Zletovo|Zrnovci";
+s_a[139] = "Antananarivo|Antsiranana|Fianarantsoa|Mahajanga|Toamasina|Toliara";
+s_a[140] = "Balaka|Blantyre|Chikwawa|Chiradzulu|Chitipa|Dedza|Dowa|Karonga|Kasungu|Likoma|Lilongwe|Machinga (Kasupe)|Mangochi|Mchinji|Mulanje|Mwanza|Mzimba|Nkhata Bay|Nkhotakota|Nsanje|Ntcheu|Ntchisi|Phalombe|Rumphi|Salima|Thyolo|Zomba";
+s_a[141] = "Johor|Kedah|Kelantan|Labuan|Melaka|Negeri Sembilan|Pahang|Perak|Perlis|Pulau Pinang|Sabah|Sarawak|Selangor|Terengganu|Wilayah Persekutuan";
+s_a[142] = "Alifu|Baa|Dhaalu|Faafu|Gaafu Alifu|Gaafu Dhaalu|Gnaviyani|Haa Alifu|Haa Dhaalu|Kaafu|Laamu|Lhaviyani|Maale|Meemu|Noonu|Raa|Seenu|Shaviyani|Thaa|Vaavu";
+s_a[143] = "Gao|Kayes|Kidal|Koulikoro|Mopti|Segou|Sikasso|Tombouctou";
+s_a[144] = "Valletta";
+s_a[145] = "Man, Isle of";
+s_a[146] = "Ailinginae|Ailinglaplap|Ailuk|Arno|Aur|Bikar|Bikini|Bokak|Ebon|Enewetak|Erikub|Jabat|Jaluit|Jemo|Kili|Kwajalein|Lae|Lib|Likiep|Majuro|Maloelap|Mejit|Mili|Namorik|Namu|Rongelap|Rongrik|Toke|Ujae|Ujelang|Utirik|Wotho|Wotje";
+s_a[147] = "Martinique";
+s_a[148] = "Adrar|Assaba|Brakna|Dakhlet Nouadhibou|Gorgol|Guidimaka|Hodh Ech Chargui|Hodh El Gharbi|Inchiri|Nouakchott|Tagant|Tiris Zemmour|Trarza";
+s_a[149] = "Agalega Islands|Black River|Cargados Carajos Shoals|Flacq|Grand Port|Moka|Pamplemousses|Plaines Wilhems|Port Louis|Riviere du Rempart|Rodrigues|Savanne";
+s_a[150] = "Mayotte";
+s_a[151] = "Aguascalientes|Baja California|Baja California Sur|Campeche|Chiapas|Chihuahua|Coahuila de Zaragoza|Colima|Distrito Federal|Durango|Guanajuato|Guerrero|Hidalgo|Jalisco|Mexico|Michoacan de Ocampo|Morelos|Nayarit|Nuevo Leon|Oaxaca|Puebla|Queretaro de Arteaga|Quintana Roo|San Luis Potosi|Sinaloa|Sonora|Tabasco|Tamaulipas|Tlaxcala|Veracruz-Llave|Yucatan|Zacatecas";
+s_a[152] = "Chuuk (Truk)|Kosrae|Pohnpei|Yap";
+s_a[153] = "Midway Islands";
+s_a[154] = "Balti|Cahul|Chisinau|Chisinau|Dubasari|Edinet|Gagauzia|Lapusna|Orhei|Soroca|Tighina|Ungheni";
+s_a[155] = "Fontvieille|La Condamine|Monaco-Ville|Monte-Carlo";
+s_a[156] = "Arhangay|Bayan-Olgiy|Bayanhongor|Bulgan|Darhan|Dornod|Dornogovi|Dundgovi|Dzavhan|Erdenet|Govi-Altay|Hentiy|Hovd|Hovsgol|Omnogovi|Ovorhangay|Selenge|Suhbaatar|Tov|Ulaanbaatar|Uvs";
+s_a[157] = "Saint Anthony|Saint Georges|Saint Peter's";
+s_a[158] = "Agadir|Al Hoceima|Azilal|Ben Slimane|Beni Mellal|Boulemane|Casablanca|Chaouen|El Jadida|El Kelaa des Srarhna|Er Rachidia|Essaouira|Fes|Figuig|Guelmim|Ifrane|Kenitra|Khemisset|Khenifra|Khouribga|Laayoune|Larache|Marrakech|Meknes|Nador|Ouarzazate|Oujda|Rabat-Sale|Safi|Settat|Sidi Kacem|Tan-Tan|Tanger|Taounate|Taroudannt|Tata|Taza|Tetouan|Tiznit";
+s_a[159] = "Cabo Delgado|Gaza|Inhambane|Manica|Maputo|Nampula|Niassa|Sofala|Tete|Zambezia";
+s_a[160] = "Caprivi|Erongo|Hardap|Karas|Khomas|Kunene|Ohangwena|Okavango|Omaheke|Omusati|Oshana|Oshikoto|Otjozondjupa";
+s_a[161] = "Aiwo|Anabar|Anetan|Anibare|Baiti|Boe|Buada|Denigomodu|Ewa|Ijuw|Meneng|Nibok|Uaboe|Yaren";
+s_a[162] = "Bagmati|Bheri|Dhawalagiri|Gandaki|Janakpur|Karnali|Kosi|Lumbini|Mahakali|Mechi|Narayani|Rapti|Sagarmatha|Seti";
+s_a[163] = "Drenthe|Flevoland|Friesland|Gelderland|Groningen|Limburg|Noord-Brabant|Noord-Holland|Overijssel|Utrecht|Zeeland|Zuid-Holland";
+s_a[164] = "Netherlands Antilles";
+s_a[165] = "Iles Loyaute|Nord|Sud";
+s_a[166] = "Akaroa|Amuri|Ashburton|Bay of Islands|Bruce|Buller|Chatham Islands|Cheviot|Clifton|Clutha|Cook|Dannevirke|Egmont|Eketahuna|Ellesmere|Eltham|Eyre|Featherston|Franklin|Golden Bay|Great Barrier Island|Grey|Hauraki Plains|Hawera|Hawke's Bay|Heathcote|Hikurangi|Hobson|Hokianga|Horowhenua|Hurunui|Hutt|Inangahua|Inglewood|Kaikoura|Kairanga|Kiwitea|Lake|Mackenzie|Malvern|Manaia|Manawatu|Mangonui|Maniototo|Marlborough|Masterton|Matamata|Mount Herbert|Ohinemuri|Opotiki|Oroua|Otamatea|Otorohanga|Oxford|Pahiatua|Paparua|Patea|Piako|Pohangina|Raglan|Rangiora|Rangitikei|Rodney|Rotorua|Runanga|Saint Kilda|Silverpeaks|Southland|Stewart Island|Stratford|Strathallan|Taranaki|Taumarunui|Taupo|Tauranga|Thames-Coromandel|Tuapeka|Vincent|Waiapu|Waiheke|Waihemo|Waikato|Waikohu|Waimairi|Waimarino|Waimate|Waimate West|Waimea|Waipa|Waipawa|Waipukurau|Wairarapa South|Wairewa|Wairoa|Waitaki|Waitomo|Waitotara|Wallace|Wanganui|Waverley|Westland|Whakatane|Whangarei|Whangaroa|Woodville";
+s_a[167] = "Atlantico Norte|Atlantico Sur|Boaco|Carazo|Chinandega|Chontales|Esteli|Granada|Jinotega|Leon|Madriz|Managua|Masaya|Matagalpa|Nueva Segovia|Rio San Juan|Rivas";
+s_a[168] = "Agadez|Diffa|Dosso|Maradi|Niamey|Tahoua|Tillaberi|Zinder";
+s_a[169] = "Abia|Abuja Federal Capital Territory|Adamawa|Akwa Ibom|Anambra|Bauchi|Bayelsa|Benue|Borno|Cross River|Delta|Ebonyi|Edo|Ekiti|Enugu|Gombe|Imo|Jigawa|Kaduna|Kano|Katsina|Kebbi|Kogi|Kwara|Lagos|Nassarawa|Niger|Ogun|Ondo|Osun|Oyo|Plateau|Rivers|Sokoto|Taraba|Yobe|Zamfara";
+s_a[170] = "Niue";
+s_a[171] = "Norfolk Island";
+s_a[172] = "Northern Islands|Rota|Saipan|Tinian";
+s_a[173] = "Akershus|Aust-Agder|Buskerud|Finnmark|Hedmark|Hordaland|More og Romsdal|Nord-Trondelag|Nordland|Oppland|Oslo|Ostfold|Rogaland|Sogn og Fjordane|Sor-Trondelag|Telemark|Troms|Vest-Agder|Vestfold";
+s_a[174] = "Ad Dakhiliyah|Al Batinah|Al Wusta|Ash Sharqiyah|Az Zahirah|Masqat|Musandam|Zufar";
+s_a[175] = "Balochistan|Federally Administered Tribal Areas|Islamabad Capital Territory|North-West Frontier Province|Punjab|Sindh";
+s_a[176] = "Aimeliik|Airai|Angaur|Hatobohei|Kayangel|Koror|Melekeok|Ngaraard|Ngarchelong|Ngardmau|Ngatpang|Ngchesar|Ngeremlengui|Ngiwal|Palau Island|Peleliu|Sonsoral|Tobi";
+s_a[177] = "Bocas del Toro|Chiriqui|Cocle|Colon|Darien|Herrera|Los Santos|Panama|San Blas|Veraguas";
+s_a[178] = "Bougainville|Central|Chimbu|East New Britain|East Sepik|Eastern Highlands|Enga|Gulf|Madang|Manus|Milne Bay|Morobe|National Capital|New Ireland|Northern|Sandaun|Southern Highlands|West New Britain|Western|Western Highlands";
+s_a[179] = "Alto Paraguay|Alto Parana|Amambay|Asuncion (city)|Boqueron|Caaguazu|Caazapa|Canindeyu|Central|Concepcion|Cordillera|Guaira|Itapua|Misiones|Neembucu|Paraguari|Presidente Hayes|San Pedro";
+s_a[180] = "Amazonas|Ancash|Apurimac|Arequipa|Ayacucho|Cajamarca|Callao|Cusco|Huancavelica|Huanuco|Ica|Junin|La Libertad|Lambayeque|Lima|Loreto|Madre de Dios|Moquegua|Pasco|Piura|Puno|San Martin|Tacna|Tumbes|Ucayali";
+s_a[181] = "Abra|Agusan del Norte|Agusan del Sur|Aklan|Albay|Angeles|Antique|Aurora|Bacolod|Bago|Baguio|Bais|Basilan|Basilan City|Bataan|Batanes|Batangas|Batangas City|Benguet|Bohol|Bukidnon|Bulacan|Butuan|Cabanatuan|Cadiz|Cagayan|Cagayan de Oro|Calbayog|Caloocan|Camarines Norte|Camarines Sur|Camiguin|Canlaon|Capiz|Catanduanes|Cavite|Cavite City|Cebu|Cebu City|Cotabato|Dagupan|Danao|Dapitan|Davao City Davao|Davao del Sur|Davao Oriental|Dipolog|Dumaguete|Eastern Samar|General Santos|Gingoog|Ifugao|Iligan|Ilocos Norte|Ilocos Sur|Iloilo|Iloilo City|Iriga|Isabela|Kalinga-Apayao|La Carlota|La Union|Laguna|Lanao del Norte|Lanao del Sur|Laoag|Lapu-Lapu|Legaspi|Leyte|Lipa|Lucena|Maguindanao|Mandaue|Manila|Marawi|Marinduque|Masbate|Mindoro Occidental|Mindoro Oriental|Misamis Occidental|Misamis Oriental|Mountain|Naga|Negros Occidental|Negros Oriental|North Cotabato|Northern Samar|Nueva Ecija|Nueva Vizcaya|Olongapo|Ormoc|Oroquieta|Ozamis|Pagadian|Palawan|Palayan|Pampanga|Pangasinan|Pasay|Puerto Princesa|Quezon|Quezon City|Quirino|Rizal|Romblon|Roxas|Samar|San Carlos (in Negros Occidental)|San Carlos (in Pangasinan)|San Jose|San Pablo|Silay|Siquijor|Sorsogon|South Cotabato|Southern Leyte|Sultan Kudarat|Sulu|Surigao|Surigao del Norte|Surigao del Sur|Tacloban|Tagaytay|Tagbilaran|Tangub|Tarlac|Tawitawi|Toledo|Trece Martires|Zambales|Zamboanga|Zamboanga del Norte|Zamboanga del Sur";
+s_a[182] = "Pitcaim Islands";
+s_a[183] = "Dolnoslaskie|Kujawsko-Pomorskie|Lodzkie|Lubelskie|Lubuskie|Malopolskie|Mazowieckie|Opolskie|Podkarpackie|Podlaskie|Pomorskie|Slaskie|Swietokrzyskie|Warminsko-Mazurskie|Wielkopolskie|Zachodniopomorskie";
+s_a[184] = "Acores (Azores)|Aveiro|Beja|Braga|Braganca|Castelo Branco|Coimbra|Evora|Faro|Guarda|Leiria|Lisboa|Madeira|Portalegre|Porto|Santarem|Setubal|Viana do Castelo|Vila Real|Viseu";
+s_a[185] = "Adjuntas|Aguada|Aguadilla|Aguas Buenas|Aibonito|Anasco|Arecibo|Arroyo|Barceloneta|Barranquitas|Bayamon|Cabo Rojo|Caguas|Camuy|Canovanas|Carolina|Catano|Cayey|Ceiba|Ciales|Cidra|Coamo|Comerio|Corozal|Culebra|Dorado|Fajardo|Florida|Guanica|Guayama|Guayanilla|Guaynabo|Gurabo|Hatillo|Hormigueros|Humacao|Isabela|Jayuya|Juana Diaz|Juncos|Lajas|Lares|Las Marias|Las Piedras|Loiza|Luquillo|Manati|Maricao|Maunabo|Mayaguez|Moca|Morovis|Naguabo|Naranjito|Orocovis|Patillas|Penuelas|Ponce|Quebradillas|Rincon|Rio Grande|Sabana Grande|Salinas|San German|San Juan|San Lorenzo|San Sebastian|Santa Isabel|Toa Alta|Toa Baja|Trujillo Alto|Utuado|Vega Alta|Vega Baja|Vieques|Villalba|Yabucoa|Yauco";
+s_a[186] = "Ad Dawhah|Al Ghuwayriyah|Al Jumayliyah|Al Khawr|Al Wakrah|Ar Rayyan|Jarayan al Batinah|Madinat ash Shamal|Umm Salal";
+s_a[187] = "Reunion";
+s_a[188] = "Alba|Arad|Arges|Bacau|Bihor|Bistrita-Nasaud|Botosani|Braila|Brasov|Bucuresti|Buzau|Calarasi|Caras-Severin|Cluj|Constanta|Covasna|Dimbovita|Dolj|Galati|Giurgiu|Gorj|Harghita|Hunedoara|Ialomita|Iasi|Maramures|Mehedinti|Mures|Neamt|Olt|Prahova|Salaj|Satu Mare|Sibiu|Suceava|Teleorman|Timis|Tulcea|Vaslui|Vilcea|Vrancea";
+s_a[189] = "Adygeya (Maykop)|Aginskiy Buryatskiy (Aginskoye)|Altay (Gorno-Altaysk)|Altayskiy (Barnaul)|Amurskaya (Blagoveshchensk)|Arkhangel'skaya|Astrakhanskaya|Bashkortostan (Ufa)|Belgorodskaya|Bryanskaya|Buryatiya (Ulan-Ude)|Chechnya (Groznyy)|Chelyabinskaya|Chitinskaya|Chukotskiy (Anadyr')|Chuvashiya (Cheboksary)|Dagestan (Makhachkala)|Evenkiyskiy (Tura)|Ingushetiya (Nazran')|Irkutskaya|Ivanovskaya|Kabardino-Balkariya (Nal'chik)|Kaliningradskaya|Kalmykiya (Elista)|Kaluzhskaya|Kamchatskaya (Petropavlovsk-Kamchatskiy)|Karachayevo-Cherkesiya (Cherkessk)|Kareliya (Petrozavodsk)|Kemerovskaya|Khabarovskiy|Khakasiya (Abakan)|Khanty-Mansiyskiy (Khanty-Mansiysk)|Kirovskaya|Komi (Syktyvkar)|Komi-Permyatskiy (Kudymkar)|Koryakskiy (Palana)|Kostromskaya|Krasnodarskiy|Krasnoyarskiy|Kurganskaya|Kurskaya|Leningradskaya|Lipetskaya|Magadanskaya|Mariy-El (Yoshkar-Ola)|Mordoviya (Saransk)|Moskovskaya|Moskva (Moscow)|Murmanskaya|Nenetskiy (Nar'yan-Mar)|Nizhegorodskaya|Novgorodskaya|Novosibirskaya|Omskaya|Orenburgskaya|Orlovskaya (Orel)|Penzenskaya|Permskaya|Primorskiy (Vladivostok)|Pskovskaya|Rostovskaya|Ryazanskaya|Sakha (Yakutsk)|Sakhalinskaya (Yuzhno-Sakhalinsk)|Samarskaya|Sankt-Peterburg (Saint Petersburg)|Saratovskaya|Severnaya Osetiya-Alaniya [North Ossetia] (Vladikavkaz)|Smolenskaya|Stavropol'skiy|Sverdlovskaya (Yekaterinburg)|Tambovskaya|Tatarstan (Kazan')|Taymyrskiy (Dudinka)|Tomskaya|Tul'skaya|Tverskaya|Tyumenskaya|Tyva (Kyzyl)|Udmurtiya (Izhevsk)|Ul'yanovskaya|Ust'-Ordynskiy Buryatskiy (Ust'-Ordynskiy)|Vladimirskaya|Volgogradskaya|Vologodskaya|Voronezhskaya|Yamalo-Nenetskiy (Salekhard)|Yaroslavskaya|Yevreyskaya";
+s_a[190] = "Butare|Byumba|Cyangugu|Gikongoro|Gisenyi|Gitarama|Kibungo|Kibuye|Kigali Rurale|Kigali-ville|Ruhengeri|Umutara";
+s_a[191] = "Ascension|Saint Helena|Tristan da Cunha";
+s_a[192] = "Christ Church Nichola Town|Saint Anne Sandy Point|Saint George Basseterre|Saint George Gingerland|Saint James Windward|Saint John Capisterre|Saint John Figtree|Saint Mary Cayon|Saint Paul Capisterre|Saint Paul Charlestown|Saint Peter Basseterre|Saint Thomas Lowland|Saint Thomas Middle Island|Trinity Palmetto Point";
+s_a[193] = "Anse-la-Raye|Castries|Choiseul|Dauphin|Dennery|Gros Islet|Laborie|Micoud|Praslin|Soufriere|Vieux Fort";
+s_a[194] = "Miquelon|Saint Pierre";
+s_a[195] = "Charlotte|Grenadines|Saint Andrew|Saint David|Saint George|Saint Patrick";
+s_a[196] = "A'ana|Aiga-i-le-Tai|Atua|Fa'asaleleaga|Gaga'emauga|Gagaifomauga|Palauli|Satupa'itea|Tuamasaga|Va'a-o-Fonoti|Vaisigano";
+s_a[197] = "Acquaviva|Borgo Maggiore|Chiesanuova|Domagnano|Faetano|Fiorentino|Monte Giardino|San Marino|Serravalle";
+s_a[198] = "Principe|Sao Tome";
+s_a[199] = "'Asir|Al Bahah|Al Hudud ash Shamaliyah|Al Jawf|Al Madinah|Al Qasim|Ar Riyad|Ash Sharqiyah (Eastern Province)|Ha'il|Jizan|Makkah|Najran|Tabuk";
+s_a[200] = "Aberdeen City|Aberdeenshire|Angus|Argyll and Bute|City of Edinburgh|Clackmannanshire|Dumfries and Galloway|Dundee City|East Ayrshire|East Dunbartonshire|East Lothian|East Renfrewshire|Eilean Siar (Western Isles)|Falkirk|Fife|Glasgow City|Highland|Inverclyde|Midlothian|Moray|North Ayrshire|North Lanarkshire|Orkney Islands|Perth and Kinross|Renfrewshire|Shetland Islands|South Ayrshire|South Lanarkshire|Stirling|The Scottish Borders|West Dunbartonshire|West Lothian";
+s_a[201] = "Dakar|Diourbel|Fatick|Kaolack|Kolda|Louga|Saint-Louis|Tambacounda|Thies|Ziguinchor";
+s_a[202] = "Anse aux Pins|Anse Boileau|Anse Etoile|Anse Louis|Anse Royale|Baie Lazare|Baie Sainte Anne|Beau Vallon|Bel Air|Bel Ombre|Cascade|Glacis|Grand' Anse (on Mahe)|Grand' Anse (on Praslin)|La Digue|La Riviere Anglaise|Mont Buxton|Mont Fleuri|Plaisance|Pointe La Rue|Port Glaud|Saint Louis|Takamaka";
+s_a[203] = "Eastern|Northern|Southern|Western";
+s_a[204] = "Singapore";
+s_a[205] = "Banskobystricky|Bratislavsky|Kosicky|Nitriansky|Presovsky|Trenciansky|Trnavsky|Zilinsky";
+s_a[206] = "Ajdovscina|Beltinci|Bled|Bohinj|Borovnica|Bovec|Brda|Brezice|Brezovica|Cankova-Tisina|Celje|Cerklje na Gorenjskem|Cerknica|Cerkno|Crensovci|Crna na Koroskem|Crnomelj|Destrnik-Trnovska Vas|Divaca|Dobrepolje|Dobrova-Horjul-Polhov Gradec|Dol pri Ljubljani|Domzale|Dornava|Dravograd|Duplek|Gorenja Vas-Poljane|Gorisnica|Gornja Radgona|Gornji Grad|Gornji Petrovci|Grosuplje|Hodos Salovci|Hrastnik|Hrpelje-Kozina|Idrija|Ig|Ilirska Bistrica|Ivancna Gorica|Izola|Jesenice|Jursinci|Kamnik|Kanal|Kidricevo|Kobarid|Kobilje|Kocevje|Komen|Koper|Kozje|Kranj|Kranjska Gora|Krsko|Kungota|Kuzma|Lasko|Lenart|Lendava|Litija|Ljubljana|Ljubno|Ljutomer|Logatec|Loska Dolina|Loski Potok|Luce|Lukovica|Majsperk|Maribor|Medvode|Menges|Metlika|Mezica|Miren-Kostanjevica|Mislinja|Moravce|Moravske Toplice|Mozirje|Murska Sobota|Muta|Naklo|Nazarje|Nova Gorica|Novo Mesto|Odranci|Ormoz|Osilnica|Pesnica|Piran|Pivka|Podcetrtek|Podvelka-Ribnica|Postojna|Preddvor|Ptuj|Puconci|Race-Fram|Radece|Radenci|Radlje ob Dravi|Radovljica|Ravne-Prevalje|Ribnica|Rogasevci|Rogaska Slatina|Rogatec|Ruse|Semic|Sencur|Sentilj|Sentjernej|Sentjur pri Celju|Sevnica|Sezana|Skocjan|Skofja Loka|Skofljica|Slovenj Gradec|Slovenska Bistrica|Slovenske Konjice|Smarje pri Jelsah|Smartno ob Paki|Sostanj|Starse|Store|Sveti Jurij|Tolmin|Trbovlje|Trebnje|Trzic|Turnisce|Velenje|Velike Lasce|Videm|Vipava|Vitanje|Vodice|Vojnik|Vrhnika|Vuzenica|Zagorje ob Savi|Zalec|Zavrc|Zelezniki|Ziri|Zrece";
+s_a[207] = "Bellona|Central|Choiseul (Lauru)|Guadalcanal|Honiara|Isabel|Makira|Malaita|Rennell|Temotu|Western";
+s_a[208] = "Awdal|Bakool|Banaadir|Bari|Bay|Galguduud|Gedo|Hiiraan|Jubbada Dhexe|Jubbada Hoose|Mudug|Nugaal|Sanaag|Shabeellaha Dhexe|Shabeellaha Hoose|Sool|Togdheer|Woqooyi Galbeed";
+s_a[209] = "Eastern Cape|Free State|Gauteng|KwaZulu-Natal|Mpumalanga|North-West|Northern Cape|Northern Province|Western Cape";
+s_a[210] = "Bird Island|Bristol Island|Clerke Rocks|Montagu Island|Saunders Island|South Georgia|Southern Thule|Traversay Islands";
+s_a[211] = "Andalucia|Aragon|Asturias|Baleares (Balearic Islands)|Canarias (Canary Islands)|Cantabria|Castilla y Leon|Castilla-La Mancha|Cataluna|Ceuta|Communidad Valencian|Extremadura|Galicia|Islas Chafarinas|La Rioja|Madrid|Melilla|Murcia|Navarra|Pais Vasco (Basque Country)|Penon de Alhucemas|Penon de Velez de la Gomera";
+s_a[212] = "Spratly Islands";
+s_a[213] = "Central|Eastern|North Central|North Eastern|North Western|Northern|Sabaragamuwa|Southern|Uva|Western";
+s_a[214] = "A'ali an Nil|Al Bahr al Ahmar|Al Buhayrat|Al Jazirah|Al Khartum|Al Qadarif|Al Wahdah|An Nil al Abyad|An Nil al Azraq|Ash Shamaliyah|Bahr al Jabal|Gharb al Istiwa'iyah|Gharb Bahr al Ghazal|Gharb Darfur|Gharb Kurdufan|Janub Darfur|Janub Kurdufan|Junqali|Kassala|Nahr an Nil|Shamal Bahr al Ghazal|Shamal Darfur|Shamal Kurdufan|Sharq al Istiwa'iyah|Sinnar|Warab";
+s_a[215] = "Brokopondo|Commewijne|Coronie|Marowijne|Nickerie|Para|Paramaribo|Saramacca|Sipaliwini|Wanica";
+s_a[216] = "Barentsoya|Bjornoya|Edgeoya|Hopen|Kvitoya|Nordaustandet|Prins Karls Forland|Spitsbergen";
+s_a[217] = "Hhohho|Lubombo|Manzini|Shiselweni";
+s_a[218] = "Blekinge|Dalarnas|Gavleborgs|Gotlands|Hallands|Jamtlands|Jonkopings|Kalmar|Kronobergs|Norrbottens|Orebro|Ostergotlands|Skane|Sodermanlands|Stockholms|Uppsala|Varmlands|Vasterbottens|Vasternorrlands|Vastmanlands|Vastra Gotalands";
+s_a[219] = "Aargau|Ausser-Rhoden|Basel-Landschaft|Basel-Stadt|Bern|Fribourg|Geneve|Glarus|Graubunden|Inner-Rhoden|Jura|Luzern|Neuchatel|Nidwalden|Obwalden|Sankt Gallen|Schaffhausen|Schwyz|Solothurn|Thurgau|Ticino|Uri|Valais|Vaud|Zug|Zurich";
+s_a[220] = "Al Hasakah|Al Ladhiqiyah|Al Qunaytirah|Ar Raqqah|As Suwayda'|Dar'a|Dayr az Zawr|Dimashq|Halab|Hamah|Hims|Idlib|Rif Dimashq|Tartus";
+s_a[221] = "Chang-hua|Chi-lung|Chia-i|Chia-i|Chung-hsing-hsin-ts'un|Hsin-chu|Hsin-chu|Hua-lien|I-lan|Kao-hsiung|Kao-hsiung|Miao-li|Nan-t'ou|P'eng-hu|P'ing-tung|T'ai-chung|T'ai-chung|T'ai-nan|T'ai-nan|T'ai-pei|T'ai-pei|T'ai-tung|T'ao-yuan|Yun-lin";
+s_a[222] = "Viloyati Khatlon|Viloyati Leninobod|Viloyati Mukhtori Kuhistoni Badakhshon";
+s_a[223] = "Arusha|Dar es Salaam|Dodoma|Iringa|Kagera|Kigoma|Kilimanjaro|Lindi|Mara|Mbeya|Morogoro|Mtwara|Mwanza|Pemba North|Pemba South|Pwani|Rukwa|Ruvuma|Shinyanga|Singida|Tabora|Tanga|Zanzibar Central/South|Zanzibar North|Zanzibar Urban/West";
+s_a[224] = "Amnat Charoen|Ang Thong|Buriram|Chachoengsao|Chai Nat|Chaiyaphum|Chanthaburi|Chiang Mai|Chiang Rai|Chon Buri|Chumphon|Kalasin|Kamphaeng Phet|Kanchanaburi|Khon Kaen|Krabi|Krung Thep Mahanakhon (Bangkok)|Lampang|Lamphun|Loei|Lop Buri|Mae Hong Son|Maha Sarakham|Mukdahan|Nakhon Nayok|Nakhon Pathom|Nakhon Phanom|Nakhon Ratchasima|Nakhon Sawan|Nakhon Si Thammarat|Nan|Narathiwat|Nong Bua Lamphu|Nong Khai|Nonthaburi|Pathum Thani|Pattani|Phangnga|Phatthalung|Phayao|Phetchabun|Phetchaburi|Phichit|Phitsanulok|Phra Nakhon Si Ayutthaya|Phrae|Phuket|Prachin Buri|Prachuap Khiri Khan|Ranong|Ratchaburi|Rayong|Roi Et|Sa Kaeo|Sakon Nakhon|Samut Prakan|Samut Sakhon|Samut Songkhram|Sara Buri|Satun|Sing Buri|Sisaket|Songkhla|Sukhothai|Suphan Buri|Surat Thani|Surin|Tak|Trang|Trat|Ubon Ratchathani|Udon Thani|Uthai Thani|Uttaradit|Yala|Yasothon";
+s_a[225] = "Tobago";
+s_a[226] = "De La Kara|Des Plateaux|Des Savanes|Du Centre|Maritime";
+s_a[227] = "Atafu|Fakaofo|Nukunonu";
+s_a[228] = "Ha'apai|Tongatapu|Vava'u";
+s_a[229] = "Arima|Caroni|Mayaro|Nariva|Port-of-Spain|Saint Andrew|Saint David|Saint George|Saint Patrick|San Fernando|Victoria";
+s_a[230] = "Ariana|Beja|Ben Arous|Bizerte|El Kef|Gabes|Gafsa|Jendouba|Kairouan|Kasserine|Kebili|Mahdia|Medenine|Monastir|Nabeul|Sfax|Sidi Bou Zid|Siliana|Sousse|Tataouine|Tozeur|Tunis|Zaghouan";
+s_a[231] = "Adana|Adiyaman|Afyon|Agri|Aksaray|Amasya|Ankara|Antalya|Ardahan|Artvin|Aydin|Balikesir|Bartin|Batman|Bayburt|Bilecik|Bingol|Bitlis|Bolu|Burdur|Bursa|Canakkale|Cankiri|Corum|Denizli|Diyarbakir|Duzce|Edirne|Elazig|Erzincan|Erzurum|Eskisehir|Gaziantep|Giresun|Gumushane|Hakkari|Hatay|Icel|Igdir|Isparta|Istanbul|Izmir|Kahramanmaras|Karabuk|Karaman|Kars|Kastamonu|Kayseri|Kilis|Kirikkale|Kirklareli|Kirsehir|Kocaeli|Konya|Kutahya|Malatya|Manisa|Mardin|Mugla|Mus|Nevsehir|Nigde|Ordu|Osmaniye|Rize|Sakarya|Samsun|Sanliurfa|Siirt|Sinop|Sirnak|Sivas|Tekirdag|Tokat|Trabzon|Tunceli|Usak|Van|Yalova|Yozgat|Zonguldak";
+s_a[232] = "Ahal Welayaty|Balkan Welayaty|Dashhowuz Welayaty|Lebap Welayaty|Mary Welayaty";
+s_a[233] = "Tuvalu";
+s_a[234] = "Adjumani|Apac|Arua|Bugiri|Bundibugyo|Bushenyi|Busia|Gulu|Hoima|Iganga|Jinja|Kabale|Kabarole|Kalangala|Kampala|Kamuli|Kapchorwa|Kasese|Katakwi|Kibale|Kiboga|Kisoro|Kitgum|Kotido|Kumi|Lira|Luwero|Masaka|Masindi|Mbale|Mbarara|Moroto|Moyo|Mpigi|Mubende|Mukono|Nakasongola|Nebbi|Ntungamo|Pallisa|Rakai|Rukungiri|Sembabule|Soroti|Tororo";
+s_a[235] = "Avtonomna Respublika Krym (Simferopol')|Cherkas'ka (Cherkasy)|Chernihivs'ka (Chernihiv)|Chernivets'ka (Chernivtsi)|Dnipropetrovs'ka (Dnipropetrovs'k)|Donets'ka (Donets'k)|Ivano-Frankivs'ka (Ivano-Frankivs'k)|Kharkivs'ka (Kharkiv)|Khersons'ka (Kherson)|Khmel'nyts'ka (Khmel'nyts'kyy)|Kirovohrads'ka (Kirovohrad)|Kyyiv|Kyyivs'ka (Kiev)|L'vivs'ka (L'viv)|Luhans'ka (Luhans'k)|Mykolayivs'ka (Mykolayiv)|Odes'ka (Odesa)|Poltavs'ka (Poltava)|Rivnens'ka (Rivne)|Sevastopol'|Sums'ka (Sumy)|Ternopil's'ka (Ternopil')|Vinnyts'ka (Vinnytsya)|Volyns'ka (Luts'k)|Zakarpats'ka (Uzhhorod)|Zaporiz'ka (Zaporizhzhya)|Zhytomyrs'ka (Zhytomyr)";
+s_a[236] = "'Ajman|Abu Zaby (Abu Dhabi)|Al Fujayrah|Ash Shariqah (Sharjah)|Dubayy (Dubai)|Ra's al Khaymah|Umm al Qaywayn";
+s_a[237] = "Barking and Dagenham|Barnet|Barnsley|Bath and North East Somerset|Bedfordshire|Bexley|Birmingham|Blackburn with Darwen|Blackpool|Bolton|Bournemouth|Bracknell Forest|Bradford|Brent|Brighton and Hove|Bromley|Buckinghamshire|Bury|Calderdale|Cambridgeshire|Camden|Cheshire|City of Bristol|City of Kingston upon Hull|City of London|Cornwall|Coventry|Croydon|Cumbria|Darlington|Derby|Derbyshire|Devon|Doncaster|Dorset|Dudley|Durham|Ealing|East Riding of Yorkshire|East Sussex|Enfield|Essex|Gateshead|Gloucestershire|Greenwich|Hackney|Halton|Hammersmith and Fulham|Hampshire|Haringey|Harrow|Hartlepool|Havering|Herefordshire|Hertfordshire|Hillingdon|Hounslow|Isle of Wight|Islington|Kensington and Chelsea|Kent|Kingston upon Thames|Kirklees|Knowsley|Lambeth|Lancashire|Leeds|Leicester|Leicestershire|Lewisham|Lincolnshire|Liverpool|Luton|Manchester|Medway|Merton|Middlesbrough|Milton Keynes|Newcastle upon Tyne|Newham|Norfolk|North East Lincolnshire|North Lincolnshire|North Somerset|North Tyneside|North Yorkshire|Northamptonshire|Northumberland|Nottingham|Nottinghamshire|Oldham|Oxfordshire|Peterborough|Plymouth|Poole|Portsmouth|Reading|Redbridge|Redcar and Cleveland|Richmond upon Thames|Rochdale|Rotherham|Rutland|Salford|Sandwell|Sefton|Sheffield|Shropshire|Slough|Solihull|Somerset|South Gloucestershire|South Tyneside|Southampton|Southend-on-Sea|Southwark|St. Helens|Staffordshire|Stockport|Stockton-on-Tees|Stoke-on-Trent|Suffolk|Sunderland|Surrey|Sutton|Swindon|Tameside|Telford and Wrekin|Thurrock|Torbay|Tower Hamlets|Trafford|Wakefield|Walsall|Waltham Forest|Wandsworth|Warrington|Warwickshire|West Berkshire|West Sussex|Westminster|Wigan|Wiltshire|Windsor and Maidenhead|Wirral|Wokingham|Wolverhampton|Worcestershire|York";
+s_a[238] = "Artigas|Canelones|Cerro Largo|Colonia|Durazno|Flores|Florida|Lavalleja|Maldonado|Montevideo|Paysandu|Rio Negro|Rivera|Rocha|Salto|San Jose|Soriano|Tacuarembo|Treinta y Tres";
+s_a[239] = "Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|District of Columbia|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming";
+s_a[240] = "Andijon Wiloyati|Bukhoro Wiloyati|Farghona Wiloyati|Jizzakh Wiloyati|Khorazm Wiloyati (Urganch)|Namangan Wiloyati|Nawoiy Wiloyati|Qashqadaryo Wiloyati (Qarshi)|Qoraqalpoghiston (Nukus)|Samarqand Wiloyati|Sirdaryo Wiloyati (Guliston)|Surkhondaryo Wiloyati (Termiz)|Toshkent Shahri|Toshkent Wiloyati";
+s_a[241] = "Malampa|Penama|Sanma|Shefa|Tafea|Torba";
+s_a[242] = "Amazonas|Anzoategui|Apure|Aragua|Barinas|Bolivar|Carabobo|Cojedes|Delta Amacuro|Dependencias Federales|Distrito Federal|Falcon|Guarico|Lara|Merida|Miranda|Monagas|Nueva Esparta|Portuguesa|Sucre|Tachira|Trujillo|Vargas|Yaracuy|Zulia";
+s_a[243] = "An Giang|Ba Ria-Vung Tau|Bac Giang|Bac Kan|Bac Lieu|Bac Ninh|Ben Tre|Binh Dinh|Binh Duong|Binh Phuoc|Binh Thuan|Ca Mau|Can Tho|Cao Bang|Da Nang|Dac Lak|Dong Nai|Dong Thap|Gia Lai|Ha Giang|Ha Nam|Ha Noi|Ha Tay|Ha Tinh|Hai Duong|Hai Phong|Ho Chi Minh|Hoa Binh|Hung Yen|Khanh Hoa|Kien Giang|Kon Tum|Lai Chau|Lam Dong|Lang Son|Lao Cai|Long An|Nam Dinh|Nghe An|Ninh Binh|Ninh Thuan|Phu Tho|Phu Yen|Quang Binh|Quang Nam|Quang Ngai|Quang Ninh|Quang Tri|Soc Trang|Son La|Tay Ninh|Thai Binh|Thai Nguyen|Thanh Hoa|Thua Thien-Hue|Tien Giang|Tra Vinh|Tuyen Quang|Vinh Long|Vinh Phuc|Yen Bai";
+s_a[244] = "Saint Croix|Saint John|Saint Thomas";
+s_a[245] = "Blaenau Gwent|Bridgend|Caerphilly|Cardiff|Carmarthenshire|Ceredigion|Conwy|Denbighshire|Flintshire|Gwynedd|Isle of Anglesey|Merthyr Tydfil|Monmouthshire|Neath Port Talbot|Newport|Pembrokeshire|Powys|Rhondda Cynon Taff|Swansea|The Vale of Glamorgan|Torfaen|Wrexham";
+s_a[246] = "Alo|Sigave|Wallis";
+s_a[247] = "West Bank";
+s_a[248] = "Western Sahara";
+s_a[249] = "'Adan|'Ataq|Abyan|Al Bayda'|Al Hudaydah|Al Jawf|Al Mahrah|Al Mahwit|Dhamar|Hadhramawt|Hajjah|Ibb|Lahij|Ma'rib|Sa'dah|San'a'|Ta'izz";
+s_a[250] = "Kosovo|Montenegro|Serbia|Vojvodina";
+s_a[251] = "Central|Copperbelt|Eastern|Luapula|Lusaka|North-Western|Northern|Southern|Western";
+s_a[252] = "Bulawayo|Harare|ManicalandMashonaland Central|Mashonaland East|Mashonaland West|Masvingo|Matabeleland North|Matabeleland South|Midlands";
+
+window.stateList = s_a;
 /********************************************************************
 * Global variable and api url
 ********************************************************************/
@@ -40,6 +307,8 @@ __API_PATH.GET_COMMENT                  = '/api/get_jotactivity';
 
 __API_PATH.LOGIN                        = '/api/login';
 __API_PATH.REGISTER                     = '/api/register';
+__API_PATH.UPDATE_PROFILE               = '/api/edit_profile';
+__API_PATH.CHANGE_PASSWORD               = '/api/changePassword';
 
 __API_PATH.GET_HOTELS                   = '/api/get_hotels';
 __API_PATH.GET_HOTEL_DETAIL             = '/api/hotel_detail';
@@ -49,6 +318,7 @@ __API_PATH.UPDATE_HOTEL                 = '/api/update_hotel';
 
 
 __API_PATH.STAFF_SUGGESTION             = '/api/get_members';
+__API_PATH.MEMBER_SIGNUP               = '/api/member_signup';
 
 
 
@@ -87,6 +357,14 @@ __API_PATH.ADD_MEMBER                   = '/api/add_member';
 __API_PATH.UPDATE_MEMBER                = '/api/update_member';
 __API_PATH.DELETE_MEMBER                = '/api/delete_member';
 
+__API_PATH.CHECK_USER                   = '/api/checkusercontact';
+__API_PATH.UPDATE_EMPLOYEE              = '/api/updateuserhotels';
+
+__API_PATH.ADD_POSITION                 = '/api/add_position';
+__API_PATH.UPDATE_POSITION              = '/api/update_position';
+__API_PATH.DELETE_POSITION              = '/api/delete_position';
+__API_PATH.GET_POSITION                 = '/api/get_position';
+
 
 __API_PATH.ADD_HOTELSHIFT               = '/api/add_hotelshift';
 __API_PATH.GET_HOTELSHIFTS              = '/api/get_hotelshifts';
@@ -95,6 +373,7 @@ __API_PATH.UPDATE_HOTELSHIFTS           = '/api/update_hotelshift';
 
 __API_PATH.MEMBER_SCHEDULE_DATA         = '/api/member_schedule_data';
 __API_PATH.ADD_MEMBER_SCHEDULE          = '/api/add_member_schedule';
+__API_PATH.ADD_MULTIPLE_SCHEDULE        = '/api/add_multipleschedule';
 
 
 
@@ -122,40 +401,29 @@ __API_PATH.HEADER_MENU =  [
     {label:"TESTIMONALS", id:"testimonial", href:'#',class:""}
 ];
 
-/*
-__API_PATH.JOT_TYPES = {
-                            quick:{label:"Quick Jot",id:'quick',src:'assets/images/logo_pic.png',icontype:'image',directory:'jot'},
-                            issue:{label:"Issue",id:'issue',src:'warning',icontype:'icon',directory:'jot'},
-                            task:{label:"task",id:'task',src:'task_icon.png',icontype:'icon',directory:'jot'},
-                            note:{label:"Note",id:'note',src:'insert_drive_file',icontype:'icon',directory:'jot'},
-                            lost_found:{label:"Lost & Found",id:'lost_found',src:'business',icontype:'icon',directory:'lost_found'},
-                            vending_machine:{label:"Vending Machine",id:'vending_machine',src:'local_drink',icontype:'icon',directory:'vending_machine'},
-                            meeting_room:{label:"Meeting Room",id:'meeting_room',src:'group',icontype:'icon',directory:'jot'}
-                        };*/
-
 
 
 __API_PATH.JOT_TYPES  = {
-                            quick:{label:"Quick Jot",id:'quick',data:'assets/images/jot_icon.png',icontype:'image',directory:'jot',bgcolor:"#3953a8",class:"cirsularhide"},
+                            quick:{label:"Quick",id:'quick',data:'assets/images/jot_icon.png',icontype:'image',directory:'jot',bgcolor:"#3953a8",class:"cirsularhide",default:true,order:1},
                             
-                            issue:{label:"Issue",id:'issue',data:'assets/images/issue_icon.png',icontype:'image',directory:'jot',bgcolor:"#53ad78",class:"onelink"},
+                            issue:{label:"Issue",id:'issue',data:'assets/images/issue_icon.png',icontype:'image',directory:'jot',bgcolor:"#53ad78",class:"",default:true,order:2},
                            
-                            task:{label:"Task",id:'task',data:'assets/images/task_icon.png',icontype:'image',directory:'jot',bgcolor:"#aba0ef",class:"twolink"},
+                            task:{label:"Task",id:'task',data:'assets/images/task_icon.png',icontype:'image',directory:'jot',bgcolor:"#aba0ef",class:"",default:true,order:3},
                             
-                            note:{label:"Note",id:'note',data:'assets/images/note_icon.png',icontype:'image',directory:'jot',bgcolor:"#71adf7",class:"threelink"},
+                            note:{label:"Note",id:'note',data:'assets/images/note_icon.png',icontype:'image',directory:'jot',bgcolor:"#71adf7",class:"",default:true,order:4},
 
-                            messages:{label:"Messages",id:'messages',data:'assets/images/message_icon.png',icontype:'image',directory:'jot',bgcolor:"#198cc6",class:"fourlink"},
+                            messages:{label:"Messages",id:'messages',data:'assets/images/message_icon.png',icontype:'image',directory:'jot',bgcolor:"#198cc6",class:"",default:true,order:5},
                             
-                            lost_found:{label:"Lost & Found",id:'lost_found',data:'assets/images/lost_icon.png',icontype:'image',directory:'lost_found',bgcolor:"#e37f4b",class:"fivelink"},
+                            lost_found:{label:"Lost & Found",id:'lost_found',data:'assets/images/lost_icon.png',icontype:'image',directory:'lost_found',bgcolor:"#e37f4b",class:"",default:false,order:6},
                             
-                            vending_machine:{label:"Vending Machine",id:'vending_machine',data:'assets/images/vending_icon.png',icontype:'image',directory:'vending_machine',bgcolor:"#e37f4b",class:"sixlink"},
+                            vending_machine:{label:"Vending Machine",id:'vending_machine',data:'assets/images/vending_icon.png',icontype:'image',directory:'vending_machine',bgcolor:"#e37f4b",class:"",default:false,order:7},
 
-                            meeting_room:{label:"Meeting Room",id:'meeting_room',data:'assets/images/metting_icon.png',icontype:'image',directory:'jot',bgcolor:"#f8553a",class:"sevenlink"}
+                            /*meeting_room:{label:"Meeting Room",id:'meeting_room',data:'assets/images/metting_icon.png',icontype:'image',directory:'jot',bgcolor:"#f8553a",class:"",default:true}*/
                         };                        
 
  
 
-__API_PATH.JOT_PRIORITY   = [{name:'urgent',class:'urgent orange'},{name:'high',class:'high red'},{name:'medium',class:'medium yellow'},{name:'low',class:'low green'}]; 
+__API_PATH.JOT_PRIORITY   = [{name:'urgent',class:'urgent'},{name:'high',class:'high'},{name:'medium',class:'medium'},{name:'low',class:'low'}]; 
 
 
 
@@ -182,17 +450,17 @@ __API_PATH.RECURRING_PATTERN = [
                                     {
                                         label        :"Weekly",
                                         id           :"weekly",
-                                        description  : "Recurring every week" 
+                                        description  : "Recurring Every Week" 
                                     },
                                     {
                                         label        :"Monthly",
                                         id           :"monthly",
-                                        description  : "Recurring every month"
+                                        description  : "Recurring Every Month"
                                     },
                                     {
                                         label        :"Yearly",
                                         id           :"yearly",
-                                        description  : "Recurring every year"
+                                        description  : "Recurring Every Year"
                                     }
 
                                 ]; 
@@ -1240,9 +1508,7 @@ __API_PATH.COLOR_CODE = {
               "beige": "#f5f5dc",
               "bisque": "#ffe4c4",
               "blanchedalmond": "#ffebcd",
-              "blue": "#0000ff",
-              "blueviolet": "#8a2be2",
-              "brown": "#a52a2a",
+            
               "burlywood": "#deb887",
               "cadetblue": "#5f9ea0",
               "chartreuse": "#7fff00",
@@ -1251,26 +1517,23 @@ __API_PATH.COLOR_CODE = {
               "cornflowerblue": "#6495ed",
               "cornsilk": "#fff8dc",
               "crimson": "#dc143c",
-              "cyan": "#00ffff",
-           
+              "cyan": "#00ffff",           
               "darkcyan": "#008b8b",
               "darkgoldenrod": "#b8860b",
-              "darkgray": "#a9a9a9",
-              
+              "darkgray": "#a9a9a9",              
               "darkgrey": "#a9a9a9",
               "darkkhaki": "#bdb76b",
-              "darkmagenta": "#8b008b",           
+                        
               "darkorange": "#ff8c00",
-              "darkorchid": "#9932cc",              
+                           
               "darksalmon": "#e9967a",
-              "darkseagreen": "#8fbc8f",
-                          
+              "darkseagreen": "#8fbc8f",                          
               "darkturquoise": "#00ced1",
-              "darkviolet": "#9400d3",
+              
               "deeppink": "#ff1493",
               "deepskyblue": "#00bfff", 
               "dodgerblue": "#1e90ff",
-              "firebrick": "#b22222",
+              
               "floralwhite": "#fffaf0",
               "forestgreen": "#228b22",
               "fuchsia": "#ff00ff",
@@ -1315,7 +1578,7 @@ __API_PATH.COLOR_CODE = {
               "mediumslateblue": "#7b68ee",
               "mediumspringgreen": "#00fa9a",
               "mediumturquoise": "#48d1cc",
-              "mediumvioletred": "#c71585",
+             
               "mintcream": "#f5fffa",
               "mistyrose": "#ffe4e1",
               "moccasin": "#ffe4b5",
@@ -1324,7 +1587,7 @@ __API_PATH.COLOR_CODE = {
               "olive": "#808000",
               "olivedrab": "#6b8e23",
               "orange": "#ffa500",
-              "orangered": "#ff4500",
+              
               "orchid": "#da70d6",
               "palegoldenrod": "#eee8aa",
               "palegreen": "#98fb98",
@@ -1347,12 +1610,12 @@ __API_PATH.COLOR_CODE = {
      
               "silver": "#c0c0c0",
               "skyblue": "#87ceeb",
-              "slateblue": "#6a5acd", 
+              
               "snow": "#fffafa",
               "springgreen": "#00ff7f",
               "steelblue": "#4682b4",
               "tan": "#d2b48c",
-              "teal": "#008080",
+              
               "thistle": "#d8bfd8",
               "tomato": "#ff6347",
               "turquoise": "#40e0d0",
@@ -1363,495 +1626,6 @@ __API_PATH.COLOR_CODE = {
               "yellow": "#ffff00",
               "yellowgreen": "#9acd32"
             };
-
-
-__API_PATH.COUNTRY_LIST = [
-
-{"name": "Afghanistan", "code": "AF"},
-{"name": "Åland Islands", "code": "AX"},
-{"name": "Albania", "code": "AL"},
-{"name": "Algeria", "code": "DZ"},
-{"name": "American Samoa", "code": "AS"},
-{"name": "AndorrA", "code": "AD"},
-{"name": "Angola", "code": "AO"},
-{"name": "Anguilla", "code": "AI"},
-{"name": "Antarctica", "code": "AQ"},
-{"name": "Antigua and Barbuda", "code": "AG"},
-{"name": "Argentina", "code": "AR"},
-{"name": "Armenia", "code": "AM"},
-{"name": "Aruba", "code": "AW"},
-{"name": "Australia", "code": "AU"},
-{"name": "Austria", "code": "AT"},
-{"name": "Azerbaijan", "code": "AZ"},
-{"name": "Bahamas", "code": "BS"},
-{"name": "Bahrain", "code": "BH"},
-{"name": "Bangladesh", "code": "BD"},
-{"name": "Barbados", "code": "BB"},
-{"name": "Belarus", "code": "BY"},
-{"name": "Belgium", "code": "BE"},
-{"name": "Belize", "code": "BZ"},
-{"name": "Benin", "code": "BJ"},
-{"name": "Bermuda", "code": "BM"},
-{"name": "Bhutan", "code": "BT"},
-{"name": "Bolivia", "code": "BO"},
-{"name": "Bosnia and Herzegovina", "code": "BA"},
-{"name": "Botswana", "code": "BW"},
-{"name": "Bouvet Island", "code": "BV"},
-{"name": "Brazil", "code": "BR"},
-{"name": "British Indian Ocean Territory", "code": "IO"},
-{"name": "Brunei Darussalam", "code": "BN"},
-{"name": "Bulgaria", "code": "BG"},
-{"name": "Burkina Faso", "code": "BF"},
-{"name": "Burundi", "code": "BI"},
-{"name": "Cambodia", "code": "KH"},
-{"name": "Cameroon", "code": "CM"},
-{"name": "Canada", "code": "CA"},
-{"name": "Cape Verde", "code": "CV"},
-{"name": "Cayman Islands", "code": "KY"},
-{"name": "Central African Republic", "code": "CF"},
-{"name": "Chad", "code": "TD"},
-{"name": "Chile", "code": "CL"},
-{"name": "China", "code": "CN"},
-{"name": "Christmas Island", "code": "CX"},
-{"name": "Cocos (Keeling) Islands", "code": "CC"},
-{"name": "Colombia", "code": "CO"},
-{"name": "Comoros", "code": "KM"},
-{"name": "Congo", "code": "CG"},
-{"name": "Congo, The Democratic Republic of the", "code": "CD"},
-{"name": "Cook Islands", "code": "CK"},
-{"name": "Costa Rica", "code": "CR"},
-{"name": "Cote D'ivoire", "code": "CI"},
-{"name": "Croatia", "code": "HR"},
-{"name": "Cuba", "code": "CU"},
-{"name": "Cyprus", "code": "CY"},
-{"name": "Czech Republic", "code": "CZ"},
-{"name": "Denmark", "code": "DK"},
-{"name": "Djibouti", "code": "DJ"},
-{"name": "Dominica", "code": "DM"},
-{"name": "Dominican Republic", "code": "DO"},
-{"name": "Ecuador", "code": "EC"},
-{"name": "Egypt", "code": "EG"},
-{"name": "El Salvador", "code": "SV"},
-{"name": "Equatorial Guinea", "code": "GQ"},
-{"name": "Eritrea", "code": "ER"},
-{"name": "Estonia", "code": "EE"},
-{"name": "Ethiopia", "code": "ET"},
-{"name": "Falkland Islands (Malvinas)", "code": "FK"},
-{"name": "Faroe Islands", "code": "FO"},
-{"name": "Fiji", "code": "FJ"},
-{"name": "Finland", "code": "FI"},
-{"name": "France", "code": "FR"},
-{"name": "French Guiana", "code": "GF"},
-{"name": "French Polynesia", "code": "PF"},
-{"name": "French Southern Territories", "code": "TF"},
-{"name": "Gabon", "code": "GA"},
-{"name": "Gambia", "code": "GM"},
-{"name": "Georgia", "code": "GE"},
-{"name": "Germany", "code": "DE"},
-{"name": "Ghana", "code": "GH"},
-{"name": "Gibraltar", "code": "GI"},
-{"name": "Greece", "code": "GR"},
-{"name": "Greenland", "code": "GL"},
-{"name": "Grenada", "code": "GD"},
-{"name": "Guadeloupe", "code": "GP"},
-{"name": "Guam", "code": "GU"},
-{"name": "Guatemala", "code": "GT"},
-{"name": "Guernsey", "code": "GG"},
-{"name": "Guinea", "code": "GN"},
-{"name": "Guinea-Bissau", "code": "GW"},
-{"name": "Guyana", "code": "GY"},
-{"name": "Haiti", "code": "HT"},
-{"name": "Heard Island and Mcdonald Islands", "code": "HM"},
-{"name": "Holy See (Vatican City State)", "code": "VA"},
-{"name": "Honduras", "code": "HN"},
-{"name": "Hong Kong", "code": "HK"},
-{"name": "Hungary", "code": "HU"},
-{"name": "Iceland", "code": "IS"},
-{"name": "India", "code": "IN"},
-{"name": "Indonesia", "code": "ID"},
-{"name": "Iran, Islamic Republic Of", "code": "IR"},
-{"name": "Iraq", "code": "IQ"},
-{"name": "Ireland", "code": "IE"},
-{"name": "Isle of Man", "code": "IM"},
-{"name": "Israel", "code": "IL"},
-{"name": "Italy", "code": "IT"},
-{"name": "Jamaica", "code": "JM"},
-{"name": "Japan", "code": "JP"},
-{"name": "Jersey", "code": "JE"},
-{"name": "Jordan", "code": "JO"},
-{"name": "Kazakhstan", "code": "KZ"},
-{"name": "Kenya", "code": "KE"},
-{"name": "Kiribati", "code": "KI"},
-{"name": "Korea, Democratic", "code": "KP"},
-{"name": "Korea, Republic of", "code": "KR"},
-{"name": "Kuwait", "code": "KW"},
-{"name": "Kyrgyzstan", "code": "KG"},
-{"name": "Lao People", "code": "LA"},
-{"name": "Latvia", "code": "LV"},
-{"name": "Lebanon", "code": "LB"},
-{"name": "Lesotho", "code": "LS"},
-{"name": "Liberia", "code": "LR"},
-{"name": "Libyan Arab Jamahiriya", "code": "LY"},
-{"name": "Liechtenstein", "code": "LI"},
-{"name": "Lithuania", "code": "LT"},
-{"name": "Luxembourg", "code": "LU"},
-{"name": "Macao", "code": "MO"},
-{"name": "Macedonia, The Former Yugoslav Republic of", "code": "MK"},
-{"name": "Madagascar", "code": "MG"},
-{"name": "Malawi", "code": "MW"},
-{"name": "Malaysia", "code": "MY"},
-{"name": "Maldives", "code": "MV"},
-{"name": "Mali", "code": "ML"},
-{"name": "Malta", "code": "MT"},
-{"name": "Marshall Islands", "code": "MH"},
-{"name": "Martinique", "code": "MQ"},
-{"name": "Mauritania", "code": "MR"},
-{"name": "Mauritius", "code": "MU"},
-{"name": "Mayotte", "code": "YT"},
-{"name": "Mexico", "code": "MX"},
-{"name": "Micronesia, Federated States of", "code": "FM"},
-{"name": "Moldova, Republic of", "code": "MD"},
-{"name": "Monaco", "code": "MC"},
-{"name": "Mongolia", "code": "MN"},
-{"name": "Montserrat", "code": "MS"},
-{"name": "Morocco", "code": "MA"},
-{"name": "Mozambique", "code": "MZ"},
-{"name": "Myanmar", "code": "MM"},
-{"name": "Namibia", "code": "NA"},
-{"name": "Nauru", "code": "NR"},
-{"name": "Nepal", "code": "NP"},
-{"name": "Netherlands", "code": "NL"},
-{"name": "Netherlands Antilles", "code": "AN"},
-{"name": "New Caledonia", "code": "NC"},
-{"name": "New Zealand", "code": "NZ"},
-{"name": "Nicaragua", "code": "NI"},
-{"name": "Niger", "code": "NE"},
-{"name": "Nigeria", "code": "NG"},
-{"name": "Niue", "code": "NU"},
-{"name": "Norfolk Island", "code": "NF"},
-{"name": "Northern Mariana Islands", "code": "MP"},
-{"name": "Norway", "code": "NO"},
-{"name": "Oman", "code": "OM"},
-{"name": "Pakistan", "code": "PK"},
-{"name": "Palau", "code": "PW"},
-{"name": "Palestinian Territory, Occupied", "code": "PS"},
-{"name": "Panama", "code": "PA"},
-{"name": "Papua New Guinea", "code": "PG"},
-{"name": "Paraguay", "code": "PY"},
-{"name": "Peru", "code": "PE"},
-{"name": "Philippines", "code": "PH"},
-{"name": "Pitcairn", "code": "PN"},
-{"name": "Poland", "code": "PL"},
-{"name": "Portugal", "code": "PT"},
-{"name": "Puerto Rico", "code": "PR"},
-{"name": "Qatar", "code": "QA"},
-{"name": "Reunion", "code": "RE"},
-{"name": "Romania", "code": "RO"},
-{"name": "Russian Federation", "code": "RU"},
-{"name": "RWANDA", "code": "RW"},
-{"name": "Saint Helena", "code": "SH"},
-{"name": "Saint Kitts and Nevis", "code": "KN"},
-{"name": "Saint Lucia", "code": "LC"},
-{"name": "Saint Pierre and Miquelon", "code": "PM"},
-{"name": "Saint Vincent and the Grenadines", "code": "VC"},
-{"name": "Samoa", "code": "WS"},
-{"name": "San Marino", "code": "SM"},
-{"name": "Sao Tome and Principe", "code": "ST"},
-{"name": "Saudi Arabia", "code": "SA"},
-{"name": "Senegal", "code": "SN"},
-{"name": "Serbia and Montenegro", "code": "CS"},
-{"name": "Seychelles", "code": "SC"},
-{"name": "Sierra Leone", "code": "SL"},
-{"name": "Singapore", "code": "SG"},
-{"name": "Slovakia", "code": "SK"},
-{"name": "Slovenia", "code": "SI"},
-{"name": "Solomon Islands", "code": "SB"},
-{"name": "Somalia", "code": "SO"},
-{"name": "South Africa", "code": "ZA"},
-{"name": "South Georgia and the South Sandwich Islands", "code": "GS"},
-{"name": "Spain", "code": "ES"},
-{"name": "Sri Lanka", "code": "LK"},
-{"name": "Sudan", "code": "SD"},
-{"name": "Suriname", "code": "SR"},
-{"name": "Svalbard and Jan Mayen", "code": "SJ"},
-{"name": "Swaziland", "code": "SZ"},
-{"name": "Sweden", "code": "SE"},
-{"name": "Switzerland", "code": "CH"},
-{"name": "Syrian Arab Republic", "code": "SY"},
-{"name": "Taiwan, Province of China", "code": "TW"},
-{"name": "Tajikistan", "code": "TJ"},
-{"name": "Tanzania, United Republic of", "code": "TZ"},
-{"name": "Thailand", "code": "TH"},
-{"name": "Timor-Leste", "code": "TL"},
-{"name": "Togo", "code": "TG"},
-{"name": "Tokelau", "code": "TK"},
-{"name": "Tonga", "code": "TO"},
-{"name": "Trinidad and Tobago", "code": "TT"},
-{"name": "Tunisia", "code": "TN"},
-{"name": "Turkey", "code": "TR"},
-{"name": "Turkmenistan", "code": "TM"},
-{"name": "Turks and Caicos Islands", "code": "TC"},
-{"name": "Tuvalu", "code": "TV"},
-{"name": "Uganda", "code": "UG"},
-{"name": "Ukraine", "code": "UA"},
-{"name": "United Arab Emirates", "code": "AE"},
-{"name": "United Kingdom", "code": "GB"},
-{"name": "United States", "code": "US"},
-{"name": "United States Minor Outlying Islands", "code": "UM"},
-{"name": "Uruguay", "code": "UY"},
-{"name": "Uzbekistan", "code": "UZ"},
-{"name": "Vanuatu", "code": "VU"},
-{"name": "Venezuela", "code": "VE"},
-{"name": "Viet Nam", "code": "VN"},
-{"name": "Virgin Islands, British", "code": "VG"},
-{"name": "Virgin Islands, U.S.", "code": "VI"},
-{"name": "Wallis and Futuna", "code": "WF"},
-{"name": "Western Sahara", "code": "EH"},
-{"name": "Yemen", "code": "YE"},
-{"name": "Zambia", "code": "ZM"},
-{"name": "Zimbabwe", "code": "ZW"}
-];         
-
-__API_PATH.US_STATE  =     [
-    {
-        "name": "Alabama",
-        "abbreviation": "AL"
-    },
-    {
-        "name": "Alaska",
-        "abbreviation": "AK"
-    },
-    {
-        "name": "American Samoa",
-        "abbreviation": "AS"
-    },
-    {
-        "name": "Arizona",
-        "abbreviation": "AZ"
-    },
-    {
-        "name": "Arkansas",
-        "abbreviation": "AR"
-    },
-    {
-        "name": "California",
-        "abbreviation": "CA"
-    },
-    {
-        "name": "Colorado",
-        "abbreviation": "CO"
-    },
-    {
-        "name": "Connecticut",
-        "abbreviation": "CT"
-    },
-    {
-        "name": "Delaware",
-        "abbreviation": "DE"
-    },
-    {
-        "name": "District Of Columbia",
-        "abbreviation": "DC"
-    },
-    {
-        "name": "Federated States Of Micronesia",
-        "abbreviation": "FM"
-    },
-    {
-        "name": "Florida",
-        "abbreviation": "FL"
-    },
-    {
-        "name": "Georgia",
-        "abbreviation": "GA"
-    },
-    {
-        "name": "Guam",
-        "abbreviation": "GU"
-    },
-    {
-        "name": "Hawaii",
-        "abbreviation": "HI"
-    },
-    {
-        "name": "Idaho",
-        "abbreviation": "ID"
-    },
-    {
-        "name": "Illinois",
-        "abbreviation": "IL"
-    },
-    {
-        "name": "Indiana",
-        "abbreviation": "IN"
-    },
-    {
-        "name": "Iowa",
-        "abbreviation": "IA"
-    },
-    {
-        "name": "Kansas",
-        "abbreviation": "KS"
-    },
-    {
-        "name": "Kentucky",
-        "abbreviation": "KY"
-    },
-    {
-        "name": "Louisiana",
-        "abbreviation": "LA"
-    },
-    {
-        "name": "Maine",
-        "abbreviation": "ME"
-    },
-    {
-        "name": "Marshall Islands",
-        "abbreviation": "MH"
-    },
-    {
-        "name": "Maryland",
-        "abbreviation": "MD"
-    },
-    {
-        "name": "Massachusetts",
-        "abbreviation": "MA"
-    },
-    {
-        "name": "Michigan",
-        "abbreviation": "MI"
-    },
-    {
-        "name": "Minnesota",
-        "abbreviation": "MN"
-    },
-    {
-        "name": "Mississippi",
-        "abbreviation": "MS"
-    },
-    {
-        "name": "Missouri",
-        "abbreviation": "MO"
-    },
-    {
-        "name": "Montana",
-        "abbreviation": "MT"
-    },
-    {
-        "name": "Nebraska",
-        "abbreviation": "NE"
-    },
-    {
-        "name": "Nevada",
-        "abbreviation": "NV"
-    },
-    {
-        "name": "New Hampshire",
-        "abbreviation": "NH"
-    },
-    {
-        "name": "New Jersey",
-        "abbreviation": "NJ"
-    },
-    {
-        "name": "New Mexico",
-        "abbreviation": "NM"
-    },
-    {
-        "name": "New York",
-        "abbreviation": "NY"
-    },
-    {
-        "name": "North Carolina",
-        "abbreviation": "NC"
-    },
-    {
-        "name": "North Dakota",
-        "abbreviation": "ND"
-    },
-    {
-        "name": "Northern Mariana Islands",
-        "abbreviation": "MP"
-    },
-    {
-        "name": "Ohio",
-        "abbreviation": "OH"
-    },
-    {
-        "name": "Oklahoma",
-        "abbreviation": "OK"
-    },
-    {
-        "name": "Oregon",
-        "abbreviation": "OR"
-    },
-    {
-        "name": "Palau",
-        "abbreviation": "PW"
-    },
-    {
-        "name": "Pennsylvania",
-        "abbreviation": "PA"
-    },
-    {
-        "name": "Puerto Rico",
-        "abbreviation": "PR"
-    },
-    {
-        "name": "Rhode Island",
-        "abbreviation": "RI"
-    },
-    {
-        "name": "South Carolina",
-        "abbreviation": "SC"
-    },
-    {
-        "name": "South Dakota",
-        "abbreviation": "SD"
-    },
-    {
-        "name": "Tennessee",
-        "abbreviation": "TN"
-    },
-    {
-        "name": "Texas",
-        "abbreviation": "TX"
-    },
-    {
-        "name": "Utah",
-        "abbreviation": "UT"
-    },
-    {
-        "name": "Vermont",
-        "abbreviation": "VT"
-    },
-    {
-        "name": "Virgin Islands",
-        "abbreviation": "VI"
-    },
-    {
-        "name": "Virginia",
-        "abbreviation": "VA"
-    },
-    {
-        "name": "Washington",
-        "abbreviation": "WA"
-    },
-    {
-        "name": "West Virginia",
-        "abbreviation": "WV"
-    },
-    {
-        "name": "Wisconsin",
-        "abbreviation": "WI"
-    },
-    {
-        "name": "Wyoming",
-        "abbreviation": "WY"
-    }
-];
-
-
 
 
 
@@ -1865,14 +1639,14 @@ __API_PATH.Hotel_STEPS  =[
 
 
 __API_PATH.DEFAULT_DEPARTMENT  = [
-                                    {department_name:"Housekeeper", abbreviation:"H/K"},
-                                    {department_name:"Electric", abbreviation:"ELEC"},
-                                    {department_name:"Mechanical", abbreviation:"MACH"},
+                                    {department_name:"Housekeeper", abbreviation:"H/K",checked:true},
+                                    {department_name:"Electric", abbreviation:"ELEC",checked:true},
+                                    {department_name:"Mechanical", abbreviation:"MACH",checked:true},
                                     {department_name:"Account", abbreviation:"A/C"},
                                     {department_name:"Admin", abbreviation:"ADMIN"},
                                     
                                  ];
-__API_PATH.EMPLOYEE_BLANK_FIELD  = 4;
+
 'use strict';
 
 app.factory('AuthSrv', function ($rootScope) {
@@ -1919,6 +1693,12 @@ app.config(['$httpProvider', function($httpProvider){
 
     $httpProvider.interceptors.push(interceptor);
 }])
+
+.config(['$qProvider', function ($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}])
+
+
 .config(['localStorageServiceProvider', function (localStorageServiceProvider) {
    
    var hostname = window.location.hostname, prefix;
@@ -1928,15 +1708,21 @@ app.config(['$httpProvider', function($httpProvider){
             break;
         default:
             prefix = 'default';
-   }    
-  localStorageServiceProvider.setPrefix(prefix);
+   }  
+ // localStorageServiceProvider.setPrefix(prefix).setStorageType('sessionStorage');
+ localStorageServiceProvider.setPrefix(prefix);
+
 }])
 .run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$timeout',
-	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$timeout){   	
-        
+	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$timeout){   	        
         
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) { 
+
+                $rootScope.currentPage          = $location.$$path;
+                $rootScope.activeHotelData      = localStorageService.get('hotel');
+                $rootScope.currentUser          = localStorageService.get('user');
+                
                 
                 if(nextRoute.$$route){
                     if(nextRoute.$$route.access){
@@ -1958,6 +1744,10 @@ app.config(['$httpProvider', function($httpProvider){
                 $rootScope.$watch(function(newValue, oldValue) {
                     $rootScope.logggedin = AuthSrv.isLogged;
                 });
+
+
+                $rootScope.$broadcast('handleSidebar');
+                
 
         
 
@@ -2048,6 +1838,18 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
              sidebar: 'no',
+             footer:'yes',
+        }
+    })
+
+    .when("/invitation/:data", {
+        templateUrl: "/modules/home/views/home.html",
+        controller: "homeController",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+             sidebar: 'no',
+             footer:'yes',
         }
     })
 
@@ -2058,6 +1860,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
             sidebar: 'no',
+            footer:'yes',
         }
     })
 
@@ -2068,6 +1871,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
             sidebar: 'no',
+            footer:'yes',
         }
     })
 
@@ -2079,6 +1883,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
              sidebar: 'no',
+             footer:'yes',
         }
     })
 
@@ -2089,6 +1894,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
             sidebar: 'no',
+            footer:'yes',
         }
     })
 
@@ -2122,6 +1928,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
     .when("/dashboard", {
         templateUrl : "/modules/dashboard/views/dashboard-home.html",
         controller  :  "dashboardController",
+        controllerAs  :  "ctlr",
         access: {
             requiredLogin: true, 
             headerType:'hotel_header',
@@ -2130,6 +1937,15 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
+
+    /*.when("/invitation", {
+        templateUrl : "/modules/invitation/views/invitation.html",
+        controller  :  "invitationController",
+        access: {
+            requiredLogin: false,
+             sidebar: 'no',
+        }
+    })*/
 
     .when("/dashboard/hotel-setup/:steps?", {
         templateUrl : "/modules/dashboard/views/steps.html",
@@ -2157,6 +1973,18 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
     .when("/dashboard/employee", {
         templateUrl : "/modules/employee/views/employee.html",
         controller  :  "employeeController",
+        controllerAs  :  "ctlr",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/position", {
+        templateUrl : "/modules/employee/views/position.html",
+        controller  :  "positionController",
+        controllerAs  :  "ctlr",
         access: {
             requiredLogin: true,
             headerType:'dashboard_header',
@@ -2252,32 +2080,45 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
     }]);
 "use strict";
 
+app.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default');
+
+    $mdThemingProvider.definePalette('hoteljot', {
+    '50': 'ffbb42',
+    '100': 'ffbb42',
+    '200': 'ffbb42',
+    '300': 'ffbb42',
+    '400': 'ffbb42',
+    '500': 'ffbb42',
+    '600': 'ffbb42',
+    '700': 'ffbb42',
+    '800': 'ffbb42',
+    '900': 'ffbb42',
+    'A100': 'ffbb42',
+    'A200': 'ffbb42',
+    'A400': 'ffbb42',
+    'A700': 'ffbb42',
+    'contrastDefaultColor': 'light',    // whether, by default, text (contrast)
+                                        // on this palette should be dark or light
+
+    'contrastDarkColors': ['50', '100', //hues which contrast should be 'dark' by default
+     '200', '300', '400', 'A100'],
+    'contrastLightColors': undefined    // could also specify this if default was 'dark'
+  });
+
+  $mdThemingProvider.theme('default')
+    .primaryPalette('hoteljot')
+    .accentPalette('blue');
+});
+"use strict";
+
 app.controller('aboutUsCtrl',['$scope',
 	function($scope){
-}]);
-"use Strict";
-
-app.controller('contactController',['$scope',
-	function($scope){
-
 }]);
 "use strict";
 
 app.controller('dashboardController', ['$scope','$location','localStorageService','$rootScope','$mdDialog','toastService','globalRequest',
 	function($scope,$location, localStorageService,$rootScope,$mdDialog,toastService,globalRequest) {
-
-		/*
-		*
-		* Redirect user if not hotel owner
-		*
-		*/	
-
-		var userDetail = localStorageService.get('user');
-		if(userDetail.role == 'staff')
-		{
-			$location.path('/dashboard/hotelboard');
-			return false;
-		}
 
 
 		/*
@@ -2352,6 +2193,24 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 		};
 
 
+		/*****************************************
+		* Open edit employee
+		*****************************************/	
+
+		$scope.openHotelEditForm = function($event, detail){
+			$event.stopPropagation();			
+			$mdDialog.show({
+				controller: 'hotelEditController',
+				templateUrl: '/modules/dashboard/views/edit_hotel.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{hotelDetail: detail}				
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
 		/*
 		* Function
 		*
@@ -2360,10 +2219,10 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 		*/
 		
 		
-		$scope.deleteHotel = function(event,hotelID){
-
-			var storedHotelID = localStorageService.get('hotel');		
-			if(storedHotelID && storedHotelID._id == hotelID)
+		$scope.deleteHotel = function(hotelID,index){
+			
+				
+			if($rootScope.activeHotelData && $rootScope.activeHotelData._id == hotelID)
 			{
 				localStorageService.remove('hotel');
 			}	
@@ -2378,12 +2237,15 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 				};
 			
 			globalRequest.jotCRUD(request).then(function(response){
-				if(response.success)
+				if(response.status == 1)
 				{
+					$scope.hotels.splice(index, 1);
 					var popup = {"message":response.message,"class":"success"};
 					toastService.alert(popup);
 				}
 			});		
+
+
 		};
 
 
@@ -2392,11 +2254,34 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 
 "use strict";
 
-app.controller('dashboardPopupController', ['$scope','$http','$location','$timeout','localStorageService','globalRequest','$rootScope','$mdDialog','$route','toastService',
-	function($scope,$http,$location,$timeout, localStorageService,globalRequest,$rootScope,$mdDialog,$route,toastService) {	
+app.controller('hotelEditController', ['$scope','$timeout','globalRequest','$mdDialog','toastService','hotelDetail',
+	function($scope,$timeout,globalRequest,$mdDialog,toastService,hotelDetail) {	
 
 
 		$scope.currencyList = window.__API_PATH.CURRENCY_LIST;
+		$scope.countryList  = window.countryList;
+		var stateList       = window.stateList;
+		
+		/************************************************
+		* Change states according to country
+		*************************************************/
+
+		$scope.populateState = function(countryName){
+			var countryIndex = $scope.countryList.indexOf(countryName);
+			$scope.stateList = stateList[countryIndex+1].split('|');
+		};
+
+		/***********************************************
+		* Take hotel details in current scope
+		***********************************************/
+
+		angular.forEach(hotelDetail,function (value,key) {
+		    if(key == 'country'){
+		    	$scope.populateState(value);
+		    }
+		    $scope[key] = value;
+		});		
+		
 
 		/*
 		* Function
@@ -2409,66 +2294,125 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 			 $mdDialog.cancel();
 		};
 
-		/*
-		* Factory method
-		*
-		* Add new hotel data
-		*
-		*/
-		$scope.hotelResult = {message:'',class:'',status:''};
-		$scope.addNewHotel = function(){
-			var acceptTerm = $scope.terms;	
-			if(acceptTerm)
-			{
-				$scope.message = ' ';		
+		/***********************************************
+		* Update hotel information
+		***********************************************/
 
-				 var hotelDataObj = {
-				 		user_id     	   : localStorageService.get('user')._id,
-						hotelname          : $scope.hotelname,
-						ownername          : $scope.ownername,
-						currency           : $scope.currency,
-						email              : $scope.email,
-						phone              : $scope.phone,
-						address            : $scope.address,
-						city               : $scope.city,
-						zipcode            : $scope.zipcode,
-						state              : $scope.state,
-						country            : $scope.country,
-						no_of_guestrooms   : $scope.no_of_guestrooms,
-						room_no            : $scope.room_no,
-						vending_area       : $scope.vending_area,
-						no_of_employee     : $scope.no_of_employee,
-						no_of_meetingrooms : $scope.no_of_meetingrooms,
-						no_of_floors       : $scope.no_of_floors,
-						arrangement_type   : $scope.arrangement_t
+		$scope.editNewHotel = function(){
+
+			var hotelDataObj = {
+			 		hotel_id     	   : $scope._id,
+					hotelname          : $scope.hotelname,
+					ownername          : $scope.ownername,
+					currency           : $scope.currency,
+					email              : $scope.email,
+					phone              : $scope.phone,
+					address            : $scope.address,
+					city               : $scope.city,
+					zipcode            : $scope.zipcode,
+					state              : $scope.state,
+					country            : $scope.country	
 				};
 
-				var request={
-						url:window.__API_PATH.ADD_HOTEL,
-						method:"POST",
-						data:hotelDataObj
-					};
+			var request={
+					url:window.__API_PATH.UPDATE_HOTEL,
+					method:"PUT",
+					data:hotelDataObj
+				};
 
-				globalRequest.jotCRUD(request).then(function(response){								
-					$scope.hotelResult 	 = response;
+
+				/***********************************************
+				* Upload bachground image
+				***********************************************/
+
+				if($scope.uploaedImgage)
+				{					
+				
+					globalRequest.uploadFiles($scope._id,'cover',$scope.uploaedImgage).then(function (response) {
 					
-					if(response.status == 1)
-					{
-						$rootScope.hotels.push(response.result);
-						$mdDialog.cancel();
-						var popup = {"message":response.message,"class":"success"};
-						toastService.alert(popup);
-					}				
+	                $timeout(function () {	                 
+	                	request.data.image = response.result[0].filename;
 
-				});
 
-			} else {
-				$scope.hotelResult.class = 'Autherror';
-				$scope.hotelResult.message = 'Please accept terms and conditions.';
-				$scope.hotelResult.status = 1;
-			}	
+	                	/***********************************************
+						* Update hotel info with bachground image
+						***********************************************/                 	
+
+		                globalRequest.jotCRUD(request).then(function(updateResponse){
+							var popup;							
+							if(updateResponse.status == 1)
+							{
+								globalRequest.getHotels();
+								$mdDialog.cancel();
+								popup = {"message":updateResponse.message,"class":"success"};
+								toastService.alert(popup);
+							} else {
+								var errors = '';
+								angular.forEach(updateResponse.errors,function(value,key){
+									errors += value.message+'<br>';
+								});
+								popup = {"message":errors,"class":""};
+								toastService.errors(popup);						
+							}
+
+						});
+
+	                });
+	            });
+
+				} else {
+
+
+					/***********************************************
+					* Update hotel info without bachground image
+					***********************************************/
+
+
+					globalRequest.jotCRUD(request).then(function(response){	
+						var popup;
+						if(response.status == 1)
+						{
+							globalRequest.getHotels();
+							$mdDialog.cancel();
+							popup = {"message":response.message,"class":"success"};
+							toastService.alert(popup);
+						} else {
+							var errors = '';
+							angular.forEach(response.errors,function(value,key){
+								errors += value.message+'<br>';
+							});
+							popup = {"message":errors,"class":""};
+							toastService.errors(popup);						
+						}
+					});
+
+				}	
+							
 			
 		};
+
+
+		/*****************************************
+		* Hotel image upload
+		*****************************************/	
+
+		$scope.$watch('files', function () {
+        	$scope.uploadCover($scope.files);
+	    });
+
+	    $scope.$watch('file', function () {
+	        if ($scope.file != null) {
+	            $scope.files = [$scope.file];
+	        }
+	    });
+
+	    $scope.uploadCover = function(files, errFiles) {
+	    	if(files)
+	    	{
+				$scope.uploaedImgage = files[0];
+			}
+
+	    };
 		
 	}
 ]);
@@ -2480,11 +2424,17 @@ app.controller('dashboardPopupController', ['$scope','$http','$location','$timeo
 app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$location','globalRequest','localStorageService',
 	function($scope,$rootScope,$routeParams,$location,globalRequest,localStorageService) {	
 
-		/*********   Get hotel setup wizard current hotel  ************/
+		$rootScope.newProcessingHotel   = localStorageService.get('processingHotel');
+		
+		/*********   Get hotel setup wizard current hotel  ************/		
+		
+		if($rootScope.currentUser.role != 'hotelowner')
+		{
+			$location.path('/dashboard');
+			return;
+		}
 
-		var hotelData   = localStorageService.get('processingHotel');
-
-		if(!hotelData)	
+		if(!$rootScope.newProcessingHotel)	
 		{			
 			/*********   Redirect if no hotel is in wizard  ************/
 
@@ -2497,7 +2447,7 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 			* Check hotel blank steps
 			***************************************************/
 
-			globalRequest.getHotelStatus(hotelData._id).then(function(response){
+			globalRequest.getHotelStatus($rootScope.newProcessingHotel._id).then(function(response){
 				
 				$rootScope.hotelStatus = response[0];
 
@@ -2590,28 +2540,38 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 
 "use strict";
 
-app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$location','globalRequest','localStorageService',
-	function($scope,$rootScope,$routeParams,$location,globalRequest,localStorageService) {	
+app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$location','globalRequest','localStorageService','$timeout','toastService',
+	function($scope,$rootScope,$routeParams,$location,globalRequest,localStorageService,$timeout,toastService) {	
+		var hotelData       = localStorageService.get('processingHotel');
 
 		$scope.currencyList = window.__API_PATH.CURRENCY_LIST;
-		var hotelData   = localStorageService.get('processingHotel');
+		$scope.countryList  = window.countryList;
+		var stateList       = window.stateList;
+		
+		/************************************************
+		* Change states according to country
+		*************************************************/
 
-		$scope.countryList = window.__API_PATH.COUNTRY_LIST;
-		$scope.stateList = window.__API_PATH.US_STATE;
 
-
+		$scope.populateState = function(countryName){
+			var countryIndex = $scope.countryList.indexOf(countryName);
+			$scope.stateList = stateList[countryIndex+1].split('|');
+		};
+		
 		/************************************************
 		* Append value if hotel already exists
 		*************************************************/
-
+		$scope.checked = false;
 		if(hotelData)
 		{
 
 			globalRequest.getHotelStatus(hotelData._id).then(function(response){
-					angular.forEach(response[0],function (value,key) {					
-							$scope[key] = value;					    
+					angular.forEach(response[0],function (value,key) {	
+						$scope[key] = value;												    
 					});
+
 			});
+			$scope.checked = true;
 		}
 
 		/************************************************
@@ -2620,13 +2580,14 @@ app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$locati
 
 		$scope.step1FormSubmit = function(){
 			var acceptTerm = $scope.terms;	
+			
 			$scope.hotelResult = {class:"",message:"",status:""};
 			if(acceptTerm)
 			{
 			
 
 				 var hotelDataObj = {
-				 		user_id     	   : localStorageService.get('user')._id,
+				 		user_id     	   : $rootScope.currentUser._id,
 						hotelname          : $scope.hotelname,
 						ownername          : $scope.ownername,
 						currency           : $scope.currency,
@@ -2637,10 +2598,8 @@ app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$locati
 						zipcode            : $scope.zipcode,
 						state              : $scope.state,
 						country            : $scope.country,
-						hotel_id		   : null
-						
+						hotel_id		   : null						
 				};
-
 
 
 				var request={
@@ -2654,36 +2613,114 @@ app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$locati
 					request.url 		  = window.__API_PATH.UPDATE_HOTEL;
 					request.method 		  = "PUT";
 					request.data.hotel_id = hotelData._id;
+					request.data.image    = $scope.image;
 				}
 				
-				globalRequest.jotCRUD(request).then(function(response){						
-					
+				globalRequest.jotCRUD(request).then(function(response){
 					localStorageService.set('processingHotel',response.result);							
 					if(response.status == 1)
-					{	var nextStep   = parseInt($routeParams.steps)+1;					
-						$location.path('/dashboard/hotel-setup/'+nextStep);
-					}		
+					{	
+						var nextStep;
+						if($scope.image)
+						{
+							nextStep   = parseInt($routeParams.steps)+1;				
+						    $location.path('/dashboard/hotel-setup/'+nextStep);
+						} else{
+							if ($scope.uploaedImgage && $scope.uploaedImgage.length) 
+							{	
+								uploadCoverIMage(response.result._id);
+							} else {								
+								nextStep   = parseInt($routeParams.steps)+1;			
+							    $location.path('/dashboard/hotel-setup/'+nextStep);
+							}
+						}
+						
+					}	else {						
+
+							var errors = '<ul class="mdToast-error-list">';
+							angular.forEach(response.errors,function(value,key){
+								errors += '<li>'+value.message+'</li>';
+							});
+							errors += '</ul>';
+
+							var popup = {"message":errors,"class":""};
+							toastService.errors(popup);
+					}	
 
 				});
 
-			} else {
-				$scope.hotelResult.class = 'Autherror';
-				$scope.hotelResult.message = 'Please accept terms and conditions.';
-				$scope.hotelResult.status = 1;
+			} else {				
+
+				var popup = {"message":"Please accept terms and conditions.","class":""};
+				toastService.errors(popup);
 			}
-		};		
+		};	
+
+
+		/*****************************************
+		* Hotel image upload
+		*****************************************/	
+
+		$scope.$watch('files', function () {
+        	$scope.uploadCover($scope.files);
+	    });
+
+	    $scope.$watch('file', function () {
+	        if ($scope.file != null) {
+	            $scope.files = [$scope.file];
+	        }
+	    });
+
+	    $scope.uploadCover = function(files, errFiles) {			
+			$scope.uploaedImgage = files;
+			$scope.image = '';
+	    };
+
+	    function uploadCoverIMage(hotelId){
+
+    		globalRequest.uploadFiles(hotelId,'cover',$scope.uploaedImgage).then(function (response) {	 
+            
+                $timeout(function () {	                 
+
+                 var ImageRequest={
+						url:window.__API_PATH.UPDATE_HOTEL,
+						method:"PUT",
+						data:{hotel_id:hotelId,image:response.result[0].filename}
+					};
+
+                 globalRequest.jotCRUD(ImageRequest).then(function(updateResponse){
+												
+						if(updateResponse.status == 1)
+						{	
+							var processingHotel  = localStorageService.get('processingHotel');
+
+							processingHotel.image = response.result[0].filename;
+							localStorageService.set('processingHotel',processingHotel);
+
+							var nextStep   = parseInt($routeParams.steps)+1;
+						    $location.path('/dashboard/hotel-setup/'+nextStep);
+						}		
+
+					});
+
+                });
+            });	        
+
+	    }			
 				
 	}
 ]);
-
 "use strict";
 
-app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$location','localStorageService','globalRequest',
-	function($scope,$rootScope,$routeParams,$location,localStorageService,globalRequest) {	
+app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$location','globalRequest','toastService',
+	function($scope,$rootScope,$routeParams,$location,globalRequest,toastService) {	
 
 		
 		$scope.defaultBoards = window.__API_PATH.JOT_TYPES;
-		var processingHotel = localStorageService.get('processingHotel');
+		
+
+
+		/*angular.forEach*/
 
 		/************************************************
 		* Navigate on previous page
@@ -2713,11 +2750,10 @@ app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$locati
 			{		
 
 				 var hotelDataObj = {
-				 		hotel_id     	   : processingHotel._id,
+				 		hotel_id     	   : $rootScope.newProcessingHotel._id,
 				 		jot_types 		   : getSelectedValues						
 						
 				};
-
 				var request={
 						url:window.__API_PATH.UPDATE_HOTEL,
 						method:"PUT",
@@ -2735,10 +2771,9 @@ app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$locati
 
 				});
 
-			} else {
-				$scope.featureResult.class = 'Autherror';
-				$scope.featureResult.message = 'Please Select at least one jot type.';
-				$scope.featureResult.status = 1;
+			} else {				
+				var popup = {"message":"Please Select at least one jot type.","class":""};
+				toastService.errors(popup);
 			}
 		};	
 
@@ -2750,10 +2785,9 @@ app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$locati
 
 "use strict";
 
-app.controller('step3Controller', ['$scope','$routeParams','$location','localStorageService','globalRequest',
-	function($scope,$routeParams,$location,localStorageService,globalRequest) {	
+app.controller('step3Controller', ['$scope','$rootScope','$routeParams','$location','localStorageService','globalRequest','toastService',
+	function($scope,$rootScope,$routeParams,$location,localStorageService,globalRequest,toastService) {	
 
-		var processingHotel = localStorageService.get('processingHotel');
 
 		/************************************************
 		* Navigate on previous page
@@ -2768,43 +2802,77 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 		/************************************************************	
 		* Default department list
 		************************************************************/
-		if($scope.selectedDepartment.length > 0)
+		if($scope.selectedDepartment)
 		{
-			$scope.defaultDepartment = $scope.selectedDepartment;
+			if($scope.selectedDepartment.length > 0)
+			{
+				$scope.defaultDepartment = $scope.selectedDepartment;
+			} else {
+				$scope.defaultDepartment = window.__API_PATH.DEFAULT_DEPARTMENT;
+			}
+
 		} else {
 			$scope.defaultDepartment = window.__API_PATH.DEFAULT_DEPARTMENT;
-		}
+		}		
 		
 
-
-		/*****************************************************
-		* Append new blank field
-		*****************************************************/
-
-		$scope.blankFieldCount = [];		
-		$scope.addmore = function(){			
-			$scope.blankFieldCount.push({department_name:"",abbreviation:""});		
-		};
-
 		/************************************************
-		* Delte Last element
+		* Add new department into default list
 		*************************************************/
 
-		$scope.deleteDeptRow = function(dept,iterationList,ind){
+		$scope.addNewDepartment = function(){
 
-			$scope[iterationList].splice(ind, 1);
+			var errors = '<ul class="mdToast-error-list">';
+			var errorRestrict = false;
 
-			if(iterationList == 'defaultDepartment'){
-				delete $scope.step3Ctlr.department_name[dept.department_name]; 
-				delete $scope.step3Ctlr.abbreviation[dept.department_name]; 
+			/************** Check empty field  **************/
+
+			if(!$scope.new_department_name)
+			{
+				
+				errors += '<li>Department name is required.</li>';
+				errorRestrict = true;
 			}
 
-			if(iterationList == 'blankFieldCount'){
-				delete $scope.step3Ctlr.department_name[ind]; 
-				delete $scope.step3Ctlr.abbreviation[ind];
+			if(!$scope.new_abbreviation)
+			{
+				errors += '<li>Abbreviation is required.</li>';
+				errorRestrict = true;
 			}
 
-			 
+			/************** Check deplicate value  **************/
+
+			angular.forEach($scope.defaultDepartment,function(value,key){
+				if(value.department_name == $scope.new_department_name)
+				{
+					
+					errors += '<li>Department name already exists.</li>';
+					errorRestrict = true;
+				}
+
+				if(value.abbreviation == $scope.new_abbreviation)
+				{					
+					errors += '<li>Abbreviation already exists.</li>';
+					errorRestrict = true;
+				}
+			});
+
+			/************** Create array  **************/
+
+			if(!errorRestrict)
+			{
+				$scope.defaultDepartment.push({
+					department_name : $scope.new_department_name,
+					abbreviation : $scope.new_abbreviation,
+					checked:true
+				});
+				$scope.new_department_name = '';
+				$scope.new_abbreviation = '';
+			} else {
+				var popup = {"message":errors,"class":""};
+				toastService.errors(popup);
+			}
+
 		};
 
 
@@ -2814,20 +2882,15 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 
 		$scope.step3FormSubmit = function(){
 
-	
 			var removeKeyFromArray = [];
-			for (var key in $scope.step3Ctlr.department_name) {
-				
-				if($scope.step3Ctlr.department_name[key])
+			for (var key in $scope.step3Ctlr.department_select) {
+				if($scope.step3Ctlr.department_select[key])
 				{
-					removeKeyFromArray.push({
-						hotel_id        : processingHotel._id,
-						department_name : $scope.step3Ctlr.department_name[key],
-						abbreviation    : $scope.step3Ctlr.abbreviation[key]
-					});
+					$scope.step3Ctlr.department_select[key].hotel_id =  $rootScope.newProcessingHotel._id;
+					removeKeyFromArray.push($scope.step3Ctlr.department_select[key]);
 				}
 								
-			}	
+			}		
 	
 			$scope.departmentResult = {class:"",message:"",status:""};
 
@@ -2836,7 +2899,7 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 				$scope.message = ' ';		
 
 				 var hotelDataObj = {
-				 		hotel_id     	       : processingHotel._id,
+				 		hotel_id     	       : $rootScope.newProcessingHotel._id,
 				 		departments_list 	   : removeKeyFromArray	
 				};
 
@@ -2856,10 +2919,9 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 
 				});
 
-			} else {
-				$scope.departmentResult.class   = 'Autherror';
-				$scope.departmentResult.message = 'Please enter at least one department.';
-				$scope.departmentResult.status  = 1;
+			} else {				
+				var popup = {"message":"Please select at least one department.","class":""};
+				toastService.errors(popup);
 			}
 		};
 			
@@ -2868,47 +2930,19 @@ app.controller('step3Controller', ['$scope','$routeParams','$location','localSto
 ]);
 "use strict";
 
-app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$location','localStorageService','globalRequest',
-	function($scope,$rootScope,$routeParams,$location,localStorageService,globalRequest) {	
+app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$location','globalRequest','toastService',
+	function($scope,$rootScope,$routeParams,$location,globalRequest,toastService) {	
 
-		var processingHotel = localStorageService.get('processingHotel');
+		
+		function isEmpty(obj) {
+		    for(var prop in obj) {
+		        if(obj.hasOwnProperty(prop))
+		            return false;
+		    }
 
-
-		/************************************************
-		* Create iteration for department
-		*************************************************/
-
-		$scope.defaultBlankField = window.__API_PATH.EMPLOYEE_BLANK_FIELD;
-		function getNumberInArray(data){
-			return new Array(data);
+		    return JSON.stringify(obj) === JSON.stringify({});
 		}
 		
-		$scope.getIteration = [];
-		angular.forEach($scope.selectedDepartment,function(value,kay){
-			$scope.getIteration[value._id] =  getNumberInArray($scope.defaultBlankField);
-		});	
-
-		/*****************************************************
-		* Append blank field in list of particular department
-		*****************************************************/	
-
-		$scope.addmore = function(deptID){
-			$scope.getIteration[deptID].push(1);
-
-		};
-
-
-		/************************************************
-		* Delte Last element
-		*************************************************/
-
-		$scope.deleteEmpRow = function(deptID,ind){
-			$scope.stepsCtrl[deptID+ind] = '';
-			$scope.getIteration[deptID].splice(ind, 1);
-			//var elem = document.getElementById(deptID+ind);
-			//elem.parentNode.removeChild(elem);			
-		};
-			
 
 		/************************************************
 		* Navigate on previous page
@@ -2919,6 +2953,94 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 			$location.path('/dashboard/hotel-setup/'+page);
 		};	
 
+		/************************************************
+		* Add new employee in list
+		*************************************************/
+		$scope.addedEmployee = [];
+		$scope.addNewEmp = function(){
+
+			var errorRestrict = false;
+			var errors = '<ul class="mdToast-error-list">';
+			if(!$scope.newfield)
+			{
+				
+				errors += '<li>First name is required.</li>';
+				errors += '<li>Last name is required.</li>';
+				errors += '<li>Contact number is required.</li>';
+				errors += '<li>Please select department.</li>';
+				errorRestrict = true;
+
+			} else {
+
+				if(!$scope.newfield.newfield_first_name)
+				{
+					
+					errors += '<li>First name is required.</li>';
+					errorRestrict = true;
+				}
+
+				if(!$scope.newfield.newfield_last_name)
+				{
+					errors += '<li>Last name is required.</li>';
+					errorRestrict = true;
+				}				
+
+				if(!$scope.newfield.newfield_contact_number)
+				{
+					errors += '<li>Contact number is required.</li>';
+					errorRestrict = true;
+				}
+
+				if(!$scope.newfield.newDepartment)
+				{
+					errors += '<li>Please select department.</li>';
+					errorRestrict = true;
+				}
+
+				
+				angular.forEach($scope.addedEmployee,function(value,key){
+					
+					if(value.email == $scope.newfield.newfield_email)
+					{						
+						errors += '<li>Email address already exists for this hotel.</li>';
+						errorRestrict = true;
+					}
+
+					if(value.contact_number == $scope.newfield.newfield_contact_number)
+					{						
+						errors += '<li>Contact Number already exists for this hotel.</li>';
+						errorRestrict = true;
+					}
+
+				});	
+				
+
+			}	
+
+			if(!errorRestrict)
+			{					
+
+				$scope.addedEmployee.push({
+					first_name     : $scope.newfield.newfield_first_name, 
+					last_name      : $scope.newfield.newfield_last_name,
+					department     : $scope.newfield.newDepartment,
+					email          : $scope.newfield.newfield_email,
+					contact_number : $scope.newfield.newfield_contact_number, 
+				});
+				
+				$scope.newfield.newfield_first_name = '';
+				$scope.newfield.newfield_last_name = '';
+				$scope.newfield.newDepartment = '';
+				$scope.newfield.newfield_email = '';
+				$scope.newfield.newfield_contact_number = '';
+			} else {
+				var popup = {"message":errors,"class":""};
+				toastService.errors(popup);
+			}
+
+			
+		};
+
 
 		/************************************************
 		* Step4 form submit
@@ -2926,25 +3048,29 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 
 		$scope.step4FormSubmit = function(){
 			var selectedEmployee = [];
-			angular.forEach($scope.stepsCtrl,function(value,key){
-				if(value.first_name)
+
+			angular.forEach($scope.stepsCtrl.selected_emp,function(value,key){
+				if($scope.stepsCtrl.selected_emp[key])
 				{
-					value.hotel_id = processingHotel._id;
-					value.status   = 'inactive';
-					value.password = '123456';
+					value.hotel_id = $rootScope.newProcessingHotel._id;
+					var departmentlist = [];
+					angular.forEach(value.department,function(depValue,deptKey){
+						departmentlist.push(depValue.abbreviation);
+					});
+					value.department   = departmentlist;
 					selectedEmployee.push(value);
 				}
+
 			});
+					
 
-			$scope.empResult = {class:"",message:"",status:""};		
-
-
+				
+			
 			if(selectedEmployee.length > 0)
-			{
-						
+			{					
 
 				 var hotelDataObj = {
-				 		hotel_id     	       : processingHotel._id,
+				 		hotel_id     	       : $rootScope.newProcessingHotel._id,
 				 		member_list 	       : selectedEmployee	
 				};
 
@@ -2955,7 +3081,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 					};
 
 				globalRequest.jotCRUD(request).then(function(response){	
-					$scope.empResult = response;
+					
 					if(response.status == 1)
 					{	
 
@@ -2966,8 +3092,9 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 						var hotelrequest={
 								url:window.__API_PATH.UPDATE_HOTEL,
 								method:"PUT",
-								data:{hotel_id : processingHotel._id,step:'completed'}
+								data:{hotel_id : $rootScope.newProcessingHotel._id,step:'completed'}
 							};
+
 						globalRequest.jotCRUD(hotelrequest).then(function(hotelresponse){
 							if(hotelresponse.status == 1)
 							{	
@@ -2979,18 +3106,22 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 				});
 
 			} else {
-				$scope.empResult.class   = 'Autherror';
-				$scope.empResult.message = 'Please enter at least one employee.';
-				$scope.empResult.status  = 1;
+				
+				var popup = {"message":"Please enter at least one employee.","class":""};
+				toastService.errors(popup);
 			}
 			
-		};
-
-			
+		};			
 			
 	}
 ]);
 
+"use Strict";
+
+app.controller('contactController',['$scope',
+	function($scope){
+
+}]);
 "use Strict";
 
 app.controller('demoController',['$scope',
@@ -2999,9 +3130,9 @@ app.controller('demoController',['$scope',
 }]);
 "use strict";
 
-app.controller('departmentController', ['$scope','localStorageService','globalRequest','$mdDialog','toastService',
-	function($scope,localStorageService,globalRequest,$mdDialog,toastService) {
-		var hotel = localStorageService.get('hotel');
+app.controller('departmentController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+		
 
 
 		/************************************
@@ -3012,12 +3143,7 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 			$scope.department_name = "";		
 			$scope.department_abbreviation = "";		
 			$scope.department_desc = "";
-		};
-
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.departmentResult = "";
-		};
+		};	
 
 		
 		/************************************
@@ -3046,25 +3172,35 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 			            url:window.__API_PATH.ADD_DEPARTMENT,
 			            method:"POST",
 			            data:{
-			            	hotel_id      	   :  hotel._id,
+			            	hotel_id      	   :  $rootScope.activeHotelData._id,
 			            	department_name    :  departmentName,
-			            	abbreviation       :  Abbreviation,
-			            	bgcolor       	   :  $scope.bgcolor,
+			            	abbreviation       :  Abbreviation,			            	
 			            	description        :  $scope.department_desc
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.departmentResult = response;
-				$scope.blank();
+			 	var popup;
+				
 			 	if(response.status == 1)
 			 	{
+			 		$scope.blank();
 			 		if(!$scope.departmentList)
 			 		{
 			 			$scope.departmentList = [];
 			 		}
 			 		$scope.departmentList.push(response.result);
 			 		
-			 		$scope.department_name = $scope.department_abbreviation = $scope.department_desc = '';			 		
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);		 		
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 });
 
@@ -3092,16 +3228,16 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 		* Delete department
 		*****************************************/	
 
-		$scope.removeDepartment = function(detail){
+		$scope.removeDepartment = function(detail,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_DEPARTMENT,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				$scope.departmentList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
@@ -3118,9 +3254,9 @@ app.controller('departmentController', ['$scope','localStorageService','globalRe
 
 "use strict";
 
-app.controller('editDepartmentController', ['$scope','localStorageService','globalRequest','deptDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,deptDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editDepartmentController', ['$scope','globalRequest','deptDetail','$mdDialog','toastService',
+	function($scope,globalRequest,deptDetail,$mdDialog,toastService) {
+		
 
 		
 		/***********************************************
@@ -3155,18 +3291,28 @@ app.controller('editDepartmentController', ['$scope','localStorageService','glob
 			            data:{
 			            	_id      	       :  $scope._id,
 			            	department_name    :  departmentName,
-			            	abbreviation       :  Abbreviation,
-			            	bgcolor       	   :  $scope.bgcolor,
+			            	abbreviation       :  Abbreviation,			            	
 			            	description        :  $scope.description
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.departmentEditResult = response;
+			 	var popup;
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
 			 		globalRequest.getDepartments();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
 
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 	
 			});
@@ -3213,9 +3359,9 @@ app.filter('departmentfilter',function(){
 });
 "use strict";
 
-app.controller('EditDocumentController', ['$scope','$rootScope','localStorageService','globalRequest','Detail','$mdDialog','Upload','$timeout',
-	function($scope,$rootScope,localStorageService,globalRequest,Detail,$mdDialog,Upload,$timeout) {
-		var hotel = localStorageService.get('hotel');
+app.controller('EditDocumentController', ['$scope','$rootScope','globalRequest','Detail','$mdDialog','$timeout','toastService',
+	function($scope,$rootScope,globalRequest,Detail,$mdDialog,$timeout,toastService) {
+		
 		/***********************************************
 		* Pass edited employee value in current scope
 		***********************************************/
@@ -3243,97 +3389,168 @@ app.controller('EditDocumentController', ['$scope','$rootScope','localStorageSer
 		*************************************/		
 
 		$scope.editDC = function(){	
+
+			/*********************************************
+			* Check files exists in scope to upload
+			* if yes, upload doument
+			* if no, save the information without files
+			*********************************************/
+
+			var popup;
+			if ($scope.newFiles && $scope.newFiles.length) {
+
+				globalRequest.uploadFiles($rootScope.activeHotelData._id,'document_center',$scope.newFiles).then(function (response) {				
+	                $timeout(function () {
+		                if(response.status == 1)
+		                {
+		                   /*********************************************
+							* Save document information
+							*********************************************/
+							$scope.newFiles= '';
+							Array.prototype.push.apply($scope.filesData,response.result);
+
+							var request = {
+						            url:window.__API_PATH.UPDATE_DOCUMENT,
+						            method:"PUT",
+						            data:{
+						            	_id      	   			:  $scope._id,
+						            	document_name   		:  $scope.document_name,
+						            	department      		:  $rootScope.department,
+						            	tags        			:  $scope.ctrl.itemTagModel,
+						            	document_description    :  $scope.document_description,
+						            	files       		    :  $scope.filesData,
+						            	upload_date				:  new Date().getTime()
+						            }
+						          };
+
+							globalRequest.jotCRUD(request).then(function(dcresponse){	 
+							 	if(dcresponse.status ==1)
+							 	{
+							 		$mdDialog.cancel();
+							 		globalRequest.getDocument();
+
+							 		popup = {"message":dcresponse.message,"class":dcresponse.class};
+									toastService.alert(popup);
+
+							 	}  else {
+							 		var errors = '<ul class="mdToast-error-list">';
+									angular.forEach(dcresponse.errors,function(value,key){
+										errors += '<li>'+value.message+'</li>';
+									});
+									errors += '</ul>';
+									popup = {"message":errors,"class":""};
+									toastService.errors(popup);
+							 	}
+
+							 });	
+						}   else {
+					 		var errors = '<ul class="mdToast-error-list">';
+							angular.forEach(response.errors,function(value,key){
+								errors += '<li>'+value.message+'</li>';
+							});
+							errors += '</ul>';
+							popup = {"message":errors,"class":""};
+							toastService.errors(popup);
+					 	}				
+
+	                });
+	            });
+
+
+			} else {
+
+				/*************************************************
+				* Save document information if no files in scope
+				*************************************************/
+
+				var request = {
+			            url:window.__API_PATH.UPDATE_DOCUMENT,
+			            method:"PUT",
+			            data:{
+			            	_id      	   			:  $scope._id,
+			            	document_name   		:  $scope.document_name,
+			            	department      		:  $rootScope.department,
+			            	tags        			:  $scope.ctrl.itemTagModel,
+			            	document_description    :  $scope.document_description,			            	
+			            	upload_date				:  new Date().getTime()
+			            }
+			          };
+
+				globalRequest.jotCRUD(request).then(function(response){
+				 	
+				 	if(response.status ==1)
+				 	{
+				 		$mdDialog.cancel();
+				 		globalRequest.getDocument();
+				 		popup = {"message":response.message,"class":response.class};
+						toastService.alert(popup);
+
+				 	}   else {
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(response.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+
+				 });
+				
+			}		
 			
-			var request = {
-		            url:window.__API_PATH.UPDATE_DOCUMENT,
-		            method:"PUT",
-		            data:{
-		            	_id      	   			:  $scope._id,
-		            	document_name   		:  $scope.document_name,
-		            	department      		:  $rootScope.department,
-		            	tags        			:  $scope.ctrl.itemTagModel,
-		            	document_description    :  $scope.document_description,
-		            	files       		    :  $scope.filesData,
-		            	upload_date				:  new Date().getTime()
-		            }
-		          };
-
-			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.docEditResult = response;
-			 	if(response.status ==1)
-			 	{
-			 		$mdDialog.cancel();
-			 		globalRequest.getDocument();
-			 	}
-
-			 });
 
 		};
 
-	/************************************
-	* Remove files by index
-	*************************************/	
+		/************************************
+		* Remove files by index
+		*************************************/	
 
-	$scope.removeImageIndex = function(fData){
-		$scope.filesData = $scope.filesData.filter(function( obj ) {
-				    return obj.filename != fData.filename;
-				});
+		$scope.removeImageIndex = function(fData){
+			$scope.filesData = $scope.filesData.filter(function( obj ) {
+					    return obj.filename != fData.filename;
+					});
 
-	};
-
-
-
-	$scope.$watch('files', function () {		
-        $scope.uploadDocument($scope.files);
-    });
-
-    $scope.$watch('file', function () {
-        if ($scope.file != null) {
-            $scope.files = [$scope.file];
-        }
-    });
+		};	
   
 
-	/*****************************************
-	* Profile image upload
-	*****************************************/	
+		/*****************************************
+		* Append selected files in scope variable 
+		*****************************************/
 
-	$scope.uploadDocument = function(files, errFiles) {			
-        if (files && files.length) {	
-            Upload.upload({
-                url: window.__API_PATH.UPLOAD_FILE,
-                type:'post',
-                arrayKey: '',
-                data: {	                    
-                    hotel_id     : hotel._id,
-                    folder_name  : 'document_center',	                    
-                    file         : files
-                }
-            }).then(function (response) {
-                $timeout(function () {
-                   //$scope.filesData.push(response.data.result);
-                   Array.prototype.push.apply($scope.filesData,response.data.result);
-                   console.log($scope.filesData);
 
-                });
-            }, function (response) {
-                if (response.status > 0) {
-                    $scope.errorMsg = response.status + ': ' + response.data;
-                }
-            }, function (evt) {
-                $scope.documentProgress = 
-                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });
-        }
+		$scope.$watch('files', function () {		
+	        $scope.uploadDocument($scope.files);
+	    });
 
-    };
+	    $scope.$watch('file', function () {
+	        if ($scope.file != null) {
+	            $scope.files = [$scope.file];
+	        }
+	    });
+
+
+		$scope.uploadDocument = function(files, errFiles) {	
+			$scope.newFiles = files;
+	    };
+
+
+	    /*****************************************
+		* delete  file from scope variable 
+		*****************************************/
+
+	    $scope.deleteAttachment = function(hashKey){
+			$scope.newFiles = $scope.newFiles.filter(function(key){
+				return key.$$hashKey != hashKey;
+			});
+		};
 
 	}
 ]);
 "use strict";
 
-app.controller('documentCenterController',['$scope','$rootScope','globalRequest','localStorageService','$mdDialog','toastService','Upload','$timeout',function($scope,$rootScope,globalRequest,localStorageService,$mdDialog,toastService,Upload,$timeout){
-	var hotel = localStorageService.get('hotel');
+app.controller('documentCenterController',['$scope','$rootScope','globalRequest','$mdDialog','toastService','$timeout',function($scope,$rootScope,globalRequest,$mdDialog,toastService,$timeout){
+	
 
 	/************************************
 	* Blank all field before open form
@@ -3342,7 +3559,7 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
 	$scope.blank = function(){
 		$scope.document_name 		= "";		
 		$scope.document_description = "";
-		$scope.filesData 			= "";
+		$scope.fileData 			= "";		
 		$rootScope.department 		= "";
 		$scope.documentProgress 	= -1;
 		$scope.documentResult 		= "";	
@@ -3387,36 +3604,122 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
 	* Add documents
 	*************************************/	
 	
-	$scope.addDC = function(){	
-		var request = {
-		            url:window.__API_PATH.ADD_DOCUMENT,
-		            method:"POST",
-		            data:{
-		            	hotel_id      			:  hotel._id,
-		            	document_name   		:  $scope.document_name,
-		            	department      		:  $rootScope.department,
-		            	tags        			:  $scope.ctrl.itemTagModel,
-		            	document_description    :  $scope.document_description,
-		            	files       		    :  $scope.filesData,
-		            	upload_date				:  new Date().getTime()
-		            }
-		    };
+	$scope.addDC = function(){
 
-		globalRequest.jotCRUD(request).then(function(response){
-			console.log(response);
-		 	$scope.documentResult = response;
+		/*********************************************
+		* Check files exists in scope to upload
+		* if yes, upload doument
+		* if no, save the information without files
+		*********************************************/
 
-		 	if(response.status == 1)
-		 	{
-		 		$scope.blankFields();				
-		 		if(!$scope.documentList)
-		 		{
-		 			$scope.documentList = [];
-		 		}
-		 		$scope.documentList.push(response.result);
-		 		
-		 	}
-		 });
+		var popup;
+		if ($scope.fileData && $scope.fileData.length) {
+
+
+			globalRequest.uploadFiles($rootScope.activeHotelData._id,'document_center',$scope.fileData).then(function (response) {			
+                $timeout(function () {
+	                if(response.status == 1)
+	                {
+	                   /*********************************************
+						* Save document information
+						*********************************************/
+
+	                   var request = {
+						            url:window.__API_PATH.ADD_DOCUMENT,
+						            method:"POST",
+						            data:{
+						            	hotel_id      			:  $rootScope.activeHotelData._id,
+						            	document_name   		:  $scope.document_name,
+						            	department      		:  $rootScope.department,
+						            	tags        			:  $scope.ctrl.itemTagModel,
+						            	document_description    :  $scope.document_description,
+						            	files       		    :  response.result,
+						            	upload_date				:  new Date().getTime()
+						            }
+						    };
+
+						globalRequest.jotCRUD(request).then(function(dcresponse){
+						 	var popup;
+						 	if(dcresponse.status == 1)
+						 	{
+						 		$scope.blankFields();				
+						 		if(!$scope.documentList)
+						 		{
+						 			$scope.documentList = [];
+						 		}
+						 		$scope.documentList.push(dcresponse.result);
+						 		popup = {"message":dcresponse.message,"class":dcresponse.class};
+								toastService.alert(popup);
+						 		
+						 	}  else {
+						 		var errors = '<ul class="mdToast-error-list">';
+								angular.forEach(dcresponse.errors,function(value,key){
+									errors += '<li>'+value.message+'</li>';
+								});
+								errors += '</ul>';
+								popup = {"message":errors,"class":""};
+								toastService.errors(popup);
+						 	}
+						 });
+					}  else {
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(response.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+                });
+            });            
+
+
+		} else {
+
+			/*************************************************
+			* Save document information if no files in scope
+			*************************************************/
+
+			var request = {
+			            url:window.__API_PATH.ADD_DOCUMENT,
+			            method:"POST",
+			            data:{
+			            	hotel_id      			:  $rootScope.activeHotelData._id,
+			            	document_name   		:  $scope.document_name,
+			            	department      		:  $rootScope.department,
+			            	tags        			:  $scope.ctrl.itemTagModel,
+			            	document_description    :  $scope.document_description,			            	
+			            	upload_date				:  new Date().getTime()
+			            }
+			    };
+
+			globalRequest.jotCRUD(request).then(function(response){
+			 	
+			 	if(response.status == 1)
+			 	{
+			 		$scope.blankFields();				
+			 		if(!$scope.documentList)
+			 		{
+			 			$scope.documentList = [];
+			 		}
+			 		$scope.documentList.push(response.result);
+
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 		
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 });
+		}
+		
 
 	};
 
@@ -3459,15 +3762,20 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
 	* Delete contact
 	*****************************************/	
 
-	$scope.removeDc = function(detail){
+	$scope.removeDc = function(detail,index){
 
 		var request={
 			url:window.__API_PATH.DELETE_DOCUMENT,
 			method:"DELETE",
-			params:{_id:detail._id}
+			params:{_id:detail}
 		};
 		
-		globalRequest.jotCRUD(request).then(function(response){				
+		globalRequest.jotCRUD(request).then(function(response){	
+
+			if(response.status == 1)
+			{
+				$scope.documentList.splice(index, 1);
+			}			
 			var popup = {"message":response.message,"class":response.class};
 			toastService.alert(popup);
 		});
@@ -3486,36 +3794,22 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
   
 
 	/*****************************************
-	* Profile image upload
+	* Append selected files in scope variable 
 	*****************************************/	
 
-	$scope.uploadDocument = function(files, errFiles) {			
-
-        if (files && files.length) {	
-            Upload.upload({
-                url: window.__API_PATH.UPLOAD_FILE,
-                type:'post',
-                arrayKey: '',
-                data: {	                    
-                    hotel_id     : hotel._id,
-                    folder_name  : 'document_center',	                    
-                    file         : files
-                }
-            }).then(function (response) {
-                $timeout(function () {
-                   $scope.filesData = response.data.result;
-                });
-            }, function (response) {
-                if (response.status > 0) {
-                    $scope.errorMsg = response.status + ': ' + response.data;
-                }
-            }, function (evt) {
-                $scope.documentProgress = 
-                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });
-        }
-
+	$scope.uploadDocument = function(files, errFiles) {	
+		$scope.fileData = 	files;
     };
+
+    /*****************************************
+	* delete  file from scope variable 
+	*****************************************/
+
+    $scope.deleteAttachment = function(hashKey){
+		$scope.fileData = $scope.fileData.filter(function(key){
+			return key.$$hashKey != hashKey;
+		});
+	};
 	
 	
 }]);
@@ -3530,7 +3824,6 @@ app.controller('documentViewController', ['$scope','Detail',
 		angular.forEach(Detail.detail,function (value,key) {
 		    $scope[key] = value;
 		});	
-		console.log($scope);
 	}
 ]);
 
@@ -3563,14 +3856,14 @@ app.filter('dcDepartmentFilter',function(){
 });
 "use strict";
 
-app.controller('editEmployeeController', ['$scope','localStorageService','globalRequest','Upload','$timeout','empDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,empDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editEmployeeController', ['$scope','$rootScope','globalRequest','$timeout','empDetail','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$timeout,empDetail,$mdDialog,toastService) {
+		
 		$scope.position_list = window.__API_PATH.POSITION;
 
 		
 		/***********************************************
-		* Pass edited employee value in current scope
+		* Take employee detail in current scope
 		***********************************************/
 		
 
@@ -3580,9 +3873,9 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 		    $scope[key] = value;
 		});
 		
-		if($scope.profile_image[0])
+		if($scope.profile_image)
 		{
-			$scope.image = '/images/hotel/'+$scope.hotel_id+'/profile/'+$scope.profile_image[0];
+			$scope.image = '/images/hotel/'+$scope.hotel_id+'/profile/'+$scope.profile_image;
 		} else {
 			$scope.image = '/assets/images/default_profile.png';
 		}
@@ -3605,7 +3898,7 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 			            	contact_number:  $scope.contact_number || null,
 			            	email         :  $scope.email || null,
 			            	status 		  :  status,
-			            	department    :  $scope.department,
+			            	departments   :  $scope.departments,
 			            	profile_image :  $scope.profileimages,
 			            	position 	  :  $scope.position,
 			            	address 	  :  $scope.address
@@ -3613,11 +3906,22 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 			          };
 
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.memberEditResult = response;
+			 	var popup;
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
 			 		globalRequest.getStaff();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 
 			 });
@@ -3630,32 +3934,12 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 
 		$scope.uploadprofileImage = function(files, errFiles) {
 			$scope.profile = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'profile',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   console.log(response);
-	                   $scope.profileimages = response.data.result[0].filename;
-	                   
+
+			globalRequest.uploadFiles($rootScope.activeHotelData._id,'profile',files).then(function (response) {
+	                $timeout(function () {	                  
+	                   $scope.profileimages = response.result[0].filename;
 	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.profileProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
+	            });	      
 
 	    };
 		
@@ -3667,9 +3951,66 @@ app.controller('editEmployeeController', ['$scope','localStorageService','global
 
 "use strict";
 
-app.controller('editshiftController', ['$scope','localStorageService','globalRequest','shiftDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,shiftDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editPositionController', ['$scope','globalRequest','positionDetail','$mdDialog','toastService',
+	function($scope,globalRequest,positionDetail,$mdDialog,toastService) {
+				
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+
+		angular.forEach(positionDetail,function (value,key) {
+		    $scope[key] = value;
+		});
+		
+
+		/************************************
+		* Edit Item
+		*************************************/			
+
+		$scope.editPosCat = function(){	
+						
+			var request = {
+			            url    : window.__API_PATH.UPDATE_POSITION,
+			            method : "PUT",
+			            data:{
+			            	_id        :  $scope._id,
+			            	position   :  $scope.position
+			            }
+			          };
+
+			globalRequest.jotCRUD(request).then(function(response){
+			 	var popup;
+			 	if(response.status ==1)
+			 	{
+			 		$mdDialog.cancel();
+			 		globalRequest.getPositionList();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+
+			 });
+		};
+		
+	}
+]);
+
+
+
+
+"use strict";
+
+app.controller('editshiftController', ['$scope','globalRequest','shiftDetail','$mdDialog','toastService',
+	function($scope,globalRequest,shiftDetail,$mdDialog,toastService) {
+		
 
 		/*
 		* Get day list in array
@@ -3693,21 +4034,8 @@ app.controller('editshiftController', ['$scope','localStorageService','globalReq
 
 		angular.forEach(shiftDetail.detail,function (value,key) {
 
-			if(key == 'start_time')
-			{
-
-				$scope.start_hour = value[0].hour;
-				$scope.start_min = value[0].minute;
-
-			} else if(key == 'end_time'){
-	
-				$scope.end_hour = value[0].hour;
-				$scope.end_min = value[0].minute;
-
-			} else if(key == 'bgcolor'){
-	
+			if(key == 'bgcolor'){	
 				$scope.ctlr.bgcolor = value;
-
 			} else {
 				$scope[key] = value;
 			}
@@ -3730,17 +4058,28 @@ app.controller('editshiftController', ['$scope','localStorageService','globalReq
 			            	shift_name      :  $scope.shift_name,		
 		            		department_name :  $scope.department_name,
 		            		bgcolor       	:  $scope.ctlr.bgcolor,
-		            		start_time      :  { hour:$scope.start_hour,minute:$scope.start_min},		
-		            		end_time        :  { hour:$scope.end_hour,minute:$scope.end_min},
+		            		start_time      :  $scope.start_time,		
+		            		end_time        :  $scope.end_time,
 	
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.shiftEditResult = response;
+			 	var popup;
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
 			 		globalRequest.getShiftTime();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 	
 			});
@@ -3755,9 +4094,9 @@ app.controller('editshiftController', ['$scope','localStorageService','globalReq
 
 "use strict";
 
-app.controller('employeeController', ['$scope','$rootScope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','toastService',
-	function($scope,$rootScope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,toastService) {
-		var hotel = localStorageService.get('hotel');
+app.controller('employeeController', ['$scope','$rootScope','globalRequest','$timeout','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$timeout,$mdDialog,toastService) {
+		
 		$scope.position_list = window.__API_PATH.POSITION;
 
 
@@ -3770,7 +4109,7 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 			$scope.last_name = "";
 			$scope.contact_number = "";
 			$scope.email = "";
-			$scope.department = "";
+			$scope.departments = "";
 			$scope.position = "";
 			$scope.status = "";
 			$scope.address = "";
@@ -3779,10 +4118,7 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 			$scope.profileimages = '';
 		};
 
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.memberResult = "";
-		};
+
 
 		/************************************
 		* Get department list
@@ -3796,41 +4132,58 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 		globalRequest.getStaff();
 
 		/************************************
+		* Get position list
+		*************************************/			
+		
+		globalRequest.getPositionList();
+
+		/************************************
 		* Add employee
 		*************************************/		
 		
 
 		$scope.addEmployee = function(){
+
 			
 			var status  = ($scope.status)?$scope.status:'inactive';			
 			var request = {
 			            url:window.__API_PATH.ADD_MEMBER,
 			            method:"POST",
 			            data:{
-			            	hotel_id      :  hotel._id,
-			            	first_name    :  $scope.first_name,
-			            	last_name     :  $scope.last_name,
-			            	contact_number     :  $scope.contact_number,
-			            	email         :  $scope.email,
-			            	status 		  :  status,
-			            	department    :  $scope.department,
-			            	profile_image :  $scope.profileimages,
-			            	position 	  :  $scope.position,
-			            	address 	  :  $scope.address,
-			            	role 	      :  'staff',
-			            	password      :  '123456',
+			            	hotel_id         :  $rootScope.activeHotelData._id,
+			            	first_name       :  $scope.first_name,
+			            	last_name        :  $scope.last_name,
+			            	contact_number   :  $scope.contact_number,
+			            	email            :  $scope.email,
+			            	status 		     :  status,
+			            	departments      :  $scope.departments,
+			            	profile_image    :  $scope.profileimages,
+			            	position 	     :  $scope.position,
+			            	address 	     :  $scope.address
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.memberResult = response;
-			 	$scope.blank();
+		 		var popup;
 			 	if(response.status == 1)
 			 	{
+			 		$scope.blank();
 			 		if(!$rootScope.staffList)
 			 		{
 			 			$rootScope.staffList = [];
 			 		}
 			 		$rootScope.staffList.push(response.result);
+
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 });
 
@@ -3857,16 +4210,16 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 		* Delete employee
 		*****************************************/	
 
-		$scope.removeEmployee = function(detail){
+		$scope.removeEmployee = function(empID,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_MEMBER,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:empID}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				$rootScope.staffList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
@@ -3879,39 +4232,38 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 
 		$scope.uploadprofileImage = function(files, errFiles) {
 			$scope.profile = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'profile',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   console.log(response);
-	                   $scope.profileimages = response.data.result[0].filename;
-	                   
+			globalRequest.uploadFiles($rootScope.activeHotelData._id,'profile',files).then(function (response) {	        
+	                $timeout(function () {	                   
+	                   $scope.profileimages = response.result[0].filename;
 	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.profileProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
 	            });
-	        }
-
 	    };
 
+	    /*****************************************
+		* Invite employee to login
+		*****************************************/
 
-	    $scope.viewDetail = function(){
+	    $scope.sendInvitation = function(empData){
+	    	//var edata = 'http://localhost:3000/api/invitation/'+empData.signupVerificationKey;
+	    	var edata = '';
+	    	edata 	 += 'employee_id='+empData._id;
+	    	edata 	 += '&hotel_id='+$rootScope.activeHotelData._id;
+	    	edata 	 += '&first_name='+empData.first_name;
+	    	edata    += '&last_name='+empData.last_name;
+	    	edata    += '&email='+empData.email;
+	    	edata    += '&profile_image='+empData.profile_image;
+	    	edata    += '&formtype=invitation';
+	    	edata    += '&contact_number='+empData.contact_number;
+	    	edata    += '&token='+empData.signupVerificationKey;
+	    	edata     = window.btoa(edata);
+	    	var url   = 'http://localhost:3000/invitation/'+edata;
 
+	    	console.log(url);
 	    };
+
+	    /*$scope.viewDetail = function(){
+
+	    };*/
 		
 	}
 ]);
@@ -3921,10 +4273,115 @@ app.controller('employeeController', ['$scope','$rootScope','localStorageService
 
 "use strict";
 
-app.controller('scheduleEmpController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','toastService','scheduledData',
-	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,toastService,scheduledData) {
-		var hotel 			= localStorageService.get('hotel');		
+app.controller('positionController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+
+
+		/************************************
+		* Get position list
+		*************************************/			
+		
+		globalRequest.getPositionList();
+
+		
+		/************************************
+		* Add position
+		*************************************/		
+		
+
+		$scope.addPosition = function(){
+		
+			var request = {
+			            url:window.__API_PATH.ADD_POSITION,
+			            method:"POST",
+			            data:{
+			            	hotel_id   :  $rootScope.activeHotelData._id,
+			            	position   :  $scope.position
+			            }
+			          };
+			globalRequest.jotCRUD(request).then(function(response){
+				var popup;
+			 	if(response.status == 1)
+			 	{
+			 		$scope.position = "";
+			 		globalRequest.getPositionList();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 });
+
+		};
+
+		/*****************************************
+		* Open edit position
+		*****************************************/	
+
+		$scope.openEditForm = function(detail){
+			
+				$mdDialog.show({
+					controller: 'editPositionController',
+					templateUrl: '/modules/employee/views/edit_position.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,	
+					locals:{positionDetail:detail}				
+				}).then(function(answer) {}, function() {});
+
+		};
+
+
+		/*****************************************
+		* Delete position
+		*****************************************/	
+
+		$scope.removePos = function(detail,index){
+
+			var request={
+				url:window.__API_PATH.DELETE_POSITION,
+				method:"DELETE",
+				params:{_id:detail}
+			};
+			
+			globalRequest.jotCRUD(request).then(function(response){				
+				$scope.potisionList.splice(index, 1);
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+			});
+
+		};
+
+		
+		
+	}
+]);
+
+
+
+
+"use strict";
+
+app.controller('scheduleEmpController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService','scheduledData',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService,scheduledData) {
+		
 		var date         	= new Date(scheduledData.scheduleDate);
+		
+
+		/*****************************************************
+		* Initialize time array if time not scheduled
+		*****************************************************/
+
+		$scope.shiftTime              = {start_time:{},end_time:{}};
+		$scope.shiftTime.start_time   = {hour:"",minute:""};
+		$scope.shiftTime.end_time     = {hour:"",minute:""};
 
 		/*
 		* Get day list in array
@@ -3934,22 +4391,30 @@ app.controller('scheduleEmpController', ['$scope','$rootScope','localStorageServ
 		    return new Array(num);   
 		};
 
+
 		
 		/*****************************************************
 		* Populate start and end time on edit time schedule
 		*****************************************************/
+
+		if(scheduledData.empDetail.Scheduledata.length > 0)
+		{
 		
-		var matchColumnDate =  date.getDate()+''+(parseInt(date.getMonth())+1) +''+date.getFullYear();
-		angular.forEach(scheduledData.empDetail.Scheduledata,function(value,key){
-			if(value.shift_filter_date == matchColumnDate)
-			{
-				$scope.selectVal  = value.schedule_data._id;	
-				$scope.start_hour = value.schedule_data.start_time.hour;
-				$scope.start_min  = value.schedule_data.start_time.minute;
-				$scope.end_hour   = value.schedule_data.end_time.hour;
-				$scope.end_min    = value.schedule_data.end_time.minute;			
-			}
-		});
+			var matchColumnDate =  date.getDate()+''+(parseInt(date.getMonth())+1) +''+date.getFullYear();
+			angular.forEach(scheduledData.empDetail.Scheduledata,function(value,key){
+
+				if(	value.shift_filter_date == matchColumnDate  &&  value.department == scheduledData.ScheduleDepartment.abbreviation )
+				{
+					$scope.selectVal                    = value.schedule_data._id;				
+					$scope.note                         = value.schedule_data.note;
+					$scope.shiftTime.start_time.hour    = value.schedule_data.start_time.hour;
+					$scope.shiftTime.start_time.minute  = value.schedule_data.start_time.minute;
+					$scope.shiftTime.end_time.hour      = value.schedule_data.end_time.hour;
+					$scope.shiftTime.end_time.minute    = value.schedule_data.end_time.minute;
+								
+				}
+			});
+		}
 		
 
 		/*
@@ -3958,18 +4423,19 @@ app.controller('scheduleEmpController', ['$scope','$rootScope','localStorageServ
 
 		$scope.onChangeSchedule = function(){
 
-			if($scope.shiftTimeList && $scope.shiftTimeList != "custom" && $scope.shiftTimeList != "off")
+			if($scope.shiftTimeList && $scope.shiftTimeList != "custom" && $scope.shiftTimeList != "onleave")
 			{
-				var getShift      = JSON.parse($scope.shiftTimeList);
-				$scope.start_hour = getShift.start_time[0].hour;
-				$scope.start_min  = getShift.start_time[0].minute;
-				$scope.end_hour   = getShift.end_time[0].hour;
-				$scope.end_min    = getShift.end_time[0].minute;
-			}
-			
-			if($scope.shiftTimeList == "off")
-			{
-				$scope.start_hour = $scope.start_min = $scope.end_hour= $scope.end_min= '';	
+				var getShift         = JSON.parse($scope.shiftTimeList);
+				$scope.shiftTime     = getShift;
+				$scope.dateValue     = 'shift';	
+			} else {
+				$scope.dateValue = $scope.shiftTimeList;
+			}	
+
+			if($scope.shiftTimeList == "onleave")
+			{						
+				$scope.shiftTime.start_time   = {hour:"",minute:""};
+			    $scope.shiftTime.end_time   = {hour:"",minute:""};
 			}
 			
 		};
@@ -3982,63 +4448,94 @@ app.controller('scheduleEmpController', ['$scope','$rootScope','localStorageServ
 
 
 		$scope.setSchedule = function(){
-			var isSetShift,shiftID;			
+			var shiftID;			
 			var monthVal 	 = date.getMonth();
 			var firstDay     = new Date(date.getFullYear(), monthVal, 1);
 			var lastDay      = new Date(date.getFullYear(), monthVal + 1, 0);
 
 			var empData 	 = scheduledData.empDetail;
-			var scheduleData = {};
-			
-			var start_hour = $scope.start_hour;
-			var start_min  = $scope.start_min;
-			var end_hour   = $scope.end_hour;
-			var end_min    = $scope.end_min;
+			var scheduleData = {};				
 
-			if($scope.shiftTimeList)
+			if($scope.shiftTime)
 			{
-				if($scope.shiftTimeList != "custom" && $scope.shiftTimeList != "off")
-				{
-					isSetShift   = JSON.parse($scope.shiftTimeList);
-					shiftID      = isSetShift._id;
+
+				if($scope.dateValue == "custom" || $scope.dateValue == "onleave")
+				{			
+					shiftID      = $scope.dateValue;				
+
 				} else {
-					shiftID   = $scope.shiftTimeList;
-				}
-				
+					shiftID      = $scope.shiftTime._id;
+				}				
 				scheduleData  = {
-									_id :shiftID,
-									start_time:{hour:start_hour,minute:start_min},
-									end_time:{hour:end_hour,minute:end_min},
+									_id        : shiftID,
+									start_time : $scope.shiftTime.start_time,
+									end_time   : $scope.shiftTime.end_time,
+									note   	   : $scope.note,
 							    };
 			} else {
 				scheduleData = '';
 			}
-			
+
+
+			if(scheduledData.multipleSchedule.length > 0)
+			{
+
+			}
 
 			var filterString =  date.getDate()+''+(parseInt(date.getMonth())+1) +''+date.getFullYear();		
-		
 			var SchedRequest = {
 		            url:window.__API_PATH.ADD_MEMBER_SCHEDULE,
 		            method:"POST",
 		            data:{
-		            	hotel_id       		:  hotel._id,		
+		            	hotel_id       		:  $rootScope.activeHotelData._id,		
 		            	user_id        		:  empData._id,
-		            	shift_date     		:  date.getTime(),
+		            	department          :  scheduledData.ScheduleDepartment.abbreviation,
+		            	shift_date     		:  new Date(date.getFullYear(),date.getMonth(), date.getDate()).getTime(),
 		            	shift_filter_date   :  filterString,	            		
-		            	schedule_data  		:  scheduleData,		
+		            	schedule_data  		:  scheduleData		           	
 		            }
 		        };
-		   
-		    globalRequest.jotCRUD(SchedRequest).then(function(response){	
-			 	if(response.status == 1)
-			 	{
-			 		$rootScope.$emit("CallgetSchedule", {firstDay:firstDay,lastDay:lastDay});
-			 		$mdDialog.cancel();	
 
-			 		var popup = {"message":response.message,"class":response.class};
-					toastService.alert(popup); 
-			 	}
-			});
+
+		    if(scheduledData.multipleSchedule.length > 0)
+			{
+
+				
+				scheduledData.multipleSchedule = scheduledData.multipleSchedule.filter(function(dataValue){
+					Object.assign(dataValue,{schedule_data :  scheduleData});
+					return dataValue;
+				});
+
+				SchedRequest.url = window.__API_PATH.ADD_MULTIPLE_SCHEDULE;
+				SchedRequest.data = {
+					multiple_schedule : scheduledData.multipleSchedule,
+					
+				};
+				
+			}
+
+			
+			var popup;
+			
+			    globalRequest.jotCRUD(SchedRequest).then(function(response){	
+				 	if(response.status == 1)
+				 	{
+				 		$rootScope.$emit("CallgetSchedule", {firstDay:firstDay,lastDay:lastDay});
+				 		$rootScope.$emit('scheduleField');
+				 		$mdDialog.cancel();	
+				 		popup = {"message":response.message,"class":response.class};
+						toastService.alert(popup); 
+				 	} else {
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(response.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+				});
+			
 
 		};
 		
@@ -4050,11 +4547,14 @@ app.controller('scheduleEmpController', ['$scope','$rootScope','localStorageServ
 app.controller('schedulerController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','$interval','toastService',
 	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,$interval,toastService) {
 
-		var hotel 			 = localStorageService.get('hotel');
+		
 		var date 	   	     = new Date();
 		$scope.currentDate   = new Date(); 
 		$scope.datesData 	 = {dates : "", monthStartDate : ""};
 		$scope.position_list = window.__API_PATH.POSITION;
+		$scope.dateLabel  = {from:"",to:""};
+
+
 
 		/*
 		* Get day list in array
@@ -4062,6 +4562,17 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		
 		$scope.getDay = function(num) {
 		    return new Array(num);   
+		};
+
+		
+
+		/*******************************************************
+		* Callback function to close color swatch on outside click
+		*******************************************************/
+
+		$scope.swatchToggle = function(){			
+				$scope.colorSwatch = false;
+											
 		};
 
 		/*
@@ -4075,6 +4586,12 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		* Get shift timing
 		*************************************/		
 		globalRequest.getShiftTime();
+
+		/************************************
+		* Get position list
+		*************************************/			
+		
+		globalRequest.getPositionList();
 		
 
 		/************************************
@@ -4091,7 +4608,7 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 					url:window.__API_PATH.MEMBER_SCHEDULE_DATA,
 					method:"GET",
 					params:{
-						hotel_id    :  hotel._id,
+						hotel_id    :  $rootScope.activeHotelData._id,
 						from_date   :  from,
 						to_date     :  to	
 					}
@@ -4110,40 +4627,25 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 
 		$rootScope.$on("CallgetSchedule", function(evt,data){
            $scope.getSchedule(data.firstDay,data.lastDay);
-        });
+        });		
 
 
-		/************************************
-		* Blank all field before open form
-		*************************************/
-		$scope.blank = function(){
-			$scope.shift_name = "";		
-			$scope.shift_time = "";		
-			$scope.ctlr.bgcolor = "";		
-			$scope.department_name = "";		
+		/**************************************************
+		* Get first and last date from current week 
+		* By passing how many week date want
+		**************************************************/
+
+
+		Date.prototype.getDateAccordingToCurrentWeek = function(start,weekCount)
+		{
+		    start = start || 0;
+		    var today = new Date(this.setHours(0, 0, 0, 0));
+		    var day = today.getDay() - start;
+		    var date = today.getDate() - day;
+		    var StartDate = new Date(today.setDate(date+1));
+   			var EndDate = new Date(today.setDate(date + 7 * weekCount));
+		    return [StartDate, EndDate];
 		};
-
-		/**************************************************************************
-		* Get last date of week by passing the week number and month start date obj
-		***************************************************************************/
-
-		Date.prototype.getWeek = function(monthStart) {
-			var onejan = new Date(monthStart);
-			return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
-		};
-
-		function getDateRangeOfWeek(monthStart,weekNo){
-			var numOfdaysPastSinceLastMonday;
-		    var d1 = new Date();
-		    numOfdaysPastSinceLastMonday = parseInt(d1.getDay()- 1);
-		    d1.setDate(d1.getDate() - numOfdaysPastSinceLastMonday);
-		    var weekNoToday = d1.getWeek(monthStart);
-		    var weeksInTheFuture = parseInt( weekNo) - parseInt(weekNoToday );
-		    d1.setDate(d1.getDate() + parseInt( 7 * weeksInTheFuture ));
-		    
-		    d1.setDate(d1.getDate() + 6);		    
-		    return d1;
-		}
 
 
 		/**************************************************************************
@@ -4181,7 +4683,9 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		*
 		*********************************************************************/
 
-		$scope.UpdateCalenderViewDates 	=	function(calenderCurrentData,nav,countDate){
+		$scope.UpdateCalenderViewDates 	=	function(calenderCurrentData,nav){
+			$scope.activeRangeMenu     = 'fullmonth';
+			$scope.scheduleRange       = false;
 			
 			var monthVal,firstDay,lastDay,year;
 
@@ -4203,24 +4707,6 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 			lastDay    = new Date(date.getFullYear(), monthVal + 1, 0);
 
 
-			if(countDate == 'today')
-			{
-				if(!nav)
-				{
-					firstDay   = new Date();
-					lastDay    = new Date();					
-				} else {
-					$scope.activeRangeMenu = '';
-				}
-
-			} else if(countDate){
-				var WeeksMonth = firstDay.getMonth()+1;
-				var WeeksYear  = firstDay.getFullYear();					
-				var lastDateOfWeek = getDateRangeOfWeek(firstDay,countDate);
-				lastDay = lastDateOfWeek;					
-			}
-	
-
 			$scope.datesData.dates        		= AllDates(firstDay,lastDay);
 			$scope.datesData.monthStartDate     = firstDay;
 
@@ -4228,26 +4714,72 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 			* Blank calender before load new data 
 			* Reinitialize calender data
 			*/
+
 			$scope.membersList 	= '';			
 			$scope.getSchedule(firstDay,lastDay);
 		};
 
+		
+
+
 		/**************************************************
 		* Set Scheduler on page load
 		**************************************************/
-		$scope.activeRangeMenu = 2;
-		$scope.UpdateCalenderViewDates('','',2);
 
+		function setSchedulerOnLoad()
+		{
+			$scope.activeRangeMenu = 1;
+			var dateArray    				    = new Date().getDateAccordingToCurrentWeek('',1);
+			$scope.datesData.dates        		= AllDates(dateArray[0],dateArray[1]);
+			$scope.datesData.monthStartDate     = new Date(date.getFullYear(), date.getMonth(), 1);
+
+			if(dateArray[0].getMonth() != dateArray[1].getMonth())
+			{
+				$scope.dateLabel 		 = {from:dateArray[0], to:dateArray[1]};
+				$scope.scheduleRange     = true;
+			} 
+
+
+			$scope.getSchedule(dateArray[0],dateArray[1]);
+		}
+		setSchedulerOnLoad();
 
 		/**************************************************
 		* Set end date of calender and filter accordingly
 		**************************************************/
 
-		$scope.setVeiwRange = function(setDateValue,countDate){
+		$scope.setVeiwRange = function(countDate){
 
-			$scope.activeRangeMenu = countDate;
-			$scope.UpdateCalenderViewDates(setDateValue,'',countDate);
+			var firstViewDay,lastViewDay,firstDay,lastDay;
+			date = new Date();
+
+			$scope.activeRangeMenu    =  countDate;
+
+			if(countDate == 'today')
+			{
+				firstViewDay = lastViewDay   = new Date(date.getFullYear(),date.getMonth(), date.getDate());
+				firstDay = lastDay   = new Date(date.getFullYear(),date.getMonth(), date.getDate());
+
+			} else if(countDate == 'fullmonth') {
+				firstViewDay = firstDay   = new Date(date.getFullYear(), date.getMonth(), 1);
+				lastViewDay = lastDay    = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+			} else {
+				var dateArray   = date.getDateAccordingToCurrentWeek('',countDate);
+				firstViewDay = firstDay    	= dateArray[0];
+				lastViewDay = lastDay 		= dateArray[1];
+			}			
 			
+			$scope.scheduleRange     = false;
+			if(firstViewDay.getMonth() != lastViewDay.getMonth())
+			{
+				$scope.dateLabel 		 = {from:firstViewDay, to:lastViewDay};
+				$scope.scheduleRange     = true;
+			} 
+
+			$scope.datesData.dates    = AllDates(firstViewDay,lastViewDay);
+			$scope.getSchedule(firstDay,lastDay);
+
+
 		};
 
 
@@ -4255,16 +4787,41 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		* Set calender view by date range
 		**************************************************/
 
-		$scope.setVeiwRangeByDate = function(){
-			$scope.activeRangeMenu = '';
-			var scheduleFrom       = $scope.scheduleFrom;
-			var scheduleTo  	   = $scope.scheduleTo;
+		$scope.setVeiwRangeByDate = function(selectElement){
 
-			if(scheduleFrom && scheduleTo)
+			if(selectElement == '')
 			{
-				$scope.datesData.dates   = AllDates(scheduleFrom,scheduleTo);
-				$scope.getSchedule(scheduleFrom,scheduleTo);
+				$scope.scheduleRange     = false;
+				setSchedulerOnLoad();
+
+			} else {
+
+				$scope.activeRangeMenu = '';
+				var scheduleFrom       = $scope.scheduleFrom;
+				var scheduleTo  	   = $scope.scheduleTo;
+
+				$scope.startRange = {min:"", max:""};
+				$scope.endRange = {min:"", max:""};
+
+				if(selectElement == 'start')
+				{
+					var rangeDate = new Date(scheduleFrom);
+					$scope.scheduleTo = '';
+					$scope.endRange.min = new Date(rangeDate.setDate(rangeDate.getDate()+1));
+					$scope.endRange.max = new Date(rangeDate.setDate(rangeDate.getDate()+30));					
+				}			
+
+				if(scheduleFrom && scheduleTo)
+				{
+					$scope.dateLabel 		 = {from:scheduleFrom, to:scheduleTo};
+					$scope.scheduleRange     = true;
+					$scope.datesData.dates   = AllDates(scheduleFrom,scheduleTo);
+					$scope.getSchedule(scheduleFrom,scheduleTo);
+				}
+
 			}
+
+			
 			
 		};
 
@@ -4283,49 +4840,116 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 				}).then(function(answer) {}, function() {});
 		};
 
+		/************************************
+		* Blank all field before open form
+		*************************************/
+		
+
+
+		function blankOnSucess(){
+			$scope.shift_name = "";		
+			$scope.shift_time = "";		
+			$scope.ctlr.bgcolor = "";		
+			$scope.department_name = "";			
+		}
+
+		$scope.blank = function(){
+			blankOnSucess();		
+			$scope.shiftListResult = "";		
+		};
 		
 
 		/************************************
 		* Add shift timing
 		*************************************/
 
-		 $scope.addshift = function(){
+		$scope.addshift = function(){
 		 	var shiftTimeRequest = {
 		            url:window.__API_PATH.ADD_HOTELSHIFT,
 		            method:"POST",
 		            data:{
-		            	hotel_id        :  hotel._id,		
+		            	hotel_id        :  $rootScope.activeHotelData._id,		
 		            	shift_name      :  $scope.shift_name,
 		            	department_name :  $scope.department_name,
 		            	bgcolor       	:  $scope.ctlr.bgcolor,
-		            	start_time      :  { hour:$scope.start_hour,minute:$scope.start_min},		
-		            	end_time        :  { hour:$scope.end_hour,minute:$scope.end_min},			
+		            	start_time      :  $scope.start_time,		
+		            	end_time        :  $scope.end_time,			
 		            }
 		          };
 			globalRequest.jotCRUD(shiftTimeRequest).then(function(response){		
-			 	$scope.shiftListResult = response;
-				$scope.blank();
+				var popup;
 			 	if(response.status == 1)
 			 	{
+			 		blankOnSucess();
 			 		if(!$scope.shiftList)
 			 		{
 			 			$scope.shiftList = [];
 			 		}
-			 		$scope.shiftList.push(response.result);	
-
-			 		/************************************
-					* Get shift timing
-					*************************************/		
+			 		$scope.shiftList.push(response.result);		
 					globalRequest.getShiftTime();
+					popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	}  else {
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 });
 		 };	
+
+
+
+		/*********************************************************************
+		* Keep selected field value in scope
+		*********************************************************************/
+
+		var selectedField  = [];
+		
+		
+		$scope.storeFieldValue = function(d,member,dept,fieldValue){
+			
+			if(fieldValue)
+			{
+				var filterString = d.getDate()+''+(parseInt(d.getMonth())+1) +''+d.getFullYear();	
+				selectedField.push({
+					department 			:  dept.abbreviation,
+					shift_date     		:  new Date(d.getFullYear(),d.getMonth(), d.getDate()).getTime(),
+			        shift_filter_date   :  filterString,
+			        user_id        		:  member._id,
+			        hotel_id       		:  $rootScope.activeHotelData._id
+				});
+			} else {
+				selectedField = selectedField.filter(function(values){
+						return values.shift_date != new Date(d.getFullYear(),d.getMonth(), d.getDate()).getTime();
+				});
+
+			}
+		};
+
+		/*********************************************************************
+		* Unselect all select field after scheduled
+		*********************************************************************/
+
+		$rootScope.$on('scheduleField', function (event, args) {
+			selectedField  = [];
+			angular.element(document.querySelectorAll(".md-checked")).removeClass("md-checked");
+		
+		});
+
+		
+
+
 
 		 /*****************************************
 		 * Open shifts edit form
 		 *****************************************/	
 
 		$scope.openEditshift = function(detail){
+				
 				$mdDialog.show({
 					controller: 'editshiftController',
 					controllerAs: 'ctlr',
@@ -4338,19 +4962,29 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 
 		}; 
 
+		/*var isAllCheck = false;	
+		function togglecheckboxes(cn){			
+		    var cbarray = document.getElementsByName(cn);
+		    for(var i = 0; i < cbarray.length; i++){
+			        cbarray[i].setAttribute("aria-checked", false);
+			}   
+		}
+*/
 
 		/*****************************************
 		 * Open shifts edit form
 		 *****************************************/	
 
-		$scope.openEmpSchedule = function(scheduleDate,empDetail){
+		$scope.openEmpSchedule = function(scheduleDate,empDetail,dept){
+			//togglecheckboxes('multipleSchedule');
+
 				$mdDialog.show({
 					controller: 'scheduleEmpController',
 					templateUrl: '/modules/employee/views/schedule_employee.html',
 					parent: angular.element(document.body),
 					fullscreen: $scope.customFullscreen,
 					clickOutsideToClose:true,	
-					locals:{scheduledData:{scheduleDate:scheduleDate,empDetail:empDetail}}				
+					locals:{scheduledData:{scheduleDate:scheduleDate,empDetail:empDetail,ScheduleDepartment:dept,multipleSchedule:selectedField}}				
 				}).then(function(answer) {}, function() {});
 
 		};
@@ -4359,16 +4993,17 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		* Delete shift
 		*****************************************/	
 
-		$scope.removeshift = function(detail){
+		$scope.removeshift = function(detail,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_HOTELSHIFTS,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				
+				$scope.shiftList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
@@ -4391,7 +5026,6 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 	      self.activated = true;
 	      self.determinateValue = 30;
 	      $interval(function() {
-
 	        self.determinateValue += 1;
 	        if (self.determinateValue > 100) {
 	          self.determinateValue = 30;
@@ -4412,20 +5046,40 @@ app.controller('showDetailController', ['$scope','empDetail',
 		angular.forEach(empDetail.detail,function (value,key) {
 		    $scope[key] = value;
 		});	
-		
-		if($scope.profile_image)
+
+		if($scope.profile_image.length > 0)
 		{
 			$scope.image = '/images/hotel/'+$scope.hotel_id+'/profile/'+$scope.profile_image;
 		} else {
 			$scope.image = '/assets/images/default_profile.png';
 		}
-		
-		console.log($scope);
+
 	}
 ]);
 
 
 
+
+"use strict";
+
+app.directive('outsideClickColorSwatch', function ($window) {    
+    return {                 
+        scope: {
+            outsideCallback: '&outsideClickColorSwatch',
+        },      
+        link: function(scope, element, attrs) {
+         var expressionHandler = scope.outsideCallback();  
+          angular.element($window).on('click', function (event) {    
+              if (element[0].contains(event.target))
+              {                  
+              } else {                 
+                expressionHandler();                
+             }           
+                         
+            });
+        }
+    };
+});
 
 "use strict";
 
@@ -4436,7 +5090,6 @@ app.filter('employeefilter',function(){
 		{
 
 			var searchEmployee        = scope.searchEmployee;
-
 			if(!searchEmployee){
 				return input;
 			}
@@ -4450,10 +5103,10 @@ app.filter('employeefilter',function(){
 								if(fullName.match(new RegExp("(" + removeSpaceFromString + ")", "i")))
 								{
 									return true;
-								}							
-								
+								}
 						});
 		}
+		
 		return input;
 
 	};
@@ -4466,20 +5119,238 @@ app.filter('employeefilter',function(){
 app.controller('faqController',['$scope',
 	function($scope){
 
+		$scope.panesA = [
+        {
+          id: 'pane-1a',
+          header: 'Do I get to keep the bag?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.',
+          isExpanded: true
+        },
+        {
+          id: 'pane-2a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'
+        },
+        {
+          id: 'pane-3a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+         {
+          id: 'pane-4a',
+         header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+         {
+          id: 'pane-5a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+         {
+          id: 'pane-6a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+         {
+          id: 'pane-7a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+      ];
+          
+
 }]);
 "use strict";
 
-app.controller('homeController',['$scope',
-	function($scope){
+app.controller('homeController',['$scope','$rootScope','$routeParams','$mdDialog','globalRequest','localStorageService','$location','$timeout',
+	function($scope,$rootScope,$routeParams,$mdDialog,globalRequest,localStorageService,$location,$timeout){
+
+		/*******************************
+		* Get current user information
+		********************************/
+
+		var userData = $rootScope.currentUser;
+
+		/*******************************
+		* Get parameter from path.
+		* 1st argument is parameter name
+		* 2nd argument is path
+		********************************/
 		
+		function getUrlParameter(param, dummyPath) {
+
+		        var sPageURL = dummyPath || window.location.search.substring(1),
+		            sURLVariables = sPageURL.split(/[&||?]/),
+		            res;
+
+		        for (var i = 0; i < sURLVariables.length; i += 1) {
+		            var paramName = sURLVariables[i],
+		                sParameterName = (paramName || '').split('=');
+
+		            if (sParameterName[0] === param) {
+		                res = sParameterName[1];
+		            }
+		        }
+
+		        return res;
+		}
+
+
+
+		/*******************************
+		* If url have parameter
+		********************************/
+
+		if($routeParams.data)
+		{
+
+			var decodeurl     = window.atob($routeParams.data);
+			var paramdata     = getUrlParameter('formtype',decodeurl);
+			var contactNumber = getUrlParameter('contact_number',decodeurl);
+			var empID 	      = getUrlParameter('employee_id',decodeurl);
+
+
+			/*******************************************
+			* If user already logged in
+			* & requsted contact number is not matched
+			* then, redirect
+			********************************************/
+
+
+
+			if(userData && userData.contact_number != contactNumber)
+			{
+				$location.path('/');
+			} else if(userData && userData.contact_number == contactNumber){
+
+				/*******************************************
+				* If user already logged in
+				* & requested contact number is matched
+				* then, update user and hotel
+				********************************************/
+
+				inviteRequest();
+
+			} else {
+
+				/*******************
+				* Check user status
+				*******************/
+
+				if(paramdata  == 'invitation')
+				{
+					var request={
+						url:window.__API_PATH.CHECK_USER,
+						method:"POST",
+						data:{
+							contact_number    : contactNumber,
+							employee_id       : empID
+						}
+					};
+					
+					globalRequest.jotCRUD(request).then(function(response){				
+
+
+						/***********************
+						* If user not exists
+						***********************/
+
+						if(response.status == 1)
+						{
+							$mdDialog.show({
+								templateUrl : "/modules/invitation/views/invitation_register.html",
+			        			controller  :  "invitationController",
+								parent: angular.element(document.body),
+								fullscreen: $scope.customFullscreen,
+								clickOutsideToClose:false,		
+								locals:{empDetail:decodeurl}							
+							}).then(function(answer) {}, function() {});
+						}
+
+						/***********************
+						* If user already exists
+						***********************/
+
+						if(response.status == 2)
+						{
+							$mdDialog.show({
+								templateUrl : "/modules/invitation/views/invitation_signin.html",
+			        			controller  :  "invitationController",
+								parent: angular.element(document.body),
+								fullscreen: $scope.customFullscreen,
+								clickOutsideToClose:false,		
+								locals:{empDetail:decodeurl}							
+							}).then(function(answer) {}, function() {});
+						}
+
+
+
+						/**************************************
+						* If user already registered with hotel
+						**************************************/
+
+						if(response.status == 3)
+						{
+							$location.path('/');
+						}
+
+					});
+				}
+
+			}
+			
+		}
+
+
+		/****************************************
+		* Update invited user information 
+		****************************************/
+
+
+		function inviteRequest(){
+			var signInRequest={
+				url:window.__API_PATH.UPDATE_EMPLOYEE,
+				method:"POST",
+				data:{
+					employee_id 			: getUrlParameter('employee_id',decodeurl),	
+					hotel_id 				: getUrlParameter('hotel_id',decodeurl),
+					contact_number          : getUrlParameter('contact_number',decodeurl),
+				}
+			};
+
+			globalRequest.jotCRUD(signInRequest).then(function(response){	
+				
+				if(response.status == 1)
+				{
+
+					var user = localStorageService.get('user');
+					user.hotel_id.push(getUrlParameter('hotel_id',decodeurl));					
+					localStorageService.set('user', user);
+					
+					$location.path('/dashboard');
+					$rootScope.popupData  = {
+								text:  'Congratulations! You have successfully registered.',
+								action: 'redirect'
+					};
+					 $timeout(function() {
+					 	$rootScope.popup = true;
+					 }, 500);
+				}							
+				
+			});
+		}	
+
+		/*******************************
+		* Owl carousel parameter 
+		********************************/
+
   		$scope.config={
 		     navigation: false,
 		     items:1,	     
 		     navContainer: '#customNav',
 		     pagination: false,
 		     rewindNav : true
-		 };
-		 
+		 };		 
 	 
 }]);
 "use strict";
@@ -4518,217 +5389,460 @@ app.directive('owlCarouselItem', [function() {
 }]);
 "use strict";
 
-app.controller('checklistCtlr', ['$scope','$rootScope','Upload','$timeout',
-	function($scope,$rootScope,Upload,$timeout) {
+app.controller('invitationController',['$scope','$rootScope','empDetail','globalRequest','$timeout','$mdDialog','$location','loginFactory','localStorageService','AuthSrv',
+	function($scope,$rootScope,empDetail,globalRequest,$timeout,$mdDialog,$location,loginFactory,localStorageService,AuthSrv){
+
+		function getUrlParameter(param, dummyPath) {
+		        var sPageURL = dummyPath || window.location.search.substring(1),
+		            sURLVariables = sPageURL.split(/[&||?]/),
+		            res;
+
+		        for (var i = 0; i < sURLVariables.length; i += 1) {
+		            var paramName = sURLVariables[i],
+		                sParameterName = (paramName || '').split('=');
+
+		            if (sParameterName[0] === param) {
+		                res = sParameterName[1];
+		            }
+		        }
+
+		        return res;
+		}
 
 
-
-		/*
-		* Default checklist
-		*/
-
-		$scope.checkList = window.__API_PATH.DEFAULT_CHECKLIST;
-
-
-		/**********************************************************
-		* Store value of checklist on change to add item in checklist
-		**********************************************************/
+		$scope.invite_first_name 	  = getUrlParameter('first_name',empDetail);
+		$scope.invite_last_name  	  = getUrlParameter('last_name',empDetail);
+		$scope.invite_contact_number  = getUrlParameter('contact_number',empDetail);
+		$scope.invite_email           = getUrlParameter('email',empDetail);
+		$scope.token                  = getUrlParameter('token',empDetail);
+		$scope.profileImage  		  = [];
+		
 
 
-		var selectedCheckBox = [];	
-		$scope.lookup = function (selectedItem, list) {
-			if( selectedItem ) {
-				selectedCheckBox.push(list.name);
-			} else {
-				selectedCheckBox = selectedCheckBox.filter(function( obj ) {
-				    return obj != list.name;
+		/************************************************
+		* Register user for invited hotel
+		************************************************/	
+
+		$scope.inviteRegisterUser = function(){
+
+			var request={
+				url:window.__API_PATH.MEMBER_SIGNUP,
+				method:"POST",
+				data:{
+					first_name 			: $scope.invite_first_name,
+					last_name 		    : $scope.invite_last_name,
+					contact_number 		: getUrlParameter('contact_number',empDetail),
+					email 			    : getUrlParameter('email',empDetail),
+					token				: $scope.token,
+					profile_image  		: '',
+					password            : $scope.invite_password
+				}
+			};
+
+			
+			if($scope.profileImage.length > 0)
+			{	
+
+			/********************************************
+			*  Upload profile image if exists
+			********************************************/		
+
+
+				globalRequest.uploadFiles(null,'profile_image',$scope.profileImage).then(function(profileResponse){
+					$scope.registerImageResult =  profileResponse;
+
+
+					/********************************************
+					*  Register user with profile image
+					********************************************/
+
+					request.data.profile_image = profileResponse.result[0].filename;
+					
+					globalRequest.jotCRUD(request).then(function(response){					
+						if(response.status == 1)
+						{
+							$mdDialog.cancel();					
+							$location.path('/');
+							$rootScope.popupData  = {
+										text:  'Congratulations! You have successfully registered.',
+										action: 'redirect'
+							};
+							 $timeout(function() {
+							 	$rootScope.popup = true;
+							 }, 500);
+						} else {
+							$mdDialog.cancel();					
+							$location.path('/');
+						}
+					});
+
 				});
-			}
 
+
+			} else {
+
+				/********************************************
+				*  Register user without profile image
+				********************************************/
+				
+				globalRequest.jotCRUD(request).then(function(response){					
+					if(response.status == 1)
+					{
+						$mdDialog.cancel();					
+						$location.path('/');
+						$rootScope.popupData  = {
+									text:  'Congratulations! You have successfully registered.',
+									action: 'redirect'
+						};
+						 $timeout(function() {
+						 	$rootScope.popup = true;
+						 }, 500);
+					} else {
+						$mdDialog.cancel();					
+						$location.path('/');
+					}
+				});
+
+			}
+			
+			
+		};
+
+
+		/************************************************
+		* Add use in invited hotel if already registered
+		************************************************/
+
+
+		$scope.inviteSignINUser  = function(){
+			
+			var loginrequest={
+					url:window.__API_PATH.LOGIN,
+					method:"POST",
+					data:{
+							email    : $scope.invite_login,
+							password : $scope.invite_signinpassword
+					}
+				};
+
+				loginFactory.login(loginrequest).then(function(response){
+				$scope.loginresult = response;
+
+				if(response.status == 1)
+				{
+
+					localStorageService.set('token', response.result.token);
+					localStorageService.set('user', response.result.user);
+					AuthSrv.isLogged = true;
+					inviteRequest();
+				}
+				
+			});				
 
 		};
 
-		/***********************************************************************
-		* Store value of checklist on change of checklist checkbox to save items
-		***********************************************************************/
-		var CheckBoxValue =  [];	
-		$scope.storeValue = function(checkListType,currentValue,isCheck,parantValue){
+		/********************************************
+		*  Keep uploaded file in temp scope
+		********************************************/
+
+		$scope.uploadprofileImage = function(files, errFiles) {
+			$scope.profileImage = files;
+		};
 
 
-			/**************************
-			* Parent item List 
-			*************************/
+		/****************************************
+		* Update invited user information 
+		****************************************/
 
-			if(checkListType == 'parentlist')				
-			{
-				var  parentItem = {
-								name   :currentValue,
-								sublist:[]
-							};
+		function inviteRequest(){
+			var signInRequest={
+				url:window.__API_PATH.UPDATE_EMPLOYEE,
+				method:"POST",
+				data:{
+					employee_id 			: getUrlParameter('employee_id',empDetail),	
+					hotel_id 				: getUrlParameter('hotel_id',empDetail),
+					contact_number          : $scope.invite_login
+				}
+			};
 
-				if(isCheck)
+			globalRequest.jotCRUD(signInRequest).then(function(response){	
+				
+				if(response.status == 1)
 				{
-					/*********** Push value on check  *********/
 
-					CheckBoxValue.push(parentItem);		
-				} else {
+					var user = localStorageService.get('user', user);
 
-					/*********** Remove value on uncheck  *********/
+					user.hotel_id.push(getUrlParameter('hotel_id',empDetail));
+					localStorageService.set('user', user);
 
-					CheckBoxValue = CheckBoxValue.filter(function( obj ) {		    
-				    	return obj.name != currentValue;
-				    });
+					$mdDialog.cancel();
+					$location.path('/dashboard');
+					$rootScope.popupData  = {
+								text:  'Congratulations! You have successfully registered.',
+								action: 'redirect'
+					};
+					 $timeout(function() {
+					 	$rootScope.popup = true;
+					 }, 500);
 				}							
 				
-			}
+			});
+		}
 
-			/**************************
-			* Sub-item List 
-			*************************/
 
-			if(checkListType == 'sublist')
-			{
+
+
+
+		 
+	 
+}]);
+"use strict";
+
+app.controller('attachmentListCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {
+
+			$scope.deleteAttachment = function(hashKey){
+
+				$rootScope.files = $rootScope.files.filter(function(key){
+					return key.$$hashKey != hashKey;
+				});
+			};
+	}
+]);
+"use strict";
+
+app.controller('checklistCtlr', ['$scope','$rootScope','toastService','$timeout',
+	function($scope,$rootScope,toastService,$timeout) {
+
+		/*****************************************
+		* Default checklist
+		*****************************************/
+
+		$rootScope.checklist =  [
+									{
+										checklist_name:'Checklist1',
+										item_list: [
+										{name:'item1',status:0},{name:'item2',status:0},{name:'item3',status:0}
+										]									
+									},
+
+									{
+										checklist_name:'Checklist2',
+										item_list: [
+										{name:'item1',status:0},{name:'item2',status:0},{name:'item3',status:0}
+										]									
+									}
+									
+								];
+
+
+		/*****************************************
+		* Add new checklist
+		*****************************************/
+		
+		
+		$scope.addchecklist = function(){	
+				$scope.mainItemError = '';
+				if(!$scope.checklist_heading || $scope.checklist_heading == '')
+				{
+					
+				} else {
+					var storedCheckbox = $scope.checklist_heading;					
+					$rootScope.checklist.push({checklist_name:storedCheckbox,item_list:[]});
+					$scope.checklist_heading = '';
+					$scope.showChecklistAdd = false;
+					
+				}	
 
 				
-				var storedSubList =  '';
-				angular.forEach(CheckBoxValue,function(value,index){
-					if( value.name == parantValue ) {
-						storedSubList = value.sublist;
-					  	//value.sublist.push(subItem);
-					  	if(isCheck)
-						{
-							/*********** Push subitem on check  *********/
-
-							var subItem = {name:currentValue};
-							storedSubList.push(subItem);
-						} else {	
-
-							/*********** Remove subitem on uncheck  *********/					
-							value.sublist = storedSubList.filter(function( obj ) {	
-						    	return obj.name != currentValue;
-						    });
-						}
-					}	               
-		        });
-
-			}
-
-			$rootScope.checklist = CheckBoxValue;			
-
 		};
 
 
 		/*****************************************
-		* Add item in checklist
+		* Add Sub-item in checklist
 		*****************************************/
 		
-
-		$scope.addchecklist = function(itemType){
-				
-				$scope.itemError = '';
-				var storedCheckbox = $scope.checkList;
-				var ItemToAdd = '';
-				if($scope.listItemName)
-				{
-					ItemToAdd = $scope.listItemName;
-					ItemToAdd 	  = ItemToAdd.replace(/(^[\s]+|[\s]+$)/g, '');
-				} else {
-					$scope.itemError = 'Please fill the blank teatarea.';
-					return false;
-				}
-			
-				var  parentItem = {
-								name   :ItemToAdd,
-								sublist:[]
-							};
-				var  subItem = {name:ItemToAdd};	
-
-
-				if(itemType == 'parentlist')
-				{
-					if(storedCheckbox.length == 0)
-					{
-						$scope.checkList.push(parentItem);
-
-					} else {
-						var valueFind = false;
-						for (var key in storedCheckbox) {
-						  if (storedCheckbox.hasOwnProperty(key)) {
-						  	if(storedCheckbox[key].name == ItemToAdd)
-						  	{
-						  		valueFind = true;
-						  	}
-						  }
-						}
-
-						if(!valueFind)
-						{
-							storedCheckbox.push(parentItem);
-						} else {
-							$scope.itemError = 'Item already exists.';
-							
-						}
-					}
-				}
-
-				if(itemType == 'sublist')
-				{
-
-					if( selectedCheckBox.length >0){
-						angular.forEach($scope.checkList,function(value,index){	
-							 selectedCheckBox.find( function( obj ) { 
-								if( obj == value.name ) {
-									var storedSublist = value.sublist;
-									var valueFind = false;
-									for (var key in storedSublist) {
-									  if (storedSublist.hasOwnProperty(key)) {
-									  	if(storedSublist[key].name == ItemToAdd)
-									  	{
-									  		valueFind = true;
-									  	}
-									  }
-									}
-
-									if(!valueFind)
-									{
-										storedSublist.push(subItem);
-										
-									} else {
-										$scope.itemError = 'Subitem already exists for "'+value.name+'".';
-										
-									}
-								  	
-								}						  
-							});                
-			            });
-					} else {
-						$scope.itemError = 'Please select item.';						
-					}
-
-				}
-			storedCheckbox = selectedCheckBox;
-		};
-
-		$scope.showTextArea = function(btnType){
-			$scope.showArea = true;
-			$scope.itemType = btnType;
-
-		};
+		$scope.addChecklistSubitem = function(index,itemName){
 		
+
+			if(itemName && itemName != "")
+			{
+				var alreadyExits  = $rootScope.checklist[index].item_list.filter(function(iValue){	
+										return  iValue.name === itemName;
+									});
+			
+				if(alreadyExits.length > 0)
+				{
+					var popup = {"message":"Item already exists.","class":""};
+                	toastService.alert(popup);
+				} else {
+					
+					$rootScope.checklist[index].item_list.push({name:itemName,status:0});
+					$scope.ctlr.checklist_subitem[index]   = '';
+				}
+										
+			}
+			
+		};
+
+
+		/*****************************************
+		* Store values of checklist in scope 
+		*****************************************/
+
+		$scope.storeChecklist = function(index,subIndex,modelValue){
+
+			if(modelValue)
+			{
+				$rootScope.checklist[index].item_list[subIndex].status = 1;
+			} else {
+				$rootScope.checklist[index].item_list[subIndex].status = 0;
+				
+			}
+			
+		};
+
+		/*****************************************
+		* Edit parent list 
+		*****************************************/
+
+		$scope.editParentList = function(index,itemValue){			
+			if(!itemValue || itemValue == "")
+			{
+				$scope.ctlr.editParent[index] = false;
+			} else {
+				$rootScope.checklist[index].checklist_name = itemValue;							
+				$scope.ctlr.editParent[index] = false;
+			}
+						
+		};
+
+
+		/*****************************************
+		* Delete checklist
+		*****************************************/
+
+		$scope.deleteChecklist = function(index){			
+			$rootScope.checklist.splice(index, 1);
+			$scope.ctlr.editParent[index] = false;									
+		};
+
+
+
+
+		/*****************************************
+		* Edit subitem 
+		*****************************************/
+
+		$scope.editSubItem = function(index,oldValue,newValue,subINdex){	
+
+			if($scope.ctlr.sublist)
+			{
+				if($scope.ctlr.sublist[index][subINdex])
+				{
+					$scope.ctlr.sublist[index][subINdex] = true;
+				}
+			}
+
+			/************************************
+			* Check edit field is empty or not
+			************************************/
+
+			if(!newValue || newValue == "") {
+
+				/************************************
+				* if empty,
+				* Then remove subitem
+				************************************/
+				$rootScope.checklist[index].item_list = $rootScope.checklist[index].item_list.filter(function(checklist){						
+							return checklist.name != oldValue;
+						});
+			} else {
+
+				/****************************************
+				* if not empty,
+				* Then replace subitem value with new
+				*****************************************/
+				
+				var sublistCount = -1;	
+				var alreadyExits  = $rootScope.checklist[index].item_list.filter(function(iValue){
+										sublistCount++;								
+
+										if(sublistCount == subINdex)
+										{
+											return false;
+										}	
+										return  iValue.name === newValue;									
+										
+									});
+
+				if(alreadyExits.length > 0)
+				{
+					var popup = {"message":"Item already exists.","class":""};
+	            	toastService.alert(popup);
+				} else {
+		
+					$rootScope.checklist[index].item_list = $rootScope.checklist[index].item_list.filter(function(checklist){
+							if(checklist.name == oldValue)
+							{
+								checklist.name = newValue;
+							}
+							return checklist;
+						});
+					
+					$scope.ctlr.editList[index][subINdex] = false;
+
+				}
+
+			}				
+					
+		};		
+
+
+		/*****************************************
+		* Delete item from sublist
+		*****************************************/
+
+		$scope.deleteSublistItem = function(index,itemValue,subindex){	
+				
+			/* Remove subitem */
+
+			$rootScope.checklist[index].item_list = $rootScope.checklist[index].item_list.filter(function(checklist){	
+					return checklist.name != itemValue;
+				});
+			$scope.ctlr.editList[index][subindex] = false;
+
+
+			/* Reassign value to all left checkbox */
+			if($scope.ctlr.sublist)
+			{
+				$scope.ctlr.sublist[index] = {};
+				angular.forEach($rootScope.checklist[index].item_list,function(value,key){
+					if(value.status ==1)
+					{
+						$scope.ctlr.sublist[index][key] = true;	
+					} else {
+						$scope.ctlr.sublist[index][key] = false;	
+					}
+				}); 
+			}			
+								
+		};	
+
 	}
 ]);
 
 "use strict";
 
-app.controller('departmentCtlr', ['$scope','$rootScope','globalRequest',
-	function($scope,$rootScope,globalRequest) {
+app.controller('departmentCtlr', ['$scope',
+	function($scope) {
 		
 
 		/*****************************************
 		* Get department List
 		******************************************/
 
-	    globalRequest.getDepartments();
+	    //globalRequest.getDepartments();
 
 	     /*after click on suggestion list*/                            
 	    $scope.callback = function(){	       
@@ -4758,161 +5872,27 @@ app.controller('dueDataCtlr', ['$scope','$rootScope',
 
 "use strict";
 
-app.controller('editJotCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','$route','toastService',
-	function($scope,globalRequest,$rootScope,$mdDialog,jotData,$route,toastService) {
-
-		
-		
-		$scope.edit_jot		   		= jotData;		
-		$scope.jot_title   			= $scope.edit_jot.jot_title;
-		$rootScope.jot_description	= $scope.edit_jot.jot_description;
-		$rootScope.jot_members		= $scope.edit_jot.jot_members;
-		$rootScope.due_date    		= new Date($scope.edit_jot.due_date);
-		$rootScope.priority    		= $scope.edit_jot.priority;
-		$rootScope.department  		= $scope.edit_jot.department;
-		$rootScope.hotel_room  		= $scope.edit_jot.hotel_room;
-
-	
-		/**************************************
-		* Edit jot popup
-		**************************************/
-
-		$scope.jotQuickEditPopup = function(HtmlName){	
-			$mdDialog.show({				
-			    templateUrl: '/modules/jot/views/'+HtmlName+'.html',
-				multiple: true,
-				clickOutsideToClose:true,
-				fullscreen: $scope.customFullscreen,				
-			}).then(function(answer) {}, function() {});
-
-		};
-
-		/**************************************
-		* Open move to dc form
-		**************************************/
-
-		$scope.moveDC = function(detail){	
-			$mdDialog.show({	
-				controller: 'moveDcController',
-				controllerAs: 'movectrl',			
-			    templateUrl: '/modules/jot/views/move_dc.html',
-				multiple: true,
-				clickOutsideToClose:true,
-				fullscreen: $scope.customFullscreen,
-				locals:{Detail:{detail:detail,prevScope:$scope}}				
-			}).then(function(answer) {}, function() {});
-
-		};
-
-
-
-		/**************************************
-		* Change status
-		**************************************/
-
-		$scope.changeStatus = function(){
-			if($scope.edit_jot.status == 'close')
-			{
-				$scope.edit_jot.status = 'open';
-			} else {
-				$scope.edit_jot.status = 'close';
-			}
-
-		};
-		
-		/**************************************
-		* Update Jot
-		**************************************/
-
-		$scope.saveUpdatedJot = function(){
-			$scope.edit_jot.jot_id				= $scope.edit_jot._id;
-			$scope.edit_jot.jot_title			= $scope.jot_title;
-			$scope.edit_jot.jot_description		= $rootScope.jot_description;
-			$scope.edit_jot.jot_members		    = $rootScope.jot_members;
-			$scope.edit_jot.due_date    		= new Date($rootScope.due_date).getTime();
-			$scope.edit_jot.priority   		    = $rootScope.priority;
-			$scope.edit_jot.department 		 	= $rootScope.department;
-			$scope.edit_jot.hotel_room 		 	= $rootScope.hotel_room;
-		
-
-			var request={
-				url:window.__API_PATH.UPDATE_JOT,
-				method:"put",
-				data:$scope.edit_jot
-			};
-
-			globalRequest.jotCRUD(request).then(function(response){		
-				var JotType = $scope.edit_jot.jot_type;
-				globalRequest.getJotList(JotType); 	
-				$mdDialog.cancel();
-				var popup = {"message":response.message,"class":response.class};
-				toastService.alert(popup);
-			});
-		};
-
-	
-		/**************************************
-		* Archive Jot
-		**************************************/
-
-		$scope.archiveJot = function(){
-			var jotid = {jot_id:$scope.edit_jot._id};
-
-			var request={
-				url:window.__API_PATH.DELETE_JOT,
-				method:"DELETE",
-				params:jotid
-			};
-			
-			globalRequest.jotCRUD(request).then(function(response){				
-				var JotType = $scope.edit_jot.jot_type;
-				globalRequest.getJotList(JotType); 
-				$mdDialog.cancel();
-				var popup = {"message":response.message,"class":response.class};
-				toastService.alert(popup);
-			});
-		};
-
-		/**************************************
-		* Close popup
-		**************************************/
-		$scope.close = function(){
-			 $mdDialog.cancel();
-		};
-		
-	}
-]).directive('ngConfirmClick', [
-        function(){
-            return {
-                link: function (scope, element, attr) {
-                    var msg = attr.ngConfirmClick || "Are you sure?";
-                    var clickAction = attr.confirmedClick;
-                    element.bind('click',function (event) {
-                        if ( window.confirm(msg) ) {
-                            scope.$eval(clickAction);
-                        }
-                    });
-                }
-            };
-    }]);
-
-
-"use strict";
-
-app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','globalRequest','localStorageService','$location','$mdDialog',
-	function($scope,$rootScope,$routeParams,globalRequest,localStorageService,$location,$mdDialog){
+app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','globalRequest','localStorageService','$location','$mdDialog','$route',
+	function($scope,$rootScope,$routeParams,globalRequest,localStorageService,$location,$mdDialog,$route){
 
 		/**********************************************************
 	    * Get active hotel data
 	    **********************************************************/
+	    $rootScope.bglayout = false;
+		//$scope.activeHotelData   = localStorageService.get('hotel');
 
-		$scope.activeHotelData   = localStorageService.get('hotel');
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = $rootScope.activeHotelData.jot_types;
 
 		/**************************************************
 		* Redirect if hotel obj not found in localstorage
 		**************************************************/
 
-		if(!$scope.activeHotelData || $scope.activeHotelData == ""){
+		if(!$rootScope.activeHotelData || $rootScope.activeHotelData == ""){
 			$location.path('/dashboard');
 			return false;
 		}
@@ -4939,6 +5919,7 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 			* Get jot list
 			**************************************/		
 			var JotType = $routeParams.type;
+			$rootScope.JotListData = '';
 			globalRequest.getJotList(JotType);			
 			$scope.BoardsPage = true;
 			
@@ -4957,15 +5938,20 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 		* Edit jot popup
 		**************************************/
 
-		$scope.jotEditPopup = function(jotData){			
-			$mdDialog.show({
-				controller: 'editJotCtlr',
-				templateUrl: '/modules/jot/views/edit_jot.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				locals: {jotData:jotData}
-			});
+		$scope.jotEditPopup = function(jotData){
+			$scope.edit_jot		   		= jotData;		
+			$scope.jot_title   			= jotData.jot_title;
+			$rootScope.jot_description	= jotData.jot_description;
+			$rootScope.jot_members		= jotData.jot_members;
+			$rootScope.due_date    		= new Date(jotData.due_date);
+			$rootScope.priority    		= jotData.priority;
+			$rootScope.department  		= jotData.department;
+			$rootScope.hotel_room  		= jotData.hotel_room;
+			
+			
 		};
+
+
 
 		/**************************************
 		* Open comment popup
@@ -4974,11 +5960,65 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 		$scope.openComments = function(jotData){			
 			$mdDialog.show({
 				controller: 'jotCommentCtlr',
+				controllerAs: 'ctlr',
 				templateUrl: '/modules/jot/views/jot_comments.html',
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,
 				locals: {jotData:jotData}
 			});
+		};
+
+		/**************************************
+		* Appned Department of click of icon
+		**************************************/
+
+		$scope.selectDept = function(depatAbbr){
+			var checkAlreadyExists = $rootScope.department.match(/\#[a-z,0-9,_\/.-]+/gmi);
+            var match = -1;
+            if(checkAlreadyExists)
+            {
+              match = checkAlreadyExists.indexOf('#'+depatAbbr);
+            }
+             if(match > -1)
+            {
+              return false;
+            }
+            
+			$rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
+		};
+
+		/**************************************
+		* Update item list
+		**************************************/
+
+		$scope.updateItemList = function(item){
+
+			var itemIndex = $scope.boards.indexOf(item);
+			if(itemIndex > -1)
+			{
+				$scope.boards.splice(itemIndex, 1);
+			} else {
+				$scope.boards.push(item);
+			}
+
+			var hotelDataObj = {
+				 		hotel_id     	   : $rootScope.activeHotelData._id,
+				 		jot_types 		   : $scope.boards
+				};
+
+			var request={
+						url:window.__API_PATH.UPDATE_HOTEL,
+						method:"PUT",
+						data:hotelDataObj
+				};
+
+			globalRequest.jotCRUD(request).then(function(response){	
+				localStorageService.set('hotel',response.result);
+				window.location.reload();
+			});
+
+
 		};
 
 		
@@ -4986,50 +6026,16 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 ]);
 "use strict";
 
-app.controller('iconCtlr', ['$scope','$rootScope','Upload','$timeout','localStorageService',
-	function($scope,$rootScope,Upload,$timeout,localStorageService) {
+app.controller('iconCtlr', ['$scope','$rootScope',
+	function($scope,$rootScope) {
 
 
-		/*****************************************
-		* Jot image upload
+	    /*****************************************
+		* Keep attachment files in scope
 		*****************************************/
-		$rootScope.issueImages = '';
-		$scope.uploadFiles = function(files, errFiles) {
-			var hotel         = localStorageService.get('hotel');
-			$rootScope.files  = files;	
-			var directoryName = $rootScope.directory;
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : directoryName,	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   var result = response.data.result;
-	                   var uploadedImagesName = []; 
-	                    angular.forEach(result, function(data) {				
-				            if(data.status){
-				            	uploadedImagesName.push(data);
-				            }
-				        });
-				        $rootScope.issueImages = uploadedImagesName;
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $rootScope.progress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
-
+	    
+		$scope.uploadFiles = function(files, errFiles) {	
+			$rootScope.files  = files;
 	    };
 
 	    /*****************************************
@@ -5066,51 +6072,113 @@ app.controller('issueCtlr', ['$scope','$rootScope',
 
 "use strict";
 
-app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','$route','toastService','localStorageService','Upload','$timeout',
-	function($scope,globalRequest,$rootScope,$mdDialog,jotData,$route,toastService,localStorageService,Upload,$timeout) {
+app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','toastService','$timeout',
+	function($scope,globalRequest,$rootScope,$mdDialog,jotData,toastService,$timeout) {
 
-		var userDetail = localStorageService.get('user');	
+		var userDetail = $rootScope.currentUser;	
+		$scope.getMonthList = window.__API_PATH.MONTH;
 		
-		
-		$scope.edit_jot		   		= jotData;		
-		$scope.jot_title   			= $scope.edit_jot.jot_title;
-		$rootScope.jot_description	= $scope.edit_jot.jot_description;
-		$rootScope.directory  		= jotData.jot_type;
-		$rootScope.jot_members		= $scope.edit_jot.jot_members;
-		$rootScope.due_date    		= new Date($scope.edit_jot.due_date);
-		$rootScope.priority    		= $scope.edit_jot.priority;
-		$rootScope.department  		= $scope.edit_jot.department;
-		$rootScope.issueImages      = '';
-		$rootScope.files      		= '';
-		$rootScope.progress      	= -1;
-		$scope.commentImages 		= '';
+		$scope.edit_jot		   			= jotData;		
+		$scope.jot_title   				= $scope.edit_jot.jot_title;
+		$rootScope.jot_description		= $scope.edit_jot.jot_description;
+		$rootScope.directory  			= jotData.jot_type;
+		$rootScope.jot_members			= $scope.edit_jot.jot_members;
+		$rootScope.due_date    			= new Date($scope.edit_jot.due_date);
+		$rootScope.priority    			= $scope.edit_jot.priority;
+		$rootScope.status    			= $scope.edit_jot.status;
+		$rootScope.department  			= $scope.edit_jot.department;
+		$rootScope.files      			= '';
+		$rootScope.progress      		= -1;
+		$scope.commentImages 			= '';
+		$rootScope.checklist  			= [];
+		$scope.checklist  		    	= jotData.checklist;
+		$scope.assigned_departments     = jotData.assigned_departments;
+		$scope.assigned_members  		= jotData.assigned_members;
+		$scope.task_type  		        = jotData.task_type;
 
 
-
-		console.log(jotData);
 		$scope.submitComment = function(){
-			var commentRequest={
-				url:window.__API_PATH.ADD_COMMENT,
-				method:"POST",
-				data:{					
-					hotel_id 			: jotData.hotel_id, 
-					jot_id 				: jotData._id, 
-					user_id 			: userDetail._id, 
-					attachment 			: $scope.commentImages, 
-					post_date 			: new Date().getTime(), 
-					message 			: $scope.message, 
+
+			/**************************************
+			* Check & upload file for comment
+			**************************************/			
+
+			if($scope.Commentfiles)
+			{
+
+				globalRequest.uploadFiles(jotData.hotel_id,'comments',$scope.Commentfiles).then(function (response) {				
+	                $timeout(function () {
+	                   var result = response.result;
+
+	                    /**************************************
+						* Add new comment with attchment
+						**************************************/	 
+
+	                    var commentRequest={
+							url:window.__API_PATH.ADD_COMMENT,
+							method:"POST",
+							data:{					
+								hotel_id 			: jotData.hotel_id, 
+								jot_id 				: jotData._id, 
+								user_id 			: userDetail._id, 
+								attachment 			: result, 
+								post_date 			: new Date().getTime(), 
+								message 			: $scope.message, 
+							}
+						};
+
+						globalRequest.jotCRUD(commentRequest).then(function(response){
+									
+							var popup = {"message":response.message,"class":response.class};
+							toastService.alert(popup);
+
+							if(response.status == 1)
+							{
+								getComments();
+								$scope.Commentfiles  = '';
+								$scope.message 		 = "";
+							}							
+
+						});
+	                });
+	            });
+			} else {
+				
+				/******************************************
+				* Add new comment if attachment not exists
+				******************************************/
+
+				if($scope.message == '' || !$scope.message)
+				{
+					var popup = {
+							"message":"Please write some comment.","class":""
+						};
+					toastService.errors(popup);
+					return false;
 				}
-			};
 
-			globalRequest.jotCRUD(commentRequest).then(function(response){	
-				getComments();		
-				var popup = {"message":response.message,"class":response.class};
-				toastService.alert(popup);
+				var commentRequest={
+					url:window.__API_PATH.ADD_COMMENT,
+					method:"POST",
+					data:{					
+						hotel_id 			: jotData.hotel_id, 
+						jot_id 				: jotData._id, 
+						user_id 			: userDetail._id, 						
+						post_date 			: new Date().getTime(), 
+						message 			: $scope.message, 
+					}
+				};
 
-				$scope.commentImages = [];
-				$scope.message 		 = "";
-				$scope.files 		 = "";
-			});
+				globalRequest.jotCRUD(commentRequest).then(function(response){	
+					getComments();		
+					var popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);					
+					$scope.message 		 = "";
+
+				});
+
+			}
+
 		};
 
 		/**************************************
@@ -5121,6 +6189,45 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 			$scope.commentImages = [];
 			$scope.message 		 = "";
 			$scope.files 		 = "";
+		};
+
+		/**************************************
+		* Appned staff member of click of icon
+		**************************************/
+
+		$scope.selectStaff = function(userName){
+			var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi);
+            var match = -1;
+            if(checkAlreadyExists)
+            {
+              match = checkAlreadyExists.indexOf('@'+userName);
+            }
+             if(match > -1)
+            {
+              return false;
+            }
+
+			$rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+		};
+
+		/**************************************
+		* Appned Department of click of icon
+		**************************************/
+
+		$scope.selectDept = function(depatAbbr){
+
+			var checkAlreadyExists = $rootScope.department.match(/\#[a-z,0-9,_\/.-]+/gmi);
+            var match = -1;
+            if(checkAlreadyExists)
+            {
+              match = checkAlreadyExists.indexOf('#'+depatAbbr);
+            }
+             if(match > -1)
+            {
+              return false;
+            }
+
+			$rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
 		};
 		
 
@@ -5152,46 +6259,19 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		*****************************************/
 		$scope.commentImages = '';
 		$scope.uploadFiles = function(files, errFiles,uploadType) {
-			var folder;
+
 			if(uploadType == "comment")
 			{
-				$scope.files  = files;
-				folder   	  = 'comments';
+
+				$scope.Commentfiles = files;
 			}
 
 			if(uploadType == "sidebar")
 			{
-				folder   	  = jotData.jot_type;
-			}
 
-				
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : jotData.hotel_id,
-	                    folder_name  : folder,	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   var result = response.data.result; 
-						if(uploadType == "comment")
-						{	
-							var uploadedImagesName = []; 					
-		                    angular.forEach(result, function(data) {				
-					            if(data.status){
-					            	uploadedImagesName.push(data);
-					            }
-					        });
-					        $scope.commentImages = uploadedImagesName;
-				    	}
-
-				    	if(uploadType == "sidebar")
-						{	
+				globalRequest.uploadFiles(jotData.hotel_id,jotData.jot_type,files).then(function (response) {
+		                $timeout(function () {
+		                    var result = response.result; 					
 
 							angular.forEach(result, function(data) {				
 					            if(data.status){
@@ -5202,20 +6282,27 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 									if(key){ return key;}
 							});	
 							updateJotMethod({image:jotData.image});
-				    	}
+					    	
 
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.progress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
+		                });
+		            });
+		        
+			}	
 
 	    };
+
+
+	    /**************************************
+		* Delete attachment
+		**************************************/
+
+		$scope.deleteCommentAttachment = function(imageHashKey){
+			
+			$scope.Commentfiles = $scope.Commentfiles.filter(function(key){
+				return key.$$hashKey != imageHashKey;
+			});
+
+		};
 
 
 
@@ -5225,25 +6312,24 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 		function updateJotMethod(paramArgs){
 
-			var JotRequest={
-				url:window.__API_PATH.UPDATE_JOT,
-				method:"put",
-				data:{
-					jot_id 			: jotData._id					
-				}
-			};	
+			var JotRequest = {
+					url:window.__API_PATH.UPDATE_JOT,
+					method:"put",
+					data:{
+						jot_id 			: jotData._id					
+					}
+				};	
+
 			Object.assign(JotRequest.data, paramArgs);
 
 			globalRequest.jotCRUD(JotRequest).then(function(response){			
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
-
 				var JotType = jotData.jot_type;
 				globalRequest.getJotList(JotType); 
+				$rootScope.files   		 = '';				
+				$scope.showDesc = false;
 
-				$rootScope.issueImages   = '';
-				$rootScope.files   		 = '';
-				$rootScope.progress      = -1;
 			});
 		}
 
@@ -5252,40 +6338,26 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		**************************************/
 
 		$scope.cancelDesc = function(){
-
-			$rootScope.issueImages   = '';
 			$rootScope.files   		 = '';
 			$rootScope.progress      = -1;
 
 		};
 
 		/**************************************
-		* Watch file upload
-		**************************************/
-
-		$rootScope.$watch('issueImages',function(){			
-			jotData.image = jotData.image.concat($rootScope.issueImages);	
-		});
-
-		/**************************************
 		* Delete attachment
 		**************************************/
 
-		$scope.deleteAttachment = function(imageHashKey){
+		$scope.deleteAttachment = function(file){
 
-
-			jotData.image = jotData.image.filter(function(key){
-				return key.$$hashKey != imageHashKey;
+			jotData.image = jotData.image.filter(function(obj){
+				return obj.filename != file.filename;
 			});
 
 			var imageRequest = {
 					image           : jotData.image
 				};
 
-				console.log(jotData.image);
-				console.log(imageRequest);
-
-			updateJotMethod(imageRequest);
+			updateJotMethod(imageRequest);			
 		};
 
 
@@ -5294,16 +6366,40 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		* Update description
 		**************************************/
 
-		$scope.saveDescription = function(){
-			jotData.image = jotData.image.filter(function(key){
-								if(key){ return key;}
-							});
+		$scope.saveDescription = function(){			
 
-			var descRequest = {
-					jot_description : $rootScope.jot_description,
-					image           : jotData.image
-				};
-			updateJotMethod(descRequest);
+			/****************************
+			* Upload file if exists
+			****************************/
+
+			if($rootScope.files && $rootScope.files.length > 0)
+			{
+				globalRequest.uploadFiles(null,$rootScope.directory,$rootScope.files).then(function(fileRasponse){
+	                if(fileRasponse.status == 1)
+	                {
+	                    $rootScope.files   = '';
+	                	jotData.image      = jotData.image.concat(fileRasponse.result);
+
+
+	                	jotData.image = jotData.image.filter(function(key){
+								if(key){ return key;}
+						});
+						var descRequest = {
+								jot_description : $rootScope.jot_description,
+								image           : jotData.image
+							};
+
+						updateJotMethod(descRequest);
+	                }
+	            });
+			} else {
+
+				var descRequest = {
+						jot_description : $rootScope.jot_description,						
+					};
+				updateJotMethod(descRequest);
+
+			}
 		};
 
 		/**************************************
@@ -5312,7 +6408,17 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 	    $scope.saveMember = function(){
 	    	var memberRequest = {jot_members : $rootScope.jot_members};
-			updateJotMethod(memberRequest);
+	    	var membersArray = $rootScope.jot_members.match(/\@[a-z,0-9]+/gmi);
+	    	membersArray.filter(function(obj){
+	    		obj = obj.replace("@", "");
+		    	if($scope.assigned_members.indexOf(obj) < 0)
+		    	{
+		    		$scope.assigned_members.push(obj);
+		    	}	    		
+	    	});
+	    	
+	    	updateJotMethod(memberRequest);
+	    	
 
 	    };
 
@@ -5331,8 +6437,18 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		**************************************/
 
 	    $scope.saveDept = function(){
-	    	var memberRequest = {department : $rootScope.department};
-			updateJotMethod(memberRequest);
+	    	var deptRequest = {department : $rootScope.department};
+
+	    	var departmentArray = $rootScope.department.match(/\#[a-z,0-9]+/gmi);
+	    	departmentArray.filter(function(obj){
+	    		obj = obj.replace("#", "");
+		    	if($scope.assigned_departments.indexOf(obj) < 0)
+		    	{
+		    		$scope.assigned_departments.push(obj);
+		    	}	    		
+	    	});
+
+			updateJotMethod(deptRequest);
 	    };
 
 	    /**************************************
@@ -5340,9 +6456,94 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		**************************************/
 
 	    $scope.savePriority = function(){
-	    	var memberRequest = {priority : $rootScope.priority};
-			updateJotMethod(memberRequest);
+	    	var priorityRequest = {priority : $rootScope.priority};
+			updateJotMethod(priorityRequest);
 	    };
+
+	    /**************************************
+		* Update department
+		**************************************/
+
+	    $scope.savePattern = function(){
+	    	var task = '';
+                  if($rootScope.taskTime == 'onetime')
+                  {
+                     task = {
+                      type: 'onetime',
+                      date: new Date($rootScope.onetime_date).getTime()
+                    };
+                  } 
+
+                  if($rootScope.taskTime == 'recurring'){
+
+                    var pattern = '';
+                    if($rootScope.selectedPattern == 'weekly')
+                    {
+                       pattern = {
+                              type : $rootScope.selectedPattern,
+                              days : $rootScope.selectedDays,
+                              
+                             };
+                    } 
+
+
+                    if($rootScope.selectedPattern == 'yearly')
+                    {
+                       pattern = {
+                              type : $rootScope.selectedPattern,
+                              month: $rootScope.yealy_month,
+                              date : $rootScope.yearly_day      
+                             };
+                    } 
+
+
+                    if($rootScope.selectedPattern == 'monthly')
+                    {
+                       pattern = {
+                              type : $rootScope.selectedPattern,
+                              date : $rootScope.monthly_recurring_date
+                             };
+                    }
+
+                    if($rootScope.selectedPattern == 'daily')
+                    {
+                      pattern = {
+                              type : $rootScope.selectedPattern,
+                              days : $rootScope.selectedDays
+                             };
+                    }
+
+                    task = {
+                      type       : 'recurring',
+                      start_date : new Date($rootScope.start_recurring_date).getTime(),
+                      end_date   : new Date($rootScope.end_recurring_date).getTime(),
+                      pattern: pattern
+                    };
+                  } 
+	    	var patternRequest = {task_type : task};
+
+	    	$scope.task_type = task;
+			updateJotMethod(patternRequest);
+	    };
+
+
+	    /**************************************
+		* Change status
+		**************************************/
+
+		$scope.changeStatus = function(){
+			
+			if($rootScope.status == 'close')
+			{
+				$rootScope.status = 'open';
+			} else {
+				$rootScope.status = 'close';
+			}
+
+			var stausRequst = {status:$rootScope.status};
+			updateJotMethod(stausRequst);
+
+		};
 			
 
 	    /**************************************
@@ -5352,23 +6553,236 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		$scope.close = function(){
 			 $mdDialog.cancel();
 		};
+
+
+
+	/*************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+
+
+
+		/*****************************************
+		* Add new checklist
+		*****************************************/
 		
+		
+		$scope.addchecklist = function(){	
+				$scope.mainItemError = '';
+				if(!$scope.checklist_heading || $scope.checklist_heading == '')
+				{
+					
+				} else {
+					var storedCheckbox = $scope.checklist_heading;					
+					$scope.checklist.push({checklist_name:storedCheckbox,item_list:[]});
+					$scope.checklist_heading = '';
+					$scope.showChecklistAdd = false;
+				}
+				
+		};
+
+
+		/*****************************************
+		* Add Sub-item in checklist
+		*****************************************/
+		
+		$scope.addChecklistSubitem = function(index,itemName){
+		
+
+			if(itemName && itemName != "")
+			{
+				var alreadyExits  = $scope.checklist[index].item_list.filter(function(iValue){	
+										return  iValue.name === itemName;
+									});
+			
+				if(alreadyExits.length > 0)
+				{
+					var popup = {"message":"Item already exists.","class":""};
+                	toastService.alert(popup);
+				} else {
+					
+					$scope.checklist[index].item_list.push({name:itemName,status:0});
+					$scope.ctlr.checklist_subitem[index]   = '';
+				}
+										
+			}
+			
+		};
+
+
+		/*****************************************
+		* Store values of checklist in scope 
+		*****************************************/
+
+		$scope.storeChecklist = function(index,subIndex,modelValue){
+
+			if(modelValue)
+			{
+				$scope.checklist[index].item_list[subIndex].status = 1;
+			} else {
+				$scope.checklist[index].item_list[subIndex].status = 0;
+				
+			}
+			
+		};
+
+		/*****************************************
+		* Edit parent list 
+		*****************************************/
+
+		$scope.editParentList = function(index,itemValue){			
+			if(!itemValue || itemValue == "")
+			{
+				$scope.ctlr.editParent[index] = false;
+			} else {
+				$scope.checklist[index].checklist_name = itemValue;							
+				$scope.ctlr.editParent[index] = false;
+			}
+						
+		};
+
+
+		/*****************************************
+		* Delete checklist
+		*****************************************/
+
+		$scope.deleteChecklist = function(index){			
+			$scope.checklist.splice(index, 1);
+			$scope.ctlr.editParent[index] = false;									
+		};
+
+
+
+
+		/*****************************************
+		* Edit subitem 
+		*****************************************/
+
+		$scope.editSubItem = function(index,oldValue,newValue,subINdex){	
+
+			if($scope.ctlr.sublist)
+			{
+				if($scope.ctlr.sublist[index][subINdex])
+				{
+					$scope.ctlr.sublist[index][subINdex] = true;
+				}
+			}
+
+			/************************************
+			* Check edit field is empty or not
+			************************************/
+
+			if(!newValue || newValue == "") {
+
+				/************************************
+				* if empty,
+				* Then remove subitem
+				************************************/
+				$scope.checklist[index].item_list = $scope.checklist[index].item_list.filter(function(checklist){						
+							return checklist.name != oldValue;
+						});
+			} else {
+
+				/****************************************
+				* if not empty,
+				* Then replace subitem value with new
+				*****************************************/
+
+				var sublistCount = -1;	
+				var alreadyExits  = $scope.checklist[index].item_list.filter(function(iValue){
+										sublistCount++;								
+
+										if(sublistCount == subINdex)
+										{
+											return false;
+										}	
+										return  iValue.name === newValue;
+									});
+
+				if(alreadyExits.length > 0)
+				{
+					var popup = {"message":"Item already exists.","class":""};
+	            	toastService.alert(popup);
+				} else {
+		
+					$scope.checklist[index].item_list = $scope.checklist[index].item_list.filter(function(checklist){
+							if(checklist.name == oldValue)
+							{
+								checklist.name = newValue;
+							}
+							return checklist;
+						});
+					
+					$scope.ctlr.editList[index][subINdex] = false;
+
+				}
+
+			}				
+					
+		};		
+
+
+		/*****************************************
+		* Delete item from sublist
+		*****************************************/
+
+		$scope.deleteSublistItem = function(index,itemValue,subindex){
+
+				/* Remove subitem */
+
+				$scope.checklist[index].item_list = $scope.checklist[index].item_list.filter(function(checklist){	
+						return checklist.name != itemValue;
+					});
+				$scope.ctlr.editList[index][subindex] = false;
+
+
+				/* Reassign value to all left checkbox */
+				if($scope.ctlr.sublist)
+				{
+					$scope.ctlr.sublist[index] = {};
+					angular.forEach($scope.checklist[index].item_list,function(value,key){
+						if(value.status ==1)
+						{
+							$scope.ctlr.sublist[index][key] = true;	
+						} else {
+							$scope.ctlr.sublist[index][key] = false;	
+						}
+					}); 
+				}	
+								
+		};	
+
+		/**************************************
+		* Update Checklist
+		**************************************/
+
+
+		$scope.updateChecklist = function(index,subIndex,modelValue){
+			
+			if(modelValue)
+			{
+				$scope.checklist[index].item_list[subIndex].status = 1;				
+			} else {
+				$scope.checklist[index].item_list[subIndex].status = 0;				
+			}	
+
+		};
+
+		$scope.saveChecklist = function(){	
+			var checklistRequest = {checklist : $scope.checklist};
+			updateJotMethod(checklistRequest);
+		};
+
 	}
 ]);
 "use strict";
 
-app.controller('jotPopupCtrl', ['$scope','$rootScope','$mdDialog','ActivateTab','globalRequest','localStorageService',
-	function($scope,$rootScope,$mdDialog,ActivateTab,globalRequest,localStorageService) {	
+app.controller('jotPopupCtrl', ['$scope','$rootScope','$mdDialog','ActivateTab','globalRequest',
+	function($scope,$rootScope,$mdDialog,ActivateTab,globalRequest) {
+		
 		/*
 		* Activate tab
 		*/
 		$scope.currentNavItem   = ActivateTab;	
-
-		/**********************************************************
-	    * Get active hotel data
-	    **********************************************************/
-
-		$scope.activeHotelData   = localStorageService.get('hotel');
 
 		/**********************************************************
 	    * Get staff list
@@ -5380,8 +6794,7 @@ app.controller('jotPopupCtrl', ['$scope','$rootScope','$mdDialog','ActivateTab',
 		* Get list of Jot types selected by current user
 		*************************************************/
 
-		$scope.boards = $scope.activeHotelData.jot_types;
-
+		$scope.boards = $rootScope.activeHotelData.jot_types;
 
 		/*
 		* Function
@@ -5430,9 +6843,9 @@ app.controller('messagesCtlr', ['$scope','$rootScope',
 
 "use strict";
 
-app.controller('moveDcController', ['$scope','$rootScope','localStorageService','globalRequest','Detail','$mdDialog','Upload','$timeout','toastService',
-	function($scope,$rootScope,localStorageService,globalRequest,Detail,$mdDialog,Upload,$timeout,toastService) {
-		var hotel = localStorageService.get('hotel');
+app.controller('moveDcController', ['$scope','$rootScope','globalRequest','Detail','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,Detail,$mdDialog,toastService) {
+		var hotel = $rootScope.activeHotelData;
 
 		/***********************************************
 		* Pass edited employee value in current scope
@@ -5534,7 +6947,7 @@ app.controller('noteCtlr', ['$scope','$rootScope',
 
 "use strict";
 
-app.controller('priorityCtlr', ['$scope','$rootScope','$mdDialog',
+app.controller('priorityCtlr', ['$scope','$rootScope',
 	function($scope,$rootScope) {
 
 		/*
@@ -5558,7 +6971,7 @@ app.controller('priorityCtlr', ['$scope','$rootScope','$mdDialog',
 
 "use restrict";
 
-app.controller('roomCtlr',['$scope','$rootScope',function($scope,$rootScope){
+app.controller('roomCtlr',['$scope',function($scope){
 
 }]);
 "use strict";
@@ -5676,7 +7089,7 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
             departmenttypeaheadCallback: "="
         },
         link: function(scope, elem, attrs) {
-          console.log(scope.enablefilter);
+
             var template = '<div class="dropdown suggestions_list" ng-show="enabledepartmentFilter"><ul class="" style="display:block;" ng-hide="!ngModel.length || !filitered.length || selected"><li ng-repeat="item in filitered = (departmentypeahead | filterdepartment:this) track by $index" ng-click="click(item)" style="cursor:pointer" ng-class="{active:$index==active}" ng-mouseenter="mouseenter($index)"><a>{{item.department_name}} ({{item.abbreviation}})</a></li></ul></div>';
 
             elem.bind('blur', function() {
@@ -5759,6 +7172,148 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
     });
 
 "use strict";
+app.directive('editJotDirectives', ['globalRequest','$rootScope','$mdDialog','toastService',
+	function(globalRequest,$rootScope,$mdDialog,toastService){
+            return {
+         
+                link: function ($scope, element, attr) {
+
+
+					/**************************************
+					* Open move to dc form
+					**************************************/
+
+					$scope.moveDC = function(detail){	
+						$mdDialog.show({	
+							controller: 'moveDcController',
+							controllerAs: 'movectrl',			
+						    templateUrl: '/modules/jot/views/move_dc.html',
+							multiple: true,
+							clickOutsideToClose:true,
+							fullscreen: $scope.customFullscreen,
+							locals:{Detail:{detail:detail,prevScope:$scope}}				
+						}).then(function(answer) {}, function() {});
+
+					};
+
+
+
+					/**************************************
+					* Change status
+					**************************************/
+
+					$scope.changeStatus = function(){
+						if($scope.edit_jot.status == 'close')
+						{
+							$scope.edit_jot.status = 'open';
+						} else {
+							$scope.edit_jot.status = 'close';
+						}
+					};
+					
+					/**************************************
+					* Update Jot
+					**************************************/
+
+					$scope.saveUpdatedJot = function(){
+						$scope.edit_jot.jot_id				= $scope.edit_jot._id;
+						$scope.edit_jot.jot_title			= $scope.jot_title;
+						$scope.edit_jot.jot_description		= $rootScope.jot_description;
+						$scope.edit_jot.jot_members		    = $rootScope.jot_members;
+						$scope.edit_jot.due_date    		= new Date($rootScope.due_date).getTime();
+						$scope.edit_jot.priority   		    = $rootScope.priority;
+						$scope.edit_jot.department 		 	= $rootScope.department;
+						$scope.edit_jot.hotel_room 		 	= $rootScope.hotel_room;
+					
+
+						var request={
+							url:window.__API_PATH.UPDATE_JOT,
+							method:"put",
+							data:$scope.edit_jot
+						};
+
+						globalRequest.jotCRUD(request).then(function(response){
+							var popup;	
+							if(response.status ==1)
+							{
+								var JotType = $scope.edit_jot.jot_type;
+								globalRequest.getJotList(JotType); 	
+
+								$mdDialog.cancel();
+								popup = {"message":response.message,"class":response.class};
+								toastService.alert(popup);
+							} else {
+
+								var errors = '<ul class="mdToast-error-list">';
+								angular.forEach(response.errors,function(value,key){
+										console.log(value);
+									errors += '<li>'+value.message+'</li>';
+								});
+								errors += '</ul>';								
+								popup = {"message":errors,"class":""};
+								toastService.errors(popup);
+							} 
+							
+						});
+					};
+
+				
+					/**************************************
+					* Archive Jot
+					**************************************/
+
+					$scope.archiveJot = function(){
+						var jotid = {jot_id:$scope.edit_jot._id};
+
+						var request={
+							url:window.__API_PATH.DELETE_JOT,
+							method:"DELETE",
+							params:jotid
+						};
+						
+						globalRequest.jotCRUD(request).then(function(response){				
+							var JotType = $scope.edit_jot.jot_type;
+							globalRequest.getJotList(JotType); 
+							$mdDialog.cancel();
+							var popup = {"message":response.message,"class":response.class};
+							toastService.alert(popup);
+						});
+					};
+
+
+					/**************************************
+					* Appned staff member of click of icon
+					**************************************/
+
+					$scope.selectStaff = function(userName){
+						var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi);
+		                var match = -1;
+		                if(checkAlreadyExists)
+		                {
+		                  match = checkAlreadyExists.indexOf('@'+userName);
+		                }
+		                 if(match > -1)
+		                {
+		                  return false;
+		                }
+						$rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+					};
+
+					/**************************************
+					* Close popup
+					**************************************/
+					$scope.close = function(){
+						 $mdDialog.cancel();
+					};
+                    
+                }
+            };
+    }]);
+
+
+
+
+"use strict";
 
 app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',function($compile, $timeout,$rootScope) {
 
@@ -5805,9 +7360,8 @@ app.directive('iconstafflistsuggestion', ['$compile', '$timeout','$rootScope',fu
                 
                 var username  = item.user_name;
                     username  = username.trim();                
-                var appendValue = "@"+username+" ";
-                console.log(1);
-                console.log(appendValue);
+                var appendValue = "@"+username+" ";               
+                
                 $rootScope.$broadcast('addUserNameAtMousePosition',appendValue);
                 $rootScope.clickopen = false;
                 $rootScope.filtermember = '';
@@ -6039,11 +7593,11 @@ app.directive('textareastaffsuggestion', ['$compile', '$timeout','$rootScope','r
   });
 "use strict";
 
-app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $mdDialog,toastService,globalRequest,localStorageService,$routeParams) {
+app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastService,globalRequest,$routeParams) {
       return {
           
           link: function($scope, element, attrs) {
-
+            var hotel = $rootScope.activeHotelData;
             /***************************************************
             * Prevent form submit on enter key
             ***************************************************/
@@ -6061,6 +7615,45 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
 
               $rootScope.priority = $rootScope.due_date = $rootScope.department =  $rootScope.jot_members = $rootScope.department = $rootScope.taskTime = $rootScope.start_recurring_date = $rootScope.end_recurring_date = $rootScope.jot_description = $rootScope.files = $rootScope.jot_title  =  '';
               $rootScope.progress = -1;
+
+
+
+              /**************************************
+              * Appned staff member of click of icon
+              **************************************/
+
+              $scope.selectStaff = function(userName){
+                var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi);
+                var match = -1;
+                if(checkAlreadyExists)
+                {
+                  match = checkAlreadyExists.indexOf('@'+userName);
+                }
+                 if(match > -1)
+                {
+                  return false;
+                }
+                $rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+              };
+
+              /**************************************
+              * Appned Department of click of icon
+              **************************************/
+
+              $scope.selectDept = function(depatAbbr){
+                 var checkAlreadyExists = $rootScope.department.match(/\#[a-z,0-9,_\/.-]+/gmi);
+                var match = -1;
+                if(checkAlreadyExists)
+                {
+                  match = checkAlreadyExists.indexOf('#'+depatAbbr);
+                }
+                 if(match > -1)
+                {
+                  return false;
+                }
+
+                $rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
+              };
                            
                 
 
@@ -6127,21 +7720,20 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                              };
                     }
 
-                     task = {
+                    task = {
                       type       : 'recurring',
                       start_date : new Date($rootScope.start_recurring_date).getTime(),
                       end_date   : new Date($rootScope.end_recurring_date).getTime(),
                       pattern: pattern
                     };
-                  }
-
-                  
+                  }                  
                   /*******************************
                   ||  End task Jot Data json 
                   *******************************/
+                
 
                   $scope.message = ' ';
-                  var hotel = localStorageService.get('hotel');
+                  
                   
                   var jotDataArray = {
                       jot_title           : $rootScope.jot_title,
@@ -6151,15 +7743,14 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                       hotel_id            : hotel._id,
                       jot_type            : $rootScope.jot_type,
                       hotel_room          : $rootScope.hotel_room,
-                      due_date            : new Date($rootScope.due_date).getTime(),
+                      due_date            : new Date($rootScope.due_date).getTime() || '',
                       department          : $rootScope.department,                      
-                      checklist           : $rootScope.checklist,  
-                      image               : $rootScope.issueImages,
+                      checklist           : $rootScope.checklist,                        
                       task_type           : task,
                       status              : 'open'
                   };
 
-                 /* console.log(jotDataArray);
+                  /*console.log($rootScope.checklist);
                   return false;*/
 
                   var request={
@@ -6169,14 +7760,67 @@ app.directive('jotFormSubmitDirectives', function($timeout, $parse,$rootScope, $
                   };
                   
                   globalRequest.jotCRUD(request).then(function(response){
-                   
+                    
+                    
                     if(response.status == 1)
                     {
-                      var JotType = $routeParams.type;
-                      globalRequest.getJotList(JotType);
-                      $mdDialog.cancel();
-                      var popup = {"message":response.message,"class":"success"};
-                      toastService.alert(popup);
+                      var jotID = response.result._id;
+
+                      /****************************
+                      * Upload file if exists
+                      ****************************/
+
+                      if($rootScope.files && $rootScope.files.length > 0)
+                      {
+                     
+                        globalRequest.uploadFiles(hotel._id,$rootScope.directory,$rootScope.files).then(function(fileRasponse){
+                            if(fileRasponse.status == 1)
+                            {
+                              var updateRequest={
+                                    url:window.__API_PATH.UPDATE_JOT,
+                                    method:"PUT",
+                                    data:{
+                                      jot_id : jotID,
+                                      image  : fileRasponse.result
+                                    }
+                                  };
+
+
+                              /****************************
+                              * Update files in jot 
+                              ****************************/
+
+                              globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+                                if(updateResponse.status == 1)
+                                {
+                                  $rootScope.files = [];
+                                  var JotType = $routeParams.type;
+                                  globalRequest.getJotList(JotType);
+                                  $mdDialog.cancel();
+                                  var popup = {"message":response.message,"class":"success"};
+                                  toastService.alert(popup);
+                                }
+
+                              });  
+                            }
+                        });
+                      } else {
+
+                          var JotType = $routeParams.type;
+                          globalRequest.getJotList(JotType);
+                          $mdDialog.cancel();
+                          var popup = {"message":response.message,"class":"success"};
+                          toastService.alert(popup);
+                      }
+                    } else {
+                        
+                        var errors = '<ul class="mdToast-error-list">';
+                        angular.forEach(response.errors,function(value,key){
+                          errors += '<li>'+value.message+'</li>';
+                        });
+                        errors += '</ul>';
+                        var errorpopup = {"message":errors,"class":""};
+                        toastService.errors(errorpopup);
                     }
                     
                   });
@@ -6341,7 +7985,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 			var caretPos = cursorPosition.GetCaretPosition(text);
             var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-            var detectUserName = word.match(/\#[a-z]+/gmi);
+            var detectUserName = word.match(/\#[a-z,0-9,_\/.-]+/gmi);
 			var countAtRate    = word.match(/\#/gm);
 		
 			if(detectUserName && countAtRate.length == 1)
@@ -6354,10 +7998,13 @@ app.filter("filterdepartment", function(cursorPosition) {
 					scope.matchWord = word;						
 					angular.forEach(input,function(value,key){
 						var listedDepartment = value.department_name;
+						var abbreviation     = value.abbreviation;
+
 						listedDepartment     = listedDepartment.toLowerCase();
+						abbreviation         = abbreviation.toLowerCase();
 						removeHash           = removeHash.toLowerCase();
 
-						if(listedDepartment.startsWith(removeHash))
+						if(listedDepartment.startsWith(removeHash) || abbreviation.startsWith(removeHash))
 						{						
 							searchedString.push(value);
 						}
@@ -6378,7 +8025,7 @@ app.filter("filterstaff", function(cursorPosition) {
 			var caretPos = cursorPosition.GetCaretPosition(text);
             var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-            var detectUserName = word.match(/\@[a-z]+/gmi);
+            var detectUserName = word.match(/\@[a-z,0-9,_\/.-]+/gmi);
 			var countAtRate    = word.match(/\@/gm);
 			
 			if(detectUserName && countAtRate.length == 1)
@@ -6392,14 +8039,21 @@ app.filter("filterstaff", function(cursorPosition) {
 					scope.matchWord = word;
 					
 					angular.forEach(input,function(value,key){
-						var listedstaff = value.user_name;
+
+						var first_name  = value.first_name;
+						var last_name   = value.last_name;
+						var user_name   = value.user_name;
+						user_name       = user_name.toLowerCase();
+						var listedstaff = first_name+last_name;
+						
 						listedstaff     = listedstaff.toLowerCase();
 						removeAtRate    = removeAtRate.toLowerCase();
 						
-						if(listedstaff.startsWith(removeAtRate))
+						if(listedstaff.startsWith(removeAtRate) || user_name.startsWith(removeAtRate))
 						{						
 							searchedString.push(value);
 						}
+
 					});		
 				}		
 				return searchedString;
@@ -6417,7 +8071,7 @@ app.filter("filterstaffJotDesc", function(cursorPosition) {
 				var caretPos = cursorPosition.GetCaretPosition(text);
 	            var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-	            var detectUserName = word.match(/\@[a-z]+/gmi);
+	            var detectUserName = word.match(/\@[a-z,0-9,_\/.-]+/gmi);
 				var countAtRate    = word.match(/\@/gm);
 						
 				if(detectUserName)
@@ -6433,10 +8087,17 @@ app.filter("filterstaffJotDesc", function(cursorPosition) {
 						var removeAtRate = word.split("@");					
 						removeAtRate     = removeAtRate[1];
 						angular.forEach(input,function(value,key){
-							var listedstaff = value.user_name;
+							var first_name  = value.first_name;
+							var last_name   = value.last_name;
+							var user_name   = value.user_name;
+							user_name       = user_name.toLowerCase();
+							var listedstaff = first_name+last_name;
+
+
 							listedstaff     = listedstaff.toLowerCase();
 							removeAtRate    = removeAtRate.toLowerCase();
-							if(listedstaff.startsWith(removeAtRate))
+
+							if(listedstaff.startsWith(removeAtRate) || user_name.startsWith(removeAtRate))
 							{						
 								searchedString.push(value);
 							}
@@ -6459,7 +8120,7 @@ app.filter("descDepartmentFilter", function(cursorPosition) {
 				var caretPos = cursorPosition.GetCaretPosition(text);
 	            var word     = cursorPosition.ReturnWord(text.value, caretPos);
 
-	            var detectUserName = word.match(/\#[a-z]+/gmi);
+	            var detectUserName = word.match(/\#[a-z,0-9,_\/.-]+/gmi);
 				var countAtRate    = word.match(/\#/gm);
 						
 				if(detectUserName)
@@ -6476,10 +8137,14 @@ app.filter("descDepartmentFilter", function(cursorPosition) {
 						var removeAtRate = word.split("#");					
 						removeAtRate     = removeAtRate[1];
 						angular.forEach(input,function(value,key){
-							var listedstaff = value.department_name;
-							listedstaff     = listedstaff.toLowerCase();
-							removeAtRate    = removeAtRate.toLowerCase();
-							if(listedstaff.startsWith(removeAtRate))
+							var department_name = value.department_name;
+							var abbreviation    = value.abbreviation;
+
+							department_name     = department_name.toLowerCase();
+							abbreviation        = abbreviation.toLowerCase();
+
+							removeAtRate        = removeAtRate.toLowerCase();
+							if(department_name.startsWith(removeAtRate) || abbreviation.startsWith(removeAtRate))
 							{						
 								searchedString.push(value);
 							}
@@ -6490,10 +8155,32 @@ app.filter("descDepartmentFilter", function(cursorPosition) {
 			
          };
 });
+
+app.filter("checklistFilter", function() {
+         return function(input,scope) {         		
+         		var totalComplete = 0;
+	         	angular.forEach(input,function(value,key){
+	         		var completeSub = 0;
+	         		angular.forEach(value.item_list,function(value1,key1){
+	         			if(value1.status == 1)
+	         			{
+	         				completeSub = completeSub+1;
+	         			}	         			
+	         		});
+
+	         		if(value.item_list.length == completeSub)
+	         		{
+	         			totalComplete = totalComplete+1; 
+	         		}
+	         	});
+
+	         	return totalComplete+'/'+input.length;
+         };
+});
 "use strict";
 
-app.controller('loginController', ['$scope','$http','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','globalRequest',
-	function($scope,$http,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,globalRequest) {	
+app.controller('loginController', ['$scope','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','$cookies',
+	function($scope,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,$cookies) {	
 
 
 		/*********************************************
@@ -6515,25 +8202,32 @@ app.controller('loginController', ['$scope','$http','$location','localStorageSer
 
 			loginFactory.login(request).then(function(response){
 				$scope.loginresult = response;
-				
 				if(response.status == 1)
 				{
+					/*if(remember && remember == 1)
+					{
+
+					}*/
+
+					 /*var now = new Date().toString();
+					 var expiry;					 
+					 expiry = now;
+					 
+					  console.log("about to put cookie");
+					  $cookies.put('sample', "Abc", {expires: expiry});*/
+					   
+										
+
+					/*$cookies.put('hoteljot',response.result.token,[{
+			            expires: 'test'
+			        }]);*/
+
 					localStorageService.set('token', response.result.token);
 					localStorageService.set('user', response.result.user);
 					AuthSrv.isLogged = true;
-					$mdDialog.cancel();
-					if(response.result.user.role == 'hotelowner')
-					{
-						$location.path('/dashboard');
-					}
+				    $mdDialog.cancel();
+					$location.path('/dashboard');
 
-					if(response.result.user.role == 'staff')
-					{
-						globalRequest.getHotelDetail(response.result.user.hotel_id);
-						$location.path('/dashboard/hotelboard');
-					}
-										
-					
 				}									
 				
 				
@@ -6588,21 +8282,13 @@ app.controller('loginController', ['$scope','$http','$location','localStorageSer
 ]);
 "use strict";
 
-/**************************************
-* Login controller
-http://localhost:3000/resetpassword/0c02baa57acfbb5a51cb0a04c587b8eec2099e3d
-**************************************/
-
-
 app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location','$mdDialog','$timeout',
 	function($scope,loginFactory,$rootScope,$routeParams,$location,$mdDialog,$timeout) {	
 
 		var token = $routeParams.token;
-
-
 		if($routeParams.expired && $routeParams.expired == 'true')
 		{
-		
+			$mdDialog.cancel();
 			$location.path('/');
 			$rootScope.popupData  = {
 						text:  'Link has been expired.',
@@ -6655,7 +8341,6 @@ app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$rout
 
 	}
 ]);
-
 'use strict';
 
 app.factory('loginFactory', ['$http', function ($http) {
@@ -6674,11 +8359,11 @@ app.factory('loginFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
-app.controller('editLostFoundController', ['$scope','localStorageService','globalRequest','Upload','$timeout','lstFndDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,lstFndDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editLostFoundController', ['$scope','$rootScope','globalRequest','lstFndDetail','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,lstFndDetail,$mdDialog,toastService) {
+		var hotel = $rootScope.activeHotelData;
 
-		
+		$rootScope.files = '';
 
 		/**********************************************************
 	    * Item tags 
@@ -6701,7 +8386,6 @@ app.controller('editLostFoundController', ['$scope','localStorageService','globa
 		* Pass edited employee value in current scope
 		***********************************************/
 				
-
 		angular.forEach(lstFndDetail.detail,function (value,key) {
 
 			if(key == 'date')
@@ -6710,6 +8394,9 @@ app.controller('editLostFoundController', ['$scope','localStorageService','globa
 			} else if(key == 'search_tag')
 			{
 				$scope.ctrl.search_tag = value.split(',');
+			}else if(key == 'description')
+			{
+				$rootScope.jot_description = value;
 			}
 			else {
 				$scope[key] = value;
@@ -6717,98 +8404,154 @@ app.controller('editLostFoundController', ['$scope','localStorageService','globa
 		    
 		});
 
-		/*****************************************
-		* Jot image upload
-		*****************************************/
-		$scope.foundImages = '';
-		$scope.uploadFoundFiles = function(files, errFiles) {
-			$scope.files       = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'lost_found',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   var result = response.data.result;
-	                   var uploadedImagesName = []; 
-	                    angular.forEach(result, function(data) {				
-				            if(data.status){
-				            	uploadedImagesName.push(data.filename);
-				            }
-				        });
-				        $scope.image = uploadedImagesName;
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.foundProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
-
-	    };
-
-
-
+	
 	    /*****************************************
 		* Update found item
 		*****************************************/
 
 		$scope.editFoundItem = function(){
 
-			var DataArray = {
-			  _id  		     : $scope._id,
-			  description    : $scope.description,			 
-			  image          : $scope.image,
-			  place 		 : $scope.place,	
-			  date 	 		 : new Date($scope.date).getTime(),				  
-			  no_of_items 	 : $scope.no_of_items,				  
-			  category 	     : $scope.category,			  
-			  status 	     : $scope.status,			  
-			  contact 	     : $scope.contact,				  
-			  search_tag 	 : $scope.ctrl.search_tag,				  
-			};
+	 		/****************************
+            * Upload file if exists
+            ****************************/
+
+            var popup;
+
+            if($rootScope.files && $rootScope.files.length > 0)
+            {
+
+            	globalRequest.uploadFiles(hotel._id,'lost_found',$rootScope.files).then(function(fileRasponse){
+                    if(fileRasponse.status == 1)
+                    {
+                    	var mergeImages      = lstFndDetail.detail.image.concat(fileRasponse.result);
+
+                        var updateRequest={
+                            url:window.__API_PATH.UPDATE_LOST_FOUND,
+                            method:"PUT",
+                            data:{  
+                              _id  		     : $scope._id,
+							  description    : $rootScope.jot_description,			 
+							  title    		 : $scope.title,			 
+							  place 		 : $scope.place,	
+							  date 	 		 : new Date($scope.date).getTime(),			
+							  image  		 : mergeImages,		  
+							  no_of_items 	 : $scope.no_of_items,				  
+							  category 	     : $scope.category,			  
+							  status 	     : $scope.status,			  
+							  contact 	     : $scope.contact,				  
+							  search_tag 	 : $scope.ctrl.search_tag,
+                            }
+                        };
 
 
+                      /****************************
+                      * Update files in lost found 
+                      ****************************/
 
-			var request={
-                    url:window.__API_PATH.UPDATE_LOST_FOUND,
-                    method:"PUT",
-                    data:DataArray
-                  };
-            
-           
-            globalRequest.jotCRUD(request).then(function(response){ 
-            	$scope.editlstFoundResult = response;
-                if(response.status ==1)
-			 	{
-			 		$mdDialog.cancel();
-			 		globalRequest.getFoundList();
-			 	}
-            });
+                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+                        if(updateResponse.status == 1)
+                        {
+                          $rootScope.files = '';
+                          globalRequest.getFoundList();
+                          $mdDialog.cancel();
+		                  popup = {"message":updateResponse.message,"class":"success"};
+		                  toastService.alert(popup);
+                        }  else {
+
+					 		var errors = '<ul class="mdToast-error-list">';
+							angular.forEach(updateResponse.errors,function(value,key){
+								errors += '<li>'+value.message+'</li>';
+							});
+							errors += '</ul>';
+							popup = {"message":errors,"class":""};
+							toastService.errors(popup);
+					 	}
+
+                      });  
+                    }  else {
+
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(fileRasponse.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+                });
+
+            } else {
+
+            	/****************************
+                * If no attachment uploaded
+                ****************************/
+
+
+            	var DataArray = {
+					  _id  		     : $scope._id,
+					  description    : $rootScope.jot_description,				 
+					  title          : $scope.title,			 
+					  place 		 : $scope.place,	
+					  date 	 		 : new Date($scope.date).getTime(),				  
+					  no_of_items 	 : $scope.no_of_items,				  
+					  category 	     : $scope.category,			  
+					  status 	     : $scope.status,			  
+					  contact 	     : $scope.contact,				  
+					  search_tag 	 : $scope.ctrl.search_tag,				  
+					};
+
+					var request={
+	                    url:window.__API_PATH.UPDATE_LOST_FOUND,
+	                    method:"PUT",
+	                    data:DataArray
+	                  };
+    
+   
+					globalRequest.jotCRUD(request).then(function(response){ 
+						
+						if(response.status ==1)
+						{
+							globalRequest.getFoundList();
+							$mdDialog.cancel();
+							popup = {"message":response.message,"class":"success"};
+							toastService.alert(popup);
+						}  else {
+
+					 		var errors = '<ul class="mdToast-error-list">';
+							angular.forEach(response.errors,function(value,key){
+								errors += '<li>'+value.message+'</li>';
+							});
+							errors += '</ul>';
+							popup = {"message":errors,"class":""};
+							toastService.errors(popup);
+					 	}
+					});
+            }	
+
+
 		};
 
-
-		
 	}
 ]);
 "use strict";
 
-app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','localStorageService','toastService','$mdDialog',
-	function($scope,$rootScope,globalRequest,localStorageService,toastService,$mdDialog) {
-		
+app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','toastService','$mdDialog',
+	function($scope,$rootScope,globalRequest,toastService,$mdDialog) {
+		var hotel = $rootScope.activeHotelData;
 		$rootScope.directory = 'lost_found';
+		$rootScope.jot_description = $rootScope.files = '';
+
+		/*****************************************
+		* Get Staff List
+		******************************************/
 
 		globalRequest.getStaff();
+
+		/*****************************************
+		* Get department List
+		******************************************/
+
+	    globalRequest.getDepartments();
 
 		/**********************************************************
 	    * Item tags 
@@ -6833,13 +8576,11 @@ app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','localSto
 
 	    $scope.submitLostFound = function(){
 	    	
-	    	$scope.message = ' ';
-
-			var hotel = localStorageService.get('hotel');
+	    	$scope.message = ' ';			
 			var DataArray = {
-			  description    : $rootScope.jot_title,
-			  hotel_id       : hotel._id,	
-			  image          : $rootScope.issueImages,
+			  description    : $rootScope.jot_description,
+			  title          : $rootScope.jot_title,
+			  hotel_id       : hotel._id,				  
 			  place 		 : $scope.lost_place,	
 			  date 	 		 : new Date($scope.lost_date).getTime(),			  
 			  no_of_items 	 : $scope.no_of_items,				  
@@ -6853,39 +8594,97 @@ app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','localSto
                     url:window.__API_PATH.LOST_FOUND,
                     method:"POST",
                     data:DataArray
-                  };
-            
+                  };            	
            
             globalRequest.jotCRUD(request).then(function(response){
-                    var result = response.result;
-                    if(response.status == 1)
-                    {
-                      $mdDialog.cancel();
-                      var popup = {"message":response.message,"class":"success"};
-                      toastService.alert(popup);
-                    }
+                
+                var lostFoundID = response.result._id;
+
+                if(response.status == 1)
+                {
+
+                	/****************************
+	                * Upload file if exists
+	                ****************************/
+
+	                if($rootScope.files && $rootScope.files.length > 0)
+	                {
+
+
+	                	globalRequest.uploadFiles(hotel._id,$rootScope.directory,$rootScope.files).then(function(fileRasponse){
+                            if(fileRasponse.status == 1)
+                            {
+                              var updateRequest={
+                                    url:window.__API_PATH.UPDATE_LOST_FOUND,
+                                    method:"PUT",
+                                    data:{
+                                      _id : lostFoundID,
+                                      image  : fileRasponse.result
+                                    }
+                                  };
+
+
+                              /****************************
+                              * Update files in lost found 
+                              ****************************/
+
+                              globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+                                if(updateResponse.status == 1)
+                                {
+                                  $rootScope.files = [];
+                                  $mdDialog.cancel();
+				                  var popup = {"message":response.message,"class":"success"};
+				                  toastService.alert(popup);
+                                }
+
+                              });  
+                            }
+                        });
+
+	                } else {
+	                	$mdDialog.cancel();
+						var popup = {"message":response.message,"class":"success"};
+						toastService.alert(popup);
+	                }
+
+                }
             });      
 	    };
-
-		
-
 	}
 ]);
 "use strict";
 
-app.controller('lostFoundManagementController',['$scope','$rootScope','globalRequest','localStorageService','toastService','Upload','$timeout','$mdDialog',
-	function($scope,$rootScope,globalRequest,localStorageService,toastService,Upload,$timeout,$mdDialog){
-		var hotel = localStorageService.get('hotel');
+app.controller('lostFoundManagementController',['$scope','$rootScope','globalRequest','toastService','$mdDialog',
+	function($scope,$rootScope,globalRequest,toastService,$mdDialog){
+
+		var hotel = $rootScope.activeHotelData;
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = hotel.jot_types;
+
+		/************************************
+		* Get employee list
+		*************************************/		
+		globalRequest.getStaff();
+
+		/*****************************************
+		* Get department List
+		******************************************/
+
+	    globalRequest.getDepartments();
 
 		/************************************
 		* Blank all field before open form
 		*************************************/
 
 		$scope.blank = function(){
-			$scope.description = "";
+			$rootScope.jot_description = "";
 			$scope.image = "";
 			$scope.foundImages = "";
-			$scope.files = "";
+			$rootScope.files = "";
 			$scope.place = "";
 			$scope.date = "";
 			$scope.no_of_items = "";
@@ -6893,16 +8692,8 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 			$scope.status = "";
 			$scope.ctrl.itemTagModel = [];
 			$scope.contact = "";
-			
 			$scope.foundProgress = -1;
 		};
-
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.lstFoundResult = "";
-			
-		};
-
 
 		/**********************************************************
 	    * Item tags 
@@ -6922,46 +8713,6 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 	    };
 
 
-	    /*****************************************
-		* Jot image upload
-		*****************************************/
-		$scope.foundImages = '';
-		$scope.uploadFoundFiles = function(files, errFiles) {
-			$scope.files       = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'lost_found',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   var result = response.data.result;
-	                   var uploadedImagesName = []; 
-	                    angular.forEach(result, function(data) {				
-				            if(data.status){
-				            	uploadedImagesName.push(data.filename);
-				            }
-				        });
-				        $scope.foundImages = uploadedImagesName;
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.foundProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
-
-	    };
-
 		/************************************
 		* Get lost found item list
 		*************************************/			
@@ -6976,7 +8727,8 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 		$scope.addfoundItem = function(){
 
 			var DataArray = {
-			  description    : $scope.description,
+			  description    : $rootScope.jot_description,
+			  title          : $scope.title,
 			  hotel_id       : hotel._id,	
 			  image          : $scope.foundImages,
 			  place 		 : $scope.place,	
@@ -6988,8 +8740,6 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 			  search_tag 	 : $scope.ctrl.itemTagModel,				  
 			};
 
-
-
 			var request={
                     url:window.__API_PATH.LOST_FOUND,
                     method:"POST",
@@ -6998,18 +8748,69 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
             
            
             globalRequest.jotCRUD(request).then(function(response){ 
-            	$scope.lstFoundResult = response;
+            	var popup;
+            	
                 if(response.status == 1)
                 {
-                    if(!$scope.LstFndList)
-			 		{
-			 			$scope.LstFndList = [];
-			 		}
-			 		$scope.LstFndList.push(response.result);
-                    var popup = {"message":response.message,"class":"success"};
-                    toastService.alert(popup);
-                    $scope.blank();
-                }
+                	var lostFoundID = response.result._id;
+
+                	/****************************
+		            * Upload file if exists
+		            ****************************/
+
+		            if($rootScope.files && $rootScope.files.length > 0)
+		            {
+
+		            	globalRequest.uploadFiles(hotel._id,'lost_found',$rootScope.files).then(function(fileRasponse){
+		                    if(fileRasponse.status == 1)
+		                    {
+				                    	
+
+		                        var updateRequest={
+		                            url:window.__API_PATH.UPDATE_LOST_FOUND,
+		                            method:"PUT",
+		                            data:{  
+		                              _id  		     : lostFoundID,
+		                              image   		 : fileRasponse.result							  
+		                            }
+		                        };
+
+
+			                      /****************************
+			                      * Update files in lost found 
+			                      ****************************/
+
+			                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+			                        if(updateResponse.status == 1)
+			                        {
+			                            $rootScope.files = '';
+			                            globalRequest.getFoundList();
+			                            popup = {"message":response.message,"class":"success"};
+										toastService.alert(popup);
+										$scope.blank();
+			                        }
+
+			                      });  
+			                    }
+			                });
+
+				    } else {
+				    	globalRequest.getFoundList();
+				    	popup = {"message":response.message,"class":"success"};
+	                    toastService.alert(popup);
+	                    $scope.blank();
+
+				    }
+                }  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
             });
 		};
 
@@ -7035,15 +8836,20 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 		* Delete employee
 		*****************************************/	
 
-		$scope.removeList = function(detail){
+		$scope.removeList = function(detail,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_LOST_FOUND,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
-			globalRequest.jotCRUD(request).then(function(response){				
+			globalRequest.jotCRUD(request).then(function(response){	
+				if(response.status == 1)
+				{
+					$scope.LstFndList.splice(index, 1);
+				}
+							
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
@@ -7052,8 +8858,8 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 }]);
 "use strict";
 
-app.controller('footerController', ['$scope','$rootScope','$mdDialog','$location',
-	function($scope,$rootScope,$mdDialog,$location) {
+app.controller('footerController', ['$scope','$rootScope','$location',
+	function($scope,$rootScope,$location) {
 		//$rootScope.popup = true;
 		$scope.callClosePopup = function(){
 			$rootScope.popup = false;
@@ -7141,10 +8947,22 @@ app.controller('frontHeaderController', ['$scope','$rootScope','$mdDialog','$loc
 
 "use strict";
 
-app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','$route','globalRequest',
-	function($scope,localStorageService,$rootScope,$mdDialog,$route,globalRequest) {	
+app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','$window','globalRequest','$timeout','$location',
+	function($scope,localStorageService,$rootScope,$mdDialog,$window,globalRequest,$timeout,$location) {	
 
-		$rootScope.userData  = localStorageService.get('user');
+	
+		
+		/*******************************************************
+		* Callback function to close jot circle on outside click
+		*******************************************************/
+
+		$scope.circleToggle = function(){			
+				$scope.logocircle = false;
+				$timeout(function() {				
+				   $rootScope.$apply();
+				});								
+		};
+
 		/*
 		* Jot form tab list
 		*/
@@ -7152,18 +8970,18 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
 
 
-		/**********************************************************
-	    * Get active hotel data
-	    **********************************************************/
-
-		$scope.activeHotelData   = localStorageService.get('hotel');
+			
 
 
-		/************************************************
-		* Get list of Jot types selected by current user
-		*************************************************/
+	    if($rootScope.activeHotelData)
+	    {
 
-		$rootScope.boards = $scope.activeHotelData.jot_types;
+			/************************************************
+			* Get list of Jot types selected by current user
+			*************************************************/
+
+			$scope.boards =  $rootScope.activeHotelData.jot_types;
+		}
 
 		/*
 		*
@@ -7180,12 +8998,13 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		* Set hotel id in local storage and redirect to jot related to selected hotel
 		*
 		*/
-		$scope.hotel = localStorageService.get('hotel');
+		
+
 		$scope.changeJotView = function(hotel){				
 			globalRequest.getJotCount();
 			localStorageService.set('hotel', hotel);
-			$scope.hotel = localStorageService.get('hotel');
-			$route.reload();
+			$rootScope.activeHotelData = localStorageService.get('hotel');
+			$window.location.reload();
 			
 		};
 
@@ -7216,15 +9035,16 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		**************************************/
 
 		$rootScope.openFormByType = function(formType){
-			
+			$scope.circleToggle();
 			$mdDialog.show({
 				controller: 'jotPopupCtrl',
 				templateUrl: '/modules/jot/views/jot-form.html',
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,				
 				locals: {ActivateTab:formType}
-			}).then(function(answer) {}, function() {});
-
+			}).then(function(answer) {}, function() {
+				
+			});
 		};
 
 
@@ -7246,15 +9066,27 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 
 "use strict";
 
-app.controller('sidebarCntroller',['$scope','$location',function($scope,$location){
+app.controller('sidebarCntroller',['$scope','$rootScope','$location','$timeout',function($scope,$rootScope,$location,$timeout){
+
+	$scope.closeSidebar = function(){			
+			$rootScope.leftopen = false;
+			$timeout(function() {				
+			   $rootScope.$apply();
+			});			
+	};
+
+
+	$rootScope.$on('handleSidebar', function() {
+		$scope.closeSidebar();   	
+	});
+
 	$scope.getClass = function (path) {
 	  return ($location.path() === path) ? 'active' : '';
 	};
-
 }]);
 "use strict";
 
-app.directive('circleToggle',['$document','$rootScope',function($document,$rootScope){
+app.directive('circleToggle',['$document',function($document){
 
 	return{
 		link: function(scope,element){
@@ -7268,7 +9100,7 @@ app.directive('circleToggle',['$document','$rootScope',function($document,$rootS
 }]);
 "use strict";
 
-app.directive('header',['$rootScope',function($rootScope){
+app.directive('header',[ function(){
 	return{
 		templateUrl:'/modules/partials/header.html',
 		link: function(scope,ele){}
@@ -7281,12 +9113,61 @@ app.directive('header',['$rootScope',function($rootScope){
 
 "use strict";
 
-app.controller('editContactController', ['$scope','localStorageService','globalRequest','Upload','$timeout','contactDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,contactDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.directive('outsideClickJotButton', function ($window) {    
+    return {                 
+        scope: {
+            outsideCallback: '&outsideClickJotButton',
+        },      
+        link: function(scope, element, attrs) {
+
+         var expressionHandler = scope.outsideCallback();               
+
+          angular.element($window).on('click', function (event) {    
+              var clickedContainerID = angular.element(event.target).attr('clickedContainer');
+              if(clickedContainerID != 'jotButton')
+              {
+                  if (element[0].contains(event.target))
+                  {} else {                 
+                    expressionHandler();                    
+                  }
+              }          
+            });
+        }
+    };
+});
+
+"use strict";
+
+app.directive('outsideClickSidebar', function ($window) {    
+    return {                 
+        scope: {
+            outsideCallback: '&outsideClickSidebar',
+        },      
+        link: function(scope, element, attrs) {
+
+         var expressionHandler = scope.outsideCallback();               
+
+          angular.element($window).on('click', function (event) {
+              var clickedContainerID = angular.element(event.target).attr('clickedContainer');
+              if(clickedContainerID != 'sidebar')
+              {
+                  if (element[0].contains(event.target))
+                  {} else {                 
+                  expressionHandler();
+                  }
+              }            
+                         
+          });
+        }
+    };
+});
+
+"use strict";
+
+app.controller('editContactController', ['$scope','globalRequest','contactDetail','$mdDialog','toastService',
+	function($scope,globalRequest,contactDetail,$mdDialog,toastService) {
 
 
-		
 		/***********************************************
 		* Pass edited employee value in current scope
 		***********************************************/
@@ -7324,11 +9205,22 @@ app.controller('editContactController', ['$scope','localStorageService','globalR
 		          };
 
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.contactEditResult = response;
+				var popup;
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
 			 		globalRequest.getContactList();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 
 			 });
@@ -7344,8 +9236,8 @@ app.controller('editContactController', ['$scope','localStorageService','globalR
 
 "use strict";
 
-app.controller('phoneDirController',['$scope','globalRequest','localStorageService','$mdDialog','toastService',function($scope,globalRequest,localStorageService,$mdDialog,toastService){
-	var hotel = localStorageService.get('hotel');
+app.controller('phoneDirController',['$scope','$rootScope','globalRequest','$mdDialog','toastService',function($scope, $rootScope, globalRequest,$mdDialog,toastService){
+	var hotel = $rootScope.activeHotelData;
 	/************************************
 	* Blank all field before open form
 	*************************************/	
@@ -7355,13 +9247,8 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 		$scope.last_name = "";
 		$scope.email = "";
 		$scope.contact = "";
+		$scope.ctrl.itemTagModel = [];
 	};
-
-	$scope.blankFields = function(){
-		$scope.blank();
-		$scope.ContactResult = "";
-	};
-
 
 	/**********************************************************
     * Item tags 
@@ -7405,9 +9292,8 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 		            	contact         :  $scope.contact
 		            }
 		          };
-		globalRequest.jotCRUD(request).then(function(response){
-		 	$scope.ContactResult = response;
-
+		globalRequest.jotCRUD(request).then(function(response){	 	
+			var popup;
 		 	if(response.status == 1)
 		 	{
 		 		$scope.blank();
@@ -7417,7 +9303,19 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 		 			$scope.ContactList = [];
 		 		}
 		 		$scope.ContactList.push(response.result);
+
+		 		popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
 		 		
+		 	} else {
+
+		 		var errors = '<ul class="mdToast-error-list">';
+				angular.forEach(response.errors,function(value,key){
+					errors += '<li>'+value.message+'</li>';
+				});
+				errors += '</ul>';
+				popup = {"message":errors,"class":""};
+				toastService.errors(popup);
 		 	}
 		 });
 
@@ -7466,6 +9364,9 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 		
 		globalRequest.jotCRUD(request).then(function(response){	
 			globalRequest.getContactList();
+			var popup = {"message":response.message,"class":response.class};
+			toastService.alert(popup);
+
 		});
 
 	};
@@ -7475,15 +9376,20 @@ app.controller('phoneDirController',['$scope','globalRequest','localStorageServi
 	* Delete contact
 	*****************************************/	
 
-	$scope.removeContact = function(detail){
+	$scope.removeContact = function(detail,index){
 
 		var request={
 			url:window.__API_PATH.DELETE_CONTACT,
 			method:"DELETE",
-			params:{_id:detail._id}
+			params:{_id:detail}
 		};
 		
-		globalRequest.jotCRUD(request).then(function(response){				
+		globalRequest.jotCRUD(request).then(function(response){	
+
+			if(response.status)
+			{
+				$scope.ContactList.splice(index, 1);
+			}			
 			var popup = {"message":response.message,"class":response.class};
 			toastService.alert(popup);
 		});
@@ -7526,50 +9432,203 @@ app.filter('contactfilter',function(){
 });
 "use strict";
 
-app.controller('profileController',['$scope','$rootScope',function($scope,$rootScope){
+app.controller('profileController',['$scope','$rootScope','globalRequest','localStorageService','toastService',function($scope,$rootScope,globalRequest,localStorageService,toastService){	
+
+	$scope.first_name   = $rootScope.currentUser.first_name;
+	$scope.last_name    = $rootScope.currentUser.last_name;
+	$scope.email 		= $rootScope.currentUser.email;
 
 
+	/******************************
+	* Update information function
+	*******************************/
+
+	function userInfoUpdate(dataObj){
+		var request={
+				url:window.__API_PATH.UPDATE_PROFILE,
+				method:"PUT",
+				data:dataObj
+			};
+		globalRequest.jotCRUD(request).then(function(response){					 			 	
+		 	if(response.status == 1)
+		 	{	 		
+
+				var popup = {"message":response.message,"class":"success"};
+	            toastService.alert(popup);					
+		 	}
+		}); 
+	}
+
+
+	/***********************
+	* Update profile image
+	***********************/
+
+	$scope.uploadprofileImage = function(files, errFiles) {
+			globalRequest.uploadFiles(null,'profile_image',files).then(function(profileResponse){
+
+				$rootScope.currentUser.profile_image = profileResponse.result[0].filename;
+		 		localStorageService.set('user',$rootScope.currentUser);
+
+					var imageObj = {
+							_id  			: $rootScope.currentUser._id,
+							profile_image   : profileResponse.result[0].filename
+					};
+					userInfoUpdate(imageObj);
+
+				});
+		};
+
+		/*****************************
+		* Update profile information
+		*****************************/
+
+		$scope.updateProfileInfo = function(){
+
+			var infoObj = {
+					_id  			: $rootScope.currentUser._id,
+					first_name      : $scope.first_name,
+					last_name       : $scope.last_name,
+					email           : $scope.email
+			};
+
+			$rootScope.currentUser.first_name = $scope.first_name;
+			$rootScope.currentUser.last_name  = $scope.last_name;
+			$rootScope.currentUser.email      = $scope.email;
+		 	localStorageService.set('user',$rootScope.currentUser);
+
+			userInfoUpdate(infoObj);
+		};
+
+
+		/*****************************
+		* Change password
+		*****************************/
+
+		$scope.changePassword = function(){
+			if($scope.new_password != $scope.confirm_password)
+			{
+					var popup = {"message":"Password does not match the confirm password.","class":"Autherror"};
+	            	toastService.alert(popup);
+	            	return false;
+			}
+				var passwordRequest={
+						url:window.__API_PATH.CHANGE_PASSWORD,
+						method:"POST",
+						data:{
+							_id  	     : $rootScope.currentUser._id,         
+							oldpassword  : $scope.old_password,
+							newpassword  : $scope.new_password
+						}
+					};
+				globalRequest.jotCRUD(passwordRequest).then(function(response){				 			 	
+				 
+				 	var popup = {"message":response.message,"class":response.class};
+	            	toastService.alert(popup);	
+	            	$scope.cancelChangePassword();
+				});
+		};
+
+		/*****************************
+		* Cancel password change
+		*****************************/
+
+		$scope.cancelChangePassword = function(){
+				$scope.old_password = $scope.new_password = $scope.confirm_password = '';
+		};
 }]);
 "use strict";
 
-app.controller('registerController', ['$scope','$rootScope','registerFactory','$location','$mdDialog','$timeout',
-	function($scope,$rootScope,registerFactory,$location,$mdDialog,$timeout) {
-
+app.controller('registerController', ['$scope','$rootScope','registerFactory','$mdDialog','$timeout','globalRequest',
+	function($scope,$rootScope,registerFactory,$mdDialog,$timeout,globalRequest) {
+		$scope.profileImage = [];
 		$scope.registerUser = function (obj) {
-
 	        var dataObj = {
 					
 					first_name  	 : $scope.first_name,
 					last_name   	 : $scope.last_name,
 					email       	 : $scope.email,
 					contact_number   : $scope.contact_number,
-					password    	 : $scope.password
+					password    	 : $scope.password,
+					
 			};
 
 			var request={
 					url:window.__API_PATH.REGISTER,
 					method:"POST",
 					data:dataObj
-				};
+				};	   
 
-			registerFactory.register(request).then(function(response){
 
-				$scope.registerResult   = response;
+			/********************************************
+			*  Upload profile image if exists
+			********************************************/
 
-				if(response.status == 1)
-				{
-					
-					$rootScope.popupData = {text:response.message,action:'ok'};
-					$timeout(function() {
-					 	$mdDialog.cancel();
-					 }, 200);
-					 $timeout(function() {
-					 	$rootScope.popup = true;
-					 }, 300);	
-				 }			
-			});       
+
+			if($scope.profileImage.length>0)
+			{
+
+				globalRequest.uploadFiles(null,'profile_image',$scope.profileImage).then(function(profileResponse){
+					$scope.registerImageResult =  profileResponse;
+
+
+					/********************************************
+					*  Register user with profile image
+					********************************************/
+
+					request.data.profile_image = profileResponse.result[0].filename;
+
+					registerFactory.register(request).then(function(response){
+						$scope.registerResult   = response;
+						if(response.status == 1)
+						{					
+							$rootScope.popupData = {text:response.message,action:'ok'};
+							$timeout(function() {
+							 	$mdDialog.cancel();
+							 }, 200);
+							 $timeout(function() {
+							 	$rootScope.popup = true;
+							 }, 300);	
+						}							
+					});
+
+				});
+
+			} else {
+
+				/********************************************
+				*  Register user without profile image
+				********************************************/
+
+				registerFactory.register(request).then(function(response){
+					$scope.registerResult   = response;
+
+					if(response.status == 1)
+					{					
+						$rootScope.popupData = {text:response.message,action:'ok'};
+						$timeout(function() {
+						 	$mdDialog.cancel();
+						 }, 200);
+						 $timeout(function() {
+						 	$rootScope.popup = true;
+						 }, 300);	
+					 }							
+				});
+				
+			}    
 		};	
 
+		/********************************************
+		*  Keep uploaded file in temp scope
+		********************************************/
+
+		$scope.uploadprofileImage = function(files, errFiles) {
+			$scope.profileImage = files;
+		};	
+
+		/********************************************
+		*  Open login form
+		********************************************/
 
 		$scope.openLoginForm = function (obj) {	
 	           $mdDialog.show({
@@ -7604,64 +9663,62 @@ app.factory('registerFactory', ['$http', function ($http) {
 }]);
 "use strict";
 
-app.controller('editCategoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','catDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,catDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
-
+app.controller('editCategoryController', ['$scope','globalRequest','$timeout','catDetail','$mdDialog','toastService',
+	function($scope,globalRequest,$timeout,catDetail,$mdDialog,toastService) {
 		
 		/***********************************************
-		* Pass edited employee value in current scope
+		* Take editable category value in current scope
 		***********************************************/
 
 		angular.forEach(catDetail.detail,function (value,key) {
 		    $scope[key] = value;
-		});
-		
+		});		
 
 		/************************************
 		* Edit Item
 		*************************************/			
 
-		$scope.editInvtCat = function(){
-	
+		$scope.editInvtCat = function(){	
 						
-			var request = {
-			            url    : window.__API_PATH.UPDATE_INVENTORY_CATEGORY,
-			            method : "PUT",
-			            data:{
-			            	_id  		 			  :  $scope._id,
-			            	inventory_category_name   :  $scope.inventory_category_name
-			            }
-			          };
+			var request =   {
+				            	url    : window.__API_PATH.UPDATE_INVENTORY_CATEGORY,
+				            	method : "PUT",
+				            	data:{
+				            		_id  		 			  :  $scope._id,
+				            		inventory_category_name   :  $scope.inventory_category_name
+				            	}
+				          	};
 
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.invtEditResult = response;
+			 	var popup;
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
 			 		globalRequest.getVendingCategory();
-			 	}
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
 
+			 	}  else {
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
 			 });
-		};
-		
+		};		
 	}
 ]);
-
-
-
-
 "use strict";
 
-app.controller('editInventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','invDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,invDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editInventoryController', ['$scope','$rootScope','localStorageService','globalRequest','invDetail','$mdDialog','toastService',
+	function($scope,$rootScope,localStorageService,globalRequest,invDetail,$mdDialog,toastService) {
 
-		
 		/***********************************************
-		* Pass edited employee value in current scope
-		***********************************************/
-		
+		* Take editable item value in current scope
+		***********************************************/		
 
 		$scope.inventCatList = invDetail.prevScope.inventCatList;
 
@@ -7681,9 +9738,62 @@ app.controller('editInventoryController', ['$scope','localStorageService','globa
 		*************************************/			
 
 		$scope.editItem = function(){
-	
-			var status  = ($scope.status)?$scope.status:'inactive';			
-			var request = {
+			var popup;
+
+			/****************************
+            * Upload file if exists
+            ****************************/
+
+            if($scope.profile && $scope.profile.length > 0)
+            {
+
+            	globalRequest.uploadFiles($rootScope.activeHotelData._id,'inventory',$scope.profile).then(function(fileRasponse){
+                    if(fileRasponse.status == 1)
+                    {  
+
+                        var status  = ($scope.status)?$scope.status:'inactive';			
+						var updateRequest = {
+						            url    : window.__API_PATH.UPDATE_ITEM,
+						            method : "PUT",
+						            data:{
+						            	_id  		 :  $scope._id,
+						            	item_name    :  $scope.item_name,
+						            	category     :  $scope.category,
+						            	price        :  $scope.price,
+						            	sku_code     :  $scope.sku_code,
+						            	quantity 	 :  $scope.quantity,		            
+						            	image 	     :  fileRasponse.result[0].filename
+						            }
+						          };
+
+
+                      /****************************
+                      * Update files in lost found 
+                      ****************************/
+
+                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+                        if(updateResponse.status == 1)
+                        {
+                          $scope.files = '';
+                          globalRequest.getVendingItems();
+                          $mdDialog.cancel();
+		                  popup = {"message":updateResponse.message,"class":"success"};
+		                  toastService.alert(popup);
+                        }
+
+                      });  
+                    }
+                });
+
+            } else {
+
+            	/****************************
+                * If no attachment uploaded
+                ****************************/
+
+
+            	var status  = ($scope.status)?$scope.status:'inactive';			
+				var request = {
 			            url    : window.__API_PATH.UPDATE_ITEM,
 			            method : "PUT",
 			            data:{
@@ -7692,84 +9802,50 @@ app.controller('editInventoryController', ['$scope','localStorageService','globa
 			            	category     :  $scope.category,
 			            	price        :  $scope.price,
 			            	sku_code     :  $scope.sku_code,
-			            	quantity 	 :  $scope.quantity,		            
-			            	image 	     :  $scope.profileimages
+			            	quantity 	 :  $scope.quantity   
 			            }
 			          };
 
-			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.invEditResult = response;
-			 	if(response.status ==1)
-			 	{
-			 		$mdDialog.cancel();
-			 		globalRequest.getVendingItems();
-			 	}
+				globalRequest.jotCRUD(request).then(function(response){
+				 	
+				 	if(response.status ==1)
+				 	{
+				 		$mdDialog.cancel();
+				 		globalRequest.getVendingItems();
+				 		popup = {"message":response.message,"class":"success"};
+		                toastService.alert(popup);
 
-			 });
+				 	}  else {
+
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(response.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+
+				 });
+            }	
+			
 		};
 
 		/*****************************************
-		* Profile image upload
+		* Get file data in scope
 		*****************************************/	
-
 		$scope.uploadprofileImage = function(files, errFiles) {
-			$scope.profile = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'inventory',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {	                  
-	                   $scope.profileimages = response.data.result[0].filename;
-	                   
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.profileProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
-
+			$scope.profile = files;		
 	    };
 		
 	}
 ]);
-
-
-
-
 "use strict";
 
-app.controller('inventoryCatController', ['$scope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','$route','toastService',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,$route,toastService) {
-		var hotel = localStorageService.get('hotel');
-
-
-		/************************************
-		* Blank all field before open form
-		*************************************/	
-
-		$scope.blank = function(){
-			$scope.inventory_category_name = "";		
-		};
-
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.inverntoryResult = "";
-		};
-
-
-
+app.controller('inventoryCatController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+		
+		
 		/************************************
 		* Get Category list
 		*************************************/			
@@ -7788,21 +9864,32 @@ app.controller('inventoryCatController', ['$scope','localStorageService','global
 			            url:window.__API_PATH.ADD_INVENTORY_CATEGORY,
 			            method:"POST",
 			            data:{
-			            	hotel_id      			  :  hotel._id,
+			            	hotel_id      			  :  $rootScope.activeHotelData._id,
 			            	inventory_category_name   :  $scope.inventory_category_name
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.invtResult = response;
-			 	$scope.blank();
-
+				var popup;
 			 	if(response.status == 1)
 			 	{
+			 		$scope.inventory_category_name = '';
 			 		if(!$scope.invtList)
 			 		{
 			 			$scope.invtList = [];
 			 		}
 			 		$scope.invtList.push(response.result);
+
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 });
 
@@ -7825,41 +9912,40 @@ app.controller('inventoryCatController', ['$scope','localStorageService','global
 
 		};
 
-
 		/*****************************************
 		* Delete category
 		*****************************************/	
 
-		$scope.removeCat = function(detail){
+		$scope.removeCat = function(detail,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_INVENTORY_CATEGORY,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				$scope.invtList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
 
-		};
-
-		
+		};	
 		
 	}
 ]);
-
-
-
-
 "use strict";
 
-app.controller('inventoryController', ['$scope','localStorageService','globalRequest','Upload','$timeout','$mdDialog','$route','toastService',
-	function($scope,localStorageService,globalRequest,Upload,$timeout,$mdDialog,$route,toastService) {
+app.controller('inventoryController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,toastService) {
 		
-		var hotel = localStorageService.get('hotel');
+		var hotel = $rootScope.activeHotelData;
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = hotel.jot_types;
 
 		/************************************
 		* Blank all field before open form
@@ -7876,10 +9962,6 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 			$scope.profileProgress = -1;
 		};
 
-		$scope.blankFields = function(){
-			$scope.blank();
-			$scope.inverntoryResult = "";
-		};
 
 		/************************************
 		* Get item list
@@ -7924,17 +10006,70 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.inverntoryResult = response;
-			 	$scope.blank();
+			 	var popup;
+			 	
 			 	if(response.status == 1)
 			 	{
-			 		if(!$scope.inverntoryList)
-			 		{
-			 			$scope.inverntoryList = [];
-			 		}
+			 		var itemID = response.result._id;
+			 		
+			 		/****************************
+		            * Upload file if exists
+		            ****************************/
 
-			 		$scope.inverntoryList.push(response.result);
+		            if($scope.profile && $scope.profile.length > 0)
+		            {
+
+		            	globalRequest.uploadFiles(hotel._id,'inventory',$scope.profile).then(function(fileRasponse){
+		                    if(fileRasponse.status == 1)
+		                    {	                    	
+
+		                        var updateRequest={
+		                            url:window.__API_PATH.UPDATE_ITEM,
+		                            method:"PUT",
+		                            data:{  
+		                              _id  		     : itemID,
+		                              image   		 : fileRasponse.result[0].filename						  
+		                            }
+		                        };
+
+
+			                      /****************************
+			                      * Update files in lost found 
+			                      ****************************/
+
+			                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+			                        if(updateResponse.status == 1)
+			                        {
+			                            $scope.profile = '';
+			                            globalRequest.getVendingItems();
+			                            popup = {"message":response.message,"class":"success"};
+										toastService.alert(popup);
+										$scope.blank();
+			                        }
+
+			                      });  
+			                    }
+			                });
+
+				    } else {
+				    	$scope.profile = '';
+                        globalRequest.getVendingItems();
+                        popup = {"message":response.message,"class":"success"};
+						toastService.alert(popup);
+						$scope.blank();
+				    }
+
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
+
 			 });
 
 		};
@@ -7944,32 +10079,32 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 		*****************************************/	
 
 		$scope.openEditForm = function(detail){
-			console.log(detail);
-				$mdDialog.show({
-					controller: 'editInventoryController',
-					templateUrl: '/modules/vending_machine/views/edit_inventory.html',
-					parent: angular.element(document.body),
-					fullscreen: $scope.customFullscreen,
-					clickOutsideToClose:true,	
-					locals:{invDetail:{detail:detail,prevScope:$scope}}				
-				}).then(function(answer) {}, function() {});
+			
+			$mdDialog.show({
+				controller: 'editInventoryController',
+				templateUrl: '/modules/vending_machine/views/edit_inventory.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{invDetail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
 
-			};
+		};
 
 
 		/*****************************************
 		* Delete Item
 		*****************************************/	
 
-		$scope.removeItem = function(detail){
+		$scope.removeItem = function(detail,index){
 			var request={
 				url:window.__API_PATH.DELETE_ITEM,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				$scope.inverntoryList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
@@ -7982,33 +10117,6 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 
 		$scope.uploadprofileImage = function(files, errFiles) {
 			$scope.profile = files;	
-			
-	        if (files && files.length) {
-	            Upload.upload({
-	                url: window.__API_PATH.UPLOAD_FILE,
-	                type:'post',
-	                arrayKey: '',
-	                data: {	                    
-	                    hotel_id     : hotel._id,
-	                    folder_name  : 'inventory',	                    
-	                    file         : files
-	                }
-	            }).then(function (response) {
-	                $timeout(function () {
-	                   console.log(response);
-	                   $scope.profileimages = response.data.result[0].filename;
-	                   
-	                });
-	            }, function (response) {
-	                if (response.status > 0) {
-	                    $scope.errorMsg = response.status + ': ' + response.data;
-	                }
-	            }, function (evt) {
-	                $scope.profileProgress = 
-	                    Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	            });
-	        }
-
 	    };
 
 	
@@ -8021,8 +10129,8 @@ app.controller('inventoryController', ['$scope','localStorageService','globalReq
 
 "use strict";
 
-app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService','globalRequest',
-	function($scope,$rootScope,localStorageService,globalRequest) {
+app.controller('vendingMachineCtlr', ['$scope','$rootScope','globalRequest',
+	function($scope,$rootScope,globalRequest) {
 		
 		/**********************************************************
 	    * Get item category
@@ -8032,21 +10140,25 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 
 		/**********************************************************
 	    * Get items list
-	    **********************************************************/				
-		var hotel = localStorageService.get('hotel');	
-		$scope.products = '';			
-		var request={
-                url:window.__API_PATH.GET_ITEMS,
-                method:"GET",
-                params:{hotel_id:hotel._id}
-              };
+	    **********************************************************/	
 
-        globalRequest.jotCRUD(request).then(function(response){        	
-        	if(response.status == 1)
-            {
-              $scope.products = response.result;
-            }
-        });
+		var hotel = $rootScope.activeHotelData;
+		function getItemList(){
+			$scope.products = '';			
+			var request={
+	                url:window.__API_PATH.GET_ITEMS,
+	                method:"GET",
+	                params:{hotel_id:hotel._id}
+	              };
+
+	        globalRequest.jotCRUD(request).then(function(response){        	
+	        	if(response.status == 1)
+	            {
+	              $scope.products = response.result;
+	            }
+	        });
+		}
+		getItemList();
 
         /**********************************************************
 	    * Add item in cart
@@ -8135,48 +10247,20 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 			return match;
 		};
 
-
-
-		/**********************************************************
-	    * Range slider
-	    **********************************************************/
-
-		/*$scope.slider = {
-		  minValue: 0,
-		  maxValue: 10000,		 
-		  options: {
-		    translate: function(value) {
-		      return '$' + value;
-		    },
-		    showSelectionBar: true,		    
-		    getPointerColor: function(value) {
-	            if (value <= 1000)
-	                return 'red';
-	            if (value <= 5000)
-	                return 'orange';
-	            if (value <= 10000)
-	                return 'green';
-	            return '#2AE02A';
-	        }
-		  }		  
-		};
-		$timeout(function () {
-            $scope.$broadcast('rzSliderForceRender');
-        },300);*/
-
+		
         /**********************************************************
 	    * Submit vending machine cart data
 	    **********************************************************/
 
         $scope.submitVendingDetail = function() {
         	var payment,paymentMode,cardType,cardOwner,roomNumber,paymentData,cartTags;        	
-        	var cartErrors = {itemerror:"",tagerror:"",paymenterror:"",error:false};
-        	payment        = $scope.payment_status;
-        	paymentMode    = $scope.ctlr.paymentmode;
-        	cardType 	   = $scope.ctlr.cardtype;
-        	cardOwner 	   = $scope.ctlr.cardowner;
-        	roomNumber 	   = $scope.ctlr.payment_room_number;
-        	cartTags       = $scope.cart_tags;
+        	var cartErrors    = {itemerror:"",tagerror:"",paymenterror:"",error:false};
+        	payment           = $scope.payment_status;
+        	paymentMode       = $scope.ctlr.paymentmode;
+        	cardType 	      = $scope.ctlr.cardtype;
+        	cardOwner 	   	  = $scope.ctlr.cardowner;
+        	roomNumber 		  = $scope.ctlr.payment_room_number;
+        	cartTags       	  = $scope.cart_tags;
         	$scope.cartErrors = '';
 
        		if($scope.cart.length == 0)
@@ -8206,6 +10290,7 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
        		}
         	
         	paymentData = {	payment_status:payment,detail:''};
+
         	if(payment == 'paid')
         	{
         		if(paymentMode == 'card')
@@ -8250,15 +10335,13 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','localStorageService
 			 	$scope.ctlr.cardtype = '';
 			 	$scope.ctlr.payment_room_number = '';
 			 	$scope.payment_status = '';
+			 	$scope.cart = [];
+			 	getItemList();
 			 });	          
         	
         };
 	}
 ]);
-
-
-
-
 "use strict";
 
 app.filter('productfilter',function(){
@@ -8266,16 +10349,12 @@ app.filter('productfilter',function(){
 
 		if(input)
 		{
-			/*var minPrice 		= scope.slider.minValue;
-			var maxPrice 		= scope.slider.maxValue;*/
 			var searchItemName  = scope.searchItemName;
 			var itemCategory 	= scope.itemCategory;
 
 			
 			input   =   input.filter(function( obj ) {
-						/*if(obj.price >= minPrice && obj.price <= maxPrice)
-						{*/
-
+					
 							if(!searchItemName && !itemCategory)
 							{
 								return true;
@@ -8305,7 +10384,6 @@ app.filter('productfilter',function(){
 							       return true;
 							    }
 							}
-						/*}*/
 					});
 		}
 		return input;
@@ -8394,13 +10472,13 @@ app.directive('closepopup', function($mdDialog) {
 
 "use strict";
 
-app.filter('currency',function(localStorageService) {
+app.filter('currency',function($rootScope) {
 	return function(input,scope){
-		var hotel = localStorageService.get('hotel');
+		
 		var currency;
-		if(hotel.currency)
+		if($rootScope.activeHotelData.currency)
 		{
-			currency = hotel.currency;			
+			currency = $rootScope.activeHotelData.currency;			
 
 		} else {
 
@@ -8500,6 +10578,62 @@ app.filter('groupBy', function(){
 		return filtered;
 		};
 	});
+"use strict";
+
+app.directive('ngConfirmDelete', ['$ngConfirm',
+    function($ngConfirm){
+        return {           
+            link: function (scope, element, attr) {
+                var title = attr.ngConfirmTitle || "Delete";
+                var msg = attr.ngConfirmDelete || "Are you sure?";
+
+                var clickAction = attr.confirmedClick;
+    
+                element.bind('click',function (event,id,index) {
+                    event.stopPropagation();
+                    $ngConfirm({
+                        title: title,                      
+                        content: attr.ngConfirmDelete,
+                        scope: scope,                      
+                        backgroundDismiss: true,
+                        buttons: { 
+                            ok: { 
+                                text: "Yes",
+                                btnClass: 'btn-primary themeColorClass',
+                                keys: ['enter'],
+                                action: function(scope){
+                                     scope.$eval(clickAction);
+                                }
+                            },                        
+                            cancel: function(scope){                                
+                            }
+                        },
+                    });
+                    
+                });
+            }
+        };
+}]);
+"use strict";
+
+app.filter('numberSuffix', function(){
+  return function(number){
+    if(isNaN(number) || number < 1){
+      return number;
+    } else {
+      var lastDigit = number % 10;
+      if(lastDigit === 1){
+        return number + 'st';
+      } else if(lastDigit === 2){
+        return number + 'nd';
+      } else if (lastDigit === 3){
+        return number + 'rd';
+      } else if (lastDigit > 3){
+        return number + 'th';
+      }
+    }
+  };
+});
 'use strict';
 
 app.factory('replaceOccurence', ['$http', function ($http) {
@@ -8515,12 +10649,12 @@ app.factory('replaceOccurence', ['$http', function ($http) {
 
 "use strict";
 
-app.factory('globalRequest',['$http','localStorageService','$rootScope',function($http,localStorageService,$rootScope){
+app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload','$timeout',function($http,localStorageService,$rootScope,Upload,$timeout){
 	return{
 		
-		/*************************************
+		/**************************************************
 		* Function for GET, POST, PUT, DELETE request
-		**************************************/
+		**************************************************/
 
 		jotCRUD: function(obj){
 			return $http(obj).then(function(response){
@@ -8530,6 +10664,40 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 					errors: response.data.errors
 				};
 			});
+		},
+
+
+		uploadFiles: function(hotelID,directoryName,files){
+		
+			var fileArgs;
+
+			if(hotelID)
+			{
+				fileArgs = {	                    
+								hotel_id     : hotelID,
+								folder_name  : directoryName,	                    
+								file         : files
+							};
+			} else {
+				fileArgs = {	
+								folder_name  : directoryName,	                    
+								file         : files
+							};
+			}		
+
+
+			if (files) {				
+	          return  Upload.upload({
+	                url: window.__API_PATH.UPLOAD_FILE,
+	                type:'post',
+	                arrayKey: '',
+	                data: fileArgs
+	            }).then(function (response) {
+	                return $timeout(function () {           
+	                   return response.data;	                   
+	                });
+	            });
+	        }
 		},
 
 
@@ -8543,6 +10711,7 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 							}
 				};
 
+			
 			return $http(hotelstatusrequest).then(function(response){	
 				return response.data.result;
 
@@ -8562,7 +10731,7 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 				method:"GET",
 				params:paramsData
 			};
-
+		
 			return $http(hotellistrequest).then(function(response){	
 				$rootScope.hotels = response.data.result;
 			}, function(response){
@@ -8582,8 +10751,7 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 			};
 
 			return $http(hotellistrequest).then(function(response){	
-				console.log(response.data.result);
-				localStorageService.set('hotel', response.data.result);
+				return response.data;				
 			});
 		},
 
@@ -8599,6 +10767,26 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 				$rootScope.staffList = response.data.result;
 			}, function(response){
 				$rootScope.staffList = response.data.errors;				
+			});
+		},
+
+
+		getPositionList:function(){
+				var hotel   = localStorageService.get('hotel');
+
+				var request = {
+			            url:window.__API_PATH.GET_POSITION,
+			            method:"GET",
+			            params:{
+			            	hotel_id      	:  hotel._id
+			            }
+			          };
+
+			return $http(request).then(function(response){
+				$rootScope.potisionList = response.data.result;			
+
+			}, function(response){
+				$rootScope.potisionList = response.data.errors;				
 			});
 		},
 
@@ -8719,12 +10907,14 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 
 		getJotCount:function(){
 				var hotel   = localStorageService.get('hotel');
+				var user   = localStorageService.get('user');
 
 				var request = {
 			            url:window.__API_PATH.JOT_COUNT,
 			            method:"GET",
 			            params:{
-			            	hotel_id      	:  hotel._id
+			            	hotel_id      	:  hotel._id,
+			            	contact_number  :  user.contact_number
 			            }
 			          };
 
@@ -8747,7 +10937,7 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 			            params:{
 			            	hotel_id      	:  hotel._id,
 			            	jot_type      	:  JotType,			            	
-			            	user_name  		:  userDetail.user_name
+			            	contact_number  :  userDetail.contact_number
 			            }
 			          };
 
@@ -8758,6 +10948,10 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope',function
 				$rootScope.JotListData = response.data.errors;				
 			});
 		},
+
+
+		
+
 		
 	};
 
@@ -8778,7 +10972,8 @@ app.directive('slideable', function () {
                 attrs.duration = (!attrs.duration) ? '0.7s' : attrs.duration;
                 attrs.easing = (!attrs.easing) ? 'ease-in-out' : attrs.easing;
                 element.css({
-                    'overflow': 'hidden',
+                    'overflow-x': 'hidden',
+                    'overflow-y': 'auto',
                     'height': '0px',
                     'transitionProperty': 'height',
                     'transitionDuration': attrs.duration,
@@ -8788,7 +10983,7 @@ app.directive('slideable', function () {
         }
     };
 })
-.directive('slideToggle', function() {
+.directive('slideToggle', function($timeout) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -8796,11 +10991,12 @@ app.directive('slideable', function () {
             var target = document.querySelector(attrs.slideToggle);
           
             attrs.expanded = false;
+            var y;
             element.bind('click', function() {
                 var content = target.querySelector('.slideable_content');
                 if(!attrs.expanded) {
                     content.style.border = '1px solid rgba(0,0,0,0)';
-                    var y = content.clientHeight+50;
+                    y = content.clientHeight+50;
                     content.style.border = 0;
                     target.style.height = y + 'px';
                 } else {
@@ -8808,6 +11004,20 @@ app.directive('slideable', function () {
                 }
                 attrs.expanded = !attrs.expanded;
             });
+
+            scope.$watch('files',function(newdata,olddata) {
+                $timeout(function() {
+                    if(newdata)
+                    {
+                        var fileContentHeight = target.querySelector('.uploadimage_list');
+                        fileContentHeight = fileContentHeight.clientHeight+50;                    
+                        var totalHeight = fileContentHeight+y;
+                        target.style.height = totalHeight+ 'px';
+                    }
+            },500);
+                
+           
+            } );
         }
     };
 });
@@ -8881,7 +11091,7 @@ app.filter('getmeridiem', function() {
 
 'use strict';
 
-app.factory('toastService', ['$mdToast','$timeout', function ($mdToast, $timeout) {
+app.factory('toastService', ['$mdToast','$timeout','$rootScope', function ($mdToast, $timeout,$rootScope) {
 	return{
 		alert: function(opt){
 			$mdToast.hide();	
@@ -8893,11 +11103,31 @@ app.factory('toastService', ['$mdToast','$timeout', function ($mdToast, $timeout
 				.action('x')
 				.hideDelay(3000);
 
+
 				$mdToast.show(toast).then(function(response) {
 				    if ( response == 'ok' ) {
 				    	$mdToast.hide();
 				    }
 				});
+			},1000);
+		},
+
+
+
+		errors: function(opt){
+					$rootScope.closeToast = function () {
+			            $mdToast.hide();
+			        };
+
+					$mdToast.hide();	
+					$timeout(function(){
+					var errorToast = {
+						  	  hideDelay   : 5000,
+					          position    : 'bottom right',
+					          action      : true,				         
+					          template : '<md-toast md-theme="default" class="ng-scope md-toast-error '+opt.class+'" _md md-bottom md-right md-default-theme" style=""><div class="md-toast-content"><span class="md-toast-text ng-binding" role="alert" aria-relevant="all" aria-atomic="true">'+opt.message+'</span> <button class="md-action md-button ng-scope md-default-theme md-ink-ripple" type="button" ng-click="$root.closeToast()" ng-class="highlightClasses">      x    </button></div></md-toast>'
+					};
+				$mdToast.show(errorToast);
 			},1000);
 		}
 	};

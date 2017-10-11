@@ -14,7 +14,8 @@ app.directive('slideable', function () {
                 attrs.duration = (!attrs.duration) ? '0.7s' : attrs.duration;
                 attrs.easing = (!attrs.easing) ? 'ease-in-out' : attrs.easing;
                 element.css({
-                    'overflow': 'hidden',
+                    'overflow-x': 'hidden',
+                    'overflow-y': 'auto',
                     'height': '0px',
                     'transitionProperty': 'height',
                     'transitionDuration': attrs.duration,
@@ -24,7 +25,7 @@ app.directive('slideable', function () {
         }
     };
 })
-.directive('slideToggle', function() {
+.directive('slideToggle', function($timeout) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -32,11 +33,12 @@ app.directive('slideable', function () {
             var target = document.querySelector(attrs.slideToggle);
           
             attrs.expanded = false;
+            var y;
             element.bind('click', function() {
                 var content = target.querySelector('.slideable_content');
                 if(!attrs.expanded) {
                     content.style.border = '1px solid rgba(0,0,0,0)';
-                    var y = content.clientHeight+50;
+                    y = content.clientHeight+50;
                     content.style.border = 0;
                     target.style.height = y + 'px';
                 } else {
@@ -44,6 +46,20 @@ app.directive('slideable', function () {
                 }
                 attrs.expanded = !attrs.expanded;
             });
+
+            scope.$watch('files',function(newdata,olddata) {
+                $timeout(function() {
+                    if(newdata)
+                    {
+                        var fileContentHeight = target.querySelector('.uploadimage_list');
+                        fileContentHeight = fileContentHeight.clientHeight+50;                    
+                        var totalHeight = fileContentHeight+y;
+                        target.style.height = totalHeight+ 'px';
+                    }
+            },500);
+                
+           
+            } );
         }
     };
 });

@@ -3,19 +3,6 @@
 app.controller('dashboardController', ['$scope','$location','localStorageService','$rootScope','$mdDialog','toastService','globalRequest',
 	function($scope,$location, localStorageService,$rootScope,$mdDialog,toastService,globalRequest) {
 
-		/*
-		*
-		* Redirect user if not hotel owner
-		*
-		*/	
-
-		var userDetail = localStorageService.get('user');
-		if(userDetail.role == 'staff')
-		{
-			$location.path('/dashboard/hotelboard');
-			return false;
-		}
-
 
 		/*
 		*
@@ -89,6 +76,24 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 		};
 
 
+		/*****************************************
+		* Open edit employee
+		*****************************************/	
+
+		$scope.openHotelEditForm = function($event, detail){
+			$event.stopPropagation();			
+			$mdDialog.show({
+				controller: 'hotelEditController',
+				templateUrl: '/modules/dashboard/views/edit_hotel.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{hotelDetail: detail}				
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
 		/*
 		* Function
 		*
@@ -97,10 +102,10 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 		*/
 		
 		
-		$scope.deleteHotel = function(event,hotelID){
-
-			var storedHotelID = localStorageService.get('hotel');		
-			if(storedHotelID && storedHotelID._id == hotelID)
+		$scope.deleteHotel = function(hotelID,index){
+			
+				
+			if($rootScope.activeHotelData && $rootScope.activeHotelData._id == hotelID)
 			{
 				localStorageService.remove('hotel');
 			}	
@@ -115,12 +120,15 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 				};
 			
 			globalRequest.jotCRUD(request).then(function(response){
-				if(response.success)
+				if(response.status == 1)
 				{
+					$scope.hotels.splice(index, 1);
 					var popup = {"message":response.message,"class":"success"};
 					toastService.alert(popup);
 				}
 			});		
+
+
 		};
 
 

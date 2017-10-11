@@ -15,25 +15,21 @@
 				<!-- <div class="dash_pro_inform_hd">Add Department</div> -->
 			</div>
 			<div class="dash_pro_inform_inner boxunoversal">
-				<div class="row">
+				<div class="row aligninput">
 					<div class="col-sm-6">
-						<md-input-container md-no-float class="md-block">
-					            <input  ng-model="department_name" placeholder="Department Name">
+						<md-input-container  class="md-block">
+					            <input  ng-model="department_name" placeholder="Department Name" ng-required="true">
 					            
 					    </md-input-container>
 					</div>
-					<div class="col-sm-4">
-						<md-input-container md-no-float class="md-block">
+					<div class="col-sm-6">
+						<md-input-container  class="md-block">
 					            <input  ng-model="abbreviation" placeholder="Abbreviation">
 					    </md-input-container>
 					</div>
-					<div class="col-sm-2">
-						<md-input-container md-no-float class="md-block">
-							 <input colorpicker colorpicker-fixed-position="true" colorpicker-position="bottom" type="text" ng-model="bgcolor"  style="background: {{bgcolor}}" placeholder="Select background color" />
-						</md-input-container>	
-					</div>
+					
 					<div class="col-sm-12">
-						<md-input-container md-no-float class="md-block">
+						<md-input-container  class="md-block">
 							 <input  ng-model="description" placeholder="Description">
 						</md-input-container>	
 					</div>
@@ -44,16 +40,6 @@
 					</div>						
 				</div>
 
-				<div class="message {{departmentEditResult.class}}" ng-if="departmentEditResult.status == 1">{{departmentEditResult.message}}
-			</div>
-			
-			<div class="result {{departmentEditResult.class}}" ng-if="departmentEditResult.status == 2">  
-                <ul>
-                  <li ng-repeat="(key,value) in departmentEditResult.errors">
-                  {{value.message}}
-                  </li>
-                </ul>
-            </div>
 			</div>
 		</form>
 	</div>

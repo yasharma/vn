@@ -45,7 +45,7 @@
 .panel.faqaccord{border-radius: 0;-webkit-border-radius: 0; box-shadow: none; -webkit-box-shadow: none; border: 1px solid #ddd;}
 .panel.faqaccord+.panel{margin-top: 10px;}
 .panel.faqaccord .panel-heading{border-radius: 0;-webkit-border-radius: 0;padding: 14px 15px}
-.panel.faqaccord .panel-heading .panel-title a{font-size: 19px;line-height: 26px; color: #4f4f4f; font-weight: 400;}
+.panel.faqaccord .panel-heading .panel-title a,.accord_heading{font-size: 19px;line-height: 26px; color: #4f4f4f; font-weight: 400;}
 .panel.faqaccord .panel-heading .panel-title ng-md-icon{vertical-align: top; font-weight: 600; margin-right: 10px; margin-top: -2px; color: #4ebdf6;}
 .panel.faqaccord.panel-open .panel-body{background: #4ebdf6;}
 .panel.faqaccord.panel-open .panel-body p{color: #fff; font-size: 15px; line-height: 22px; margin-bottom: 20px;}

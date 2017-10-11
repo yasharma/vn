@@ -1,99 +1,112 @@
-<div class="dash-main-con">	
-	<section class="dashrightsection" ng-class="{'leftopen':$root.leftopen}" ng-style="{'padding-left': isAuth.headerType =='hotel_header'?'20px':'','margin-left': isAuth.headerType =='hotel_header'?'0':'' }"  ng-class="{'leftopen':leftopen}">
+<div class="dash-main-con aligninput">	
+	<section class="dashrightsection" ng-style="{'padding-left': isAuth.headerType =='hotel_header'?'20px':'','margin-left': isAuth.headerType =='hotel_header'?'0':'' }"  ng-class="{'leftopen':leftopen}">
 		
-		<div class="dash_hd_txt" layout="row" layout-align="space-between center">
+		<!-- <div class="dash_hd_txt" layout="row" layout-align="space-between center">
 			<div class="dash_hd">Profile</div>
-		</div>
+		</div> -->
 		<div class="dash_pro_top">
 			<div class="dash_pro_top_inner positionrel" style="background: url(' assets/images/coverpic.jpg') 0 0 no-repeat; background-size: cover;">
 				<div class="dash_pro_top_gradint"></div>
-				<div class="dash_pro_top_dp">
-					<img class="width100" src="assets/images/pro_dp.jpg">
-					<span class="chkgedp">
-						<input type="file" class="chkgedp_up" name="">
-						<ng-md-icon icon="edit" style="fill: #fff" size="18"></ng-md-icon> 
+				<div class="dash_pro_top_dp" style="    background: #fff;">			
+
+					<img class="width100" src="{{($root.currentUser.profile_image)?'images/profile_image/'+$root.currentUser.profile_image:'assets/images/default_profile.png'}}">
+					<span class="chkgedp" style="cursor: pointer;" ngf-select ="uploadprofileImage($files, $invalidFiles)" ngf-resize="{width: 90, height: 90}" ng-model="profile_image" ngf-max-size="5MB">						
+						<ng-md-icon  icon="edit" style="fill: #fff" size="18"></ng-md-icon> 
 					</span>
 				</div>
-				<div class="dash_pro_top_cover">
+				<div class="dash_pro_top_cover" style="width: 203px;">
 					<md-button class="md-primary addyellobtn bluebtn" >update cover photo</md-button>  
 				</div>
 			</div>
 		</div>
-		<div class="dash_pro_inform">
+
+		<!-- View Information -->
+		<div class="dash_pro_inform" ng-hide = "enableEdit">
 			<div class="clearfix">
-				<div class="dash_pro_inform_hd">Information
+				<div class="dash_pro_inform_hd">Profile Information
 					<div class="dash_pro_inform_edit">
-						<md-button class="md-primary addyellobtn yellowbtn">EDIT PROFILE</md-button>  
+						<md-button class="md-primary addyellobtn yellowbtn" ng-click="enableEdit = true">EDIT PROFILE</md-button>  
 					</div>
 				</div>
 			</div>
 			<div class="dash_pro_inform_inner md-whiteframe-8dp">
 				<div class="row mar-bot15">
 					<div class="col-xs-3">
-						<div class="infotxt">Name</div>
+						<div class="infotxt">Full Name</div>
 					</div>
 					<div class="col-xs-9">
-						<div class="infotxtright">Alex Ryan</div>
+						<div class="infotxtright">{{$root.currentUser.first_name+' '+$root.currentUser.last_name}}</div>
 					</div>
 				</div>
-				<div class="row mar-bot15">
-					<div class="col-xs-3">
-						<div class="infotxt">Age</div>
-					</div>
-					<div class="col-xs-9">
-						<div class="infotxtright">52</div>
-					</div>
-				</div>
-				<div class="row mar-bot15">
-					<div class="col-xs-3">
-						<div class="infotxt">Gender</div>
-					</div>
-					<div class="col-xs-9">
-						<div class="infotxtright">Male</div>
-					</div>
-				</div>
+
+				
+				
 				<div class="row mar-bot15">
 					<div class="col-xs-3">
 						<div class="infotxt">Email</div>
 					</div>
 					<div class="col-xs-9">
-						<div class="infotxtright">Male</div>
+						<div class="infotxtright">{{$root.currentUser.email}}</div>
 					</div>
 				</div>
-				<div class="row mar-bot15">
-					<div class="col-xs-3">
-						<div class="infotxt">Email</div>
-					</div>
-					<div class="col-xs-9">
-						<div class="infotxtright">alexxxryan@test.com</div>
-					</div>
-				</div>
+				
 				<div class="row mar-bot15">
 					<div class="col-xs-3">
 						<div class="infotxt">Contact</div>
 					</div>
 					<div class="col-xs-9">
-						<div class="infotxtright">8989898989</div>
+						<div class="infotxtright">{{$root.currentUser.contact_number}}</div>
 					</div>
-				</div>
-				<div class="row mar-bot15">
-					<div class="col-xs-3">
-						<div class="infotxt">Preferred Location</div>
-					</div>
-					<div class="col-xs-9">
-						<div class="infotxtright">England</div>
-					</div>
-				</div>
-				<div class="row mar-bot15">
-					<div class="col-xs-3">
-						<div class="infotxt">Address</div>
-					</div>
-					<div class="col-xs-9">
-						<div class="infotxtright">122 b Lorem ipsum, Street 2B, London, Uk</div>
-					</div>
-				</div>
+				</div>				
+				
 			</div>
 		</div>
+
+		<!-- Edit Information -->
+
+		<div class="dash_pro_inform" ng-show = "enableEdit">
+		<form name="updateProfileInfoform" ng-submit="updateProfileInfo(updateProfileInfoform.$valid)" novalidate>
+			<div class="clearfix">
+				<div class="dash_pro_inform_hd">Profile Information
+					
+				</div>
+			</div>
+			<div class="dash_pro_inform_inner md-whiteframe-8dp">
+				<div class="row mar-bot15">	
+								
+					<div class="col-xs-3">
+						<md-input-container  class="md-block">
+					            <input  ng-model="first_name" placeholder="First Name ">
+					             
+					    </md-input-container>
+					</div>
+
+					<div class="col-xs-3">
+						<md-input-container  class="md-block">
+					            <input  ng-model="last_name" placeholder="Last Name ">
+					             
+					    </md-input-container>
+					</div>
+
+					<div class="col-xs-4">
+						<md-input-container  class="md-block">
+					            <input  ng-model="email" placeholder="Email">					             
+					    </md-input-container>
+					</div>
+
+					<div class="col-xs-2">
+						<div class="dash_pro_inform_edit">
+							<md-button type = "submit" class="md-primary addyellobtn yellowbtn" ng-click="enableEdit = false">Save</md-button>  
+						</div>
+					</div>
+					
+				</div>								
+				
+			</div>
+			</form>
+		</div>
+
+		<br>
 		<div class="dash_pro_inform">
 			<div class="clearfix">
 				<div class="dash_pro_inform_hd">Change Password</div>
@@ -101,27 +114,27 @@
 			<div class="dash_pro_inform_inner md-whiteframe-8dp">
 				<div class="row">
 					<div class="col-sm-4">
-						<md-input-container md-no-float class="md-block">
-					            <input  ng-model="user.hotelName" placeholder="Paradise sun ">
+						<md-input-container  class="md-block">
+					            <input  type="password" ng-model="old_password" placeholder="Old Password" autocomplete="off">
 					    </md-input-container>
 					</div>
 					<div class="col-sm-4">
-						<md-input-container md-no-float class="md-block">
-					            <input  ng-model="user.hotelName1" placeholder="Paradise sun ">
+						<md-input-container class="md-block">
+					            <input type="password"  ng-model="new_password" placeholder="New Password" autocomplete="off">
 					    </md-input-container>
 					</div>
 					<div class="col-sm-4">
-						<md-input-container md-no-float class="md-block">
-					            <input  ng-model="user.hotelName2" placeholder="Paradise sun ">
+						<md-input-container  class="md-block">
+					            <input type="password"  ng-model="confirm_password" placeholder="Confirm Password" autocomplete="off">
 					    </md-input-container>
 					</div>
 				</div>
 				<div class="clearfix">
 					<div class="chane_pass_btn">
-						<md-button class="md-primary addyellobtn bluebtn">CHANGE PASSWORD</md-button>  
+						<md-button type="submit" ng-click="changePassword()" class="md-primary addyellobtn bluebtn">CHANGE PASSWORD</md-button>  
 					</div>
 					<div class="chane_pass_btn">
-						<md-button class="md-primary addyellobtn widthauto graybtn ">Cancel</md-button>
+						<md-button ng-click="cancelChangePassword()" class="md-primary addyellobtn widthauto graybtn ">Cancel</md-button>
 					</div>	
 				</div>
 			</div>

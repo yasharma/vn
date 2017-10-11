@@ -1,4 +1,4 @@
-<md-dialog class="newhotel_dialog">
+<md-dialog class="newhotel_dialog aligninput">
   <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>{{jot_title}}</h2>
@@ -14,40 +14,15 @@
           <div class="edit_water_left backgounnonepad0">
             <div class="edit_water_left_outer">
               <div class="room_edit">
-                <p> {{$root.jot_description}}    <a class="edit_link" ng-hide="showDesc" ng-click="showDesc = !showDesc" href="javaScript:void(0);">Edit</a></p>
-
+                <p ng-hide="showDesc"> {{$root.jot_description}}    <a class="edit_link" ng-click="showDesc = !showDesc" href="javaScript:void(0);">Edit</a></p>
               </div>
 
 
-              <!-- Start save jot description -->
-              <ul class="uploadimage_list clearfix">
-                  <li ng-repeat="files in edit_jot.image" ng-hide="hideattachment" ng-if="files.filename"> 
+              <div class="hotelDesc-in-comment" ng-class="{expandDesc:showDesc}" > 
 
-                      <div class="col-lg-4 col-md-4" style="height:100%">
-                          <img src="images/hotel/{{edit_jot.hotel_id}}/{{edit_jot.jot_type}}/{{files.filename}}" style="max-width: 100%" ng-if='files.type == "image/jpeg"'>            
-
-                          <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-if='files.type=="application/pdf"'' icon="picture_as_pdf" class="cursor"  size="22" ng-click="removeImageIndex($index);">
-                          </ng-md-icon>
-                      </div>
-
-                      <div class="col-lg-6 col-md-6">
-                        <strong> 
-                        <a href="/images/hotel/{{edit_jot.hotel_id}}/{{edit_jot.jot_type}}/{{files.filename}}" target="_blank">
-                        {{files.filename}} {{files.type}} 
-                        </a></strong>
-                        <div class="attachment_list_icon">
-                          <a href="javaScript:void(0)" ng-click="deleteAttachment(files.$$hashKey);  hideattachment = ! hideattachment">Delete</a>
-                        </div>
-                      </div>
-                      <div class="clearfix"></div>                     
-                  </li>               
-              </ul>
-
-              <!-- <div class="clearfix" ng-include="'/modules/jot/views/attachment_list.html'"></div> -->
-
-              <div class="hotelDesc-in-comment" ng-class="{expandDesc:showDesc}" >             
+                <div class="clearfix" ng-include="'/modules/jot/views/attachment_list.html'"></div>
                 <div class="clearfix" ng-include="'/modules/jot/views/jot_desc.html'"></div>
-                <div class="chane_pass_btn">
+                <div class="chane_pass_btn" style="    margin-bottom: 15px">
                    <a href="javascript:void(0)" ng-click="saveDescription()" class="custom-button">Save</a>
                   </div>
 
@@ -55,7 +30,263 @@
                     <md-button ng-click="cancelDesc(); showDesc = !showDesc" class="md-primary addyellobtn widthauto graybtn ">Cancel</md-button>
                 </div>
                 <br>
+                <div class="clearfix"></div>
               </div>
+
+            <div class="room_edit"  ng-show="assigned_departments.length">
+              <div class="addtxt">Departments</div>
+
+              <ul class="taginglist min_height29 clearfix" style="margin: 0px 18px 10px 0px">
+                <li ng-repeat="jottag in assigned_departments" class="capitalize"   ng-if="($root.departmentList | filter : {abbreviation : jottag } : true).length">
+
+                {{($root.departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
+                 </li>                      
+              </ul>
+            </div>
+
+
+            <div class="room_edit" ng-show="assigned_members.length">
+              <div class="addtxt">Members</div>
+
+
+              <ul class="taginglist min_height29 clearfix" style="margin: 0px 18px 10px 0px">
+                <li ng-repeat="member in assigned_members" class="capitalize"  ng-if="($root.staffList | filter:{user_name:member}).length">
+
+                {{($root.staffList | filter:{user_name:member})[0].first_name+' '+($root.staffList | filter:{user_name:member})[0].last_name}}
+                 </li>                      
+              </ul>
+            </div>
+
+
+             <div class="room_edit add_hotel_room_proty clearfix capitalize" style=" background: #ddd;padding: 10px;">
+            
+              <label class="capitalize"  style="width: 100px;">Priority: </label><span class="highttag capitalize {{$root.priority}}">{{$root.priority}}</span><br><br>
+
+              <label class="capitalize" style="width: 96px;">Satus:</label>  <span class="yellowtag capitalize status {{$root.status}}" style="float: none;">{{$root.status}}</span>
+
+
+            </div>
+
+
+             <div class="room_edit clearfix capitalize" style=" background: #ddd;padding: 10px;" ng-if="task_type && $root.directory =='task'">
+           
+
+              <div ng-if="task_type && task_type.type == 'onetime'">
+                <div class="addtxt">One Time</div> 
+                {{task_type.date | date: 'MMM d, y'}}         
+              </div>
+
+
+
+              <div ng-if="task_type.type == 'recurring'">
+
+                  <div class="addtxt capitalize">{{task_type.pattern.type}} Recurring</div> 
+
+                  <label class="capitalize">Start Date: </label>&nbsp; {{task_type.start_date | date: 'MMM d, y'}}<br>          
+                  <label class="capitalize">End Date: </label>&nbsp; {{task_type.end_date | date: 'MMM d, y'}}<br> 
+
+                           
+                  <label ng-if="task_type.pattern.type == 'daily' || task_type.pattern.type == 'weekly'" class="capitalize" >{{task_type.pattern.days.join(", ")}} </label><br>
+
+                   <div ng-if="task_type.pattern.type == 'yearly' || task_type.pattern.type == 'monthly'"> 
+                    <label class="capitalize">Recurring Pattern: </label>&nbsp;
+                    
+                    On
+
+                    {{task_type.pattern.date | numberSuffix}}  
+                     {{
+                         (task_type.pattern.month)
+                         ?(getMonthList | filter:{value:task_type.pattern.month}:true)[0].label
+                         : '' 
+                    }}
+                     of every {{(task_type.pattern.type == 'yearly')?"Year":"Month"}}
+                     
+                    </div>           
+                    
+              </div>
+
+
+            </div>
+
+
+
+             <div class="room_edit capitalize" ng-if="$root.directory !='task'">
+                 <div class="addtxt">Due Date</div> 
+                 {{$root.due_date| date: 'MMM d, y'}}      
+          
+            </div>
+
+
+
+
+
+              <!-- Start main checklist -->
+
+              <ul class="parantchecklist">
+                <br>
+                <li ng-repeat="checklistParent in checklist track by $index" ng-init="parentIndex = $index">            
+
+                    <ng-md-icon icon="check_box" style="fill: #ccc" size="24"></ng-md-icon>
+                        <label ng-click="ctlr.editParent[parentIndex] = !ctlr.editParent[parentIndex]; ChangedParenrItem = checklistParent.checklist_name" ng-hide="ctlr.editParent[parentIndex]">{{checklistParent.checklist_name}}   </label>             
+
+
+
+                         <!-- Start edit checklist name -->  
+
+                        <div class="clearfix sublists_container editList" ng-show="ctlr.editParent[parentIndex]">
+                      <md-input-container class="md-block" style="margin-top: 0;">
+                          <input aria-label="Checklist subitem"
+                          md-no-float class="md-block" ng-model="ChangedParenrItem">
+                      </md-input-container>         
+                    
+                      <div class="pull-left">
+                          <md-button  ng-click="editParentList(parentIndex,ChangedParenrItem)" class="md-primary addyellobtn bluebtn">Save</md-button>
+                      </div>
+                      <div class="pull-left">
+                          <md-button ng-click="ctlr.editParent[parentIndex] = false;" class="md-primary addyellobtn bluebtn">Cancel</md-button>
+                      </div>
+
+                      <div class="pull-left">
+                        
+                          <md-button ng-click="deleteChecklist(parentIndex)" class="md-primary addyellobtn bluebtn">Delete</md-button>
+                        
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                  <!-- End edit checklist name -->  
+
+
+                  <div class="clearfix"></div>
+                        <div class="col-sm-11"  style="padding-left: 3px;padding-right: 0;">
+                          <div class="checklist_loader_container">
+                         
+                            <div class="checklist_loader" style="width: {{(100/checklistParent.item_list.length)*((checklistParent.item_list | filter:{status:1}).length)}}%"></div>
+
+                          </div>  
+                          </div>
+                          <div class="col-sm-1" style="padding-right: 0;margin: 9px 0;text-align: right;">
+                           {{
+                            (checklistParent.item_list.length == 0)
+                            ? '0'
+                            : (100/checklistParent.item_list.length)*((checklistParent.item_list | filter:{status:1}).length)  | number:0
+                          }}%
+                           </div>
+                          <div class="clearfix"></div>
+
+
+
+                      <!-- Start Sub item of checklist -->
+                      
+                  <ul class="sublist">
+                      <li ng-repeat="subItem in checklistParent.item_list"> 
+
+                              <md-checkbox aria-label ="checklist"  ng-model="ctlr.sublist[parentIndex][$index]" ng-true-value='true' ng-false-value="false" ng-change="storeChecklist(parentIndex,$index,ctlr.sublist[parentIndex][$index])" ng-checked="{{(subItem.status==1)?true:false}}">
+                            </md-checkbox>
+
+                            <label ng-click="ctlr.editList[parentIndex][$index] = !ctlr.editList[parentIndex][$index]; ChangedSubItem = subItem.name;" ng-hide="ctlr.editList[parentIndex][$index]">{{subItem.name}}</label>
+
+
+                            <!-- Start edit sublist item -->
+
+                            <div class="clearfix sublists_container editList" ng-show="ctlr.editList[parentIndex][$index]">
+                          <md-input-container class="md-block"  style="margin-top: 0;">
+                              <input aria-label="Checklist subitem"
+                              md-no-float class="md-block" ng-model="ChangedSubItem">
+                          </md-input-container>           
+                        
+                          <div class="pull-left">
+                              <md-button  ng-click="editSubItem(parentIndex,subItem.name,ChangedSubItem,$index)" class="md-primary addyellobtn bluebtn">Save</md-button>
+                          </div>
+                          <div class="pull-left">
+                              <md-button ng-click="ctlr.editList[parentIndex][$index] = false;" class="md-primary addyellobtn bluebtn">Cancel</md-button>
+                          </div>
+
+                          <div class="pull-left">
+                              <md-button ng-click="deleteSublistItem(parentIndex,subItem.name,$index)" class="md-primary addyellobtn bluebtn">Delete</md-button>
+                          </div>
+                        </div>
+
+                        <!-- End edit sublist item -->
+
+
+                      </li>
+                  </ul>
+                  <!-- End Sub item of checklist -->
+                  <div class="sublists">
+                  <div class="">
+
+                    <!-- Start add sub item in checklist -->  
+                  
+                    <a href="javascript:void(0)" ng-click="subitemOnOff = !subitemOnOff;" ng-hide="subitemOnOff">Add an item...</a>
+
+                     <div class="clearfix sublists_container" ng-show="subitemOnOff">
+                      <md-input-container class="md-block">
+                          <input aria-label="Checklist subitem"
+                          md-no-float class="md-block" ng-model="ctlr.checklist_subitem[$index]" placeholder="Add an Item...">
+                      </md-input-container>
+                      
+                    
+                    <div class="pull-left">
+                        <md-button ng-click="addChecklistSubitem($index,ctlr.checklist_subitem[$index])" class="md-primary addyellobtn bluebtn">Add Subitem</md-button>
+                    </div>
+
+                    <div class="pull-left">
+                        <md-button ng-click="subitemOnOff = false; ctlr.checklist_subitem[$index] = ''" class="md-primary addyellobtn bluebtn">Cancel</md-button>
+                    </div>
+                    </div>
+                  </div>
+                  </div>
+                  <!-- End add sub item in checklist -->
+                    <div class="clearfix"></div>
+                </li>
+            </ul> 
+
+
+            <div class="chane_pass_btn" ng-if="checklist.length">
+                    <md-button ng-click="saveChecklist()" class="md-primary addyellobtn yellowbtn">Save Checklist</md-button> 
+                    <br> 
+            </div>
+
+              <!-- End checklist -->             
+
+
+              <!-- Start save jot description -->
+              <ul class="uploadimage_list_edit clearfix" ng-show="edit_jot.image.length > 0"> 
+
+                  <li ng-repeat="files in edit_jot.image track by $index" ng-hide="hideattachment" ng-if="files.filename"> 
+                    <div class="uploadimage_list_edit_img" ng-switch="files.type">
+                       <img src="images/hotel/{{edit_jot.hotel_id}}/{{edit_jot.jot_type}}/{{files.filename}}" style="max-width: 100%" ng-switch-when="image/jpeg">     
+
+                          <img src="images/hotel/{{edit_jot.hotel_id}}/{{edit_jot.jot_type}}/{{files.filename}}" style="max-width: 100%" ng-switch-when="image/png">       
+
+                          <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-when="application/pdf" icon="picture_as_pdf" class="cursor"  size="22">
+                          </ng-md-icon>
+
+                          <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-default  icon="insert_drive_file" class="cursor"  size="22">
+                    </div>
+
+                    <div class="uploadimage_list_edit_itxt">
+                      <strong>
+                        <a href="/images/hotel/{{edit_jot.hotel_id}}/{{edit_jot.jot_type}}/{{files.filename}}" target="_blank">
+                        {{files.filename}} </a></strong>
+                     <!--  <div class="attachment_list_icon">
+                            <a href="javaScript:void(0)" ng-click="deleteAttachment(files.$$hashKey);  hideattachment = ! hideattachment">Delete</a>
+                      </div> -->
+
+                      <div class="attachment_list_icon">
+                            <a href="javaScript:void(0)"    confirmed-click="deleteAttachment(files)" ng-confirm-title="Delete Attachment" ng-confirm-delete="Are you sure you want to remove this attachment.">Delete</a>
+                      </div>
+
+                    </div>
+                    <div class="clearfix"></div>                     
+                </li>   
+
+
+              </ul>
+
+              <!-- <div class="clearfix" ng-include="'/modules/jot/views/attachment_list.html'"></div> -->
+
+             
 
 
 
@@ -69,22 +300,40 @@
 
               <!-- Start save jot comment -->
 
-              <ul class="uploadimage_list clearfix">
-                  <li ng-repeat="f in files" ng-hide="hideattachment"> 
+              <ul class="uploadimage_list_edit clearfix"> 
 
-                      <div class="col-lg-4 col-md-4" style="height:100%">
-                          <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" style="max-width: 100%;">
-                      </div>
+                  <li ng-repeat="files in Commentfiles" ng-hide="hideattachment"> 
+                    <div class="uploadimage_list_edit_img" ng-switch="files.type">
+                        <img ngf-thumbnail="files" style="max-width: 100%" ng-switch-when="image/jpeg">     
 
-                      <div class="col-lg-6 col-md-6">
-                        <strong>{{f.name}} {{f.$errorParam}}</strong>
-                        <div class="attachment_list_icon">
-                          <a href="javaScript:void(0)" ng-click="hideattachment = ! hideattachment">Delete</a>
-                        </div>
+                          <img ngf-thumbnail="files" ng-switch-when="image/png">       
+
+                          <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-when="application/pdf" icon="picture_as_pdf" class="cursor"  size="22">
+                          </ng-md-icon>
+
+                          <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-default  icon="insert_drive_file" class="cursor"  size="22">
+                    </div>
+
+                    <div class="uploadimage_list_edit_itxt">
+                      <strong>                       
+                        {{files.name}}
+                        </strong>
+
+                      <div class="attachment_list_icon">
+                            <a href="javaScript:void(0)" ng-click="deleteCommentAttachment(files.$$hashKey);  hideattachment = ! hideattachment">Delete</a>
                       </div>
-                      <div class="clearfix"></div>                     
-                  </li>               
+                    </div>
+                    <div class="clearfix"></div>                     
+                </li>   
+
+
               </ul>
+
+
+
+
+
+
 
               <div class="room_edit">
                
@@ -94,7 +343,7 @@
                     <div class="attctfield">
                       <ng-md-icon class="cursor" ngf-select ="uploadFiles($files, $invalidFiles,'comment')" multiple ng-model="file"   ngf-max-size="5MB"  title="Add an attachment" icon="attach_file" style="fill:#c1c1c1" size="24"></ng-md-icon> 
                     </div>
-                    <div class="clearfix">
+                    <div class="clearfix" >
                       <div class="chane_pass_btn">
                         <md-button type="submit"  class="md-primary addyellobtn yellowbtn">Send</md-button>  
                       </div>
@@ -108,13 +357,16 @@
               </div>
               <!-- End save jot comment -->
 
+
+
+
               <div class="room_edit_new" ng-if="commentList.length > 0">
                 <div class="addtxt">Activity</div>
                 <ul class="activity_list">
 
-                  <li ng-repeat = "comment in commentList">
+                  <li ng-repeat = "comment in commentList | orderBy:'_id':true">
                     <div class="acti_pic">
-                    <img style="width: 35px;" src="{{(comment.userdata[0].profile_image)?'/images/hotel/'+edit_jot.hotel_id+'/profile/'+comment.userdata[0].profile_image:'/assets/images/default_profile.png'}}">
+                    <img style="width: 35px;" src="{{(comment.userdata.profile_image)?'/images/hotel/'+edit_jot.hotel_id+'/profile/'+comment.userdata.profile_image:'/assets/images/default_profile.png'}}">
 
 
                     </div>
@@ -156,46 +408,162 @@
             <div class="addtxt">Add</div>
             <ul class="edit_water_right_list clearfix">
                 <li>
-                  <a href="javaScript:void(0);" ng-click="showMember = !showMember">
-                    <ng-md-icon icon="person" size="20" ></ng-md-icon>Member
+                  <a href="javaScript:void(0);" ng-click="showDept = taskpattern = showChecklistAdd = dDate = prior = false; showMember = !showMember">
+                    <ng-md-icon icon="person" size="20" ></ng-md-icon>Members
                   </a>
 
-                  <div class="right_edit_section" ng-show="showMember">           
+                  <div class="right_edit_section" ng-show="showMember"> 
+
+                    <div class="quick_edit_small_section_header">
+                     <span class="quick_edit_section_title"> Change Members</span>
+                    <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = taskpattern = dDate = showChecklistAdd = prior = false"></ng-md-icon> 
+                    </div>   
+
                       <div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
-                      <div class="chane_pass_btn">
+
+
+                       <ul class="quick_member_list">
+                          <li ng-repeat="member in $parent.staffList"  title="{{member.first_name+' '+member.last_name}}">
+                            <div class="quick_member" ng-click="selectStaff(member.user_name)">
+                            {{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+                            </div>
+                            </li>
+                        </ul>
+
+
+                      <div class="chane_pass_btn comment_btns">
                          <a href="javascript:void(0)" ng-click="saveMember();showMember = !showMember" class="custom-button">Save</a>
                         </div>
-
-                      <div class="chane_pass_btn">
+                      <div class="chane_pass_btn comment_btns">
                           <md-button ng-click="showMember = !showMember" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
                       </div>
                       <br>
                   </div>
-
-
                 </li>
+
                 <li>
-                  <a href="javaScript:void(0);" ng-click="dDate = !dDate">
+                  <a href="javaScript:void(0);" ng-click="showMember = taskpattern = dDate = showChecklistAdd = prior = false; showDept = !showDept">
+                    <ng-md-icon icon="next_week" size="20"></ng-md-icon>Departments
+                  </a>
+
+                  <div class="right_edit_section" ng-show="showDept">  
+
+                    <div class="quick_edit_small_section_header">
+                     <span class="quick_edit_section_title"> Change Department</span>
+                    <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = taskpattern = showChecklistAdd = dDate = prior = false"></ng-md-icon> 
+                    </div> 
+
+                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+                      
+
+                      <ul class="taginglist min_height29 clearfix">
+                          <li ng-repeat="dept in $parent.departmentList"  title="{{dept.department_name}}" ng-click="selectDept(dept.abbreviation)">
+                            
+                            {{dept.abbreviation}}
+                            
+                            </li>
+                        </ul>
+
+                      <div class="chane_pass_btn comment_btns">
+                         <a href="javascript:void(0)" ng-click="saveDept();showDept = !showDept" class="custom-button">Save</a>
+                        </div>
+
+                      <div class="chane_pass_btn comment_btns">
+                          <md-button ng-click="showDept = !showDept" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
+                      </div>
+                      <br>
+                  </div>
+                </li>
+
+                <li  ng-if="$root.directory !='task'">
+                  <a href="javaScript:void(0);" ng-click="showMember =  taskpattern = showChecklistAdd = showDept = prior = false; dDate = !dDate">
                     <ng-md-icon icon="date_range" size="20"></ng-md-icon>Due Date
                   </a>
 
-                  <div class="right_edit_section" ng-show="dDate">           
+                  <div class="right_edit_section" ng-show="dDate">
+
+                    <div class="quick_edit_small_section_header">
+                     <span class="quick_edit_section_title"> Change Date</span>
+                    <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = taskpattern = showChecklistAdd =  dDate = prior = false"></ng-md-icon> 
+                    </div> 
+
                       <div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
-                      <div class="chane_pass_btn">
+                      <div class="chane_pass_btn comment_btns">
                          <a href="javascript:void(0)" ng-click="saveDueDate();dDate = !dDate" class="custom-button">Save</a>
                         </div>
 
-                      <div class="chane_pass_btn">
+                      <div class="chane_pass_btn comment_btns">
                           <md-button ng-click="dDate = !dDate" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
                       </div>
                       <br>
                   </div>
-
                 </li>
+
+
+                <li  ng-if="$root.directory =='task'">
+                  <a href="javaScript:void(0);" ng-click="showMember = showChecklistAdd = showDept = prior  = dDate = false; taskpattern = !taskpattern">
+
+                    <ng-md-icon icon="date_range" size="20"></ng-md-icon>Pattern
+                  </a>
+
+                  <div class="right_edit_section" ng-show="taskpattern">
+
+                    <div class="quick_edit_small_section_header">
+                     <span class="quick_edit_section_title"> Change Task Pattern</span>
+                    <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = showChecklistAdd = dDate = prior = taskpattern = false"></ng-md-icon> 
+                    </div> 
+
+                      <div class="clearfix editpopup" ng-include="'/modules/jot/views/task_datepicker.html'"></div>
+
+                      <div class="chane_pass_btn comment_btns">
+                         <a href="javascript:void(0)" ng-click="savePattern();taskpattern = !taskpattern" class="custom-button">Save</a>
+                        </div>
+
+                      <div class="chane_pass_btn comment_btns">
+                          <md-button ng-click="taskpattern = !taskpattern" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
+                      </div>
+                      <br>
+                  </div>
+                </li>
+
+
+
+                <!-- Checklist -->
+
+
                 <li>
-                  <a href="javascript:;">
+                  <a href="javascript:void(0);"  ng-click="showMember = taskpattern = showDept = prior = dDate = false;  showChecklistAdd = ! showChecklistAdd">
                     <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Checklist
                   </a>
+
+                  <div class="right_edit_section" ng-show="showChecklistAdd">  
+
+                    <div class="quick_edit_small_section_header">
+                     <span class="quick_edit_section_title"> Add Checklist</span>
+                    <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = taskpattern = dDate = prior = showChecklistAdd = false"></ng-md-icon> 
+                    </div>
+                    
+                      <div class="col-md-12 clearfix">
+                        <md-input-container class="md-block">
+                            <input aria-label="Checklist Title"
+                            md-no-float class="md-block" ng-model="checklist_heading">              
+                        </md-input-container>       
+
+                      </div>
+
+
+                      <br>
+                      <div class="chane_pass_btn comment_btns">
+                         <a href="javascript:void(0)" ng-click="showChecklistAdd = false; addchecklist();" class="custom-button">Save</a>
+                      </div>
+
+                      <div class="chane_pass_btn comment_btns">
+                          <md-button ng-click="showChecklistAdd = !showChecklistAdd" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
+                      </div>
+                      <br>
+                  </div>
+
+
                 </li>
                 <li>
                   <a href="javaScript:void(0);" ngf-select ="uploadFiles($files, $invalidFiles,'sidebar')" multiple ng-model="file"   ngf-max-size="5MB"  title="Add an attachment" icon="attach_file" style="fill:#c1c1c1">
@@ -203,51 +571,48 @@
                   </a>
                 </li>
             </ul>  
+
             <div class="addtxt mar-top20">Actions</div>
               <ul class="edit_water_right_list clearfix">  
-                <li>
-                  <a href="javaScript:void(0);" ng-click="move = !move">
-                    <ng-md-icon icon="next_week" size="20"></ng-md-icon>Move
-                  </a>
-
-                  <div class="right_edit_section" ng-show="move">           
-                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
-                      <div class="chane_pass_btn">
-                         <a href="javascript:void(0)" ng-click="saveDept();move = !move" class="custom-button">Save</a>
-                        </div>
-
-                      <div class="chane_pass_btn">
-                          <md-button ng-click="move = !move" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
-                      </div>
-                      <br>
-                  </div>
-
-                </li>
+                
 
                 <li>
-                  <a href="javaScript:void(0);" ng-click="prior = !prior">
+                  <a href="javaScript:void(0);" ng-click="showMember = taskpattern = showChecklistAdd = showDept = dDate = false; prior = !prior">
                     <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Set Priority
                   </a>
 
-                  <div class="right_edit_section" ng-show="prior">           
-                      <div class="clearfix" ng-include="'/modules/jot/views/priority.html'"></div>
+                  <div class="right_edit_section" ng-show="prior">  
+
+                    <div class="quick_edit_small_section_header">
+                     <span class="quick_edit_section_title"> Change Priority</span>
+                    <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = taskpattern = showChecklistAdd = dDate = prior = false"></ng-md-icon> 
+                    </div>
+
+                      <div class="clearfix" ng-include="'/modules/jot/views/priority.html'"  style="position:relative;top: -21px;    left: 5px;"></div>
                       <br>
-                      <div class="chane_pass_btn">
+                      <div class="chane_pass_btn comment_btns" style="position:relative;top: -21px;">
                          <a href="javascript:void(0)" ng-click="savePriority();prior = !prior" class="custom-button">Save</a>
                         </div>
 
-                      <div class="chane_pass_btn">
+                      <div class="chane_pass_btn comment_btns" style="position:relative;top: -21px;">
                           <md-button ng-click="prior = !prior" class="md-primary addyellobtn widthauto graybtn ">close</md-button>
                       </div>
                       <br>
                   </div>
                 </li>
 
+
                 <li>
+                  <a href="javaScript:void(0);" ng-click="showMember = taskpattern = showChecklistAdd = showDept = dDate = prior = false; changeStatus()">
+                    <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>{{$root.status == 'close' ? 'Mark Open':'Mark Close'}}
+                  </a>                  
+                </li>
+
+                <!-- <li>
                   <a href="javascript:;">
                     <ng-md-icon icon="av_timer" size="20"></ng-md-icon>Set Reminder
                   </a>
-                </li>
+                </li> -->
             </ul>
           </div>
         </div>

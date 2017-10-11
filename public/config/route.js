@@ -10,6 +10,18 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
              sidebar: 'no',
+             footer:'yes',
+        }
+    })
+
+    .when("/invitation/:data", {
+        templateUrl: "/modules/home/views/home.html",
+        controller: "homeController",
+        access: {
+            requiredLogin: false,
+            headerType:'front_header',
+             sidebar: 'no',
+             footer:'yes',
         }
     })
 
@@ -20,6 +32,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
             sidebar: 'no',
+            footer:'yes',
         }
     })
 
@@ -30,6 +43,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
             sidebar: 'no',
+            footer:'yes',
         }
     })
 
@@ -41,6 +55,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
              sidebar: 'no',
+             footer:'yes',
         }
     })
 
@@ -51,6 +66,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             requiredLogin: false,
             headerType:'front_header',
             sidebar: 'no',
+            footer:'yes',
         }
     })
 
@@ -84,6 +100,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
     .when("/dashboard", {
         templateUrl : "/modules/dashboard/views/dashboard-home.html",
         controller  :  "dashboardController",
+        controllerAs  :  "ctlr",
         access: {
             requiredLogin: true, 
             headerType:'hotel_header',
@@ -92,6 +109,15 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
+
+    /*.when("/invitation", {
+        templateUrl : "/modules/invitation/views/invitation.html",
+        controller  :  "invitationController",
+        access: {
+            requiredLogin: false,
+             sidebar: 'no',
+        }
+    })*/
 
     .when("/dashboard/hotel-setup/:steps?", {
         templateUrl : "/modules/dashboard/views/steps.html",
@@ -119,6 +145,18 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
     .when("/dashboard/employee", {
         templateUrl : "/modules/employee/views/employee.html",
         controller  :  "employeeController",
+        controllerAs  :  "ctlr",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/position", {
+        templateUrl : "/modules/employee/views/position.html",
+        controller  :  "positionController",
+        controllerAs  :  "ctlr",
         access: {
             requiredLogin: true,
             headerType:'dashboard_header',

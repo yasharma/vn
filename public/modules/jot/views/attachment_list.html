@@ -1,20 +1,31 @@
-<ul class="uploadimage_list clearfix">
+<ul class="uploadimage_list_edit clearfix" ng-controller="attachmentListCtlr" ng-show="$root.files.length > 0">
 
-    <li ng-repeat="f in $root.files" ng-hide="hideattachment"> 
 
-        <div class="col-lg-4 col-md-4" style="height:100%">
-            <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'">
+    <li ng-repeat="f in $root.files"> 
+
+        <div class="uploadimage_list_edit_img" ng-switch="f.type">
+           
+            <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" ng-switch-when="image/jpeg">
+            <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" ng-switch-when="image/png">
+              
+
+           <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-when="application/pdf"  icon="picture_as_pdf" class="cursor"  size="22">
+            </ng-md-icon>
+
+
+             <ng-md-icon style="fill:#2aaae0;transform: inherit;" ng-switch-default  icon="insert_drive_file" class="cursor"  size="22">
+            </ng-md-icon>
         </div>
 
-        <div class="col-lg-6 col-md-6">
+        <div class="uploadimage_list_edit_itxt">
         	<strong>{{f.name}} {{f.$errorParam}}</strong>
         	<div class="attachment_list_icon">
-        		<a href="javaScript:void(0)" ng-click="hideattachment = ! hideattachment">Delete</a>
+                <a href="javaScript:void(0)" ng-click="deleteAttachment(f.$$hashKey);">Delete</a>
         	</div>
         </div>
         <div class="clearfix"></div>                     
     </li>               
 </ul> 
-<span class="progress" ng-show="$root.progress >= 0">
+<!-- <span class="progress" ng-show="$root.progress >= 0">
             <div style="background: green;text-align: center;color: #fff; width:{{$root.progress}}%" ng-bind="$root.progress + '%'"></div>
-</span> 
+</span>  -->

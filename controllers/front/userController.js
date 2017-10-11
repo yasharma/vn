@@ -13,7 +13,8 @@ const    jwt         = require('jsonwebtoken'),
          response    = require(path.resolve('./config/lib/response')),
          //mail        = require(path.resolve('./config/lib/mail')),
          hostPath    = require(path.resolve('./config/lib/hostPath')),
-         config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));   
+         config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
+         ObjectId    = mongoose.Types.ObjectId;       
 
 
 /****************************************************************
@@ -86,11 +87,15 @@ exports.register       = (reqst, respe) => {
 
     if(!_.isEmpty(reqst.body)){
             
-            var email               = reqst.body.email;
-            reqst.body.role         = 'hotelowner';
-        
             async.waterfall([
                 function (callback) {
+
+                      let firstname                   = reqst.body.first_name;
+                      let lastname                    = reqst.body.last_name;
+                      let random                      = Math.floor(10 + Math.random() * 90);
+                      reqst.body.user_name            = firstname.charAt(0) + lastname + random;
+                      reqst.body.role                 = 'hotelowner';
+
                     let usersave        = new User(reqst.body);
                     usersave.save(function(err, user) {
                         callback(err, user);
@@ -99,7 +104,8 @@ exports.register       = (reqst, respe) => {
                 function (user, callback) {
                     
                     let baseUrl     = hostPath.host(reqst),
-                    signupLink      = baseUrl + 'api/verify/' + user.emailVerificationKey; //Saved in model Pre.save()
+                    //signupLink      = baseUrl + 'api/verify/' + user.emailVerificationKey; //Saved in model Pre.save()
+                    signupLink      = '';
                     let result      = {'verifyUrl': signupLink};
                     /*mail.send({
                         user:user,
@@ -119,6 +125,9 @@ exports.register       = (reqst, respe) => {
                     callback(null, result);
                 }
             ],function(err, result) {
+
+                
+
                 if(err){
                     return respe.json(response.errors(err.errors,'Error in Registration process.'));
                 }else{
@@ -134,7 +143,7 @@ exports.register       = (reqst, respe) => {
                                 email:              {'message'      : 'Email address is required.'},
                                 password:           {'message'      : 'Password is required.'},
                             };
-                return respe.json(response.errors(errors,"Error in Registration process."));
+                return respe.json(response.errors(errors,"Registration data is required."));
         }
 };
 
@@ -229,14 +238,9 @@ exports.forgotPassword = function(reqst,respe,next){
         },
   
         function (user, token, done) {
-            User.update(
-                {_id: user._id},
-                { passwordReset: { token: token, timestamp: Date.now() + 86400000, status: true} }, 
-                { runValidators: true, setDefaultsOnInsert: true },
-                function(err, result){
+            User.update({_id: user._id},{ passwordReset: { token: token, timestamp: Date.now() + 86400000, status: true} },{ runValidators: true, setDefaultsOnInsert: true },function(err, result){
                     done(err, token, user, result);
-                }
-            );
+                });
         },
  
         function (token, user, done) {
@@ -370,25 +374,27 @@ exports.changePassword = function (reqst, respe, next) {
         var errors =    { oldpassword: {'message':'Oldpassword and Newpassword is required.'}}
         return respe.json(response.errors(errors,"Oldpassword and Newpassword is required."));
     }
-
+    
     let user        = new User(),
-    oldpassword     = user.hashPassword(reqst.body.oldpassword);
+    oldpassword     = user.hashPassword(config.salt, reqst.body.oldpassword);
     let userId      = reqst.body._id;
 
-    User.findOne({ $and: [{ _id: userId},{ password: oldpassword }]}, {user_name: 1, email: 1},(err, finaluser) => {
+
+    User.findOne({ $and: [{ _id: userId},{ password: oldpassword }]}, {first_name: 1,last_name: 1, email: 1,contact_number: 1},(err, finaluser) => {
         if(err){
-            next(err);
+            return respe.json(response.errors({},'User data not found. Wrong password.'));
         }else{
 
-            if(finaluser){
+            if(!_.isNull(finaluser)){
 
                 finaluser.password      = reqst.body.newpassword;
                 finaluser.save(function(err, saveduser){
 
                 if(err){
-                    next(err);
+                    return respe.json(response.errors(err.errors,'Error in password change.'));
                 }else{
 
+                    return respe.json(response.success(saveduser,'Your password has been updated successfully.'));
                     /*mail.send({
                         subject: 'HotelJot - Password Changed Successfully',
                         html: 'ChangePassword',
@@ -411,8 +417,41 @@ exports.changePassword = function (reqst, respe, next) {
                 }
               });
             }else{
-                return respe.json(response.errors('user not found','Your current password is incorrect!'));
+                return respe.json(response.errors({},'Your current password is incorrect!'));
             }
         }
     });
 };
+/************************************************************
+*************************************************************
+******* Function to edit profile from user dashboard  *******
+*************************************************************
+*************************************************************/
+
+
+exports.editProfile = function (reqst, respe, next){
+
+    var userData        = reqst.body;
+
+    if(!userData._id){
+        var errors =    { _id: {'message':'user id is required.'}}
+        return respe.json(response.errors(errors,"user id is required."));
+    }
+  
+    User.findOneAndUpdate(
+        { _id: userData._id, "status": 'active' }, userData,
+        { new: true, runValidators: true, setDefaultsOnInsert: true, context:'query', fields:{ _id: 1, first_name: 1, last_name: 1,email: 1} },
+        function(err, userdata){
+            if( err ){
+                next(err);
+            } else {
+                if(!_.isNull(userdata)){
+                    respe.json(response.success(userdata ,'Profile has been updated'));  
+                }else{
+                    respe.json(response.errors({},'user details not found'));
+                }
+            }   
+        }
+    );
+}
+

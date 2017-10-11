@@ -1,14 +1,14 @@
 "use strict";
 
-app.controller('departmentCtlr', ['$scope','$rootScope','globalRequest',
-	function($scope,$rootScope,globalRequest) {
+app.controller('departmentCtlr', ['$scope',
+	function($scope) {
 		
 
 		/*****************************************
 		* Get department List
 		******************************************/
 
-	    globalRequest.getDepartments();
+	    //globalRequest.getDepartments();
 
 	     /*after click on suggestion list*/                            
 	    $scope.callback = function(){	       

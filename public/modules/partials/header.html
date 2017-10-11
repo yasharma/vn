@@ -1,4 +1,4 @@
-<div class="clearfix frontheder" ng-if="isAuth.headerType =='front_header'" ng-controller="frontHeaderController">
+<div class="clearfix frontheder" ng-if="isAuth.headerType =='front_header'" ng-controller="frontHeaderController" style="z-index: 9999;">
 		<div class="yellowlogo pull-left">
 			<a href="/">
 				<img src="assets/images/yellowlogo.png">
@@ -43,32 +43,46 @@
 
 
 
-
-
-<div class="dash_home_header clearfix" ng-if="isAuth.headerType =='hotel_header'" ng-controller="headerController">
+<div class="dash_home_header  clearfix" ng-if="isAuth.headerType =='hotel_header'" ng-controller="headerController">
 	<duv class="dash_home_header_logo pull-left">
-		<a href="/dashboard"><img src="assets/images/dash-logo.png"></a>
+		<a href="/"><img src="assets/images/dash-logo.png"></a>
 	</duv>
 	<duv class="dash_home_header_menu pull-right">
 		<ul class="dash_home_header_menu_list">
 			<li class="noti_icon positionrel">
+				<a href="/dashboard">
+				<ng-md-icon class="cursor sidemenu" icon="home" style="fill: white" size="32"></ng-md-icon>
+				</a>
+			</li>
+			<li class="noti_icon positionrel">
 				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
 				<small class="notification-badge">5</small>
 			</li>
-			<li class="usermenu" title="{{$root.userData.first_name}} {{$root.userData.last_name}}">
+			<li class="usermenu" title="{{$root.currentUser.first_name}} {{$root.currentUser.last_name}}">
 				<md-menu md-position-mode="target-right target" md-offset="0 80">
 		          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
-		          	<i class="user_dp_header"><img src="assets/images/user_dp_header.png"></i>
+		          	<i class="user_dp_header"  style="overflow: hidden; background: #fff url({{($root.currentUser.profile_image)?'images/profile_image/'+$root.currentUser.profile_image:'assets/images/default_profile.png'}});background-size: cover;">	
+
+		          	<!-- <img src="{{($root.userData.profile_image)?'images/profile_image/'+$root.userData.profile_image:'assets/images/default_profile.png'}}"  style="max-width: 100%;"> -->
+		          	</i>
 		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
 		          </md-button>
 
-		          <md-menu-content width="3" >
-		            <md-menu-item ng-repeat="item in [1]">
-		              <md-button ng-click="clearToken(); announceClick($index)">
-		                  <div layout="row">
-		                    <p>Logout</p>
-		                    <md-icon md-menu-align-target  style="margin: auto 3px auto 0;"></md-icon>
-		                  </div>
+		            <md-menu-content width="3.5" >           
+
+		             <md-menu-item>
+		             	<div class="md-button">		             		                  
+		                  <ng-md-icon icon="person" md-menu-align-target  style="margin: auto 3px auto 0;"></ng-md-icon>
+		                    <p style="text-align: left;margin: inherit;"><a layout="row" href="/dashboard/profile">Profile Settings </a></p>
+		              	</div>		              
+		            </md-menu-item>
+
+		            <md-menu-item>
+		              <md-button ng-click="clearToken(); announceClick($index)">		              
+		                  <a layout="row" href="javascript:void(0)">
+		                  <ng-md-icon icon="power_settings_new" md-menu-align-target  style="margin: auto 3px auto 0;"></ng-md-icon>
+		                    <p style="text-align: left;margin: inherit;">Logout</p>		                    
+		                  </a>
 		              </md-button>
 		            </md-menu-item>
 		          </md-menu-content>
@@ -87,71 +101,70 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- header -->
-<div class="dash_home_header clearfix" ng-if="isAuth.headerType=='dashboard_header'" ng-controller="headerController">
+<div class="dash_home_header dashboard_header clearfix" ng-if="isAuth.headerType=='dashboard_header'" ng-controller="headerController">
 
 
 	<duv class="dash_home_header_logo_center"> 
 
-		<a href="javascript:void(0);" ng-click="logocircle=!logocircle" class="md-block">
-			<img src="assets/images/circle-logo.png">
+		<a href="javascript:void(0);" ng-click="logocircle=!logocircle" class="md-block" clickedContainer="jotButton">
+			<img src="assets/images/circle-logo.png" clickedContainer="jotButton">
 		</a>	
-		<div class="iconHover " ng-class="{'logocircle':logocircle}" circle-toggle > 
-			<div class="center_circle">
+		<div class="iconHover" ng-class="{'logocircle':logocircle}" outside-click-jot-button="circleToggle"> 
+			<div class="center_circle" ng-if="((boards | filter:'quick')[0])?true:false">
 				<a href="javascript:void(0);" ng-click="quickTaskPopup()">
 					Quick Jot
 				</a>
 			</div>
 
-
-            <a href="javascript:void(0);" ng-repeat="board in $root.boards"  title="{{jotValue.label}}" 
-            ng-click="$root.openFormByType($root.jotTypes[board])" class="icon {{$root.jotTypes[board].class}}">            	
-            	<img src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'" width="25px">
+            <a href="javascript:void(0);" ng-repeat="board in boards | filter:'!quick'"  title="{{$root.jotTypes[board].label}}" 
+            ng-click="$root.openFormByType($root.jotTypes[board])" class="icon link{{$index+1}}"> 
+           
+				<img src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'" width="25px">
             </a>
+        </div>	
 
-        </div>		
+
 	</duv>
+
 
 	<div class="pull-left">
 		<div class="clearfix">
-			<div class="hotel_drop" layout="row" layout-align="space-between center">{{hotel.hotelname}} 				
 
-				<md-menu md-position-mode="target-right target " md-offset="0 68" >
+
+			<div class="hotel_drop" layout="row" layout-align="space-between center" title="{{$root.activeHotelData.hotelname}}">{{ $root.activeHotelData.hotelname}} 				
+
+				<md-menu md-position-mode="target-right target"  md-offset="0 55" class="hotel_menu">
 				  <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
 		          	
 		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
 		          </md-button>
 
-				  <md-menu-content width="4">
-				    <md-menu-item ng-repeat="hotel in hotels">
+				  <md-menu-content class="width199" id="popupmenu_container0">
+				    <md-menu-item ng-repeat="hotel in hotels | filter:{step:'completed'}">
 				      <md-button ng-click="changeJotView(hotel)">
 				          <div layout="row">
-				            <p>{{hotel.hotelname}}</p>
-				            <md-icon md-menu-align-target  style="margin: auto 3px auto 0;"></md-icon>
+				            <p style="margin: inherit;">{{hotel.hotelname}}</p>
+				            
 				          </div>
 				      </md-button>
 				    </md-menu-item>
-				  </md-menu-content>
 
+				    <md-menu-item  ng-if="$root.currentUser.role =='hotelowner'">
+				      <md-button>				      
+				          <div layout="row">
+				            <p style="margin: inherit;"><a href="/dashboard/hotel-setup/1">Setup New Hotel</a></p>				            
+				          </div>
+
+				      </md-button>
+				    </md-menu-item>
+				  </md-menu-content>
 				</md-menu>
 			</div>
 
 			<div class="heder_srch">
 
-			<md-input-container md-no-float="" class="md-block md-input-has-placeholder" autocomplete="off">
+			<md-input-container md-no-float="" class="md-block md-input-has-placeholder" autocomplete="off" style="margin: 0 !important;">
 			<ng-md-icon icon="search"  class="search_icon" style="fill:#a3a3a3" size="24"></ng-md-icon>
 	        <input  placeholder="Search here..." class="ng-pristine searchbar ng-untouched ng-valid ng-isolate-scope md-input ng-empty" aria-label="@ Staff Manager Name with Note for Manager" aria-invalid="false">	        
 
@@ -159,39 +172,47 @@
 			</div>
 		</div>
 	</div>
+
 	<duv class="dash_home_header_menu pull-right">
 		<div class="clearfix">
 		                        
 		<ul class="dash_home_header_menu_list pull-left">
+
+			<li class="noti_icon positionrel">
+				<a href="{{($root.currentPage == '/dashboard/hotelboard')?'/dashboard':'/dashboard/hotelboard'}}">
+				<ng-md-icon class="cursor sidemenu" icon="home" style="fill: white" size="32"></ng-md-icon>
+				</a>
+			</li>
+			
+			<li class="noti_icon positionrel">
+				<ng-md-icon class="cursor sidemenu" clickedContainer="sidebar" ng-click="$root.leftopen=!$root.leftopen" icon="menu" style="fill: white" size="32"></ng-md-icon>
+			</li>
 			<li class="noti_icon positionrel">
 				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
 				<small class="notification-badge">5</small>
 			</li>
-			<li class="usermenu"  title="{{$root.userData.first_name}} {{$root.userData.last_name}}">
-				<md-menu md-position-mode="target-right target " md-offset="0 80" >
+			<li class="usermenu"  title="{{$root.currentUser.first_name}} {{$root.currentUser.last_name}}">
+				<md-menu md-position-mode="target-right target " md-offset="0 73" >
 		          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
-		          	<i class="user_dp_header"><img src="assets/images/user_dp_header.png"></i>
+
+		          <i class="user_dp_header"  style="overflow: hidden; background: #fff url({{($root.currentUser.profile_image)?'images/profile_image/'+$root.currentUser.profile_image:'assets/images/default_profile.png'}});background-size: cover;">		          	
+		          
+		          	</i>
 		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
 		          </md-button>
-		          <md-menu-content width="3" >
-		            <md-menu-item>
-
-		              <md-button ng-click="clearToken(); announceClick($index)">
-		              
-		                  <a layout="row" href="javascript:void(0)">
-		                  <ng-md-icon icon="power_settings_new" md-menu-align-target  style="margin: auto 3px auto 0;"></ng-md-icon>
-		                    <p>Logout</p>		                    
-		                  </a>
-		              </md-button>
-
+		          <md-menu-content>
+		             <md-menu-item>
+		             	<div class="md-button">		             		                  
+		                  <ng-md-icon icon="person" md-menu-align-target  style="margin: auto 3px auto 0;"></ng-md-icon>
+		                    <p style="text-align: left;margin: inherit;"><a layout="row" href="/dashboard/profile">Profile Settings </a></p>
+		              	</div>		              
 		            </md-menu-item>
 
-		             <md-menu-item>
-		              <md-button>
-		                  <a layout="row" href="/dashboard/profile">
-		                  <ng-md-icon icon="person" md-menu-align-target  style="margin: auto 3px auto 0;"></ng-md-icon>
-		                    <p>Edit Profile</p>
-		                    
+		            <md-menu-item>
+		              <md-button ng-click="clearToken(); announceClick($index)">		              
+		                  <a layout="row" href="javascript:void(0)">
+		                  <ng-md-icon icon="power_settings_new" md-menu-align-target  style="margin: auto 3px auto 0;"></ng-md-icon>
+		                    <p style="text-align: left;margin: inherit;">Logout</p>		                    
 		                  </a>
 		              </md-button>
 		            </md-menu-item>
@@ -202,6 +223,10 @@
 		</ul>
 		</div>
 	</duv>
+
 </div>
 
-<!--End header
+<!--End header-->
+
+
+

@@ -1,9 +1,12 @@
 <div class="dash-main-con">
-	<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
-	
+	<section class="dashrightsection">
+
 		
 		<div class="dash_hd_txt" layout="row" layout-align="space-between center">
-			<div class="dash_hd">Welcome To {{activeHotelData.hotelname}}</div>
+			<div class="dash_hd mar-bot0">
+			<!-- <ng-md-icon icon="home" style="fill:#000" size="24"></ng-md-icon>  -->
+
+			Welcome To {{$root.activeHotelData.hotelname}}</div> 
 			<div class="rightfilter_right dash-home_right">
 				<div class="chane_pass_btn_right mrright0 positionrel">
 					<md-button class="md-primary addyellobtn yellowbtn widthauto" ng-click="orderBy = !orderBy">SETTING</md-button>
@@ -11,105 +14,46 @@
 					<div class="settingdrop" ng-show="orderBy">
 						<ul class="settingdrop_list">
 
-							<li class="clearfix">
+							<li class="clearfix" ng-repeat="itemTyles in $root.jotTypes">
 								<a href="javascript:;">
-									<div class="icon_circle messange_color">
-									<img src="assets/images/message_icon.png"></div>
-									<span class="txtdrop">Messages</span>
+									<div class="icon_circle messange_color" style="background: {{itemTyles.bgcolor}}">
+									<img src="{{itemTyles.data}}"></div>
+									<span class="txtdrop">{{itemTyles.label}}</span>
 									<span class="pull-right">
-										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+										<md-checkbox  ng-model="enableItems[$index]" aria-label="enableItems[$index]" ng-checked = "{{((boards|filter:itemTyles.id)[0])?true:false}}"  ng-click="updateItemList(itemTyles.id)">
 										</md-checkbox>
-									</span>
-								</a>
-							</li>
 
-
-							<li class="clearfix">
-								<a href="javascript:;">
-									<div class="icon_circle task_jot_color"><img src="assets/images/task_icon.png"></div>
-									<span class="txtdrop">Task</span>
-									<span class="pull-right">
-										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-										</md-checkbox>
 									</span>
 								</a>
+								
 							</li>
-							<li class="clearfix">
-								<a href="javascript:;">
-									<div class="icon_circle note_jot_color"><img src="assets/images/note_icon.png"></div>
-									<span class="txtdrop">Note</span>
-									<span class="pull-right">
-										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-										</md-checkbox>
-									</span>
-								</a>
-							</li>
-							<li class="clearfix">
-								<a href="javascript:;">
-									<div class="icon_circle issue_jot_color"><img src="assets/images/issue_icon.png"></div>
-									<span class="txtdrop">Issue</span>
-									<span class="pull-right">
-										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-										</md-checkbox>
-									</span>
-								</a>
-							</li>
-							<li class="clearfix">
-								<a href="javascript:;">
-									<div class="icon_circle lost_jot_color"><img src="assets/images/lost_icon.png"></div>
-									<span class="txtdrop">Lost &amp; Found</span>
-									<span class="pull-right">
-										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-										</md-checkbox>
-									</span>
-								</a>
-							</li>
-							<li class="clearfix">
-								<a href="javascript:;">
-									<div class="icon_circle metting_jot_color"><img src="assets/images/metting_icon.png"></div>
-									<span class="txtdrop">Meeting Room</span>
-									<span class="pull-right">
-										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-										</md-checkbox>
-									</span>
-								</a>
-							</li>
-							<li class="clearfix">
-								<a href="javascript:;">
-									<div class="icon_circle vending_color"><img src="assets/images/vending_icon.png"></div>
-									<span class="txtdrop">Vending Room</span>
-									<span class="pull-right">
-										<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-										</md-checkbox>
-									</span>
-								</a>
-							</li>
+							
 						</ul>
-						<div class="dragtxt">Drag &amp; Drop to Change the Order</div>
+						
 					</div>
 				</div>
 				
 			</div>
 		</div>
 
-			<!-- <a class="circle_container" ng-repeat="board in boards" href="/dashboard/hotelboard/{{$root.jotTypes[board].id}}"> -->
 
 		<div class="hotel_list_top" ng-hide="BoardsPage">
-			<div class="circle_container" ng-repeat="board in $root.boards">
-				<a class="circle" href="/dashboard/hotelboard/{{$root.jotTypes[board].id}}">
+			<div class="circle_container" ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
+				<a class="circle" href="{{(board.id == 'lost_found')?'/dashboard/lost_found':(board.id == 'vending_machine')?'/dashboard/inventory':'/dashboard/hotelboard/'+board.id}}">
 					<div class="circle__inner">
 						<div class="circle__wrapper">
-							<div class="messange_jotnum numberdigit">
-								{{
-								(($root.JotCount | filter : {_id: $root.jotTypes[board].id})[0].count)?($root.JotCount | filter : {_id: $root.jotTypes[board].id})[0].count:0;
-							}}
-						</div>
-						<div class="hover_effect_home" style='background: {{($root.jotTypes[board].bgcolor)?$root.jotTypes[board].bgcolor:"#71adf7";}}'>
+							
+						<div class="hover_effect_home" style='background: {{(board.bgcolor)?board.bgcolor:"#71adf7";}}'>
 
 							<div>
-								<img  class="hotel-list-icon" src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'">
+								<img  class="hotel-list-icon" src="{{board.data}}" ng-if="board.icontype == 'image'">
 							</div>
-							<h4>{{$root.jotTypes[board].label}}</h4>
+							<h4>{{board.label}}</h4>
+							<div class="messange_jotnum numberdigit">
+								{{
+								(($root.JotCount | filter : {_id: board.id})[0].count)?($root.JotCount | filter : {_id: board.id})[0].count:0;
+								}}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -117,23 +61,6 @@
 		</div>
 	</div> 
 	<div class="clearfix"></div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -156,11 +83,12 @@
 					</div>
 					<div class="all_option">
 						<ul class="all_option_list">
-							<li ng-repeat="board in $root.boards">
-								<a href="/dashboard/hotelboard/{{$root.jotTypes[board].id}}">
-									<span class="txtdrop">{{$root.jotTypes[board].label}}</span>
-									<div class="icon_circle messange_color" style="background:{{$root.jotTypes[board].bgcolor}}">
-										<img src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'">
+
+							<li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
+								<a href="{{(board.id == 'lost_found')?'/dashboard/lost_found':(board.id == 'vending_machine')?'/dashboard/inventory':'/dashboard/hotelboard/'+board.id}}">
+									<span class="txtdrop">{{board.label}}</span>
+									<div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
+										<img src="{{board.data}}" ng-if="board.icontype == 'image'">
 									</div>
 								</a>
 							</li>
@@ -171,42 +99,66 @@
 
 
 
-				<!----------------------------------------------------------------------------
+				<!----------------------------------------------------------------------
 				* For hotel owner
-				-------------------------------------------------------------------------- -->
+				---------------------------------------------------------------------->
 
 
 
-				<div class="hotel_message_inner" ng-if="$root.userData.role == 'hotelowner'">
+				<div class="hotel_message_inner" ng-if="$root.currentUser.role == 'hotelowner'">
+					<a href="javascript:void(0)" ng-click="$root.openFormByType($root.jotTypes[activetype])" class="create_new_jot_label"> {{'Create '+ $root.jotTypes[activetype].label+' Jot'}}</a>
 
 					<div class="clearfix new_mesge">
 						
 						<ul class="new_mesge_list">
 
-							<li ng-repeat="jot in ownerjotlist = (JotListData)">
+							<li ng-repeat="jot in ownerjotlist = (JotListData)" ng-click="openComments(jot)">
+
 								<div class="add_hotel_room mar-bot20">
 									<div class="add_hotel_room_inner">
 										<div class="room_change" layout="row" layout-align="space-between center">
-											<a class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</a>
-											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
-										</div>
-										<ul class="taginglist clearfix">
-											<li ng-repeat="jottag in jot.assigned_departments">
+											<a class="capitalize overeclips">{{jot.jot_title}}</a>
 
-											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
-											 </li>											
+											<ng-md-icon icon="message" title="Comments" style="fill:#4d4d4d" size="18"></ng-md-icon>
+
+											<ng-md-icon icon="mode_edit" title="Quick Edit" ng-click="jotEditPopup(jot); $event.stopPropagation(); showQuickEdit = true;" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+
+										<ul class="taginglist min_height29 clearfix"  style="margin: 10px 0">
+											<li ng-repeat="jottag in jot.assigned_departments" title="{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}">	
+												{{jottag}}
+											 </li>								
+										
 										</ul>
+
+										
+
+										<ul class="quick_member_list small min_height27" style="margin-left: 0;margin-right: 0;">
+
+				                          <li ng-repeat="member in jot.assigned_members"  title="{{($root.staffList | filter:{user_name:member})[0].first_name+' '+($root.staffList | filter:{user_name:member})[0].last_name}}" style="color: #fff;" ng-if="($root.staffList | filter:{user_name:member}).length">
+
+				                            <div class="quick_member">	
+
+				                            {{($root.staffList | filter:{user_name:member})[0].first_name.substring(0,1)+''+($root.staffList | filter:{user_name:member})[0].last_name.substring(0,1)}}
+				                           
+				                            </div>
+				                            </li>
+				                        </ul>
+
+
 										<ul class="tim_list clearfix">
-											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+
+											<li ng-if="jot.jot_type !='task'"><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
 												{{ jot.due_date | date: 'MMM d, y'}}
 											</li>
-											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+
+											<li ng-if="jot.checklist.length"><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											{{jot.checklist | checklistFilter:this}}
+											</li>
 
 											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
 											{{jot.image.length}}
 											</li>
-
-											<!-- <li><ng-md-icon icon="chat_bubble_outline" style="fill:#7a7a7a" size="18"></ng-md-icon>5</li> -->
 										</ul>										
 									</div>
 									<div class="add_hotel_room_proty" layout="row" layout-align="space-between end">
@@ -214,6 +166,123 @@
 										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
 									</div>
 								</div>
+
+
+								<div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation(); " ng-show="showQuickEdit"></div>
+
+								   <div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">								
+								    <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
+									
+					                <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+
+								
+								<div class="quick_edit_buttons" edit-jot-directives>
+				                    <ul class="quick_edit_buttons_list clearfix">
+				                        <li>
+				                            <a href="javascript:void(0);"  ng-click="showDept = dDate = prior = false; showMember = !showMember">
+				                            <ng-md-icon icon="person" size="20"></ng-md-icon>
+				                            Change Member
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showMember">
+
+						                        <div class="quick_edit_small_section_header">
+						                            <span class="quick_edit_section_title"> Change Members</span>
+						                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+						                            </div>
+							                      <div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+
+							                      <ul class="quick_member_list small">
+							                      	<li ng-repeat="member in staffList"  title="{{member.first_name+' '+member.last_name}}">
+							                      		<div class="quick_member" ng-click="selectStaff(member.user_name)">
+							                      		{{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+							                      		</div>
+							                      	
+							                      	</li>
+
+							                      </ul>	
+							                    </div>
+				                         </li>
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = dDate = prior = false;showDept = !showDept">
+				                                <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Change Department
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showDept">
+
+				                                <div class="quick_edit_small_section_header">
+					                             <span class="quick_edit_section_title"> Change Department</span>
+					                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+					                            </div>
+
+						                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+
+						                       <ul class="taginglist min_height29 clearfix">
+						                          <li ng-repeat="dept in departmentList"  title="{{dept.department_name}}" ng-click="selectDept(dept.abbreviation)">
+						                            
+						                            {{dept.abbreviation}}
+						                            
+						                            </li>
+						                        </ul>
+						                    </div>
+				                        </li>
+				                       <!--  <li>
+				                            <a href="javascript:void(0);">
+				                                <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Copy
+				                            </a>
+				                        </li> -->
+				                        <li ng-if="jot.jot_type != 'task'">
+					                        <a href="javascript:void(0);" ng-click="showMember = showDept =  prior = false;dDate = !dDate">
+					                        <ng-md-icon icon="watch_later" size="20"></ng-md-icon>Change Due Date</a>
+
+					                        <div class="quick_edit_small_section" ng-show="dDate">
+
+					                         <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Date</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     <div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+						                    </div>
+				                        </li>
+
+				                         <li>
+				                        <a href="javascript:void(0);" confirmed-click="archiveJot('',$index)" ng-confirm-title="Delete Jot" ng-confirm-delete="Are you sure you want to remove this jot."><ng-md-icon icon="delete" size="20"></ng-md-icon>Archive Jot</a>
+				                        </li>                         
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = showDept = dDate = false;prior = !prior">
+				                            <ng-md-icon icon="date_range" size="20"></ng-md-icon>Set Priority</a>
+
+				                             <div class="quick_edit_small_section" ng-show="prior">
+				                             <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Priority</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     	<div class="clearfix" ng-include="'/modules/jot/views/priority.html'" style="position:relative;top: -21px;"></div>
+						                    </div>
+				                        </li>
+
+				                        <li >
+				                            <a href="javascript:void(0);" ng-click="changeStatus()"><ng-md-icon icon="done_all" size="20"></ng-md-icon>
+				                       
+				                            {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
+				                        </li>
+
+				                        <!-- <li><a href="javascript:void(0);">
+				                        <ng-md-icon icon="av_timer" size="20">
+				                        </ng-md-icon>Set Reminder</a>
+				                        </li> -->
+				                        <li>
+				                        <a href="javascript:void(0);" ng-click="moveDC(edit_jot);">
+				                        <ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC
+				                        </a>
+				                        </li>
+				                    </ul>
+				                </div>
+
+				            	</div>
+
+							
 							</li>	
 						</ul>
 
@@ -230,31 +299,45 @@
 				-------------------------------------------------------------------------- -->
 
 
-				<div class="hotel_message_inner"  ng-if="$root.userData.role == 'staff'">
+				<div class="hotel_message_inner"  ng-if="$root.currentUser.role == 'staff'">
+				<a href="javascript:void(0)" ng-click="$root.openFormByType($root.jotTypes[activetype])" class="create_new_jot_label"> {{'Create '+ $root.jotTypes[activetype].label+' Jot'}}</a>
 					<div class="clearfix new_mesge">
 						<div class="add_hotel_icon">							
 							New Jot
 						</div>
 						<ul class="new_mesge_list">
 
-							<li ng-repeat="jot in jotlist = (JotListData['my'] |filter:{status:'!close'})">
+							<li ng-repeat="jot in jotlist = (JotListData['my'] |filter:{status:'!close'})" ng-click="openComments(jot)">
 								<div class="add_hotel_room mar-bot20">
 									<div class="add_hotel_room_inner">
 										<div class="room_change" layout="row" layout-align="space-between center">
-											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
-											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
-										</div>
-										<ul class="taginglist clearfix">
-											<li ng-repeat="jottag in jot.assigned_departments">
+											<Span class="capitalize overeclips">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="message" title="Comments" style="fill:#4d4d4d" size="18"></ng-md-icon>
 
-											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
-											 </li>
+											<ng-md-icon icon="mode_edit" title="Quick Edit" ng-click="jotEditPopup(jot); $event.stopPropagation(); showQuickEdit = true;" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+										<ul class="taginglist min_height29 clearfix" style="margin: 10px 0">
+											<li ng-repeat="jottag in jot.assigned_departments" title="{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}">	
+												{{jottag}}
+											 </li>											
+										
 										</ul>
+
+										<ul class="quick_member_list small min_height27" style="margin-left: 0;margin-right: 0;">
+				                          <li ng-repeat="member in jot.assigned_members"  title="{{($root.staffList | filter:{user_name:member})[0].first_name+' '+($root.staffList | filter:{user_name:member})[0].last_name}}" style="color: #fff;"  ng-if="($root.staffList | filter:{user_name:member}).length">
+
+				                            <div class="quick_member">	
+
+				                            {{($root.staffList | filter:{user_name:member})[0].first_name.substring(0,1)+''+($root.staffList | filter:{user_name:member})[0].last_name.substring(0,1)}}
+				                           
+				                            </div>
+				                            </li>
+				                        </ul>
 										<ul class="tim_list clearfix">
-											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											<li  ng-if="jot.jot_type !='task'"><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
 												{{ jot.due_date | date: 'MMM d, y'}}
 											</li>
-											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>{{jot.checklist | checklistFilter:this}}</li>
 
 											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
 											{{jot.image.length}}
@@ -269,27 +352,166 @@
 										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
 									</div>
 								</div>
+
+
+								<div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
+
+								<div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">								
+								    <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
+									
+					                <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+
+								
+								<div class="quick_edit_buttons" edit-jot-directives>
+				                    <ul class="quick_edit_buttons_list clearfix">
+				                        <li>
+				                            <a href="javascript:void(0);"  ng-click="showDept = dDate = prior = false; showMember = !showMember">
+				                            <ng-md-icon icon="person" size="20"></ng-md-icon>
+				                            Change Member
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showMember">
+
+						                        <div class="quick_edit_small_section_header">
+						                            <span class="quick_edit_section_title"> Change Members</span>
+						                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+						                            </div>
+							                      <div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+
+							                      <ul class="quick_member_list small">
+							                      	<li ng-repeat="member in staffList"  title="{{member.first_name+' '+member.last_name}}">
+							                      		<div class="quick_member" ng-click="selectStaff(member.user_name)">
+							                      		{{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+							                      		</div>
+
+
+							                      		<!-- 
+							                      		use 'selected' class in with 'quick_member'
+
+							                      		 <ng-md-icon class="selectedicon" icon="check" size="20" style="fill:#444" ng-if="">
+							                      		</ng-md-icon> -->
+
+							                      	
+							                      	</li>
+
+							                      </ul>
+							                      
+
+							                    </div>
+
+				                         </li>
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = dDate = prior = false;showDept = !showDept">
+				                                <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Change Department
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showDept">
+
+				                                <div class="quick_edit_small_section_header">
+					                             <span class="quick_edit_section_title"> Change Department</span>
+					                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+					                            </div>
+
+						                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+						                      <ul class="taginglist min_height29 clearfix">
+						                          <li ng-repeat="dept in departmentList"  title="{{dept.department_name}}" ng-click="selectDept(dept.abbreviation)">
+						                            
+						                            {{dept.abbreviation}}
+						                            
+						                            </li>
+						                        </ul>
+						                     
+						                    </div>
+				                        </li>
+				                       <!--  <li>
+				                            <a href="javascript:void(0);">
+				                                <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Copy
+				                            </a>
+				                        </li> -->
+				                        <li>
+					                        <a href="javascript:void(0);" ng-click="showMember = showDept =  prior = false;dDate = !dDate">
+					                        <ng-md-icon icon="watch_later" size="20"></ng-md-icon>Change Due Date</a>
+
+					                        <div class="quick_edit_small_section" ng-show="dDate">
+
+					                         <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Date</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     <div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+						                    </div>
+
+
+				                        </li>
+
+				                         <li>
+				                        <a href="javascript:void(0);" confirmed-click="archiveJot('',$index)" ng-confirm-title="Delete Jot" ng-confirm-delete="Are you sure you want to remove this jot."><ng-md-icon icon="delete" size="20"></ng-md-icon>Archive Jot</a>
+				                        </li>                         
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = showDept = dDate = false;prior = !prior">
+				                            <ng-md-icon icon="date_range" size="20"></ng-md-icon>Set Priority</a>
+
+				                             <div class="quick_edit_small_section" ng-show="prior">
+				                             <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Priority</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     	<div class="clearfix" ng-include="'/modules/jot/views/priority.html'"  style="position:relative;top: -21px;"></div>
+						                    </div>
+				                        </li>
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="changeStatus()"><ng-md-icon icon="done_all" size="20"></ng-md-icon>
+				                       
+				                            {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
+				                        </li>
+
+				                        <!-- <li><a href="javascript:void(0);">
+				                        <ng-md-icon icon="av_timer" size="20">
+				                        </ng-md-icon>Set Reminder</a>
+				                        </li> -->
+				                        <li>
+				                        <a href="javascript:void(0);" ng-click="moveDC(edit_jot);">
+				                        <ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC
+				                        </a>
+				                        </li>
+				                    </ul>
+				                </div>
+				            	</div>
 							</li>
 
 
-							<li ng-repeat="jot in JotListData['department']">
+							<li ng-repeat="jot in JotListData['department']" ng-click="openComments(jot)">
 								<div class="add_hotel_room mar-bot20">
 									<div class="add_hotel_room_inner">
 										<div class="room_change" layout="row" layout-align="space-between center">
-											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
-											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
-										</div>
-										<ul class="taginglist clearfix">
-											<li ng-repeat="jottag in jot.assigned_departments">
+											<Span class="capitalize overeclips">{{jot.jot_title}}</Span>
 
-											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
-											 </li>
+											<ng-md-icon icon="message" title="Comments" style="fill:#4d4d4d" size="18"></ng-md-icon>
+											<ng-md-icon icon="mode_edit" title="Quick Edit" ng-click="jotEditPopup(jot); $event.stopPropagation(); showQuickEdit = true;" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+										</div>
+										<ul class="taginglist min_height29 clearfix"  style="margin: 10px 0">
+											<li ng-repeat="jottag in jot.assigned_departments" title="{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}">	
+												{{jottag}}
+											 </li>											
+										
 										</ul>
+										<ul class="quick_member_list small min_height27" style="margin-left: 0;margin-right: 0;">
+				                          <li ng-repeat="member in jot.assigned_members"  title="{{($root.staffList | filter:{user_name:member})[0].first_name+' '+($root.staffList | filter:{user_name:member})[0].last_name}}" style="color: #fff;"  ng-if="($root.staffList | filter:{user_name:member}).length">
+
+				                            <div class="quick_member" >	
+
+				                            {{($root.staffList | filter:{user_name:member})[0].first_name.substring(0,1)+''+($root.staffList | filter:{user_name:member})[0].last_name.substring(0,1)}}
+				                           
+				                            </div>
+				                            </li>
+				                        </ul>
 										<ul class="tim_list clearfix">
-											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											<li  ng-if="jot.jot_type !='task'"><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
 												{{ jot.due_date | date: 'MMM d, y'}}
 											</li>
-											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>{{jot.checklist | checklistFilter:this}}</li>
 
 											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
 											{{jot.image.length}}
@@ -304,6 +526,131 @@
 										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
 									</div>
 								</div>
+
+								<div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
+
+								<div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">								
+								    <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
+									
+					                <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+
+								
+								<div class="quick_edit_buttons" edit-jot-directives>
+				                    <ul class="quick_edit_buttons_list clearfix">
+				                        <li>
+				                            <a href="javascript:void(0);"  ng-click="showDept = dDate = prior = false; showMember = !showMember">
+				                            <ng-md-icon icon="person" size="20"></ng-md-icon>
+				                            Change Member
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showMember">
+
+						                        <div class="quick_edit_small_section_header">
+						                            <span class="quick_edit_section_title"> Change Members</span>
+						                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+						                            </div>
+							                      <div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+
+							                      <ul class="quick_member_list small">
+							                      	<li ng-repeat="member in staffList"  title="{{member.first_name+' '+member.last_name}}">
+							                      		<div class="quick_member" ng-click="selectStaff(member.user_name)">
+							                      		{{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+							                      		</div>
+
+
+							                      		<!-- 
+							                      		use 'selected' class in with 'quick_member'
+
+							                      		 <ng-md-icon class="selectedicon" icon="check" size="20" style="fill:#444" ng-if="">
+							                      		</ng-md-icon> -->
+
+							                      	
+							                      	</li>
+
+							                      </ul>
+							                      
+
+							                    </div>
+
+				                         </li>
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = dDate = prior = false;showDept = !showDept">
+				                                <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Change Department
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showDept">
+
+				                                <div class="quick_edit_small_section_header">
+					                             <span class="quick_edit_section_title"> Change Department</span>
+					                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+					                            </div>
+
+						                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+						                      <ul class="taginglist min_height29 clearfix">
+						                          <li ng-repeat="dept in departmentList"  title="{{dept.department_name}}" ng-click="selectDept(dept.abbreviation)">
+						                            
+						                            {{dept.abbreviation}}
+						                            
+						                            </li>
+						                        </ul>
+						                    </div>
+				                        </li>
+				                       <!--  <li>
+				                            <a href="javascript:void(0);">
+				                                <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Copy
+				                            </a>
+				                        </li> -->
+				                        <li>
+					                        <a href="javascript:void(0);" ng-click="showMember = showDept =  prior = false;dDate = !dDate">
+					                        <ng-md-icon icon="watch_later" size="20"></ng-md-icon>Change Due Date</a>
+
+					                        <div class="quick_edit_small_section" ng-show="dDate">
+
+					                         <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Date</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     <div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+						                    </div>
+
+
+				                        </li>
+
+				                         <li>
+				                        <a href="javascript:void(0);" confirmed-click="archiveJot('',$index)" ng-confirm-title="Delete Jot" ng-confirm-delete="Are you sure you want to remove this jot."><ng-md-icon icon="delete" size="20"></ng-md-icon>Archive Jot</a>
+				                        </li>                         
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = showDept = dDate = false;prior = !prior">
+				                            <ng-md-icon icon="date_range" size="20"></ng-md-icon>Set Priority</a>
+
+				                             <div class="quick_edit_small_section" ng-show="prior">
+				                             <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Priority</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     	<div class="clearfix" ng-include="'/modules/jot/views/priority.html'" style="position:relative;top: -21px;"></div>
+						                    </div>
+				                        </li>
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="changeStatus()"><ng-md-icon icon="done_all" size="20"></ng-md-icon>
+				                       
+				                            {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
+				                        </li>
+
+				                        <!-- <li><a href="javascript:void(0);">
+				                        <ng-md-icon icon="av_timer" size="20">
+				                        </ng-md-icon>Set Reminder</a>
+				                        </li> -->
+				                        <li>
+				                        <a href="javascript:void(0);" ng-click="moveDC(edit_jot);">
+				                        <ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC
+				                        </a>
+				                        </li>
+				                    </ul>
+				                </div>
+				            	</div>
 							</li>
 							
 
@@ -330,25 +677,36 @@
 								</div>
 
 
-								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['my']">
+								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['my']" ng-click="openComments(jot)">
 									<div class="add_hotel_room_inner">
 										<div class="room_change" layout="row" layout-align="space-between center">
-											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
-											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+											<Span class="capitalize overeclips">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="message" title="Comments" style="fill:#4d4d4d" size="18"></ng-md-icon>
+											<ng-md-icon icon="mode_edit" title="Quick Edit" ng-click="jotEditPopup(jot); $event.stopPropagation(); showQuickEdit = true;" style="fill:#4d4d4d" size="18"></ng-md-icon> 
 										</div>
+										<ul class="quick_member_list small min_height27" style="margin-left: 0;margin-right: 0;">
+				                          <li ng-repeat="member in jot.assigned_members"  title="{{($root.staffList | filter:{user_name:member})[0].first_name+' '+($root.staffList | filter:{user_name:member})[0].last_name}}" style="color: #fff;"  ng-if="($root.staffList | filter:{user_name:member}).length">
 
-										<ul class="taginglist clearfix">
-											<li ng-repeat="jottag in jot.assigned_departments">
+				                            <div class="quick_member">	
 
-											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
-											 </li>
+				                            {{($root.staffList | filter:{user_name:member})[0].first_name.substring(0,1)+''+($root.staffList | filter:{user_name:member})[0].last_name.substring(0,1)}}
+				                           
+				                            </div>
+				                            </li>
+				                        </ul>
+
+										<ul class="taginglist min_height29 clearfix"  style="margin: 10px 0">
+											<li ng-repeat="jottag in jot.assigned_departments" title="{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}">	
+												{{jottag}}
+											 </li>											
+										
 										</ul>
 
 										<ul class="tim_list clearfix">
-											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											<li  ng-if="jot.jot_type !='task'"><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
 												{{ jot.due_date | date: 'MMM d, y'}}
 											</li>
-											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>{{jot.checklist | checklistFilter:this}}</li>
 
 											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
 											{{jot.image.length}}
@@ -362,6 +720,135 @@
 										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
 										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
 									</div>
+
+
+
+									<div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
+
+								<div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">								
+								    <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
+									
+					                <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+
+								
+								<div class="quick_edit_buttons" edit-jot-directives>
+				                    <ul class="quick_edit_buttons_list clearfix">
+				                        <li>
+				                            <a href="javascript:void(0);"  ng-click="showDept = dDate = prior = false; showMember = !showMember">
+				                            <ng-md-icon icon="person" size="20"></ng-md-icon>
+				                            Change Member
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showMember">
+
+						                        <div class="quick_edit_small_section_header">
+						                            <span class="quick_edit_section_title"> Change Members</span>
+						                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+						                            </div>
+							                      <div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+
+							                      <ul class="quick_member_list small">
+							                      	<li ng-repeat="member in staffList"  title="{{member.first_name+' '+member.last_name}}">
+							                      		<div class="quick_member" ng-click="selectStaff(member.user_name)">
+							                      		{{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+							                      		</div>
+
+
+							                      		<!-- 
+							                      		use 'selected' class in with 'quick_member'
+
+							                      		 <ng-md-icon class="selectedicon" icon="check" size="20" style="fill:#444" ng-if="">
+							                      		</ng-md-icon> -->
+
+							                      	
+							                      	</li>
+
+							                      </ul>
+							                      
+
+							                    </div>
+
+				                         </li>
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = dDate = prior = false;showDept = !showDept">
+				                                <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Change Department
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showDept">
+
+				                                <div class="quick_edit_small_section_header">
+					                             <span class="quick_edit_section_title"> Change Department</span>
+					                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+					                            </div>
+
+						                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+						                      <ul class="taginglist min_height29 clearfix">
+						                          <li ng-repeat="dept in departmentList"  title="{{dept.department_name}}" ng-click="selectDept(dept.abbreviation)">
+						                            
+						                            {{dept.abbreviation}}
+						                            
+						                            </li>
+						                        </ul>
+						                    </div>
+				                        </li>
+				                       <!--  <li>
+				                            <a href="javascript:void(0);">
+				                                <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Copy
+				                            </a>
+				                        </li> -->
+				                        <li>
+					                        <a href="javascript:void(0);" ng-click="showMember = showDept =  prior = false;dDate = !dDate">
+					                        <ng-md-icon icon="watch_later" size="20"></ng-md-icon>Change Due Date</a>
+
+					                        <div class="quick_edit_small_section" ng-show="dDate">
+
+					                         <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Date</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     <div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+						                    </div>
+
+
+				                        </li>
+
+				                         <li>
+				                       <a href="javascript:void(0);" confirmed-click="archiveJot('',$index)" ng-confirm-title="Delete Jot" ng-confirm-delete="Are you sure you want to remove this jot."><ng-md-icon icon="delete" size="20"></ng-md-icon>Archive Jot</a>
+				                        </li>                         
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = showDept = dDate = false;prior = !prior">
+				                            <ng-md-icon icon="date_range" size="20"></ng-md-icon>Set Priority</a>
+
+				                             <div class="quick_edit_small_section" ng-show="prior">
+				                             <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Priority</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     	<div class="clearfix" ng-include="'/modules/jot/views/priority.html'" style="position:relative;top: -21px;"></div>
+						                    </div>
+				                        </li>
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="changeStatus()"><ng-md-icon icon="done_all" size="20"></ng-md-icon>
+				                       
+				                            {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
+				                        </li>
+
+				                        <!-- <li><a href="javascript:void(0);">
+				                        <ng-md-icon icon="av_timer" size="20">
+				                        </ng-md-icon>Set Reminder</a>
+				                        </li> -->
+				                        <li>
+				                        <a href="javascript:void(0);" ng-click="moveDC(edit_jot);">
+				                        <ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC
+				                        </a>
+				                        </li>
+				                    </ul>
+				                </div>
+				            	</div>
+
+
 								</div>
 							
 								<div ng-show="!JotListData['my'].length" class="itemnotfound">
@@ -379,23 +866,34 @@
 								
 
 
-								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['department']">
+								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['department']" ng-click="openComments(jot)">
 									<div class="add_hotel_room_inner">
 										<div class="room_change" layout="row" layout-align="space-between center">
-											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
-											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+											<Span class="capitalize overeclips">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="message" title="Comments" style="fill:#4d4d4d" size="18"></ng-md-icon>
+											<ng-md-icon icon="mode_edit" title="Quick Edit" ng-click="jotEditPopup(jot); $event.stopPropagation(); showQuickEdit = true;" style="fill:#4d4d4d" size="18"></ng-md-icon> 
 										</div>
-										<ul class="taginglist clearfix">
-											<li ng-repeat="jottag in jot.assigned_departments">
-
-											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
-											 </li>
+										<ul class="taginglist min_height29 clearfix"  style="margin: 10px 0">
+											<li ng-repeat="jottag in jot.assigned_departments" title="{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}">	
+												{{jottag}}
+											 </li>											
+										
 										</ul>
+										<ul class="quick_member_list small min_height27" style="margin-left: 0;margin-right: 0;">
+				                          <li ng-repeat="member in jot.assigned_members"  title="{{($root.staffList | filter:{user_name:member})[0].first_name+' '+($root.staffList | filter:{user_name:member})[0].last_name}}" style="color: #fff;"  ng-if="($root.staffList | filter:{user_name:member}).length">
+
+				                            <div class="quick_member" >	
+
+				                            {{($root.staffList | filter:{user_name:member})[0].first_name.substring(0,1)+''+($root.staffList | filter:{user_name:member})[0].last_name.substring(0,1)}}
+				                           
+				                            </div>
+				                            </li>
+				                        </ul>
 										<ul class="tim_list clearfix">
-											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											<li  ng-if="jot.jot_type !='task'"><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
 												{{ jot.due_date | date: 'MMM d, y'}}
 											</li>
-											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>{{jot.checklist | checklistFilter:this}}</li>
 
 											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
 											{{jot.image.length}}
@@ -409,6 +907,132 @@
 										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
 										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
 									</div>
+
+
+									<div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
+
+								<div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">								
+								    <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
+									
+					                <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+
+								
+								<div class="quick_edit_buttons" edit-jot-directives>
+				                    <ul class="quick_edit_buttons_list clearfix">
+				                        <li>
+				                            <a href="javascript:void(0);"  ng-click="showDept = dDate = prior = false; showMember = !showMember">
+				                            <ng-md-icon icon="person" size="20"></ng-md-icon>
+				                            Change Member
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showMember">
+
+						                        <div class="quick_edit_small_section_header">
+						                            <span class="quick_edit_section_title"> Change Members</span>
+						                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+						                            </div>
+							                      <div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+
+							                      <ul class="quick_member_list small">
+							                      	<li ng-repeat="member in staffList"  title="{{member.first_name+' '+member.last_name}}">
+							                      		<div class="quick_member" ng-click="selectStaff(member.user_name)">
+							                      		{{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+							                      		</div>
+
+
+							                      		<!-- 
+							                      		use 'selected' class in with 'quick_member'
+
+							                      		 <ng-md-icon class="selectedicon" icon="check" size="20" style="fill:#444" ng-if="">
+							                      		</ng-md-icon> -->
+
+							                      	
+							                      	</li>
+
+							                      </ul>
+							                      
+
+							                    </div>
+
+				                         </li>
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = dDate = prior = false;showDept = !showDept">
+				                                <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Change Department
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showDept">
+
+				                                <div class="quick_edit_small_section_header">
+					                             <span class="quick_edit_section_title"> Change Department</span>
+					                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+					                            </div>
+
+						                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+						                      <ul class="taginglist min_height29 clearfix">
+						                          <li ng-repeat="dept in departmentList"  title="{{dept.department_name}}" ng-click="selectDept(dept.abbreviation)">
+						                            
+						                            {{dept.abbreviation}}
+						                            
+						                            </li>
+						                        </ul>
+						                    </div>
+				                        </li>
+				                       <!--  <li>
+				                            <a href="javascript:void(0);">
+				                                <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Copy
+				                            </a>
+				                        </li> -->
+				                        <li>
+					                        <a href="javascript:void(0);" ng-click="showMember = showDept =  prior = false;dDate = !dDate">
+					                        <ng-md-icon icon="watch_later" size="20"></ng-md-icon>Change Due Date</a>
+
+					                        <div class="quick_edit_small_section" ng-show="dDate">
+
+					                         <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Date</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     <div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+						                    </div>
+
+
+				                        </li>
+
+				                         <li>
+				                        <a href="javascript:void(0);" confirmed-click="archiveJot('',$index)" ng-confirm-title="Delete Jot" ng-confirm-delete="Are you sure you want to remove this jot."><ng-md-icon icon="delete" size="20"></ng-md-icon>Archive Jot</a>
+				                        </li>                         
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = showDept = dDate = false;prior = !prior">
+				                            <ng-md-icon icon="date_range" size="20"></ng-md-icon>Set Priority</a>
+
+				                             <div class="quick_edit_small_section" ng-show="prior">
+				                             <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Priority</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     	<div class="clearfix" ng-include="'/modules/jot/views/priority.html'" style="position:relative;top: -21px;"></div>
+						                    </div>
+				                        </li>
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="changeStatus()"><ng-md-icon icon="done_all" size="20"></ng-md-icon>
+				                       
+				                            {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
+				                        </li>
+
+				                        <!-- <li><a href="javascript:void(0);">
+				                        <ng-md-icon icon="av_timer" size="20">
+				                        </ng-md-icon>Set Reminder</a>
+				                        </li> -->
+				                        <li>
+				                        <a href="javascript:void(0);" ng-click="moveDC(edit_jot);">
+				                        <ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC
+				                        </a>
+				                        </li>
+				                    </ul>
+				                </div>
+				            	</div>
 								</div>
 
 								<div ng-show="!JotListData['department'].length" class="itemnotfound">
@@ -425,23 +1049,34 @@
 
 
 
-								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['closed']">
+								<div class="add_hotel_room mar-bot20" ng-repeat="jot in JotListData['closed']" ng-click="openComments(jot)">
 									<div class="add_hotel_room_inner">
 										<div class="room_change" layout="row" layout-align="space-between center">
-											<Span class="capitalize" ng-click="openComments(jot)">{{jot.jot_title}}</Span>
-											<ng-md-icon icon="mode_edit" ng-click="jotEditPopup(jot)" style="fill:#4d4d4d" size="18"></ng-md-icon> 
+											<Span class="capitalize overeclips">{{jot.jot_title}}</Span>
+											<ng-md-icon icon="message" title="Comments" style="fill:#4d4d4d" size="18"></ng-md-icon>
+											<ng-md-icon icon="mode_edit" title="Quick Edit" ng-click="jotEditPopup(jot); $event.stopPropagation(); showQuickEdit = true;" style="fill:#4d4d4d" size="18"></ng-md-icon> 
 										</div>
-										<ul class="taginglist clearfix">
-											<li ng-repeat="jottag in jot.assigned_departments">
-
-											{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}
-											 </li>
+										<ul class="taginglist min_height29 clearfix"  style="margin: 10px 0">
+											<li ng-repeat="jottag in jot.assigned_departments" title="{{(departmentList | filter : {abbreviation : jottag } : true)[0].department_name}}">	
+												{{jottag}}
+											 </li>											
+										
 										</ul>
+										<ul class="quick_member_list small min_height27" style="margin-left: 0;margin-right: 0;">
+				                          <li ng-repeat="member in jot.assigned_members"  title="{{($root.staffList | filter:{user_name:member})[0].first_name+' '+($root.staffList | filter:{user_name:member})[0].last_name}}" style="color: #fff;"  ng-if="($root.staffList | filter:{user_name:member}).length">
+
+				                            <div class="quick_member">	
+
+				                            {{($root.staffList | filter:{user_name:member})[0].first_name.substring(0,1)+''+($root.staffList | filter:{user_name:member})[0].last_name.substring(0,1)}}
+				                           
+				                            </div>
+				                            </li>
+				                        </ul>
 										<ul class="tim_list clearfix">
-											<li><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
+											<li  ng-if="jot.jot_type !='task'"><ng-md-icon icon="av_timer" style="fill:#7a7a7a" size="18"></ng-md-icon>
 												{{ jot.due_date | date: 'MMM d, y'}}
 											</li>
-											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>3/5</li>
+											<li><ng-md-icon icon="playlist_add_check" style="fill:#7a7a7a" size="18"></ng-md-icon>{{jot.checklist | checklistFilter:this}}</li>
 
 											<li><ng-md-icon icon="attach_file" style="fill:#7a7a7a" size="18"></ng-md-icon>
 											{{jot.image.length}}
@@ -455,6 +1090,131 @@
 										<span class="highttag capitalize {{jot.priority}}">{{jot.priority}}</span>
 										<span class="yellowtag capitalize status {{jot.status}}">{{jot.status}}</span>
 									</div>
+
+									<div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
+
+								<div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">								
+								    <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
+									
+					                <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+
+								
+								<div class="quick_edit_buttons" edit-jot-directives>
+				                    <ul class="quick_edit_buttons_list clearfix">
+				                        <li>
+				                            <a href="javascript:void(0);"  ng-click="showDept = dDate = prior = false; showMember = !showMember">
+				                            <ng-md-icon icon="person" size="20"></ng-md-icon>
+				                            Change Member
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showMember">
+
+						                        <div class="quick_edit_small_section_header">
+						                            <span class="quick_edit_section_title"> Change Members</span>
+						                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+						                            </div>
+							                      <div class="clearfix" ng-include="'/modules/jot/views/staff.html'"></div>
+
+							                      <ul class="quick_member_list small">
+							                      	<li ng-repeat="member in staffList"  title="{{member.first_name+' '+member.last_name}}">
+							                      		<div class="quick_member" ng-click="selectStaff(member.user_name)">
+							                      		{{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+							                      		</div>
+
+
+							                      		<!-- 
+							                      		use 'selected' class in with 'quick_member'
+
+							                      		 <ng-md-icon class="selectedicon" icon="check" size="20" style="fill:#444" ng-if="">
+							                      		</ng-md-icon> -->
+
+							                      	
+							                      	</li>
+
+							                      </ul>
+							                      
+
+							                    </div>
+
+				                         </li>
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = dDate = prior = false;showDept = !showDept">
+				                                <ng-md-icon icon="arrow_forward" size="20"></ng-md-icon>Change Department
+				                            </a>
+
+				                            <div class="quick_edit_small_section" ng-show="showDept">
+
+				                                <div class="quick_edit_small_section_header">
+					                             <span class="quick_edit_section_title"> Change Department</span>
+					                            <ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+					                            </div>
+
+						                      <div class="clearfix" ng-include="'/modules/jot/views/department.html'"></div>
+						                      <ul class="taginglist min_height29 clearfix">
+						                          <li ng-repeat="dept in departmentList"  title="{{dept.department_name}}" ng-click="selectDept(dept.abbreviation)">
+						                            
+						                            {{dept.abbreviation}}
+						                            
+						                            </li>
+						                        </ul>
+						                    </div>
+				                        </li>
+				                       <!--  <li>
+				                            <a href="javascript:void(0);">
+				                                <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Copy
+				                            </a>
+				                        </li> -->
+				                        <li>
+					                        <a href="javascript:void(0);" ng-click="showMember = showDept =  prior = false;dDate = !dDate">
+					                        <ng-md-icon icon="watch_later" size="20"></ng-md-icon>Change Due Date</a>
+
+					                        <div class="quick_edit_small_section" ng-show="dDate">
+
+					                         <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Date</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     <div class="clearfix" ng-include="'/modules/jot/views/datepicker.html'"></div>
+						                    </div>
+
+
+				                        </li>
+
+				                         <li>
+				                        <a href="javascript:void(0);" confirmed-click="archiveJot('',$index)" ng-confirm-title="Delete Jot" ng-confirm-delete="Are you sure you want to remove this jot."><ng-md-icon icon="delete" size="20"></ng-md-icon>Archive Jot</a>
+				                        </li>                         
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="showMember = showDept = dDate = false;prior = !prior">
+				                            <ng-md-icon icon="date_range" size="20"></ng-md-icon>Set Priority</a>
+
+				                             <div class="quick_edit_small_section" ng-show="prior">
+				                             <div class="quick_edit_small_section_header">
+				                            	 <span class="quick_edit_section_title"> Change Priority</span>
+				                            	<ng-md-icon  class="quick_close_btn" icon="close" style="fill:#444" size="20" ng-click="showMember = showDept = dDate = prior = false"></ng-md-icon> 
+				                            </div>
+						                     	<div class="clearfix" ng-include="'/modules/jot/views/priority.html'" style="position:relative;top: -21px;"></div>
+						                    </div>
+				                        </li>
+
+				                        <li>
+				                            <a href="javascript:void(0);" ng-click="changeStatus()"><ng-md-icon icon="done_all" size="20"></ng-md-icon>
+				                       
+				                            {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}</a>
+				                        </li>
+
+				                        <!-- <li><a href="javascript:void(0);">
+				                        <ng-md-icon icon="av_timer" size="20">
+				                        </ng-md-icon>Set Reminder</a>
+				                        </li> -->
+				                        <li>
+				                        <a href="javascript:void(0);" ng-click="moveDC(edit_jot);">
+				                        <ng-md-icon icon="logout" size="20"></ng-md-icon>Send To DC
+				                        </a>
+				                        </li>
+				                    </ul>
+				                </div>
+				            	</div>
 								</div>
 								
 								

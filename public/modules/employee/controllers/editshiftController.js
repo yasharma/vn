@@ -1,8 +1,8 @@
 "use strict";
 
-app.controller('editshiftController', ['$scope','localStorageService','globalRequest','shiftDetail','$mdDialog',
-	function($scope,localStorageService,globalRequest,shiftDetail,$mdDialog) {
-		var hotel = localStorageService.get('hotel');
+app.controller('editshiftController', ['$scope','globalRequest','shiftDetail','$mdDialog','toastService',
+	function($scope,globalRequest,shiftDetail,$mdDialog,toastService) {
+		
 
 		/*
 		* Get day list in array
@@ -26,21 +26,8 @@ app.controller('editshiftController', ['$scope','localStorageService','globalReq
 
 		angular.forEach(shiftDetail.detail,function (value,key) {
 
-			if(key == 'start_time')
-			{
-
-				$scope.start_hour = value[0].hour;
-				$scope.start_min = value[0].minute;
-
-			} else if(key == 'end_time'){
-	
-				$scope.end_hour = value[0].hour;
-				$scope.end_min = value[0].minute;
-
-			} else if(key == 'bgcolor'){
-	
+			if(key == 'bgcolor'){	
 				$scope.ctlr.bgcolor = value;
-
 			} else {
 				$scope[key] = value;
 			}
@@ -63,17 +50,28 @@ app.controller('editshiftController', ['$scope','localStorageService','globalReq
 			            	shift_name      :  $scope.shift_name,		
 		            		department_name :  $scope.department_name,
 		            		bgcolor       	:  $scope.ctlr.bgcolor,
-		            		start_time      :  { hour:$scope.start_hour,minute:$scope.start_min},		
-		            		end_time        :  { hour:$scope.end_hour,minute:$scope.end_min},
+		            		start_time      :  $scope.start_time,		
+		            		end_time        :  $scope.end_time,
 	
 			            }
 			          };
 			globalRequest.jotCRUD(request).then(function(response){
-			 	$scope.shiftEditResult = response;
+			 	var popup;
 			 	if(response.status ==1)
 			 	{
 			 		$mdDialog.cancel();
 			 		globalRequest.getShiftTime();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 	
 			});

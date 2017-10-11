@@ -3,11 +3,14 @@
 app.controller('schedulerController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','$interval','toastService',
 	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,$interval,toastService) {
 
-		var hotel 			 = localStorageService.get('hotel');
+		
 		var date 	   	     = new Date();
 		$scope.currentDate   = new Date(); 
 		$scope.datesData 	 = {dates : "", monthStartDate : ""};
 		$scope.position_list = window.__API_PATH.POSITION;
+		$scope.dateLabel  = {from:"",to:""};
+
+
 
 		/*
 		* Get day list in array
@@ -15,6 +18,17 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		
 		$scope.getDay = function(num) {
 		    return new Array(num);   
+		};
+
+		
+
+		/*******************************************************
+		* Callback function to close color swatch on outside click
+		*******************************************************/
+
+		$scope.swatchToggle = function(){			
+				$scope.colorSwatch = false;
+											
 		};
 
 		/*
@@ -28,6 +42,12 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		* Get shift timing
 		*************************************/		
 		globalRequest.getShiftTime();
+
+		/************************************
+		* Get position list
+		*************************************/			
+		
+		globalRequest.getPositionList();
 		
 
 		/************************************
@@ -44,7 +64,7 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 					url:window.__API_PATH.MEMBER_SCHEDULE_DATA,
 					method:"GET",
 					params:{
-						hotel_id    :  hotel._id,
+						hotel_id    :  $rootScope.activeHotelData._id,
 						from_date   :  from,
 						to_date     :  to	
 					}
@@ -63,40 +83,25 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 
 		$rootScope.$on("CallgetSchedule", function(evt,data){
            $scope.getSchedule(data.firstDay,data.lastDay);
-        });
+        });		
 
 
-		/************************************
-		* Blank all field before open form
-		*************************************/
-		$scope.blank = function(){
-			$scope.shift_name = "";		
-			$scope.shift_time = "";		
-			$scope.ctlr.bgcolor = "";		
-			$scope.department_name = "";		
+		/**************************************************
+		* Get first and last date from current week 
+		* By passing how many week date want
+		**************************************************/
+
+
+		Date.prototype.getDateAccordingToCurrentWeek = function(start,weekCount)
+		{
+		    start = start || 0;
+		    var today = new Date(this.setHours(0, 0, 0, 0));
+		    var day = today.getDay() - start;
+		    var date = today.getDate() - day;
+		    var StartDate = new Date(today.setDate(date+1));
+   			var EndDate = new Date(today.setDate(date + 7 * weekCount));
+		    return [StartDate, EndDate];
 		};
-
-		/**************************************************************************
-		* Get last date of week by passing the week number and month start date obj
-		***************************************************************************/
-
-		Date.prototype.getWeek = function(monthStart) {
-			var onejan = new Date(monthStart);
-			return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
-		};
-
-		function getDateRangeOfWeek(monthStart,weekNo){
-			var numOfdaysPastSinceLastMonday;
-		    var d1 = new Date();
-		    numOfdaysPastSinceLastMonday = parseInt(d1.getDay()- 1);
-		    d1.setDate(d1.getDate() - numOfdaysPastSinceLastMonday);
-		    var weekNoToday = d1.getWeek(monthStart);
-		    var weeksInTheFuture = parseInt( weekNo) - parseInt(weekNoToday );
-		    d1.setDate(d1.getDate() + parseInt( 7 * weeksInTheFuture ));
-		    
-		    d1.setDate(d1.getDate() + 6);		    
-		    return d1;
-		}
 
 
 		/**************************************************************************
@@ -134,7 +139,9 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		*
 		*********************************************************************/
 
-		$scope.UpdateCalenderViewDates 	=	function(calenderCurrentData,nav,countDate){
+		$scope.UpdateCalenderViewDates 	=	function(calenderCurrentData,nav){
+			$scope.activeRangeMenu     = 'fullmonth';
+			$scope.scheduleRange       = false;
 			
 			var monthVal,firstDay,lastDay,year;
 
@@ -156,24 +163,6 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 			lastDay    = new Date(date.getFullYear(), monthVal + 1, 0);
 
 
-			if(countDate == 'today')
-			{
-				if(!nav)
-				{
-					firstDay   = new Date();
-					lastDay    = new Date();					
-				} else {
-					$scope.activeRangeMenu = '';
-				}
-
-			} else if(countDate){
-				var WeeksMonth = firstDay.getMonth()+1;
-				var WeeksYear  = firstDay.getFullYear();					
-				var lastDateOfWeek = getDateRangeOfWeek(firstDay,countDate);
-				lastDay = lastDateOfWeek;					
-			}
-	
-
 			$scope.datesData.dates        		= AllDates(firstDay,lastDay);
 			$scope.datesData.monthStartDate     = firstDay;
 
@@ -181,26 +170,72 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 			* Blank calender before load new data 
 			* Reinitialize calender data
 			*/
+
 			$scope.membersList 	= '';			
 			$scope.getSchedule(firstDay,lastDay);
 		};
 
+		
+
+
 		/**************************************************
 		* Set Scheduler on page load
 		**************************************************/
-		$scope.activeRangeMenu = 2;
-		$scope.UpdateCalenderViewDates('','',2);
 
+		function setSchedulerOnLoad()
+		{
+			$scope.activeRangeMenu = 1;
+			var dateArray    				    = new Date().getDateAccordingToCurrentWeek('',1);
+			$scope.datesData.dates        		= AllDates(dateArray[0],dateArray[1]);
+			$scope.datesData.monthStartDate     = new Date(date.getFullYear(), date.getMonth(), 1);
+
+			if(dateArray[0].getMonth() != dateArray[1].getMonth())
+			{
+				$scope.dateLabel 		 = {from:dateArray[0], to:dateArray[1]};
+				$scope.scheduleRange     = true;
+			} 
+
+
+			$scope.getSchedule(dateArray[0],dateArray[1]);
+		}
+		setSchedulerOnLoad();
 
 		/**************************************************
 		* Set end date of calender and filter accordingly
 		**************************************************/
 
-		$scope.setVeiwRange = function(setDateValue,countDate){
+		$scope.setVeiwRange = function(countDate){
 
-			$scope.activeRangeMenu = countDate;
-			$scope.UpdateCalenderViewDates(setDateValue,'',countDate);
+			var firstViewDay,lastViewDay,firstDay,lastDay;
+			date = new Date();
+
+			$scope.activeRangeMenu    =  countDate;
+
+			if(countDate == 'today')
+			{
+				firstViewDay = lastViewDay   = new Date(date.getFullYear(),date.getMonth(), date.getDate());
+				firstDay = lastDay   = new Date(date.getFullYear(),date.getMonth(), date.getDate());
+
+			} else if(countDate == 'fullmonth') {
+				firstViewDay = firstDay   = new Date(date.getFullYear(), date.getMonth(), 1);
+				lastViewDay = lastDay    = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+			} else {
+				var dateArray   = date.getDateAccordingToCurrentWeek('',countDate);
+				firstViewDay = firstDay    	= dateArray[0];
+				lastViewDay = lastDay 		= dateArray[1];
+			}			
 			
+			$scope.scheduleRange     = false;
+			if(firstViewDay.getMonth() != lastViewDay.getMonth())
+			{
+				$scope.dateLabel 		 = {from:firstViewDay, to:lastViewDay};
+				$scope.scheduleRange     = true;
+			} 
+
+			$scope.datesData.dates    = AllDates(firstViewDay,lastViewDay);
+			$scope.getSchedule(firstDay,lastDay);
+
+
 		};
 
 
@@ -208,16 +243,41 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		* Set calender view by date range
 		**************************************************/
 
-		$scope.setVeiwRangeByDate = function(){
-			$scope.activeRangeMenu = '';
-			var scheduleFrom       = $scope.scheduleFrom;
-			var scheduleTo  	   = $scope.scheduleTo;
+		$scope.setVeiwRangeByDate = function(selectElement){
 
-			if(scheduleFrom && scheduleTo)
+			if(selectElement == '')
 			{
-				$scope.datesData.dates   = AllDates(scheduleFrom,scheduleTo);
-				$scope.getSchedule(scheduleFrom,scheduleTo);
+				$scope.scheduleRange     = false;
+				setSchedulerOnLoad();
+
+			} else {
+
+				$scope.activeRangeMenu = '';
+				var scheduleFrom       = $scope.scheduleFrom;
+				var scheduleTo  	   = $scope.scheduleTo;
+
+				$scope.startRange = {min:"", max:""};
+				$scope.endRange = {min:"", max:""};
+
+				if(selectElement == 'start')
+				{
+					var rangeDate = new Date(scheduleFrom);
+					$scope.scheduleTo = '';
+					$scope.endRange.min = new Date(rangeDate.setDate(rangeDate.getDate()+1));
+					$scope.endRange.max = new Date(rangeDate.setDate(rangeDate.getDate()+30));					
+				}			
+
+				if(scheduleFrom && scheduleTo)
+				{
+					$scope.dateLabel 		 = {from:scheduleFrom, to:scheduleTo};
+					$scope.scheduleRange     = true;
+					$scope.datesData.dates   = AllDates(scheduleFrom,scheduleTo);
+					$scope.getSchedule(scheduleFrom,scheduleTo);
+				}
+
 			}
+
+			
 			
 		};
 
@@ -236,49 +296,116 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 				}).then(function(answer) {}, function() {});
 		};
 
+		/************************************
+		* Blank all field before open form
+		*************************************/
+		
+
+
+		function blankOnSucess(){
+			$scope.shift_name = "";		
+			$scope.shift_time = "";		
+			$scope.ctlr.bgcolor = "";		
+			$scope.department_name = "";			
+		}
+
+		$scope.blank = function(){
+			blankOnSucess();		
+			$scope.shiftListResult = "";		
+		};
 		
 
 		/************************************
 		* Add shift timing
 		*************************************/
 
-		 $scope.addshift = function(){
+		$scope.addshift = function(){
 		 	var shiftTimeRequest = {
 		            url:window.__API_PATH.ADD_HOTELSHIFT,
 		            method:"POST",
 		            data:{
-		            	hotel_id        :  hotel._id,		
+		            	hotel_id        :  $rootScope.activeHotelData._id,		
 		            	shift_name      :  $scope.shift_name,
 		            	department_name :  $scope.department_name,
 		            	bgcolor       	:  $scope.ctlr.bgcolor,
-		            	start_time      :  { hour:$scope.start_hour,minute:$scope.start_min},		
-		            	end_time        :  { hour:$scope.end_hour,minute:$scope.end_min},			
+		            	start_time      :  $scope.start_time,		
+		            	end_time        :  $scope.end_time,			
 		            }
 		          };
 			globalRequest.jotCRUD(shiftTimeRequest).then(function(response){		
-			 	$scope.shiftListResult = response;
-				$scope.blank();
+				var popup;
 			 	if(response.status == 1)
 			 	{
+			 		blankOnSucess();
 			 		if(!$scope.shiftList)
 			 		{
 			 			$scope.shiftList = [];
 			 		}
-			 		$scope.shiftList.push(response.result);	
-
-			 		/************************************
-					* Get shift timing
-					*************************************/		
+			 		$scope.shiftList.push(response.result);		
 					globalRequest.getShiftTime();
+					popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 	}  else {
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
 			 	}
 			 });
 		 };	
+
+
+
+		/*********************************************************************
+		* Keep selected field value in scope
+		*********************************************************************/
+
+		var selectedField  = [];
+		
+		
+		$scope.storeFieldValue = function(d,member,dept,fieldValue){
+			
+			if(fieldValue)
+			{
+				var filterString = d.getDate()+''+(parseInt(d.getMonth())+1) +''+d.getFullYear();	
+				selectedField.push({
+					department 			:  dept.abbreviation,
+					shift_date     		:  new Date(d.getFullYear(),d.getMonth(), d.getDate()).getTime(),
+			        shift_filter_date   :  filterString,
+			        user_id        		:  member._id,
+			        hotel_id       		:  $rootScope.activeHotelData._id
+				});
+			} else {
+				selectedField = selectedField.filter(function(values){
+						return values.shift_date != new Date(d.getFullYear(),d.getMonth(), d.getDate()).getTime();
+				});
+
+			}
+		};
+
+		/*********************************************************************
+		* Unselect all select field after scheduled
+		*********************************************************************/
+
+		$rootScope.$on('scheduleField', function (event, args) {
+			selectedField  = [];
+			angular.element(document.querySelectorAll(".md-checked")).removeClass("md-checked");
+		
+		});
+
+		
+
+
 
 		 /*****************************************
 		 * Open shifts edit form
 		 *****************************************/	
 
 		$scope.openEditshift = function(detail){
+				
 				$mdDialog.show({
 					controller: 'editshiftController',
 					controllerAs: 'ctlr',
@@ -291,19 +418,29 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 
 		}; 
 
+		/*var isAllCheck = false;	
+		function togglecheckboxes(cn){			
+		    var cbarray = document.getElementsByName(cn);
+		    for(var i = 0; i < cbarray.length; i++){
+			        cbarray[i].setAttribute("aria-checked", false);
+			}   
+		}
+*/
 
 		/*****************************************
 		 * Open shifts edit form
 		 *****************************************/	
 
-		$scope.openEmpSchedule = function(scheduleDate,empDetail){
+		$scope.openEmpSchedule = function(scheduleDate,empDetail,dept){
+			//togglecheckboxes('multipleSchedule');
+
 				$mdDialog.show({
 					controller: 'scheduleEmpController',
 					templateUrl: '/modules/employee/views/schedule_employee.html',
 					parent: angular.element(document.body),
 					fullscreen: $scope.customFullscreen,
 					clickOutsideToClose:true,	
-					locals:{scheduledData:{scheduleDate:scheduleDate,empDetail:empDetail}}				
+					locals:{scheduledData:{scheduleDate:scheduleDate,empDetail:empDetail,ScheduleDepartment:dept,multipleSchedule:selectedField}}				
 				}).then(function(answer) {}, function() {});
 
 		};
@@ -312,16 +449,17 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		* Delete shift
 		*****************************************/	
 
-		$scope.removeshift = function(detail){
+		$scope.removeshift = function(detail,index){
 
 			var request={
 				url:window.__API_PATH.DELETE_HOTELSHIFTS,
 				method:"DELETE",
-				params:{_id:detail._id}
+				params:{_id:detail}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
-				$mdDialog.cancel();
+				
+				$scope.shiftList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 			});
@@ -344,7 +482,6 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 	      self.activated = true;
 	      self.determinateValue = 30;
 	      $interval(function() {
-
 	        self.determinateValue += 1;
 	        if (self.determinateValue > 100) {
 	          self.determinateValue = 30;

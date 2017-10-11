@@ -21,6 +21,9 @@ var MemberScheduleSchema 	= new Schema({
     shift_filter_date:{
         type: String
     },
+    department:{
+        type: String
+    },
     schedule_data:{
         type: Object //('shift_name':'day shift','start_time': '9am','end_time': '5pm','short_note':'i am on leave today.')
     },

@@ -1,17 +1,15 @@
-<section class="dashrightsection" ng-class="{'leftopen':leftopen}">
+<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
 	<div class="dash_hd_txt mar-bot20 clearfix">
 		<div class="dash_hd mar-bot0 dash_hd-left">View Member</div>
 		<div class="rightfilter_right">
 			<div class="chane_pass_btn_right">
 				
-				<md-button  slide-toggle="#emp" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blankFields();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+				<md-button  slide-toggle="#emp" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
 					{{(invForm)?"Close":"Add Member"}}
 				</md-button>
 
 			</div>	
-			<div class="chane_pass_btn_right" ng-hide="addform">
-				<md-button class="md-primary addyellobtn graybtn widthauto">export</md-button>
-			</div>	
+				
 	    </div>    
 	</div>
 
@@ -20,51 +18,67 @@
 	<form name="addEmployeeform" ng-submit="addEmployee(addEmployeeform.$valid)" novalidate>	
 		<div class="dash_pro_inform_inner boxunoversal">
 			<div class="row">
+
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
-				            <input  ng-model="first_name" placeholder="First Name ">
-				             
-				    </md-input-container>
-				</div>
-				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
-				            <input  ng-model="last_name" placeholder="Last Name">
-				            
-				    </md-input-container>
-				</div>
-				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
-				            <input  ng-model="contact_number" placeholder="Contact Number">
+					<md-input-container  class="md-block">
+				            <input  ng-model="first_name" placeholder="First Name" ng-required="true">				             
 				    </md-input-container>
 				</div>
 
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container class="md-block">
+				            <input  ng-model="last_name" placeholder="Last Name" ng-required="true">				            
+				    </md-input-container>
+				</div>
+
+				<div class="col-sm-4">
+					<md-input-container class="md-block">
+				            <input  ng-model="contact_number" placeholder="Contact Number" ng-required="true">
+				    </md-input-container>
+				</div>
+
+				<div class="col-sm-4">
+					<md-input-container class="md-block">
 				            <input  ng-model="email" placeholder="Email">
-
 				    </md-input-container>
 				</div>
 
-				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
-                        <md-select ng-model="department" placeholder="Select Department" style="padding:0">
-                          <md-option ng-repeat="dept in departmentList" value="{{dept.abbreviation}}">
+				<div class="col-sm-4">					
+
+                    <md-input-container md-no-float class="md-block">					
+						<md-select ng-model="departments"
+				                   md-on-close="clearSearchTerm()"
+				                   data-md-container-class="selectdemoSelectHeader"
+				                   multiple aria-label="department" placeholder="Select Department">					          
+				          <md-optgroup label="deptartments">
+				            <md-option ng-repeat="dept in departmentList" value="{{dept.abbreviation}}">
                             {{dept.department_name}}
-                          </md-option>                         
-                        </md-select>
-                    </md-input-container>
+                          </md-option>
+				          </md-optgroup>
+				        </md-select>
+					</md-input-container>
+
+
+
 				</div>
 				<div class="col-sm-4">
-					<md-input-container md-no-float class="md-block">
-				        <md-select ng-model="position" placeholder="Position" style="padding:0">
-                        <md-option  ng-repeat="pos in position_list" value="{{pos}}">
-                            {{pos}}
-                        </md-option> 
-                                             
-                        </md-select>
-				    </md-input-container>
+				
+				     <md-input-container  md-no-float class="md-block">					
+						<md-select ng-model="position"
+				                   md-on-close="clearSearchTerm()"
+				                   data-md-container-class="selectdemoSelectHeader"
+				                   multiple aria-label="Position" placeholder="Select Position">					          
+				          <md-optgroup label="Position">
+				           <md-option  ng-repeat="pos in potisionList" value="{{pos.position}}">
+	                            {{pos.position}}
+	                        </md-option> 
+				          </md-optgroup>
+				        </md-select>
+					</md-input-container>
+
 				</div>
 				<div class="clearfix"></div>
+
 				<div class="col-sm-4">
 					<md-input-container md-no-float class="md-block">
 						 <md-select ng-model="status" placeholder="Select Status" style="padding:0">
@@ -79,7 +93,7 @@
 				</div>
 
 				<div class="col-sm-8">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container class="md-block">
 						 <input  ng-model="address" placeholder="Address">
 					</md-input-container>	
 				</div>
@@ -87,59 +101,23 @@
 			
 			<div class="clearfix ">
 				<div class="Selectdep_txt">Upload Images</div>
+
 				<div class="change_pro positionrel">
 					
 					<img ngf-thumbnail="profile[0] || 'assets/images/default_profile.png'"  class="width100" style="height:100%">
 					<div class="hover_de">
 						<ng-md-icon icon="photo_camera" style="fill: #fff" size="24"></ng-md-icon> 
 						<span class="text-center">
-							Change your profile photo
+							Upload profile photo
 						</span>
 					</div>
 					<input type="file" ngf-select ="uploadprofileImage($files, $invalidFiles)" ngf-resize="{width: 90, height: 90}" ng-model="profile_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
-				</div>				
-				<span class="progress" ng-show="profileProgress >= 0">
-				     <div style="background: green;text-align: center;color: #fff; width:{{profileProgress}}%" ng-bind="profileProgress + '%'"></div>
-				</span> 
+				</div>			
+				
 				<br>
 			</div>
 
-			<!-- <div class="clearfix ">
-				<div class="Selectdep_txt">Permisson:</div>
-					<div class="selall">
-						<md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-				            Select All
-				         </md-checkbox>
-          			</div>
-          			<div class="selall_list clearfix">
-	          			<ul class="selall_list_ul">
-	          				<li><md-checkbox ng-model="Meeting.cb1" aria-label="Checkbox 2">
-					            Meeting Room 
-					         </md-checkbox></li>
-					         <li><md-checkbox ng-model="Vending.cb1" aria-label="Checkbox 2">
-					            Vending Room
-					         </md-checkbox></li>
-					         <li><md-checkbox ng-model="Lost.cb1" aria-label="Checkbox 3">
-					            Lost &amp; Found
-					         </md-checkbox></li>
-					         <li><md-checkbox ng-model="Messages.cb1" aria-label="Checkbox 4">
-					           Messages
-					         </md-checkbox></li>
-					         <li><md-checkbox ng-model="Phone.cb1" aria-label="Checkbox 5">
-					             Phone Directory 
-					         </md-checkbox></li>
-					         <li><md-checkbox ng-model="Report.cb1" aria-label="Checkbox 6">
-					            View Report
-					         </md-checkbox></li>
-					         <li><md-checkbox ng-model="Remove.cb1" aria-label="Checkbox 7">
-					            Add / Remove Members
-					         </md-checkbox></li>
-					         <li><md-checkbox ng-model="Group.cb1" aria-label="Checkbox 8">
-					           Add / Remove Group
-					         </md-checkbox></li>
-	          			</ul>
-	          		</div>	
-				</div> -->
+			
 
 			<div class="clearfix">
 				<div class="chane_pass_btn">
@@ -147,18 +125,6 @@
 				</div>
 					
 			</div>
-
-
-			<div class="message {{memberResult.class}}" ng-if="memberResult.status == 1">{{memberResult.message}}
-			</div>
-
-			<div class="result {{memberResult.class}}" ng-if="memberResult.status==2">    
-                <ul>
-                  <li ng-repeat="(key,value) in memberResult.errors">
-                  {{value.message}}
-                  </li>
-                </ul>
-            </div>
 
 		</div>
 		</form>
@@ -170,22 +136,29 @@
 	<div class="clearfix depart_midle">
 		<div class="deptsrch deptsrch_gray">
 			<div class="deptsrch_gray_top mar-bot0 clearfix">
+					
+
 				<div class="montfilter vending_left_top_serch positionrel">
-					<md-input-container md-no-float class="md-block">
+					<md-input-container class="md-block">
 			      <input  ng-model="searchEmployee" placeholder="Search Employee">
 			  	</md-input-container>			  	
 				</div>
+
+				<div class="" style="float: right; padding: 10px 0px 0 10px;cursor: pointer;" ng-click="searchEmployee = searchPosition = search_departmentwise = search_status = ''" title="Reset filters">
+						<img src="assets/images/reset_filter.png" style="width: 30px;">
+				</div>
+
 				<div class="right_montfilter">
 					<ul class="clearfix">
 						<li>
 							<div class="selectwhite">
-					            <md-input-container md-no-float class="md-block selectgeneral38">
+					            <md-input-container md-no-float class="md-block selectgeneral48">
 					                <md-select ng-model="searchPosition" placeholder="Position" style="padding:0">
 					                <md-option value="">
 			                            Select
 			                          </md-option>
-					                 <md-option value="{{pos}}" ng-repeat="pos in position_list">
-			                            {{pos}}
+					                <md-option  ng-repeat="pos in potisionList" value="{{pos.position}}">
+	                            		{{pos.position}}
 			                          </md-option>                    
 			                        </md-select>
 					            </md-input-container>
@@ -193,7 +166,7 @@
 						</li>
 						<li>
 							<div class="selectwhite">
-					            <md-input-container md-no-float class="md-block selectgeneral38">
+					            <md-input-container  md-no-float class="md-block selectgeneral48">
 					                <md-select ng-model="search_departmentwise" placeholder="Department">
 					                	<md-option value="">
                             				Select Department
@@ -207,7 +180,7 @@
 	        			</li>
 	        			<li>
 							<div class="selectwhite">
-					            <md-input-container md-no-float class="md-block selectgeneral38">
+					            <md-input-container md-no-float class="md-block selectgeneral48">
 					                <md-select ng-model="search_status" placeholder="Status">
 					                <md-option value="">
 			                            Select Status
@@ -224,59 +197,76 @@
 	        			</li>
         			</ul>
 				</div>
+
+				
 			</div>
 		</div>
 
-	<div class="addmember_data_table">
-			<div class="table_div">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table">
-          <thead>
-              <tr>
-                  <th width="8%"># </th>                  
-                  <th width="20%">Name</th>
-                  <th width="20%">Position</th>
-                  <th width="12%">Department</th>
-                  <th width="12%">Last Activity</th>
-                  <th width="20%">Status</th>
-                  <th width="20%">Action</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr ng-repeat="emp in filteredemp = 
-              ($root.staffList | 
-              filter:(!!search_departmentwise || undefined) 
-              && {department: search_departmentwise} | 
-              filter:(!!searchPosition || undefined) && {position:searchPosition} |
-              filter: (!!search_status || undefined) && {status: search_status}: true |
-              employeefilter:this
-              ) 
-              track by $index" ng-hide="hideEmp">
-                  <td>{{$index+1}}</td>
-                 
-                  <td class="capitalize" >
-                  	<img src="{{(emp.profile_image[0])?'/images/hotel/'+emp.hotel_id+'/profile/'+emp.profile_image[0]:'/assets/images/default_profile.png'}}" style="margin-right: 10px;">
+		<div class="addmember_data_table">
+				<div class="table_div">
+	        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table" ng-init="ctrl.hideEmp = []">
+	          <thead>
+	              <tr>
+	                  <th width="2%"># </th>                  
+	                  <th width="20%">Name</th>
+	                  <th width="10%">Position</th>
+	                  <th width="10%">Department</th>
+	                  <th width="18%">Email Address</th>
+	                  <th width="15%">Contact Number</th>
+	                  <th width="10%">Status</th>
+	                  <th width="10%">Action</th>
+	              </tr>
+	          </thead>
+	          <tbody>
+	              <tr ng-repeat="emp in filteredemp = 
+	              ($root.staffList | 
+	              filter:(!!search_departmentwise || undefined) 
+	              && {departments: search_departmentwise} | 
+	              filter:(!!searchPosition || undefined) && {position:searchPosition} |
+	              filter: (!!search_status || undefined) && {status: search_status}: true |
+	              employeefilter:this
+	              ) 
+	              track by $index">
+	                  <td>{{$index+1}}</td>
+	                 
+	                  <td class="capitalize" >
+	                  	<img src="{{(emp.profile_image)?'/images/hotel/'+emp.hotel_id+'/profile/'+emp.profile_image:'/assets/images/default_profile.png'}}" style="margin-right: 10px;">
 
-                  {{emp.first_name}} {{emp.last_name}}</td>
-                  <td>{{(emp.position  != 'false')?emp.position:'-'}}</td>
-                  <td>{{(departmentList | filter : {abbreviation : emp.department } : true)[0].department_name}}
-                  </td>
-                  <td><span class="tablebluetag">{{emp.updated | date : 'dd MMM, yyyy h:m a'}}</span></td>
-                  <td><span class="tablebluetag">{{emp.status}}</span></td>
-                  <td>
-                  	<!-- <ng-md-icon class="cursor tablegreentag" icon="remove_red_eye" class="cursor"  size="22" ng-click="viewDetail(emp);"></ng-md-icon> -->
+	                  {{emp.first_name}} {{emp.last_name}}</td>
+	                  <td>
 
-                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(emp);"></ng-md-icon>
-                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" ng-click="removeEmployee(emp);hideEmp = ! hideEmp"></ng-md-icon>
-                  </td>
-              </tr>
-              
-          </tbody>
-        </table>
+	                  {{emp.position.join(", ")}}
 
-        <div ng-show="!filteredemp.length" class="itemnotfound">
-                No employee found.                
-         </div>
-      </div>
-	</div>
+
+	                  </td>
+	                  <td>                 
+
+	                  <label ng-repeat="dept in emp.departments">
+	                  	{{(departmentList | filter : {abbreviation : dept } : true)[0].department_name}}{{($index < emp.departments.length-1)?",&nbsp;":''}}
+	                  </label>
+	                
+	                  </td>
+	                  <td>{{emp.email}}</td>
+	                  <td>{{emp.contact_number}}</td>
+	                  <td><span class="tablebluetag">{{emp.status}}</span></td>
+	                  <td>
+	                  	<!-- <ng-md-icon class="cursor tablegreentag" icon="remove_red_eye" class="cursor"  size="22" ng-click="viewDetail(emp);"></ng-md-icon> -->
+	                  	<ng-md-icon ng-if="emp.invitationstatus == 'unverified' "  class="cursor edit_icon tablebluetag" icon="insert_invitation" class="cursor"  size="22" ng-click="sendInvitation(emp);" title="Invite"></ng-md-icon>
+
+	                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(emp);" title="Edit"></ng-md-icon>
+
+	                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeEmployee(emp._id,$index)" ng-confirm-title="Delete Employee" ng-confirm-delete="Are you sure you want to remove this employee."></ng-md-icon>
+
+	                  	<ng-md-icon ng-if="emp.invitationstatus == 'verified' " class="cursor" style="fill: green;float: right;" icon="check_circle" class="cursor"  size="22" title="Verified"></ng-md-icon>
+	                  </td>
+	              </tr>	              
+	          </tbody>
+	        </table>
+
+	        <div ng-show="!filteredemp.length" class="itemnotfound">
+	                No employee found.                
+	         </div>
+	      </div>
+		</div>
 	</div>
 </section>

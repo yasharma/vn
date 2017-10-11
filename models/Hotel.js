@@ -1,5 +1,6 @@
 var mongoose      = require('mongoose'),
   Schema          = mongoose.Schema,
+  ObjectId        = Schema.ObjectId,
   path 			      = require('path'),
   uniqueValidator = require('mongoose-unique-validator'),
   config 			    = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
@@ -9,16 +10,14 @@ var HotelSchema  = new Schema({
   
   image:{
       type: String,
-      default: 'no-hotel.jpg'
   },
   user_id: {
-    type: String,
-    default: false
+    type: ObjectId,
   },
   hotelname: {
     type: String,
     trim: true,
-    required: 'Hotel name can not be empty.'
+    required: 'Hotel name is required.'
   },
   currency: {
     type: String,
@@ -28,13 +27,13 @@ var HotelSchema  = new Schema({
   ownername: {
     type: String,
     trim: true,
-    required: 'Owner Entity can not be empty.',
+    required: 'Owner Entity is required.',
   },
   email: {
     type: String,
     lowercase: true,
     trim: true,
-    required: 'Email address can not be empty.',
+    required: 'Email address is required.',
     validate: {
       validator: function(email) {
         return /^([\w-\.+]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
@@ -44,18 +43,17 @@ var HotelSchema  = new Schema({
   },
   phone: {
     type: Number,
-    default: false
+    required: 'Contact Number is required.',
   },
   address: {
     type: String,
     trim: true,
-    required: 'Address can not be empty.',
+    required: 'Address is required.',
   },
   city: {
     type: String,
     default: false
   },
-
   state: {
     type: String,
     default: false
@@ -68,12 +66,10 @@ var HotelSchema  = new Schema({
     type: Number,
     default: false
   },
-
   jot_types: {
     type: Array,
     default: []
   },
-  
   step:{
     type: String,
     default: 1
@@ -90,6 +86,16 @@ var HotelSchema  = new Schema({
     }
 });
 
+
+HotelSchema.pre('save', function(next) {
+    let hotel = this;
+    if (this.isModified('user_id')  || this.isNew) {
+        hotel.user_id   = mongoose.Types.ObjectId(hotel.user_id);
+        next();
+    }else{
+      return next();
+    }
+});
 
 HotelSchema.set('autoIndex', config.db.autoIndex);
 HotelSchema.plugin(uniqueValidator, {

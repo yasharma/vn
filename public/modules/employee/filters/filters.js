@@ -7,7 +7,6 @@ app.filter('employeefilter',function(){
 		{
 
 			var searchEmployee        = scope.searchEmployee;
-
 			if(!searchEmployee){
 				return input;
 			}
@@ -21,10 +20,10 @@ app.filter('employeefilter',function(){
 								if(fullName.match(new RegExp("(" + removeSpaceFromString + ")", "i")))
 								{
 									return true;
-								}							
-								
+								}
 						});
 		}
+		
 		return input;
 
 	};
