@@ -1,7 +1,7 @@
 "use strict";
 const config = {
   db: {
-    URL: 'mongodb://localhost:27017/hoteljot_db',
+    URL: `mongodb://${process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost'}/hoteljot_db`,
     DEBUG: true,
     autoIndex: true
   },
