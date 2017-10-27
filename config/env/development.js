@@ -1,12 +1,12 @@
 "use strict";
 const config = {
   db: {
-    URL: 'mongodb://localhost:27017/hoteljot_db',
+    URL: process.env.MONGODB_URL || `mongodb://${process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost'}/hoteljot_db`,
     DEBUG: true,
     autoIndex: true
   },
   server: {
-    PORT: 3000
+    PORT: process.env.WEBSITES_PORT || 3000
   },
   /*mail:{
     poolConfig : {
