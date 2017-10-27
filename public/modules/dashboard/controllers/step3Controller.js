@@ -96,6 +96,7 @@ app.controller('step3Controller', ['$scope','$rootScope','$routeParams','$locati
 		*************************************************/
 
 		$scope.step3FormSubmit = function(){
+			$rootScope.hoteljotLoader = true;
 
 			var removeKeyFromArray = [];
 			for (var key in $scope.step3Ctlr.department_select) {
@@ -105,9 +106,7 @@ app.controller('step3Controller', ['$scope','$rootScope','$routeParams','$locati
 					removeKeyFromArray.push($scope.step3Ctlr.department_select[key]);
 				}
 								
-			}		
-	
-			$scope.departmentResult = {class:"",message:"",status:""};
+			}				
 
 			if(removeKeyFromArray.length > 0)
 			{
@@ -125,7 +124,7 @@ app.controller('step3Controller', ['$scope','$rootScope','$routeParams','$locati
 					};
 
 				globalRequest.jotCRUD(request).then(function(response){				
-											
+					$rootScope.hoteljotLoader = false;						
 					if(response.status == 1)
 					{
 						var nextStep   = parseInt($routeParams.steps) +1;					
@@ -134,7 +133,8 @@ app.controller('step3Controller', ['$scope','$rootScope','$routeParams','$locati
 
 				});
 
-			} else {				
+			} else {
+				$rootScope.hoteljotLoader = false;				
 				var popup = {"message":"Please select at least one department.","class":""};
 				toastService.errors(popup);
 			}

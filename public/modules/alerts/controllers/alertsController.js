@@ -26,7 +26,10 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 		*************************************/		
 		
 
-		$scope.addAlert = function(){			
+		$scope.addAlert = function(){	
+
+		/*socket.emit('notification2','hello');
+		return false;	*/	
 
 			var request = {
 			            url:window.__API_PATH.ADD_ALERT,
@@ -45,6 +48,7 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 			 	{
 			 		$scope.blank();			 		
 			 		socket.emit('notification',response.result);
+			 		
 			 		
 			 		popup = {"message":response.message,"class":response.class};
 					toastService.alert(popup);		 		

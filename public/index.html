@@ -23,7 +23,8 @@
 
 
           <section layout="row" flex style="background: rgb(49, 57, 66);" ng-if="isAuth.sidebar=='yes'"> 
-            <md-sidenav class="md-sidenav-right md-whiteframe-4dp my-scroll-area" md-component-id="sidebar" style="background: rgb(49, 57, 66);" ng-nicescroll nice-option="{cursorcolor: '#e2edff',horizrailenabled: false}" nice-scroll-end="endScroll()">
+            <md-sidenav class="md-sidenav-right md-whiteframe-4dp my-scroll-area" md-component-id="sidebar" style="background: rgb(49, 57, 66);position: fixed;" ng-nicescroll nice-option="{cursorcolor: '#e2edff',horizrailenabled: false}" nice-scroll-end="endScroll()">
+            
               <md-content layout-padding style="background: rgb(49, 57, 66);">
               <div ng-include="'/modules/partials/sidebar.html'"></div>     
               </md-content>
@@ -32,17 +33,15 @@
 
 
           <section layout="row" flex style="background: #f4f8f9;" class="{{$root.hideclass}}" ng-controller="notificationController"> 
-            <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="notification" style="background:#f4f8f9;">
+            <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="notification" style="background:#f4f8f9;position: fixed;">
 
               <md-content layout-padding style="background: #f4f8f9;">
               <div class="quick_edit_small_section_header" style="text-align: left;border-bottom-color: #ddd;">
                <ng-md-icon icon="notifications" class="cursor" style="fill:#7a7a7a" size="24"></ng-md-icon>
                 <span class="quick_edit_section_title"> Notification</span>
                 <ng-md-icon class="quick_close_btn" icon="close" style="fill:#7a7a7a" size="24"  ng-click="$root.toggleNotification()" role="button" tabindex="0"></ng-md-icon> 
-                </div>
-                
-
-                <div class="notification_content">  
+                </div>  
+                <div class="notification_content">
                     <div class="alert alert-info" ng-repeat="msg in $root.message | orderBy:'_id':true track by $index">
                       <a class="close" data-dismiss="alert" ng-click="removeNotification(msg._id,$index);">×</a>
                       <ng-md-icon ng-if="msg.title" icon="add_alert" style="fill: #3da0d3" size="20"></ng-md-icon> 

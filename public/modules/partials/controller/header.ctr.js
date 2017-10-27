@@ -38,6 +38,12 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 	    	
 	    	$rootScope.message.push(resp.result);
 		});
+
+		socket.on('jot_create_notification',function(resp){
+			console.log(resp.result);
+	    	$rootScope.message.push(resp.result);
+	    	$rootScope.message2 = resp.result;
+		});
 		
 		/*******************************************************
 		* Callback function to close jot circle on outside click

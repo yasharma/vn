@@ -24,9 +24,9 @@ app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$locati
 		*************************************************/
 
 		$scope.step2FormSubmit = function(){
+			$rootScope.hoteljotLoader = true;
 
 			$scope.featureResult = {class:"",message:"",status:""};
-
 			var getSelectedValues = [];
 			for (var key in $scope.step2Ctlr.selectFeature) {
 				if($scope.step2Ctlr.selectFeature[key]){							
@@ -49,17 +49,17 @@ app.controller('step2Controller', ['$scope','$rootScope','$routeParams','$locati
 					};
 
 				globalRequest.jotCRUD(request).then(function(response){	
-											
+					$rootScope.hoteljotLoader = false;						
 					if(response.status == 1)
-					{
+					{						
 						var nextStep   = parseInt($routeParams.steps) +1;
-
 						$location.path('/dashboard/hotel-setup/'+nextStep);
 					}				
 
 				});
 
-			} else {				
+			} else {
+				$rootScope.hoteljotLoader = false;				
 				var popup = {"message":"Please Select at least one jot type.","class":""};
 				toastService.errors(popup);
 			}

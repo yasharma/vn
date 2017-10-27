@@ -27,14 +27,7 @@ app.controller('loginController', ['$scope','$location','localStorageService','l
 				if(response.status == 1)
 				{
 					
-					// socket.emit('web.login',response.result.user);
-					// socket.on('web.login',function(resp){						
-					// 	console.log(resp);
-					// });
-					
-
-
-
+					socket.emit('web.login',response.result.user);
 
 					var now = new Date();
 					if($scope.remember && $scope.remember == 1)
@@ -54,14 +47,9 @@ app.controller('loginController', ['$scope','$location','localStorageService','l
 					localStorageService.set('user', response.result.user);
 					AuthSrv.isLogged = true;
 				    $mdDialog.cancel();
-
 					$location.path('/dashboard');
-
-
-
 				}									
-				
-				
+								
 			});				
 	               
 		};

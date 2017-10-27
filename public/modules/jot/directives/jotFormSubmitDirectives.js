@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastService,globalRequest,$routeParams) {
+app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastService,globalRequest,$routeParams,socket) {
       return {
           
           link: function($scope, element, attrs) {
@@ -193,6 +193,8 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                     if(response.status == 1)
                     {
                       var jotID = response.result._id;
+
+                      socket.emit('jot_create_notification',response.result);
 
                       /****************************
                       * Upload file if exists
