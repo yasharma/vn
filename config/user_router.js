@@ -82,6 +82,11 @@ module.exports = {
 	  	
 	  	/* Member's Route*/
 	  	{ url: '/configure_members',    	method: ctrls.memberController.configureHotelMember, 			type: 'POST'	},
+
+	  	{ url: '/configure_rooms',    	method: ctrls.meetingRoomController.configureHotelRooms, 			type: 'POST'	},
+
+	  	{ url: '/get_booking_report',    	method: ctrls.meetingRoomController.bookingReport, 			type: 'GET'	},
+
 	  	{ url: '/add_member',    			method: ctrls.memberController.addMember, 						type: 'POST'	},
 	  	{ url: '/update_member', 			method: ctrls.memberController.updateMember, 					type: 'PUT'		},
 	  	{ url: '/delete_member', 			method: ctrls.memberController.deleteMember, 					type: 'DELETE'	},
@@ -121,8 +126,34 @@ module.exports = {
 	  	{ url: '/add_multipleschedule',  	 method: ctrls.memberController.addMultipleSchedule, 			type: 'POST'	},
 		{ url: '/member_schedule_data',  	 method: ctrls.memberController.MemberScheduleData, 			type: 'GET'		},
 	  	{ url: '/uploadfiledata',   		 method: ctrls.uploadFilesController.uploadfiledata ,			type: 'POST'	},
-	  	
+	  		
 
+	  	/* Hotel's Meeting Room Routes */
+	  	
+	  	{ url: '/add_meetingroom',   		method: ctrls.meetingRoomController.addMeetingRoom, 					type: 'POST'	},
+	  	{ url: '/update_meetingroom', 		method: ctrls.meetingRoomController.updateMeetingRoom,					type: 'PUT'		},
+	  	{ url: '/delete_meetingroom', 		method: ctrls.meetingRoomController.deleteMeetingRoom,					type: 'DELETE'	},
+	  	{ url: '/get_meetingrooms',   		method: ctrls.meetingRoomController.listMeetingRoom,					type: 'GET'		},
+
+
+	  	  	/* Hotel's Meeting Room Routes */
+	  	
+	  	{ url: '/add_booking', method: ctrls.roomBookingController.addBookDetail, type: 'POST'	},
+
+
+	  	{ url: '/get_mysale', method: ctrls.vendingController.vendingSale,type: 'GET'		},
+
+	  	{ url: '/cancle_sale', method: ctrls.vendingController.vendingCancleSale,type: 'PUT'		},
+	  	
+	  	{ url: '/change_paymentstatus',method: ctrls.vendingController.vendingPaymentStatus, 					type: 'PUT'},
+	 
+	 	{ url: '/cancel_booking',  method: ctrls.roomBookingController.cancelBooking, 					type: 'PUT'},
+
+	 	{ url: '/add_alert', method: ctrls.alertController.addAlert, type: 'POST'},
+	 	{ url: '/get_alerts', method: ctrls.alertController.listAlerts, type: 'GET'},
+	 	{ url: '/update_alert', method: ctrls.alertController.updateAlerts, type: 'PUT'},
+
+	 	{ url: '/get_notification', method: ctrls.alertController.listNotification, type: 'GET'},
 	  	
 	]
 };

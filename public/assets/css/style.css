@@ -18,7 +18,7 @@ a {
 
 
 .red, .add_hotel_room_proty .high{
-  background: rgba(222, 74, 53, 1) !important;
+  background: rgba(222, 74, 53, 0.9) !important;
   color: #fff !important;
 }
 
@@ -265,7 +265,7 @@ md-dialog > .EditMode .suggestions_list {
     margin-left: 5px;
 }
 .status.close {
-    background: green !important;
+    background: rgba(0,128,0,0.9) !important;
     opacity: 1;
     font-size: 14px;
     font-weight: normal;
@@ -1442,3 +1442,9 @@ body.md-toast-animating.md-dialog-is-showing { overflow: hidden !important;max-h
 .newhotel_dialog_form md-input-container.selectgeneral_edit .md-input{padding: 4px 15px!important;} 
 .newhotel_dialog_form md-input-container.selectgeneral_edit .md-errors-spacer{min-height: 0;}
 .sidemenu{width: 30px;}
+.pri_table {}
+.pri_table th, .pri_table td {padding: 5px 0;}
+.add_hotel_room_proty span{display: inline-block;}
+/*.newhotel_dialog md-toolbar.md-default-theme:not(.md-menu-toolbar), .newhotel_dialog md-toolbar:not(.md-menu-toolbar){background: #4ebdf6!important;}
+.newhotel_dialog .md-toolbar-tools h2{ color: #fff;}*/
+/*md-toolbar{min-height: 50px;}*/

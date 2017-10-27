@@ -9,6 +9,9 @@ var CartSchema  = new Schema({
   hotel_id: {
     type: ObjectId,
   },
+  user_id: {
+    type: ObjectId,
+  },
   items: {
     type: Object,
   },
@@ -26,7 +29,8 @@ var CartSchema  = new Schema({
   },
   status: {
     type: String,
-    default: false
+    enum: ['cancelled','delivered','modified'],
+    default: 'delivered'
   },
 },{
     timestamps: {
@@ -37,8 +41,9 @@ var CartSchema  = new Schema({
 
 CartSchema.pre('save', function(next) {
     let cart = this;
-    if (this.isModified('hotel_id')  || this.isNew) {
+    if (this.isModified('hotel_id')  || this.isModified('user_id') || this.isNew) {
         cart.hotel_id   = mongoose.Types.ObjectId(cart.hotel_id);
+        cart.user_id    = mongoose.Types.ObjectId(cart.user_id);
         next();
     }else{
       return next();

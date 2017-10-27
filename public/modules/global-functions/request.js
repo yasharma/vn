@@ -187,6 +187,41 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 			});
 		},
 
+		getReports:function(){
+			$rootScope.reportsList = '';
+			var reportsRequest = {
+					url:window.__API_PATH.GET_REPORTS,
+					method:"GET",
+					params: { 
+								"hotel_id" : $rootScope.activeHotelData._id,
+								"user_id"  : $rootScope.currentUser._id,						
+							}
+				};			
+			return $http(reportsRequest).then(function(response){	
+				$rootScope.reportsList =  response.data.result;
+
+			}, function(response){
+				$rootScope.reportsList = response.data.errors;				
+			});
+		},
+
+		getBookingReports:function(){
+			$rootScope.bookingReportsList = '';
+			var bookReportsRequest = {
+					url:window.__API_PATH.GET_BOOK_REPORTS,
+					method:"GET",
+					params: { 
+								"hotel_id" : $rootScope.activeHotelData._id,					
+							}
+				};			
+			return $http(bookReportsRequest).then(function(response){	
+				$rootScope.bookingReportsList =  response.data.result;
+
+			}, function(response){
+				$rootScope.bookingReportsList = response.data.errors;				
+			});
+		},
+
 		getVendingCategory:function(){
 				var hotel   = localStorageService.get('hotel');
 				var request = {
@@ -278,6 +313,26 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 		},
 
 
+		getRoomList:function(range){
+				var hotel   = localStorageService.get('hotel');
+
+				var request = {
+			            url:window.__API_PATH.GET_MEETINGROOMS,
+			            method:"GET",
+			            params:{
+			            	hotel_id      	:  hotel._id,
+			            	range           :  range
+			            }
+			          };
+
+			return $http(request).then(function(response){
+				$rootScope.meetingRoomList = response.data.result;			
+
+			}, function(response){
+				$rootScope.meetingRoomList = response.data.errors;				
+			});
+		},
+
 		getJotList:function(JotType){
 				var hotel   	 = localStorageService.get('hotel');
 				var userDetail   = localStorageService.get('user');
@@ -301,7 +356,37 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 		},
 
 
-		
+		getAlertList:function(){
+			var userDetail   = localStorageService.get('user');
+			var getAlertRequest = {
+			            url:window.__API_PATH.GET_ALERTS,
+			            method:"GET"			            			            
+			          };
+			return $http(getAlertRequest).then(function(response){				
+				$rootScope.alertList = response.data.result;
+
+
+			}, function(response){
+				$rootScope.alertList = response.data.errors;				
+			});
+		},
+		getNotification:function(){
+			var userDetail   = localStorageService.get('user');
+			var getAlertRequest = {
+			            url:window.__API_PATH.GET_NOTIFICATION,
+			            method:"GET",
+			            params:{
+			            	user_id      	:  userDetail._id
+			            }			            
+			          };
+			return $http(getAlertRequest).then(function(response){				
+				$rootScope.message	 = response.data.result;				
+
+
+			}, function(response){
+				$rootScope.alertList = response.data.errors;				
+			});
+		},
 
 		
 	};

@@ -29,7 +29,7 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
               * Appned staff member of click of icon
               **************************************/
 
-              $scope.selectStaff = function(userName){
+              /*$scope.selectStaff = function(userName){
                 var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi);
                 var match = -1;
                 if(checkAlreadyExists)
@@ -41,6 +41,27 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                   return false;
                 }
                 $rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+              };*/
+
+              $scope.selectStaff = function(userName){
+        
+                if($rootScope.jot_members)
+                { 
+                  var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi); 
+                  var match = -1;
+                  if(checkAlreadyExists)
+                  {
+                    match = checkAlreadyExists.indexOf('@'+userName);
+                  }
+                  if(match > -1)
+                  {
+                    return false;
+                  }
+                  $rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+                } else {
+                  $rootScope.jot_members = ' @'+userName+' ';
+                }
+                
               };
 
               /**************************************

@@ -8,9 +8,20 @@
 
 			<div class="dash_step_panel">
 				<ul class="clearfix">
+<!-- {{$root.hotelStatus.jot_types | filter:quick:true }}<br> -->
+<!-- {{($root.hotelStatus.jot_types | filter:'meeting_room')[0]}} -->
 
-					<li ng-class="{currentStep:$index+1 == ActiveStep,active:$index+1 < ActiveStep}" ng-repeat="steps in hotelStepList">
+<!-- {{ (getFeatureList | filter:{step :'rooms'})[0] }} -->
+
+<!-- {{(($root.hotelStatus.jot_types)[0])
+?(($root.hotelStatus.jot_types | filter:value.id)[0] == value.id):(value.default)?true:false}} -->
+
+					<li ng-class="{currentStep:$index+1 == ActiveStep,active:$index+1 < ActiveStep}" ng-repeat="steps in hotelStepList"  ng-if="(steps.id != 'default')?(($root.hotelStatus.jot_types | filter:'meeting_room')[0])?true:false:true">
+
 						<div class="">
+						<!-- {{steps.id}} -->
+
+						
 							<div class="step_number">
 								<label>{{$index+1}}</label>
 								<ng-md-icon icon="done" ></ng-md-icon> 
@@ -23,7 +34,8 @@
 			</div>
 			<div class="dash_step_inner slide-animate-container">
 				<div class="stephd">
-					<h4>Step {{ActiveStep}} : {{hotelStepList[ActiveStep-1].label}}</h4>
+					<h4>Step {{ActiveStep}} : {{hotelStepList[ActiveStep-1].label}} <small><i>({{hotelStepList[ActiveStep-1].description}})</i></small></h4>
+
 				</div>
 				<!-- <ng-include class="slide-animate" src="stepsTemplate"></ng-include> -->
 

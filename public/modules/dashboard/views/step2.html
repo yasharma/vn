@@ -1,6 +1,4 @@
 <div ng-controller="step2Controller as step2Ctlr">
-<div class="dash_hd">You can add or remove the features as per your hotel need</div>
-
 <form name="step2Form" ng-submit="step2FormSubmit(step2Form.$valid)" novalidate ng-show="!forget">	<ul class="step_hotel_list_edit noshadow clearfix">
 
 	<li ng-repeat="(key,value) in defaultBoards">
@@ -19,7 +17,7 @@
 	
 	</ul>
 	
-	<div class="clearfix mar-top20">
+	<div class="clearfix mar-top20"  style="text-align: right;">
 	<div class="chane_pass_btn">
 		<md-button  ng-click="navigateBack()" class="md-primary addyellobtn graybtn" >PREVIOUS</md-button>
 	</div>	

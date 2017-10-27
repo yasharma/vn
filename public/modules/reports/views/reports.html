@@ -1,0 +1,187 @@
+<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
+	<div class="dash_hd_txt mar-bot20 clearfix">
+		<div class="dash_hd mar-bot0 dash_hd-left">Sales Reports</div>		   
+	</div>
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch deptsrch_gray">
+			<div class="deptsrch_gray_top mar-bot0 clearfix">
+					
+
+				<div class="montfilter vending_left_top_serch positionrel">
+					<md-input-container class="md-block">
+			      <input  ng-model="searchCustomer" placeholder="Search Customer Name">
+			  	</md-input-container>			  	
+				</div>
+
+				<div class="" style="float: right; padding: 10px 0px 0 10px;cursor: pointer;" ng-click="searchCustomer = search_date = search_paymode =search_order_status = search_status = ''" title="Reset filters">
+						<img src="assets/images/reset_filter.png" style="width: 30px;">
+				</div>
+
+				<div class="right_montfilter">
+					<ul class="clearfix">
+						<li style="width: 180px;">
+							<div class="selectwhite">			           
+
+					            <md-input-container  class="md-block lost_found_picker">
+				                   <md-datepicker class="angudatepicker" md-open-on-focus  ng-model="search_date" string-to-timestamp md-hide-icons="triangle"  md-placeholder="Date"></md-datepicker>
+
+				                 </md-input-container>
+				                
+		        			</div>
+						</li>
+						<li  style="width: 180px;">
+							<div class="selectwhite">
+					            <md-input-container  md-no-float class="md-block selectgeneral48">
+					                <md-select ng-model="search_paymode" placeholder="Payment Method">
+					                	<md-option value="">
+                            				Select
+                          				</md-option>
+					                	<md-option value="card">
+                            				Card
+                          				</md-option>
+                          				<md-option value="cash">
+                            				Cash
+                          				</md-option>
+					                </md-select>
+					            </md-input-container>
+		        			</div>
+	        			</li>
+	        			<li  style="width: 180px;">
+							<div class="selectwhite">
+					            <md-input-container md-no-float class="md-block selectgeneral48">
+					                <md-select ng-model="search_status" placeholder="Payment Status">
+					                <md-option value="">
+			                            Select Status
+			                          </md-option>
+					                  <md-option value="pending">
+			                            Pending
+			                          </md-option> 
+			                          <md-option value="complete">
+			                            Complete
+			                          </md-option> 
+					                </md-select>
+					            </md-input-container>
+		        			</div>
+	        			</li>
+
+	        			<li  style="width: 180px;">
+							<div class="selectwhite">
+					            <md-input-container md-no-float class="md-block selectgeneral48">
+					                <md-select ng-model="search_order_status" placeholder="Order Status">
+					                <md-option value="">
+			                            Select Status
+			                          </md-option>
+					                  <md-option value="cancelled">
+			                            Cancelled
+			                          </md-option> 
+			                          <md-option value="delivered">
+			                            Completed
+			                          </md-option> 
+					                </md-select>
+					            </md-input-container>
+		        			</div>
+	        			</li>
+        			</ul>
+				</div>
+
+				
+			</div>
+		</div>
+
+		<div class="addmember_data_table">
+			<div class="table_div">
+
+	        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table" ng-init="ctrl.hideEmp = []">
+	          <thead>
+	              <tr>
+	                  <th width="2%"># </th>                  
+	                  <th width="15%">Customer Name</th>
+	                  <th width="17%">Payment Method</th>
+	                  <th width="15%">Payment Status</th>
+	                  <th width="20%">Sales Date</th>
+	                  <th width="10%">Total Price</th>
+	                  <th width="10%">Status</th>
+	                  <th width="8%">Action</th>
+	              </tr>
+	          </thead>
+	          <tbody>
+	              <tr ng-repeat="report in filterereport = 
+	              ($root.reportsList | 
+	              filter:(!!search_paymode || undefined) 
+	              && {payment:{detail:{paymentmode:search_paymode}} } | 	              
+	              filter: (!!search_status || undefined) && {payment:{payment_status:search_status} }: true |
+	              filter: (!!search_order_status || undefined) && {status:search_order_status}: true |
+	              searchCustomerFilter:this | searchDateFilter:this | orderBy:'_id':true
+	              ) 
+	              track by $index">
+
+	              <!-- <tr ng-repeat="report in filterereport = 
+	              ($root.reportsList  | orderBy:'_id'
+	              ) 
+	              track by $index"> -->
+
+
+	                  <td style="height: 60px;">{{$index+1}}</td>
+	                 
+	                  <td class="capitalize">	{{report.user_info}}</td>
+	                 
+	                  
+	                  <td class="capitalize">
+	                  {{report.payment.detail.paymentmode}}
+
+	                  {{(report.payment.detail.paymentmode == 'card')?"("+report.payment.detail.cardtype+")":""}}
+
+	                  {{(!report.payment.detail.paymentmode)?"Room Bill":""}}
+	                  </td>
+
+	                  <td class="capitalize" title="Click to edit">
+	                  	<div class="editoverlay" ng-show="paymenteditable" ng-click="paymenteditable = !paymenteditable"></div>
+		                  <a href="javaScript:void(0)" ng-click="paymenteditable = !paymenteditable"  ng-hide="paymenteditable && report.status != 'cancelled'">
+
+		                  <!-- outside-click-close-dropdown="dropdown" -->
+
+		                  <ng-md-icon   class="cursor edit_icon tablebluetag" icon="done_all" class="cursor"  size="22" style="fill:#47d147" ng-if="report.payment.payment_status=='complete'"></ng-md-icon> 
+
+		                  <ng-md-icon   class="cursor edit_icon tablebluetag" icon="cancel" class="cursor"  size="22" style="fill:#ff3333" ng-if="report.payment.payment_status!='complete'"></ng-md-icon> 
+	                 	 {{report.payment.payment_status}}
+	                  </a>
+
+	                  <md-input-container md-no-float class="md-block selectgeneral38" ng-init = "search_status = report.payment.payment_status" ng-show="paymenteditable && report.status != 'cancelled'" style="    margin: 0 !important;border: 0;">
+			                <md-select ng-model="search_status" placeholder="Status" ng-change="paymentStatus(report,search_status);paymenteditable = !paymenteditable">
+			                  <md-option value="pending">
+	                            Pending
+	                          </md-option> 
+	                          <md-option value="complete">
+	                            Completed
+	                          </md-option> 
+			                </md-select>
+					    </md-input-container>
+
+
+	                  </td>	                 
+	                  <td>{{report.date | date : "EEE d MMM, yyyy h:m a" }}</td>
+	                  <td>{{report.payment.currency}}{{report.payment.totalprice}}</td>
+	                   <td class="capitalize">
+	                   <ng-md-icon   class="cursor edit_icon tablebluetag" icon="check_circle" class="cursor"  size="22" style="fill:#47d147" ng-if="report.status != 'cancelled'"></ng-md-icon>
+
+	                   <ng-md-icon   class="cursor edit_icon tablebluetag" icon="cancel" class="cursor"  size="22" style="fill:#ff3333" ng-if="report.status == 'cancelled'"></ng-md-icon> 
+	                   {{report.status}}
+	                   </td>
+	                  <td>
+	                  	<ng-md-icon   class="cursor edit_icon tablebluetag" icon="remove_red_eye" class="cursor"  size="22" ng-click="openReportDetail(report);" title="View Report"></ng-md-icon>
+
+	                  	<ng-md-icon ng-if="report.status !='cancelled'" class="cursor closr_icon tableredtag" icon="cancel"  style="fill:#ff3333" class="cursor"  size="22" title="Cancel Order" confirmed-click="cancelOrder(report._id,$index)" ng-confirm-title="Order Cancel" ng-confirm-delete="Are you sure you want to cancel this order."></ng-md-icon>
+	                  </td>
+
+	              </tr>	              
+	          </tbody>
+	        </table>
+
+	        <div ng-show="!filterereport.length" class="itemnotfound">
+	                No reports found.                
+	         </div>
+	      </div>
+		</div>
+	</div>
+</section>

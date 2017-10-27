@@ -1,4 +1,4 @@
-<div class="clearfix frontheder" ng-if="isAuth.headerType =='front_header'" ng-controller="frontHeaderController" style="z-index: 9999;">
+<div class="clearfix frontheder" ng-if="isAuth.headerType =='front_header'" ng-controller="frontHeaderController" style="z-index: 9;">
 		<div class="yellowlogo pull-left">
 			<a href="/">
 				<img src="assets/images/yellowlogo.png">
@@ -54,9 +54,9 @@
 				<ng-md-icon class="cursor sidemenu" icon="home" style="fill: white" size="32"></ng-md-icon>
 				</a>
 			</li>
-			<li class="noti_icon positionrel">
+			<li class="noti_icon positionrel" ng-click="$root.toggleNotification()">
 				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
-				<small class="notification-badge">5</small>
+				<!-- <small class="notification-badge">5</small> -->
 			</li>
 			<li class="usermenu" title="{{$root.currentUser.first_name}} {{$root.currentUser.last_name}}">
 				<md-menu md-position-mode="target-right target" md-offset="0 80">
@@ -184,12 +184,14 @@
 				</a>
 			</li>
 			
-			<li class="noti_icon positionrel">
-				<ng-md-icon class="cursor sidemenu" clickedContainer="sidebar" ng-click="$root.leftopen=!$root.leftopen" icon="menu" style="fill: white" size="32"></ng-md-icon>
+			<li class="noti_icon positionrel" ng-click="$root.toggleSidebar()">
+				<!-- <ng-md-icon class="cursor sidemenu" clickedContainer="sidebar" ng-click="$root.leftopen=!$root.leftopen" icon="menu" style="fill: white" size="32"></ng-md-icon> -->
+
+				<ng-md-icon class="cursor sidemenu" icon="menu" style="fill: white" size="32"></ng-md-icon>
 			</li>
-			<li class="noti_icon positionrel">
+			<li class="noti_icon positionrel" ng-click="$root.toggleNotification()">
 				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
-				<small class="notification-badge">5</small>
+				<small class="notification-badge">{{$root.message.length}}</small>
 			</li>
 			<li class="usermenu"  title="{{$root.currentUser.first_name}} {{$root.currentUser.last_name}}">
 				<md-menu md-position-mode="target-right target " md-offset="0 73" >

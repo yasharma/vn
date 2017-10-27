@@ -290,8 +290,9 @@ exports.validateResetToken = (reqst, respe, next) => {
     User.count({ "passwordReset.token": reqst.params.token, "passwordReset.timestamp": { $gt: Date.now() }, "passwordReset.status": true } , function(err, user){
         
         if(user === 0){
+
             respe.redirect(`/resetpassword/${reqst.params.token}?expired=true`);    
-        } else {
+        } else {            
             respe.redirect(`/resetpassword/${reqst.params.token}`);
         }
 

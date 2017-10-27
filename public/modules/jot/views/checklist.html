@@ -58,7 +58,7 @@
 		        
 				<ul class="sublist">
 				    <li ng-repeat="subItem in checklistParent.item_list"> 
-				    		{{parentIndex}} - {{$index}}
+				    		
 				            <md-checkbox aria-label ="checklist"  ng-model="ctlr.sublist[parentIndex][$index]" ng-true-value='true' ng-false-value="false" ng-change="storeChecklist(parentIndex,$index,ctlr.sublist[parentIndex][$index])">
 					        </md-checkbox>
 

@@ -41,6 +41,7 @@ app.config(['$httpProvider', function($httpProvider){
 }])
 
 
+
 .config(['localStorageServiceProvider', function (localStorageServiceProvider) {
    
    var hostname = window.location.hostname, prefix;
@@ -51,99 +52,65 @@ app.config(['$httpProvider', function($httpProvider){
         default:
             prefix = 'default';
    }  
- // localStorageServiceProvider.setPrefix(prefix).setStorageType('sessionStorage');
  localStorageServiceProvider.setPrefix(prefix);
 
 }])
-.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$timeout',
-	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$timeout){   	        
+.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$cookies',
+	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$cookies){ 	        
         
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) { 
 
+                $rootScope.hideclass            = 'hideclass';
                 $rootScope.currentPage          = $location.$$path;
                 $rootScope.activeHotelData      = localStorageService.get('hotel');
                 $rootScope.currentUser          = localStorageService.get('user');
                 
-                
+
+                /*************************************************
+                * Login Remember & redirect user if cookie not set
+                *************************************************/
+
                 if(nextRoute.$$route){
                     if(nextRoute.$$route.access){
-                        $rootScope.isAuth= nextRoute.$$route.access;
+                        $rootScope.isAuth = nextRoute.$$route.access;
                    } 
-                }
+                } 
                 
+
+
+
+               if(!( $cookies.get("hoteljot") && ($cookies.get("hoteljot") == window.btoa('rememberloggedin') || $cookies.get("hoteljot") == window.btoa('sessionloggedin'))  )){
+
+                    localStorageService.remove('token');
+                    localStorageService.remove('user');
+                    localStorageService.remove('hotel');
+                    $cookies.remove("hoteljot");
+                    delete $rootScope.user;
+                    AuthSrv.isLogged = false;
+               }
+              
+
+
                 if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
                     AuthSrv.isLogged = 0;                  
                     $location.path("/");
-                }/*else {
-                   
-                    var token = localStorageService.get('token');
-                    if(($location.path() === '/login' || $location.path() === '/') && token ){           
-                       $location.path("/dashboard");
-                    }
-                }*/
+                }
+
+
 
                 $rootScope.$watch(function(newValue, oldValue) {
-                    $rootScope.logggedin = AuthSrv.isLogged;
+                    $rootScope.logggedin = AuthSrv.isLogged;                   
                 });
-
-
-                $rootScope.$broadcast('handleSidebar');
-                
-
-        
+                $rootScope.$broadcast('handleSidebar'); 
 
         });
 
         $rootScope.$on("$routeChangeSuccess", function(event, next, current) {
+          $rootScope.hideclass = '';
           $templateCache.removeAll(); 
 
-          /*$timeout(function() {
-            var viewHeight,windowHeightl,containerHeight;
-
-            viewHeight = document.getElementsByTagName('ng-view')[0].clientHeight;
-            windowHeight = window.innerHeight;
-            if(windowHeight > viewHeight)
-            {
-
-                containerHeight = windowHeight-70;
-            }
-
-            if(windowHeight < viewHeight)
-            {
-
-                containerHeight = viewHeight-70;
-            }
-
-
-            window.addEventListener('resize', setWindowSize);
-
-              function setWindowSize() { 
-                    $rootScope.$apply(function(){
-                        viewHeight = document.getElementsByTagName('ng-view')[0].clientHeight;
-                        windowHeight = window.innerHeight;
-                        if(windowHeight > viewHeight)
-                            {
-
-                                containerHeight = windowHeight-70;
-                            }
-
-                            if(windowHeight < viewHeight)
-                            {
-
-                                containerHeight = viewHeight-70;
-                            }
-                            $rootScope.iframeHeight = containerHeight;
-
-                    });
-              }
-          });        
-
-          $rootScope.iframeHeight = window.innerHeight-70;
-          window.addEventListener('resize', setWindowSize);
-          function setWindowSize() { 
-                $rootScope.$apply(function(){$rootScope.iframeHeight = window.innerHeight-70;});
-          }*/
+          
         });
 
 
@@ -153,6 +120,7 @@ app.config(['$httpProvider', function($httpProvider){
             localStorageService.remove('token');
             localStorageService.remove('user');
             localStorageService.remove('hotel');
+            $cookies.remove("hoteljot");
             delete $rootScope.user;
             AuthSrv.isLogged = false;
             $location.path('/');

@@ -86,6 +86,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
            requiredLogin: false,
             headerType:'front_header',
             sidebar: 'no',
+            footer:'yes',
         }
     })    
 
@@ -104,7 +105,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         access: {
             requiredLogin: true, 
             headerType:'hotel_header',
-            sidebar: 'no',
+            sidebar: 'yes',
             outside:'yes'
         }
     })
@@ -163,7 +164,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             sidebar: 'yes'
         }
     })
-    .when("/dashboard/employee_schedule", {
+    .when("/dashboard/employee-schedule", {
         templateUrl : "/modules/employee/views/scheduler.html",
         controller  :  "schedulerController",
         controllerAs  :  "ctlr",
@@ -192,7 +193,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
-    .when("/dashboard/inventory_category", {
+    .when("/dashboard/inventory-category", {
         templateUrl   : "/modules/vending_machine/views/inventory_category.html",
         controller    : "inventoryCatController",
         access: {
@@ -201,7 +202,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             sidebar: 'yes'
         }
     })
-    .when("/dashboard/lost_found", {
+    .when("/dashboard/lost-found", {
         templateUrl   : "/modules/lost_found/views/lost_found_management.html",
         controller    : "lostFoundManagementController",
         controllerAs  : "ctrl",
@@ -222,7 +223,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
-    .when("/dashboard/phone_directory", {
+    .when("/dashboard/phone-directory", {
         templateUrl   : "/modules/phone_directory/views/phone_directory.html",
         controller    : "phoneDirController",
         controllerAs  : "ctrl",
@@ -233,9 +234,51 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
-    .when("/dashboard/document_center", {
+    .when("/dashboard/document-center", {
         templateUrl   : "/modules/document_center/views/document_center.html",
         controller    : "documentCenterController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/alerts", {
+        templateUrl   : "/modules/alerts/views/alerts.html",
+        controller    : "alertsController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+    .when("/dashboard/sales-report", {
+        templateUrl   : "/modules/reports/views/reports.html",
+        controller    : "reportsController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/booking-report", {
+        templateUrl   : "/modules/meeting/views/reports.html",
+        controller    : "bookingReportController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+    .when("/dashboard/meeting-rooms", {
+        templateUrl   : "/modules/meeting/views/meeting_room_management.html",
+        controller    : "meetingManagementController",
         controllerAs    : "ctrl",
         access: {
             requiredLogin: true,

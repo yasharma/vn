@@ -187,16 +187,20 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','globalRequest',
 	        	};
         	}
 
+        	paymentData.totalprice = $scope.getTotal();
+        	paymentData.currency   = hotel.currency;
+
 
         	var request = {
 				            url:window.__API_PATH.PURCHASE,
 				            method:"POST",
 				            data:{
-				            	hotel_id  : hotel._id,
-				            	items     : $scope.cart,
-				            	payment   : paymentData,
-				            	user_info : cartTags,				      
-	        					date      : new Date().getTime()
+				            	hotel_id  	: hotel._id,
+				            	user_id	    : $rootScope.currentUser._id,			            	
+				            	items     	: $scope.cart,
+				            	payment   	: paymentData,
+				            	user_info 	: cartTags,				      
+	        					date      	: new Date().getTime()
 				            }
 				          };
 			 globalRequest.jotCRUD(request).then(function(response){

@@ -1,207 +1,169 @@
 <div class="dash-main-con">
-	<section class="dashrightsection aligninput" ng-class="{'leftopen':$root.leftopen}">
-	
-	<div class="dash_hd_txt mar-bot20 clearfix">
-		<div class="dash_hd mar-bot0 dash_hd-left">Document Center</div>
-		<div class="rightfilter_right">
-			<div class="chane_pass_btn_right">
-		    <md-button  slide-toggle="#doc" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">				
-					{{(invForm)?"Close":"Upload document"}}
-			</md-button>
-			</div>
-	  </div>    
-	</div>
-
-
-	<div class="dash_pro_inform slideable lost_panel" id="doc">
-
-		<div class="dash_pro_inform_inner boxunoversal">
-
-			<form name="addDCform" ng-submit="addDC(addDCform.$valid)" novalidate>
-				<div class="row mar-bot20">
-
-					<div class="col-sm-6">
-						<md-input-container  class="md-block">
-					    <input  ng-model="document_name" placeholder="Document Name"  ng-required="true">
-					  </md-input-container>
-					</div>
-
-					<div class="col-sm-6">
-						<div class="clearfix newhotel_dialog_form_top" ng-include="'/modules/jot/views/department.html'"></div>
-					</div>
-
-					<div class="col-sm-6">	
-					    <md-chips ng-model="ctrl.itemTagModel" name="itemTag" readonly="ctrl.readonly"
-	                    md-removable="ctrl.removable" placeholder="Enter #Tag for Document" class="tag_name">
-	                    <md-chip-template>
-	                       <span class="entered_tags">{{$chip}}</span>
-	                    </md-chip-template>
-	                 </md-chips>
-
-					</div>
-
-					<div class="col-sm-6">
-						<md-input-container  class="md-block">
-					    <textarea ng-model="document_description" placeholder="Description"></textarea>
-					  </md-input-container>
-					</div>
-
-					<div class="col-sm-12">
-						<div class="uplaod_area" ngf-select ="uploadDocument($files, $invalidFiles)" ngf-multiple="true" ng-model="files"   ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" ngf-drop>							
-							<div class="drop_desc">
-								Drag and drop file here
-							</div>
-								<br>
-								or
-								<br>
-							<div class="select_files">
-								Select files
-							</div>
-							
-						</div>
-
-						<!-- <ul class="uploadimage_list clearfix">
-						    <li ng-repeat="f in files" ng-hide="hideattachment"> 
-						        {{f.name}}                  
-						    </li>               
-						</ul> --> 
-						<!-- <span class="progress" ng-show="documentProgress >= 0">
-						    <div style="background: green;text-align: center;color: #fff; width:{{documentProgress}}%" ng-bind="documentProgress + '%'"></div>
-						</span> -->
-					</div>
-						<br>
-						<div class="clearfix"></div>
-						<ul class="uploadimage_list_edit col-sm-12 mar-top20 clearfix">
-						    <li  ng-repeat="f in fileData"> 
-						        <div class="uploadimage_list_edit_img" style="height:100%" ng-switch="f.type">
-						            <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" style="max-width:100%" ng-switch-when="image/jpeg">
-
-						             <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" style="max-width:100%" ng-switch-when="image/png">
-
-						            <ng-md-icon style="fill:#2aaae0" ng-switch-when="application/pdf" class="cursor" icon="picture_as_pdf" class="cursor"  size="22" ng-click="removeImageIndex($index);">
-		                  			</ng-md-icon>
-
-		                  			<ng-md-icon ng-switch-default style="fill:#2aaae0" class="cursor" icon="insert_drive_file" class="cursor"  size="22" ng-click="removeImageIndex($index);">
-		                  			</ng-md-icon>
-						        </div>
-
-
-						        <div class="uploadimage_list_edit_itxt">
-						        	<strong>{{f.name}} {{f.$errorParam}}</strong>
-						        	<div class="attachment_list_icon">
-						                <a href="javaScript:void(0)" ng-click="deleteAttachment(f.$$hashKey);">Delete</a>
-						        	</div>
-						        </div>
-						        <div class="clearfix"></div>                     
-						    </li> 
-						</ul>
-					
-					
-				</div>
-				<div class="clearfix">
-					<div class="chane_pass_btn">
-						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
-					</div>					
-				</div>
-			
-			</form>
-		</div>
-	</div>
-
-	<div class="clearfix depart_midle">
-		<div class="deptsrch">
-			<div class="deptsrch_gray_top mar-bot0 clearfix">
-				<div class="positionrel inventory_filter_top">
-				<div class="row ">
-				<div class="col-sm-8">
-					<div class="vending_left_top_serch positionrel">
-						<md-input-container  class="md-block">
-				      <input  ng-model="searchDCName" autocomplete="off" placeholder="Search by document name">
-				  	</md-input-container>
-				  	
-					</div>
-					</div>
-					<div class="col-sm-3">
-					<div class="selectwhite">
-			          <md-input-container md-no-float class="md-block selectgeneral48">
-			              <md-select ng-model="searchDepartment" placeholder="Filter">
-			                <md-option value="">
-			                  Select
-			                </md-option>
-			                <md-option ng-repeat="dept in departmentList" value="{{dept.abbreviation}}">
-	                            				{{dept.department_name}}
-	                        </md-option>
-			              </md-select>          
-			          </md-input-container>
-		  			</div>
-	  			</div>
-
-	  			<div class="col-sm-1" style=" padding:10px 10px 0 5px;text-align:right; cursor: pointer;" ng-click="searchDepartment = searchDCName  = ''" title="Reset filters">
-							<img src="assets/images/reset_filter.png" style="width: 30px;">
-						</div>	
-
-				</div>
-				</div>
-			</div>
-		</div>
-		<div class="doc_center">
-			<div class="doc_center_row">
-
-				<div class="doc_center_col" ng-repeat="docs in (documentList | filter:{document_name:searchDCName}| dcDepartmentFilter:this)" ng-hide="hideDc">
-
-					<div class="doc_center_col_top">
-						<span class="capitalize">
-						<ng-md-icon class="cursor" icon="insert_drive_file" style="fill: #a3a3a3" size="24"></ng-md-icon> 
-						 {{docs.document_name}}
-						 <label ng-show="docs.filesize">- {{docs.filesize | bytes}}</label></span>
-
-						<span> 
-						<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openDocumentEditPopup(docs);" title="Edit">
-				 		</ng-md-icon>
-
-						<ng-md-icon ng-click="openDocumentFileView(docs)" class="cursor edit_icon tablebluetag" icon="file_download" style="fill: #4ebdf6" size="20" title="View Files"></ng-md-icon> 
-
-						<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeDc(docs._id,$index)" ng-confirm-title="Delete Document" ng-confirm-delete="Are you sure you want to remove this document.">
-	                  	</ng-md-icon>
-
-						</span>
-					</div>
-					<div class="doc_center_col_mid">
-
-					
-
-						<p title="{{docs.document_description}}" ng-if="docs.document_description.length">
-
-			 				{{ docs.document_description | limitTo: 80 }}
-			 				<a href="javaScript:void(0)" title="{{docs.document_description}}" ng-if="docs.document_description.length > 80" style="color: #4ebdf6;"> ...view more</a>
-			 			</p>
-
-		 				<p ng-if="!docs.document_description.length" style="height: 33px;">
-		 					Description is missing write short description for this document.
-		 				</p>
-
-						<ul class="taginglist clearfix" style="margin-left: 0px;">
-							<li ng-repeat="tag in docs.tags" style="background: #4ebdf6">
-									{{tag}}
-							</li>
-						</ul>
-					</div>
-					<div class="doc_center_col_bot">
-						<div class="doc_center_col_bot_link">
-						<a href="javascript:void(0);">
-							{{docs.department}}
-						</a></div>
-						<div class="date_st">
-							<ng-md-icon icon="access_time" style="fill: #ababab" size="18"></ng-md-icon>							
-							{{docs.upload_date | date: 'MMM d, y'}}
-						</div>
-					</div>
-				</div>
-				
-				
-			</div>
-		</div>
-	</div> 
-	
-</section>
+   <section class="dashrightsection aligninput" ng-class="{'leftopen':$root.leftopen}">
+      <div class="dash_hd_txt mar-bot20 clearfix">
+         <div class="dash_hd mar-bot0 dash_hd-left">Document Center</div>
+         <div class="rightfilter_right">
+            <div class="chane_pass_btn_right">
+               <md-button  slide-toggle="#doc" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">				
+                  {{(invForm)?"Close":"Upload document"}}
+               </md-button>
+            </div>
+         </div>
+      </div>
+      <div class="dash_pro_inform slideable lost_panel" id="doc">
+         <div class="dash_pro_inform_inner boxunoversal">
+            <form name="addDCform" ng-submit="addDC(addDCform.$valid)" novalidate>
+               <div class="row mar-bot20">
+                  <div class="col-sm-6">
+                     <md-input-container  class="md-block">
+                        <input  ng-model="document_name" placeholder="Document Name"  ng-required="true">
+                     </md-input-container>
+                  </div>
+                  <div class="col-sm-6">
+                     <div class="clearfix newhotel_dialog_form_top" ng-include="'/modules/jot/views/department.html'"></div>
+                  </div>
+                  <div class="col-sm-6">
+                     <md-chips ng-model="ctrl.itemTagModel" name="itemTag" readonly="ctrl.readonly"
+                        md-removable="ctrl.removable" placeholder="Enter #Tag for Document" class="tag_name">
+                        <md-chip-template>
+                           <span class="entered_tags">{{$chip}}</span>
+                        </md-chip-template>
+                     </md-chips>
+                  </div>
+                  <div class="col-sm-6">
+                     <md-input-container  class="md-block">
+                        <textarea ng-model="document_description" placeholder="Description"></textarea>
+                     </md-input-container>
+                  </div>
+                  <div class="col-sm-12">
+                     <div class="uplaod_area" ngf-select ="uploadDocument($files, $invalidFiles)" ngf-multiple="true" ng-model="files"   ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-allow-dir="true" ngf-drop>
+                        <div class="drop_desc">
+                           Drag and drop file here
+                        </div>
+                        <br>
+                        or
+                        <br>
+                        <div class="select_files">
+                           Select files
+                        </div>
+                     </div>
+                     <!-- <ul class="uploadimage_list clearfix">
+                        <li ng-repeat="f in files" ng-hide="hideattachment"> 
+                            {{f.name}}                  
+                        </li>               
+                        </ul> --> 
+                     <!-- <span class="progress" ng-show="documentProgress >= 0">
+                        <div style="background: green;text-align: center;color: #fff; width:{{documentProgress}}%" ng-bind="documentProgress + '%'"></div>
+                        </span> -->
+                  </div>
+                  <br>
+                  <div class="clearfix"></div>
+                  <ul class="uploadimage_list_edit col-sm-12 mar-top20 clearfix">
+                     <li  ng-repeat="f in fileData">
+                        <div class="uploadimage_list_edit_img" style="height:100%" ng-switch="f.type">
+                           <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" style="max-width:100%" ng-switch-when="image/jpeg">
+                           <img ngf-thumbnail="f || 'assets/images/defaultjot.jpg'" style="max-width:100%" ng-switch-when="image/png">
+                           <ng-md-icon style="fill:#2aaae0" ng-switch-when="application/pdf" class="cursor" icon="picture_as_pdf" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+                           </ng-md-icon>
+                           <ng-md-icon ng-switch-default style="fill:#2aaae0" class="cursor" icon="insert_drive_file" class="cursor"  size="22" ng-click="removeImageIndex($index);">
+                           </ng-md-icon>
+                        </div>
+                        <div class="uploadimage_list_edit_itxt">
+                           <strong>{{f.name}} {{f.$errorParam}}</strong>
+                           <div class="attachment_list_icon">
+                              <a href="javaScript:void(0)" ng-click="deleteAttachment(f.$$hashKey);">Delete</a>
+                           </div>
+                        </div>
+                        <div class="clearfix"></div>
+                     </li>
+                  </ul>
+               </div>
+               <div class="clearfix">
+                  <div class="chane_pass_btn">
+                     <md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+      <div class="clearfix depart_midle">
+         <div class="deptsrch">
+            <div class="deptsrch_gray_top mar-bot0 clearfix">
+               <div class="positionrel inventory_filter_top">
+                  <div class="row ">
+                     <div class="col-sm-8">
+                        <div class="vending_left_top_serch positionrel">
+                           <md-input-container  class="md-block">
+                              <input  ng-model="searchDCName" autocomplete="off" placeholder="Search by document name">
+                           </md-input-container>
+                        </div>
+                     </div>
+                     <div class="col-sm-3">
+                        <div class="selectwhite">
+                           <md-input-container md-no-float class="md-block selectgeneral48">
+                              <md-select ng-model="searchDepartment" placeholder="Filter">
+                                 <md-option value="">
+                                    Select
+                                 </md-option>
+                                 <md-option ng-repeat="dept in departmentList" value="{{dept.abbreviation}}">
+                                    {{dept.department_name}}
+                                 </md-option>
+                              </md-select>
+                           </md-input-container>
+                        </div>
+                     </div>
+                     <div class="col-sm-1" style=" padding:10px 10px 0 5px;text-align:right; cursor: pointer;" ng-click="searchDepartment = searchDCName  = ''" title="Reset filters">
+                        <img src="assets/images/reset_filter.png" style="width: 30px;">
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="doc_center">
+            <div class="doc_center_row">
+               <div class="doc_center_col" ng-repeat="docs in (documentList | filter:{document_name:searchDCName}| dcDepartmentFilter:this)" ng-hide="hideDc">
+                  <div class="doc_center_col_top">
+                     <span class="capitalize">
+                        <ng-md-icon class="cursor" icon="insert_drive_file" style="fill: #a3a3a3" size="24"></ng-md-icon>
+                        {{docs.document_name}}
+                        <label ng-show="docs.filesize">- {{docs.filesize | bytes}}</label>
+                     </span>
+                     <span>
+                        <ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openDocumentEditPopup(docs);" title="Edit">
+                        </ng-md-icon>
+                        <ng-md-icon ng-if="docs.files.length" ng-click="openDocumentFileView(docs)" class="cursor edit_icon tablebluetag" icon="file_download" style="fill: #4ebdf6" size="20" title="View Files"></ng-md-icon>
+                        <ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeDc(docs._id,$index)" ng-confirm-title="Delete Document" ng-confirm-delete="Are you sure you want to remove this document.">
+                        </ng-md-icon>
+                     </span>
+                  </div>
+                  <div class="doc_center_col_mid">
+                     <p title="{{docs.document_description}}" ng-if="docs.document_description.length">
+                        {{ docs.document_description | limitTo: 80 }}
+                        <a href="javaScript:void(0)" title="{{docs.document_description}}" ng-if="docs.document_description.length > 80" style="color: #4ebdf6;"> ...view more</a>
+                     </p>
+                     <p ng-if="!docs.document_description.length" style="height: 33px;">
+                        Description is missing write short description for this document.
+                     </p>
+                     <ul class="taginglist clearfix" style="margin-left: 0px;">
+                        <li ng-repeat="tag in docs.tags" style="background: #4ebdf6">
+                           {{tag}}
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="doc_center_col_bot">
+                     <div class="doc_center_col_bot_link">
+                        <a href="javascript:void(0);">
+                        {{docs.department}}
+                        </a>
+                     </div>
+                     <div class="date_st">
+                        <ng-md-icon icon="access_time" style="fill: #ababab" size="18"></ng-md-icon>
+                        {{docs.upload_date | date: 'MMM d, y'}}
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
 </div>

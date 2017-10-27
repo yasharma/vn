@@ -26,12 +26,12 @@ exports.configureHotelMember = (reqst, respe) => {
     if(reqst.body.member_list){
 
         var memberdata             = reqst.body.member_list;
+        var hotel_id               = reqst.body.hotel_id;
         var UpdatedData            =  [];
         var PhoneDirectoryData     =  [];
 
         /* manipulate user data beforesaving as  bulk record */
-        _.map(memberdata, function(member){
-            
+        _.map(memberdata, function(member){         
 
             let firstname         = member.first_name;
             let lastname          = member.last_name;
@@ -60,20 +60,75 @@ exports.configureHotelMember = (reqst, respe) => {
                 'tags'          : member.department.map(dept => '#' + dept),
             });
         });
-        
-        Employee.insertMany(UpdatedData, function (err, result) {
-        
-            if(!_.isNull(result)){
 
-                PhoneDirectory.insertMany(PhoneDirectoryData, function(err, phonedirectorydata){
-                    return respe.json(response.success(result,'Members Added Successfully.'));
+
+
+
+
+
+
+
+        Employee.findOne({hotel_id: hotel_id}, function(err, empData){
+            if(empData){
+
+                Employee.remove({hotel_id: hotel_id}, function(err, deletedData) {                    
+                    if(deletedData){
+
+                        Employee.insertMany(UpdatedData, function (err, result) {
+        
+                            if(!_.isNull(result)){
+
+                                PhoneDirectory.findOne({hotel_id: hotel_id}, function(err, phoneData){
+                                if(phoneData)
+                                {
+                                    PhoneDirectory.remove({hotel_id: hotel_id}, function(err, deletedPhData) {
+                                        if(deletedPhData){
+
+                                            PhoneDirectory.insertMany(PhoneDirectoryData, function(err, phonedirectorydata)
+                                            {
+                                                return respe.json(response.success(result,'Members Added Successfully.'));
+                                            });
+
+                                        }
+                                    });
+
+                                } else {
+
+                                    PhoneDirectory.insertMany(PhoneDirectoryData, function(err, phonedirectorydata)
+                                    {
+                                        return respe.json(response.success(result,'Members Added Successfully.'));
+                                    });
+                                }
+                            });
+                                
+                            }else{
+                                return respe.json(response.errors(err.errors,'Error in User Saved.'));
+                            }
+                        });
+
+                       
+                    }
                 });
-                
-            }else{
-                return respe.json(response.errors(err.errors,'Error in User Saved.'));
+
+            } else {
+
+                Employee.insertMany(UpdatedData, function (err, result) {
+        
+                    if(!_.isNull(result)){
+                        PhoneDirectory.insertMany(PhoneDirectoryData, function(err, phonedirectorydata){
+                            return respe.json(response.success(result,'Members Added Successfully.'));
+                        });
+                        
+                    }else{
+                        return respe.json(response.errors(err.errors,'Error in User Saved.'));
+                    }
+                });
+
             }
+
         });
-    }else{
+
+    } else {
         var errors =    { _id: {'message':'Member data is required.'}}
         return respe.json(response.errors(errors,"Error in Member data."));
     }

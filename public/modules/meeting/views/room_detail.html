@@ -1,0 +1,59 @@
+<md-dialog class="newhotel_dialog custom_size">
+<md-toolbar>
+      <div class="md-toolbar-tools custom_padding">
+        <h2>
+        <div class="show_profile_image">
+		<img src="{{(room_image)?'/images/hotel/'+hotel_id+'/rooms/'+room_image:'/assets/images/metting_list.png'}}" class="cn_profile_image" style="width: 66px;">
+			<label class="full_name capitalize">{{name}}</label>
+		</div></h2>
+
+         <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+
+<div class="user_info">
+
+<ul>
+
+	<li ng-if="room_number">
+		<div class="heading-left">Room Number:</div>
+		<div class="desc-right">{{room_number}}</div>
+		<div class="clearfix"></div>
+	</li>
+	<li ng-if="dimension">
+		<div class="heading-left" >Dimension:</div>
+		<div class="desc-right">{{dimension}}</div>
+		<div class="clearfix"></div>
+	</li>
+	<li ng-if="capacity">
+		<div class="heading-left" >Capacity:</div>
+		<div class="desc-right">{{capacity}}</div>
+		<div class="clearfix"></div>
+	</li>
+	<li ng-if="cost">
+		<div class="heading-left" >Cost:</div>
+		<div class="desc-right">{{(cost)?cost:0 | currency}}</div>
+		<div class="clearfix"></div>
+	</li>
+	<li ng-if="facilities.length">
+		<div class="heading-left" >Facilities:</div>
+		<div class="desc-right capitalize">
+		
+		<ul>
+			<li ng-repeat="facy in facilities" title="{{facy}}" style="display: inline-block;    margin-right: 10px;">
+					<img ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'image'" src="{{(facilityList | filter : {label : facy } : true)[0].src}}">
+					
+					<ng-md-icon ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'icon'" icon="{{(facilityList | filter : {label : facy } : true)[0].src}}" style="fill: #a5a7a7" size="20"></ng-md-icon> 	
+			</li> 
+		</ul>
+
+		</div>
+		<div class="clearfix"></div>
+	</li>
+</ul>
+</div>
+
+</md-dialog>

@@ -15,6 +15,7 @@ var app = angular.module('hoteljotApp',[
 			'cp.ngConfirm',
 			'vAccordion',
 			'ngCookies',
+			//'rzModule',
 			])
 
 .config(['localStorageServiceProvider',

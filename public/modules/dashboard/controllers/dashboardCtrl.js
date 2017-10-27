@@ -3,6 +3,12 @@
 app.controller('dashboardController', ['$scope','$location','localStorageService','$rootScope','$mdDialog','toastService','globalRequest',
 	function($scope,$location, localStorageService,$rootScope,$mdDialog,toastService,globalRequest) {
 
+		/* socket.on("message", function(data){
+		    console.log(data);
+		});
+*/
+
+
 
 		/*
 		*
@@ -36,6 +42,7 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 		*/
 		
 
+
 		$scope.redirectToJot = function(hotel){
 			
 			globalRequest.getHotelStatus(hotel._id).then(function(response){				
@@ -53,6 +60,10 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 
 					} else if(response[0].members.length == 0) {
 						completedStep = 4;
+
+					} else if(response[0].rooms.length == 0) {	
+						completedStep = 5;
+						
 					} else {
 						completedStep = 'completed';
 					}
@@ -60,12 +71,13 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 					completedStep = 'completed';
 				}
 
-
+				
 
 				if(completedStep == 'completed')
 				{
 					localStorageService.set('hotel', hotel);			
 					$location.path('/dashboard/hotelboard');
+					
 				} else {
 					localStorageService.set('processingHotel',hotel);
 					$location.path('/dashboard/hotel-setup');

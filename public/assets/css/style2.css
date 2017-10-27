@@ -1,46 +1,36 @@
-.wizard_department_list{
-    display: block;
-    color: #444;
+html {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
 }
-
+.wizard_department_list{display: block;color: #444;}
 .uplaod_area{position: relative;}
-
-.inside_cover_image {
-    position: absolute;
-    width: 180px;
-    left: 40px;
-    top: 12px;
-}
-
-ul.emp_info_field li {
-    width: 100%;
-    float: none;
-    margin: 0;
-}
-
-.emp_dept_field {
-    background: #eee;
-    margin-right: 10px;
-    padding: 2px 10px;
-    font-weight: normal;
-}
-
-.result.ng-binding {
-    padding: 0 0 9px 0;
-}
-
+.inside_cover_image {position: absolute;width: 180px;left: 40px;top: 12px;}
+ul.emp_info_field li {width: 100%;float: none;margin: 0;}
+.emp_dept_field {background: #eee; margin-right: 10px;padding: 2px 10px;font-weight: normal;}
+.result.ng-binding {padding: 0 0 9px 0;}
 .dash_step_panel ul li.active::after, .dash_step_panel ul li.completed::after {
     width: 100%;
 }
 
 textarea#jot_description {
     border: 1px solid #dddddd !important;
+    height: 150px !important;
 }
 
 .invite_content .rightlogin {
     width: 100%;
 }
-
+.editoverlay {
+    position: fixed;
+    /* background: rgba(0,0,0,0.5); */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+.toogle_menu_list ul.sub_menu {
+    margin-left: 20px;
+}
 .uploadimage_list {
     margin-top: 30px;
 }
@@ -239,12 +229,15 @@ md-dialog md-dialog-content {
     border-radius: 100%;
     text-align: center;
     display: block;
-    padding: 5px 0;
+    padding: 1px 5px;
     width: 30px;
     height: 30px;
     font-size: 13px;
     color: #fff;
     text-transform: uppercase;
+    text-align: center;
+    line-height: 30px;
+    margin-bottom: 5px;
 }
 
 .selectedicon {
@@ -332,7 +325,7 @@ md-dialog md-dialog-content {
 }
 
 .min_height27 {
-    height: 27px;
+    height: 34px;
 }
 .taginglist {
     margin: 0px 18px 10px 18px;
@@ -341,7 +334,7 @@ md-dialog md-dialog-content {
 .md-select-value{border: 0  !important;}
 
 .Quick_jot_list .md-button._md-nav-button {
-    padding: 12px 32px;
+    padding: 12px 15px;
 }
 
 .new_mesge_list > li:nth-child(4n) .quick_edit_buttons {
@@ -449,4 +442,44 @@ md-dialog {
 md-toolbar {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+}
+
+.change_pro.big {
+    width: 289px;
+    height: 168px;
+}
+
+.change_pro.big .uplosd_img_ab {
+    width: 289px;
+    height: 168px;
+}
+
+.big .hover_de {
+    opacity: 1;
+}
+
+.big .hover_de ng-md-icon {
+    display: block;
+    margin: 45px auto 5px;
+}
+.search_result_header {
+    color: #fff;
+    font-size: 18px;
+    background: #2aaae0;
+    padding: 10px 10px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+ .align_calendr_icon {
+    top: 14px!important;
+    left: auto!important;
+    right: 2px;
+}
+
+.hideattachment .desc_attachment_icon{display: none !important;}
+
+.md-input-has-value.datepicker label {
+    top: -23px !important;
+    left: 0 !important;
+    padding-left: 0!important;
 }

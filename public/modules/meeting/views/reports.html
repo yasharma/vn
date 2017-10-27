@@ -1,0 +1,156 @@
+<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
+	<div class="dash_hd_txt mar-bot20 clearfix">
+		<div class="dash_hd mar-bot0 dash_hd-left">Sales Reports</div>
+		<div class="rightfilter_right dash-home_right">
+
+            <div class="chane_pass_btn_right mrright0 positionrel" style="">             
+               
+                  <ul class="all_option_list">
+					<li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
+						<a href="
+						{{(board.id == 'lost_found')
+						?'/dashboard/lost-found':(board.id == 'vending_machine')
+						?'/dashboard/inventory'
+						:(board.id == 'meeting_room')?'/dashboard/booking-report'
+						:'/dashboard/hotelboard/'+board.id}}">
+							<span class="txtdrop" style="z-index: 99;">{{board.label}}</span>
+							<div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
+								<img src="{{board.data}}" ng-if="board.icontype == 'image'">
+							</div>
+						</a>
+					</li>				
+				</ul>
+               
+            </div>
+         </div>		   
+	</div>
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch deptsrch_gray">
+			<div class="deptsrch_gray_top mar-bot0 clearfix">
+					
+
+				<div class="montfilter vending_left_top_serch positionrel">
+					<md-input-container class="md-block">
+			      <input  ng-model="searchReport" placeholder="Search Report">
+			  	</md-input-container>			  	
+				</div>
+
+				<div class="" style="float: right; padding: 10px 0px 0 10px;cursor: pointer;" ng-click="searchReport = search_from_date = search_to_date = search_status = ''" title="Reset filters">
+						<img src="assets/images/reset_filter.png" style="width: 30px;">
+				</div>
+
+				<div class="right_montfilter">
+					<ul class="clearfix">
+						<li style="width: 180px;">
+							<div class="selectwhite">	
+									           
+
+				                 <md-input-container md-no-float class="md-block datepicker lost_found_picker">
+				                 <label>Start Date/Time</label>
+							        <input ng-model="search_from_date" string-to-timestamp  datetime-picker hour="23" minute='59' class="angudatepicker" style="padding-left: 22px;width: 100%;" />
+							        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20" class="calendr_icon align_calendr_icon" ></ng-md-icon>
+							    </md-input-container>			                
+		        			</div>
+						</li>
+
+						<li style="width: 180px;">
+							<div class="selectwhite">			           
+
+
+				                 <md-input-container md-no-float class="md-block datepicker lost_found_picker">
+				                 <label>End Date/Time</label>
+							        <input ng-model="search_to_date" string-to-timestamp  datetime-picker hour="23" minute='59' class="angudatepicker" style="padding-left: 22px;width: 100%;" />
+							        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20" class="calendr_icon align_calendr_icon" ></ng-md-icon>
+							    </md-input-container>			                
+		        			</div>
+						</li>
+							        			
+
+	        			<li  style="width: 180px;">
+							<div class="selectwhite">
+					            <md-input-container md-no-float class="md-block selectgeneral48">
+					                <md-select ng-model="search_status" placeholder="Status">
+					                <md-option value="">
+			                            Select Status
+			                          </md-option>
+					                  <md-option value="cancelled">
+			                            Cancelled
+			                          </md-option> 
+			                          <md-option value="booked">
+			                            Booked
+			                          </md-option> 
+					                </md-select>
+					            </md-input-container>
+		        			</div>
+	        			</li>
+        			</ul>
+				</div>
+
+				
+			</div>
+		</div>
+
+		<div class="addmember_data_table">
+			<div class="table_div">
+
+	        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table" ng-init="ctrl.hideEmp = []">
+	          <thead>
+	              <tr>
+	                  <th width="2%"># </th>                  
+	                  <th width="20%">Room</th>
+	                  <th width="15%">Booked By</th>
+	                  <th width="15%">Book Time</th>
+	                  <th width="17%">Date Of Booking</th>
+	                   <th width="15%">Customer</th>	                 	                  
+	                  <th width="10%">Status</th>
+	                  <th width="8%">Action</th>
+	              </tr>
+	          </thead>
+	          <tbody>
+	              <tr ng-repeat="report in filterereport = 
+	              ($root.bookingReportsList | filter:searchReport | filterBookingByDate: this | filter:(!!search_status || undefined) 
+	              	&& {status: search_status} | orderBy:'_id':true
+	              ) 
+	              track by $index">
+
+	                  <td style="height: 60px;">{{$index+1}}</td>
+	                 
+	                  <td class="capitalize"  style="color:#4ebdf6"  ng-click="showRoomInfo(report);" >
+	                  	<img src="{{(report.room_detail[0].room_image)?'/images/hotel/'+report.hotel_id+'/rooms/'+report.room_detail[0].room_image:'/assets/images/metting_list.png'}}" style="margin-right: 10px;width: 90px;">
+
+	                  	{{report.room_detail[0].name}} {{"("+report.room_detail[0].room_number+")"}}
+	                  </td>
+	                 
+	                  
+	                  <td class="capitalize" ng-click="showSellerInfo(report);" style="color:#4ebdf6">
+	                  	{{report.seller_detail[0].first_name}} {{report.seller_detail[0].last_name}}
+	                  </td>
+
+	                  <td class="capitalize">
+	                  	{{report.booking_time | date : "EEE d MMM, yyyy h:mm a"}}
+	                  </td>	                 
+	                  <td>
+	                  <label style="color:#4ebdf6;    width: 45px;">From: </label>{{report.reserved.from | date : "EEE d MMM, yyyy h:mm a"}} <br>
+	                  <label style="color:#4ebdf6;    width: 45px;">To: </label>{{report.reserved.to | date : "EEE d MMM, yyyy h:m a"}}</td>	                  
+	                   <td class="capitalize">
+	                   {{report.recipient_first_name}} {{report.recipient_last_name}}
+	                   </td>
+	                   <td  class="capitalize">{{report.status}}</td>
+	                  <td>
+	                  	<ng-md-icon   class="cursor edit_icon tablebluetag" icon="remove_red_eye" class="cursor"  size="22" ng-click="openReportDetail(report);" title="View Report" style="margin-right: 10px;"></ng-md-icon>
+
+	                  	<ng-md-icon ng-if="report.status !='cancelled'" class="cursor closr_icon tableredtag" icon="cancel"  style="fill:#ff3333" class="cursor"  size="22" title="Cancel Booking" confirmed-click="cancelBooking(report._id,$index)" ng-confirm-title="Booking Cancel" ng-confirm-delete="Are you sure you want to cancel this booking."></ng-md-icon>
+	                  </td>
+
+	              </tr>	              
+	          </tbody>
+	        </table>
+
+	        <div ng-show="!filterereport.length" class="itemnotfound">
+	                No reports found.                
+	         </div>
+	      </div>
+		</div>
+	</div>
+</section>

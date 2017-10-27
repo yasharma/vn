@@ -1,0 +1,90 @@
+<div class="dash-main-con">
+<!--middle panel -->
+<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
+	
+	<div class="dash_hd_txt mar-bot20" layout="row" layout-align="space-between center">
+		<div class="dash_hd mar-bot0">Alerts For Hotel</div>
+		<div class="rightfilter">
+
+			 <md-button  slide-toggle="#depart" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+				{{(invForm)?"Close":"Add Alert"}}
+			</md-button>
+	    </div>    
+	</div>
+
+	<div class="dash_pro_inform transformable slideable" id="depart">
+		<form name="addAlertform" ng-submit="addAlert(addAlertform.$valid)" novalidate>
+			<div class="clearfix">
+				<!-- <div class="dash_pro_inform_hd">Add Department</div> -->
+			</div>
+			<div class="dash_pro_inform_inner boxunoversal">
+				<div class="row ">
+					<div class="col-sm-6">
+						<md-input-container  class="md-block">
+					            <input  ng-model="alert_title" placeholder="Title">
+					            
+					    </md-input-container>
+					</div>	
+					<div class="clearfix"></div>				
+					<div class="col-sm-6">
+						<md-input-container md-no-float class="md-block">
+							 <textarea  ng-model="alert_description" rows="3" placeholder="Description" ng-required="true"></textarea>
+						</md-input-container>	
+					</div>
+					
+				</div>
+				<div class="clearfix">
+					<div class="chane_pass_btn">
+						<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+					</div>						
+				</div>
+
+				
+			</div>
+		</form>
+	</div>
+
+
+
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch">
+			<div class="vending_left_top_serch positionrel" style="float: left;width: 90%;">
+			  <md-input-container  class="md-block">
+			      <input  ng-model="search_alert" placeholder="Search Alert" autocomplete="off">
+			  </md-input-container>			 
+			</div>
+
+
+			<div class="" style="float: right; padding: 10px 0px 0 5px;cursor: pointer;" ng-click="search_alert = ''" title="Reset filters">
+				<img src="assets/images/reset_filter.png" style="width: 30px;">
+			</div>
+		</div>
+		<div class="deptsrch_data">
+			 <ul class="deptsrch_data_list clearfix">
+			 		<li ng-repeat="alerts in filtereddepartment = ($root.alertList | orderBy:'_id':true |  
+	              filter: {alert_title: search_alert})">
+			 			<div class="deptsrch_data_title">
+			 				<ng-md-icon icon="add_alert" style="fill: #3da0d3" size="20"></ng-md-icon> 
+			 				{{alerts.title}}
+                  
+			 			</div>
+			 			<div class="deptsrch_data_para">
+			 				<p>
+			 				{{ alerts.description }}			 				
+			 				</p>
+			 			</div>
+			 		</li>
+			 		
+			 </ul>
+
+			 <div ng-show="!filtereddepartment.length" class="itemnotfound">
+                No alert found.                
+             </div>
+		</div>
+	</div>
+
+
+	
+</section>
+</div>

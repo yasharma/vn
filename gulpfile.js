@@ -7,9 +7,9 @@ const gulp      = require('gulp'),
     uglify      = require('gulp-uglify'),
     pump        = require('pump'),
     fs          = require('fs'),
-    //watch       = require('gulp-watch'),
+    exec        = require('child_process').exec,
+    watch       = require('gulp-watch'),
     nodemon     = require('gulp-nodemon');
-
 
 gulp.task('nodemon', function () {
   nodemon({
@@ -18,6 +18,9 @@ gulp.task('nodemon', function () {
     ignore: ['node_modules/','bower_components/','public/js/','test/', 'coverage/','*.html'],
   })
 });
+
+
+
 
 /********************************************************************************************************************************************************************************************************************************************************/
 
@@ -33,6 +36,8 @@ let watchFiles = [
 
 
 gulp.task('jshint', ['uglify:front-js'], (cb) => {
+    
+
     return gulp.src(watchFiles)
         .pipe(jshint())
         .pipe(jshint.reporter(stylish));
@@ -74,6 +79,9 @@ gulp.task('vendor:js', (cb) => {
             './bower_components/angular-confirm/dist/angular-confirm.min.js',
             './bower_components/v-accordion/dist/v-accordion.min.js',
             './bower_components/angular-cookies/angular-cookies.js',
+  
+
+
                     
 
         ]),
@@ -117,7 +125,7 @@ gulp.task('vendor:theme-css', (cb) => {
             './bower_components/components-font-awesome/css/font-awesome.min.css',
             './bower_components/angular-material/angular-material.min.css',
             './bower_components/angular-material-icons/angular-material-icons.css',
-            /*'./bower_components/angularjs-slider/dist/rzslider.min.css',*/
+            './bower_components/angularjs-slider/dist/rzslider.min.css',
              './bower_components/angularjs-datetime-picker/angularjs-datetime-picker.css',
              './bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css',          
              './bower_components/owl.carousel/dist/assets/owl.carousel.min.css',
@@ -152,7 +160,7 @@ gulp.task('check:env', () => {
 });
 
 
-/***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/******************************************************************************************************************************************************************************************************************************/
 
 gulp.task('default',
     [

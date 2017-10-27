@@ -60,10 +60,8 @@
 						</span>
 					</div>
 					<input type="file"  ngf-accept="'image/*'" ngf-select ="uploadprofileImage($files, $invalidFiles)" ngf-resize="{width: 90, height: 90}" ng-model="profile_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
-				</div>				
-				<span class="progress" ng-show="profileProgress >= 0">
-				     <div style="background: green;text-align: center;color: #fff; width:{{profileProgress}}%" ng-bind="profileProgress + '%'"></div>
-				</span> 
+				</div>			
+				
 				<br>
 			</div> 
 			<div class="clearfix">

@@ -1,16 +1,9 @@
 <!-- <close-on-outside-click> -->
 <div ng-controller="sidebarCntroller">
-
-<div class="toogle_menu_list" ng-if="isAuth.outside != 'yes'" outside-click-sidebar='closeSidebar'>
-	<ul>				
-
-		<!-- <li title="Add/View Employee" >
-			<a href="javaScript:void(0);" ng-class="getClass('/dashboard/Preference')">	
-				<ng-md-icon icon="settings" class="cursor"  size="24"></ng-md-icon> 
-				<span>My Preference </span>						
-			</a>	
-								
-		</li> -->
+<!-- 
+<div class="toogle_menu_list" ng-if="isAuth.outside != 'yes'" outside-click-sidebar='closeSidebar'> -->
+<div class="toogle_menu_list" ng-if="isAuth.outside != 'yes'">
+	<ul>
 
 		<li title="Add/View Employee" >
 			<a href="javaScript:void(0);" ng-click="sideEmp = !sideEmp">	
@@ -19,16 +12,16 @@
 				<ng-md-icon icon="{{(sideEmp)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 9px;" class="cursor expand_icon"  size="24"></ng-md-icon>
 			</a>
 			<ul class="sub_menu" ng-show="sideEmp">
-				<li><a href="/dashboard/employee" ng-class="getClass('/dashboard/employee')">Manage Employees</a></li>
-				<li><a href="/dashboard/employee_schedule"  ng-class="getClass('/dashboard/employee_schedule')">Schedule Employees</a></li>
-				<li><a href="/dashboard/position" ng-class="getClass('/dashboard/position')">Manage Positions</a></li>
+				<li><a href="/dashboard/employee" ng-class="getClass('/dashboard/employee')" ng-click="closeSidebar();">Manage Employees</a></li>
+				<li><a href="/dashboard/employee-schedule"  ng-class="getClass('/dashboard/employee-schedule')" ng-click="closeSidebar();">Schedule Employees</a></li>
+				<li><a href="/dashboard/position" ng-class="getClass('/dashboard/position')" ng-click="closeSidebar();">Manage Positions</a></li>
 			</ul>						
 		</li>
 
 
 
 		<li title="Add/View Department">
-			<a href="/dashboard/department" ng-class="getClass('/dashboard/department')">	
+			<a href="/dashboard/department" ng-class="getClass('/dashboard/department')" ng-click="closeSidebar();">	
 				<ng-md-icon icon="portrait" class="cursor" style="" size="24"></ng-md-icon> 
 				<span>Departments</span>
 			</a>					
@@ -36,7 +29,7 @@
 
 		
 		<li title="Inventory Category">
-			<a href="javascript:void(0);" ng-click="sideinv = !sideinv">	
+			<a href="javascript:void(0);" ng-click="sideinv = !sideinv;">	
 				<ng-md-icon icon="shop" class="cursor" style="" size="24"></ng-md-icon> 
 				<span>Inventory</span>
 				<ng-md-icon icon="{{(sideinv)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 9px;"  size="24"></ng-md-icon>
@@ -44,36 +37,70 @@
 
 
 			<ul class="sub_menu" ng-show="sideinv">
-				<li><a href="/dashboard/inventory" ng-class="getClass('/dashboard/inventory')">Manage Inventory</a></li>					
-				<li ><a href="/dashboard/inventory_category" ng-class="getClass('/dashboard/inventory_category')">Manage Category</a></li>
+				<li><a href="/dashboard/inventory" ng-class="getClass('/dashboard/inventory')" ng-click="closeSidebar();">Manage Inventory</a></li>					
+				<li ><a href="/dashboard/inventory-category" ng-class="getClass('/dashboard/inventory-category')" ng-click="closeSidebar();">Manage Category</a></li>
 			</ul>	
 		
 
 		</li>
 
 		<li title="Lost & Found Management">
-			<a href="/dashboard/lost_found" ng-class="getClass('/dashboard/lost_found')">	
+			<a href="/dashboard/lost-found" ng-class="getClass('/dashboard/lost-found')" ng-click="closeSidebar();">	
 				<ng-md-icon icon="business" class="cursor" style="" size="24"></ng-md-icon> 
 				<span>Lost & Found Management</span>
 			</a>
 		</li>
 
+		<li title="Meeting Rooms">
+			<a href="javascript:void(0);" ng-click="sidemeeting = !sidemeeting;">	
+				<ng-md-icon icon="event_seat" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Meeting Rooms</span>
+				<ng-md-icon icon="{{(sidemeeting)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 9px;"  size="24"></ng-md-icon>
+			</a>
+
+
+			<ul class="sub_menu" ng-show="sidemeeting">
+							
+				<li ><a href="/dashboard/meeting-rooms" ng-class="getClass('/dashboard/meeting-rooms')" ng-click="closeSidebar();">Rooms</a></li>
+
+				<li ><a href="/dashboard/booking-report" ng-class="getClass('/dashboard/booking-report')" ng-click="closeSidebar();">Booking Reports</a></li>
+			</ul>	
+		
+
+		</li>
+
 		</li><li title="Phone Directory">
-			<a href="/dashboard/phone_directory" ng-class="getClass('/dashboard/phone_directory')">	
+			<a href="/dashboard/phone-directory" ng-class="getClass('/dashboard/phone-directory')" ng-click="closeSidebar();">	
 				<ng-md-icon icon="contact_phone" class="cursor" style="" size="24"></ng-md-icon> 
 				<span>Phone Directory</span>
 			</a>
 		</li>
 
 		</li><li title="Document Center">
-			<a href="/dashboard/document_center" ng-class="getClass('/dashboard/document_center')">	
+			<a href="/dashboard/document-center" ng-class="getClass('/dashboard/document-center')" ng-click="closeSidebar();">	
 				<ng-md-icon icon="folder_open" class="cursor" style="" size="24"></ng-md-icon> 
 				<span>Document Center</span>
 			</a>
 		</li>
+
+		<li title="Alerts">
+			<a href="/dashboard/alerts" ng-class="getClass('/dashboard/alerts')" ng-click="closeSidebar();">	
+				<ng-md-icon icon="add_alert" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Alerts</span>
+			</a>
+		</li>
+
+		<li title="Reports" ng-click="closeSidebar();">
+			<a href="/dashboard/sales-report" ng-class="getClass('/dashboard/sales-report')">	
+				<ng-md-icon icon="receipt" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Sales Report</span>
+			</a>
+		</li>
+	
+
+
+		
 		
 	</ul>
 </div>
 </div>
-<!-- </close-on-outside-click> -->
-<!--middle panel -->

@@ -15,6 +15,7 @@ var app = angular.module('hoteljotApp',[
 			'cp.ngConfirm',
 			'vAccordion',
 			'ngCookies',
+			//'rzModule',
 			])
 
 .config(['localStorageServiceProvider',
@@ -348,10 +349,16 @@ __API_PATH.ADD_ITEM                     = '/api/add_item';
 __API_PATH.DELETE_ITEM                  = '/api/delete_item';
 __API_PATH.PURCHASE                     = '/api/add_to_cart';
 
+__API_PATH.CANCEL_ORDER                 = '/api/cancle_sale';
+__API_PATH.PAYMENT_STATUS               = '/api/change_paymentstatus';
+
 __API_PATH.ADD_INVENTORY_CATEGORY       = '/api/add_inventory_category';
 __API_PATH.UPDATE_INVENTORY_CATEGORY    = '/api/update_inventory_category';
 __API_PATH.DELETE_INVENTORY_CATEGORY    = '/api/delete_inventory_category';
 __API_PATH.GET_INVENTORY_CATEGORY       = '/api/get_inventory_category';
+__API_PATH.GET_REPORTS                  = '/api/get_mysale';
+
+__API_PATH.GET_BOOK_REPORTS             = '/api/get_booking_report';
 
 __API_PATH.ADD_MEMBER                   = '/api/add_member';
 __API_PATH.UPDATE_MEMBER                = '/api/update_member';
@@ -389,8 +396,28 @@ __API_PATH.DELETE_DOCUMENT              = '/api/delete_document';
 __API_PATH.GET_DOCUMENT                 = '/api/get_document';
 __API_PATH.MOVE_DOCUMENT                = '/api/move_document';
 __API_PATH.CONFIGURE_MEMBERS            = '/api/configure_members';
+__API_PATH.CONFIGURE_ROOMS              = '/api/configure_rooms';
 
 __API_PATH.GET_HOTEL_STATUS             = '/api/getHotelStatus';
+
+
+
+
+__API_PATH.ADD_MEETINGROOM              = '/api/add_meetingroom';
+__API_PATH.UPDATE_MEETINGROOM           = '/api/update_meetingroom';
+__API_PATH.DELETE_MEETINGROOM           = '/api/delete_meetingroom';
+__API_PATH.GET_MEETINGROOMS             = '/api/get_meetingrooms';
+
+
+__API_PATH.BOOK_ROOM                    = '/api/book_room';
+__API_PATH.ADD_BOOKING                  = '/api/add_booking';
+__API_PATH.CANCEL_BOOKING               = '/api/cancel_booking';
+
+__API_PATH.ADD_ALERT                    = '/api/add_alert';
+__API_PATH.GET_ALERTS                   = '/api/get_alerts';
+__API_PATH.UPDATE_ALERT                 = '/api/update_alert';
+__API_PATH.GET_NOTIFICATION             = '/api/get_notification';
+
 
 
 __API_PATH.HEADER_MENU =  [
@@ -418,8 +445,19 @@ __API_PATH.JOT_TYPES  = {
                             
                             vending_machine:{label:"Vending Machine",id:'vending_machine',data:'assets/images/vending_icon.png',icontype:'image',directory:'vending_machine',bgcolor:"#e37f4b",class:"",default:false,order:7},
 
-                            /*meeting_room:{label:"Meeting Room",id:'meeting_room',data:'assets/images/metting_icon.png',icontype:'image',directory:'jot',bgcolor:"#f8553a",class:"",default:true}*/
+                            meeting_room:{label:"Meeting Room",id:'meeting_room',data:'assets/images/metting_icon.png',icontype:'image',directory:'meeting',bgcolor:"#f8553a",class:"",default:true}
                         };                        
+
+
+
+__API_PATH.Hotel_STEPS  =[
+                            {label:"Basic Information",id:"default",description:"Fill out basic information of hotel",next:"default"},
+                            {label:"Jots",id:"default",description:"You can add or remove the features as per your hotel need",next:"default"},
+                            {label:"Departments",id:"default",description:"Add the department your hotel have",next:"default"},
+                            {label:"Employees",id:"default",description:"Add your hotel hotel staff",next:"meeting_room"},
+                            {label:"Rooms & Common Area",id:"meeting_room",description:"Add rooms & common area",next:"false"}
+                        ]; 
+
 
  
 
@@ -1629,13 +1667,7 @@ __API_PATH.COLOR_CODE = {
 
 
 
-__API_PATH.Hotel_STEPS  =[
-                            {label:"Basic Information"},
-                            {label:"Jots"},
-                            {label:"Departments"},
-                            {label:"Employees"},
-                            {label:"Rooms"}
-                        ]; 
+
 
 
 __API_PATH.DEFAULT_DEPARTMENT  = [
@@ -1699,6 +1731,7 @@ app.config(['$httpProvider', function($httpProvider){
 }])
 
 
+
 .config(['localStorageServiceProvider', function (localStorageServiceProvider) {
    
    var hostname = window.location.hostname, prefix;
@@ -1709,99 +1742,65 @@ app.config(['$httpProvider', function($httpProvider){
         default:
             prefix = 'default';
    }  
- // localStorageServiceProvider.setPrefix(prefix).setStorageType('sessionStorage');
  localStorageServiceProvider.setPrefix(prefix);
 
 }])
-.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$timeout',
-	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$timeout){   	        
+.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$cookies',
+	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$cookies){ 	        
         
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) { 
 
+                $rootScope.hideclass            = 'hideclass';
                 $rootScope.currentPage          = $location.$$path;
                 $rootScope.activeHotelData      = localStorageService.get('hotel');
                 $rootScope.currentUser          = localStorageService.get('user');
                 
-                
+
+                /*************************************************
+                * Login Remember & redirect user if cookie not set
+                *************************************************/
+
                 if(nextRoute.$$route){
                     if(nextRoute.$$route.access){
-                        $rootScope.isAuth= nextRoute.$$route.access;
+                        $rootScope.isAuth = nextRoute.$$route.access;
                    } 
-                }
+                } 
                 
+
+
+
+               if(!( $cookies.get("hoteljot") && ($cookies.get("hoteljot") == window.btoa('rememberloggedin') || $cookies.get("hoteljot") == window.btoa('sessionloggedin'))  )){
+
+                    localStorageService.remove('token');
+                    localStorageService.remove('user');
+                    localStorageService.remove('hotel');
+                    $cookies.remove("hoteljot");
+                    delete $rootScope.user;
+                    AuthSrv.isLogged = false;
+               }
+              
+
+
                 if ( nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredLogin  && !AuthSrv.isLogged && !localStorageService.get('user')) {
                     AuthSrv.isLogged = 0;                  
                     $location.path("/");
-                }/*else {
-                   
-                    var token = localStorageService.get('token');
-                    if(($location.path() === '/login' || $location.path() === '/') && token ){           
-                       $location.path("/dashboard");
-                    }
-                }*/
+                }
+
+
 
                 $rootScope.$watch(function(newValue, oldValue) {
-                    $rootScope.logggedin = AuthSrv.isLogged;
+                    $rootScope.logggedin = AuthSrv.isLogged;                   
                 });
-
-
-                $rootScope.$broadcast('handleSidebar');
-                
-
-        
+                $rootScope.$broadcast('handleSidebar'); 
 
         });
 
         $rootScope.$on("$routeChangeSuccess", function(event, next, current) {
+          $rootScope.hideclass = '';
           $templateCache.removeAll(); 
 
-          /*$timeout(function() {
-            var viewHeight,windowHeightl,containerHeight;
-
-            viewHeight = document.getElementsByTagName('ng-view')[0].clientHeight;
-            windowHeight = window.innerHeight;
-            if(windowHeight > viewHeight)
-            {
-
-                containerHeight = windowHeight-70;
-            }
-
-            if(windowHeight < viewHeight)
-            {
-
-                containerHeight = viewHeight-70;
-            }
-
-
-            window.addEventListener('resize', setWindowSize);
-
-              function setWindowSize() { 
-                    $rootScope.$apply(function(){
-                        viewHeight = document.getElementsByTagName('ng-view')[0].clientHeight;
-                        windowHeight = window.innerHeight;
-                        if(windowHeight > viewHeight)
-                            {
-
-                                containerHeight = windowHeight-70;
-                            }
-
-                            if(windowHeight < viewHeight)
-                            {
-
-                                containerHeight = viewHeight-70;
-                            }
-                            $rootScope.iframeHeight = containerHeight;
-
-                    });
-              }
-          });        
-
-          $rootScope.iframeHeight = window.innerHeight-70;
-          window.addEventListener('resize', setWindowSize);
-          function setWindowSize() { 
-                $rootScope.$apply(function(){$rootScope.iframeHeight = window.innerHeight-70;});
-          }*/
+          
         });
 
 
@@ -1811,6 +1810,7 @@ app.config(['$httpProvider', function($httpProvider){
             localStorageService.remove('token');
             localStorageService.remove('user');
             localStorageService.remove('hotel');
+            $cookies.remove("hoteljot");
             delete $rootScope.user;
             AuthSrv.isLogged = false;
             $location.path('/');
@@ -1914,6 +1914,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
            requiredLogin: false,
             headerType:'front_header',
             sidebar: 'no',
+            footer:'yes',
         }
     })    
 
@@ -1932,7 +1933,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         access: {
             requiredLogin: true, 
             headerType:'hotel_header',
-            sidebar: 'no',
+            sidebar: 'yes',
             outside:'yes'
         }
     })
@@ -1991,7 +1992,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             sidebar: 'yes'
         }
     })
-    .when("/dashboard/employee_schedule", {
+    .when("/dashboard/employee-schedule", {
         templateUrl : "/modules/employee/views/scheduler.html",
         controller  :  "schedulerController",
         controllerAs  :  "ctlr",
@@ -2020,7 +2021,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
-    .when("/dashboard/inventory_category", {
+    .when("/dashboard/inventory-category", {
         templateUrl   : "/modules/vending_machine/views/inventory_category.html",
         controller    : "inventoryCatController",
         access: {
@@ -2029,7 +2030,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             sidebar: 'yes'
         }
     })
-    .when("/dashboard/lost_found", {
+    .when("/dashboard/lost-found", {
         templateUrl   : "/modules/lost_found/views/lost_found_management.html",
         controller    : "lostFoundManagementController",
         controllerAs  : "ctrl",
@@ -2050,7 +2051,7 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
-    .when("/dashboard/phone_directory", {
+    .when("/dashboard/phone-directory", {
         templateUrl   : "/modules/phone_directory/views/phone_directory.html",
         controller    : "phoneDirController",
         controllerAs  : "ctrl",
@@ -2061,9 +2062,51 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
-    .when("/dashboard/document_center", {
+    .when("/dashboard/document-center", {
         templateUrl   : "/modules/document_center/views/document_center.html",
         controller    : "documentCenterController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/alerts", {
+        templateUrl   : "/modules/alerts/views/alerts.html",
+        controller    : "alertsController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+    .when("/dashboard/sales-report", {
+        templateUrl   : "/modules/reports/views/reports.html",
+        controller    : "reportsController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/booking-report", {
+        templateUrl   : "/modules/meeting/views/reports.html",
+        controller    : "bookingReportController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+    .when("/dashboard/meeting-rooms", {
+        templateUrl   : "/modules/meeting/views/meeting_room_management.html",
+        controller    : "meetingManagementController",
         controllerAs    : "ctrl",
         access: {
             requiredLogin: true,
@@ -2112,13 +2155,86 @@ app.config(function($mdThemingProvider) {
 });
 "use strict";
 
-app.controller('aboutUsCtrl',['$scope',
-	function($scope){
-}]);
+app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService','socket',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService,socket) {
+		
+		/************************************
+		* Get alert list
+		*************************************/
+
+		globalRequest.getAlertList();
+
+		/************************************
+		* Blank all field before open form
+		*************************************/	
+
+		$scope.blank = function(){
+			$scope.title = "";		
+			$scope.description = "";		
+			
+		};	
+
+
+
+		/************************************
+		* Add alert
+		*************************************/		
+		
+
+		$scope.addAlert = function(){			
+
+			var request = {
+			            url:window.__API_PATH.ADD_ALERT,
+			            method:"POST",
+			            data:{
+			            	hotel_id     :  $rootScope.activeHotelData._id,
+			            	title        :  $scope.alert_title,	            	
+			            	description  :  $scope.alert_description,
+			            	user_id      :  $rootScope.currentUser._id,
+			            }
+			          };
+			globalRequest.jotCRUD(request).then(function(response){
+			 	var popup;
+				
+			 	if(response.status == 1)
+			 	{
+			 		$scope.blank();			 		
+			 		socket.emit('notification',response.result);
+			 		
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);		 		
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 });
+
+		};
+		
+	}
+]);
+
+
+
+
+
+
 "use strict";
 
 app.controller('dashboardController', ['$scope','$location','localStorageService','$rootScope','$mdDialog','toastService','globalRequest',
 	function($scope,$location, localStorageService,$rootScope,$mdDialog,toastService,globalRequest) {
+
+		/* socket.on("message", function(data){
+		    console.log(data);
+		});
+*/
+
 
 
 		/*
@@ -2153,6 +2269,7 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 		*/
 		
 
+
 		$scope.redirectToJot = function(hotel){
 			
 			globalRequest.getHotelStatus(hotel._id).then(function(response){				
@@ -2170,6 +2287,10 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 
 					} else if(response[0].members.length == 0) {
 						completedStep = 4;
+
+					} else if(response[0].rooms.length == 0) {	
+						completedStep = 5;
+						
 					} else {
 						completedStep = 'completed';
 					}
@@ -2177,12 +2298,13 @@ app.controller('dashboardController', ['$scope','$location','localStorageService
 					completedStep = 'completed';
 				}
 
-
+				
 
 				if(completedStep == 'completed')
 				{
 					localStorageService.set('hotel', hotel);			
 					$location.path('/dashboard/hotelboard');
+					
 				} else {
 					localStorageService.set('processingHotel',hotel);
 					$location.path('/dashboard/hotel-setup');
@@ -2425,6 +2547,11 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 	function($scope,$rootScope,$routeParams,$location,globalRequest,localStorageService) {	
 
 		$rootScope.newProcessingHotel   = localStorageService.get('processingHotel');
+
+		/*********   Get setup steps  ************/
+
+		$scope.hotelStepList = window.__API_PATH.Hotel_STEPS;
+
 		
 		/*********   Get hotel setup wizard current hotel  ************/		
 		
@@ -2441,18 +2568,27 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 			$location.path('/dashboard/hotel-setup/1');
 			//return false;
 
-		} else {						
+		} else {
+
 
 			/**************************************************
 			* Check hotel blank steps
 			***************************************************/
 
 			globalRequest.getHotelStatus($rootScope.newProcessingHotel._id).then(function(response){
-				
-				$rootScope.hotelStatus = response[0];
 
-				$scope.selectedDepartment = response[0].departments;
+				$scope.addedEmployee       = [];
+				$scope.selectedDepartment  = [];
+
+				$rootScope.hotelStatus	   = response[0];
+				$scope.selectedDepartment  = response[0].departments;
+				$scope.addedEmployee       = response[0].members;
+
+
+
+
 				
+	
 				var completedStep = 1;
 				var redirectPath = '/dashboard';
 
@@ -2467,6 +2603,9 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 
 					} else if(response[0].members.length == 0) {
 						completedStep = 4;
+
+					} else if(response[0].rooms.length == 0) {
+						completedStep = 5;
 					} else {
 						completedStep = 'completed';
 					}
@@ -2477,10 +2616,12 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 					completedStep = 'completed';
 				}
 
+				
 				$scope.ActiveStep = $routeParams.steps;
 
 				if(completedStep != 'completed')
 				{			
+
 
 					/**************************************************
 					* Redirect on step from where user left the process
@@ -2512,6 +2653,17 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 
 				$location.path(redirectPath);
 
+				
+				/*********   Check Next step exixts  ************/
+
+				var getNextStepID = $scope.hotelStepList[$routeParams.steps-1].next;
+				if($rootScope.hotelStatus.jot_types.indexOf(getNextStepID) >-1 )
+				{
+					$rootScope.nextStep  = true;
+				} else {				
+					$rootScope.nextStep  = false;
+				}
+
 				if(redirectPath == '/dashboard')
 				{
 					return false;
@@ -2521,9 +2673,9 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 			
 		}
 
-		/*********   Get setup steps  ************/
+		
 
-		$scope.hotelStepList = window.__API_PATH.Hotel_STEPS;
+		
 
 		/***********************************************************			
 		* Render page template according to step in route url			
@@ -2944,6 +3096,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 		}
 		
 
+
 		/************************************************
 		* Navigate on previous page
 		*************************************************/
@@ -2956,7 +3109,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 		/************************************************
 		* Add new employee in list
 		*************************************************/
-		$scope.addedEmployee = [];
+		//$scope.addedEmployee = [];
 		$scope.addNewEmp = function(){
 
 			var errorRestrict = false;
@@ -3047,8 +3200,8 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 		*************************************************/
 
 		$scope.step4FormSubmit = function(){
+			console.log($rootScope.nextStep);
 			var selectedEmployee = [];
-
 			angular.forEach($scope.stepsCtrl.selected_emp,function(value,key){
 				if($scope.stepsCtrl.selected_emp[key])
 				{
@@ -3062,9 +3215,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 				}
 
 			});
-					
-
-				
+		
 			
 			if(selectedEmployee.length > 0)
 			{					
@@ -3083,24 +3234,33 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 				globalRequest.jotCRUD(request).then(function(response){	
 					
 					if(response.status == 1)
-					{	
+					{
 
-						/************************************************
-						* Mark steps completed
-						*************************************************/
+						if($rootScope.nextStep)
+						{
+							var nextStep   = parseInt($routeParams.steps) +1;			
+							$location.path('/dashboard/hotel-setup/'+nextStep);
 
-						var hotelrequest={
-								url:window.__API_PATH.UPDATE_HOTEL,
-								method:"PUT",
-								data:{hotel_id : $rootScope.newProcessingHotel._id,step:'completed'}
-							};
+						}	else {
+							/************************************************
+							* Mark steps completed
+							*************************************************/
 
-						globalRequest.jotCRUD(hotelrequest).then(function(hotelresponse){
-							if(hotelresponse.status == 1)
-							{	
-								$location.path('/dashboard/hotel-setup');
-							}	
-						});						
+							var hotelrequest={
+									url:window.__API_PATH.UPDATE_HOTEL,
+									method:"PUT",
+									data:{hotel_id : $rootScope.newProcessingHotel._id,step:'completed'}
+								};
+
+							globalRequest.jotCRUD(hotelrequest).then(function(hotelresponse){
+								if(hotelresponse.status == 1)
+								{	
+									$location.path('/dashboard/hotel-setup');
+								}	
+							});
+						}						
+
+										
 					}				
 
 				});
@@ -3116,744 +3276,179 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 	}
 ]);
 
-"use Strict";
-
-app.controller('contactController',['$scope',
-	function($scope){
-
-}]);
-"use Strict";
-
-app.controller('demoController',['$scope',
-	function($scope){
-
-}]);
 "use strict";
 
-app.controller('departmentController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
-	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+app.controller('step5Controller', ['$scope','$rootScope','$routeParams','$location','globalRequest','toastService',
+	function($scope,$rootScope,$routeParams,$location,globalRequest,toastService) {	
+
+		
+		function isEmpty(obj) {
+		    for(var prop in obj) {
+		        if(obj.hasOwnProperty(prop))
+		            return false;
+		    }
+
+		    return JSON.stringify(obj) === JSON.stringify({});
+		}
 		
 
+		/************************************************
+		* Navigate on previous page
+		*************************************************/
 
-		/************************************
-		* Blank all field before open form
-		*************************************/	
-
-		$scope.blank = function(){
-			$scope.department_name = "";		
-			$scope.department_abbreviation = "";		
-			$scope.department_desc = "";
+		$scope.navigateBack = function(){
+			var page = $routeParams.steps - 1;			
+			$location.path('/dashboard/hotel-setup/'+page);
 		};	
 
-		
-		/************************************
-		* Get department list
-		*************************************/	
-				
-		globalRequest.getDepartments();
+		/************************************************
+		* Add new employee in list
+		*************************************************/
+		$scope.addedRooms = [];
+		$scope.addNewRoom = function(){
 
-		/************************************
-		* Add Department
-		*************************************/		
-		
-
-		$scope.addDepartment = function(){	
-
-			var departmentName	=	$scope.department_name;
-			var Abbreviation	=	$scope.department_abbreviation;
-			if(!Abbreviation){
-				if(departmentName){
-					var departmentNameArray = departmentName.match(/\b(\w)/g);
-				    Abbreviation        = departmentNameArray.join('');
-				} 				
-			}
-
-			var request = {
-			            url:window.__API_PATH.ADD_DEPARTMENT,
-			            method:"POST",
-			            data:{
-			            	hotel_id      	   :  $rootScope.activeHotelData._id,
-			            	department_name    :  departmentName,
-			            	abbreviation       :  Abbreviation,			            	
-			            	description        :  $scope.department_desc
-			            }
-			          };
-			globalRequest.jotCRUD(request).then(function(response){
-			 	var popup;
-				
-			 	if(response.status == 1)
-			 	{
-			 		$scope.blank();
-			 		if(!$scope.departmentList)
-			 		{
-			 			$scope.departmentList = [];
-			 		}
-			 		$scope.departmentList.push(response.result);
-			 		
-			 		popup = {"message":response.message,"class":response.class};
-					toastService.alert(popup);		 		
-			 	} else {
-
-			 		var errors = '<ul class="mdToast-error-list">';
-					angular.forEach(response.errors,function(value,key){
-						errors += '<li>'+value.message+'</li>';
-					});
-					errors += '</ul>';
-					popup = {"message":errors,"class":""};
-					toastService.errors(popup);
-			 	}
-			 });
-
-		};
-
-
-		/*****************************************
-		* Open edit department
-		*****************************************/	
-
-		$scope.openEditDepartment = function(detail){
-				$mdDialog.show({
-					controller: 'editDepartmentController',
-					templateUrl: '/modules/department/views/edit_department.html',
-					parent: angular.element(document.body),
-					fullscreen: $scope.customFullscreen,
-					clickOutsideToClose:true,	
-					locals:{deptDetail:{detail:detail,prevScope:$scope}}				
-				}).then(function(answer) {}, function() {});
-
-		};
-
-
-		/*****************************************
-		* Delete department
-		*****************************************/	
-
-		$scope.removeDepartment = function(detail,index){
-
-			var request={
-				url:window.__API_PATH.DELETE_DEPARTMENT,
-				method:"DELETE",
-				params:{_id:detail}
-			};
-			
-			globalRequest.jotCRUD(request).then(function(response){				
-				$scope.departmentList.splice(index, 1);
-				var popup = {"message":response.message,"class":response.class};
-				toastService.alert(popup);
-			});
-
-		};
-		
-	}
-]);
-
-
-
-
-
-
-"use strict";
-
-app.controller('editDepartmentController', ['$scope','globalRequest','deptDetail','$mdDialog','toastService',
-	function($scope,globalRequest,deptDetail,$mdDialog,toastService) {
-		
-
-		
-		/***********************************************
-		* Pass edited employee value in current scope
-		***********************************************/
-				
-
-		angular.forEach(deptDetail.detail,function (value,key) {
-		    $scope[key] = value;
-		});
-		
-		/************************************
-		* Edit employee
-		*************************************/		
-		
-
-		$scope.updateDepartment = function(){
-			
-
-			var departmentName	=	$scope.department_name;
-			var Abbreviation	=	$scope.abbreviation;
-			if(!Abbreviation){
-				if(departmentName){
-					var departmentNameArray = departmentName.match(/\b(\w)/g);
-				    Abbreviation        = departmentNameArray.join('');
-				} 				
-			}
-
-			var request = {
-			            url:window.__API_PATH.UPDATE_DEPARTMENT,
-			            method:"PUT",
-			            data:{
-			            	_id      	       :  $scope._id,
-			            	department_name    :  departmentName,
-			            	abbreviation       :  Abbreviation,			            	
-			            	description        :  $scope.description
-			            }
-			          };
-			globalRequest.jotCRUD(request).then(function(response){
-			 	var popup;
-			 	if(response.status ==1)
-			 	{
-			 		$mdDialog.cancel();
-			 		globalRequest.getDepartments();
-			 		popup = {"message":response.message,"class":response.class};
-					toastService.alert(popup);
-
-			 	} else {
-
-			 		var errors = '<ul class="mdToast-error-list">';
-					angular.forEach(response.errors,function(value,key){
-						errors += '<li>'+value.message+'</li>';
-					});
-					errors += '</ul>';
-					popup = {"message":errors,"class":""};
-					toastService.errors(popup);
-			 	}
-			 	
-			});
-
-		};		
-		
-	}
-]);
-
-
-
-
-"use strict";
-
-app.filter('departmentfilter',function(){
-	return function(input,scope){
-
-		if(input)
-		{
-
-			var searchDepartmentName  = scope.searchDepartment;
-			if(!searchDepartmentName)
+			var errorRestrict = false;
+			var errors = '<ul class="mdToast-error-list">';
+			if(!$scope.newfield)
 			{
-				return input;
-			}
-
-
-			input   =   input.filter(function( obj ) {							
-
-							if(searchDepartmentName)
-							{
-								if (obj.department_name.match(new RegExp("(" + searchDepartmentName + ")", "i"))) 
-								{
-							       return true;
-							    }
-							}
-
-						});
-		}
-		return input;
-
-	};
-
-});
-"use strict";
-
-app.controller('EditDocumentController', ['$scope','$rootScope','globalRequest','Detail','$mdDialog','$timeout','toastService',
-	function($scope,$rootScope,globalRequest,Detail,$mdDialog,$timeout,toastService) {
-		
-		/***********************************************
-		* Pass edited employee value in current scope
-		***********************************************/
-		angular.forEach(Detail.detail,function (value,key) {
-		    if(key == 'tags')
-			{
-				$scope.ctrl.itemTagModel = value;
-
-			} else if(key == 'department'){
-
-				$rootScope.department = value;
-
-			} else if(key == 'files'){
-
-				$scope.filesData = value;
+				
+				errors += '<li>Room name is required.</li>';
+				errors += '<li>Room number is required.</li>';
+				errorRestrict = true;
 
 			} else {
-				$scope[key] = value;
+
+				if(!$scope.newfield.newfield_room_name)
+				{
+					
+					errors += '<li>Room name is required.</li>';
+					errorRestrict = true;
+				}
+
+				if(!$scope.newfield.newfield_room_number)
+				{
+					errors += '<li>Room number is required.</li>';
+					errorRestrict = true;
+				}				
+
+				
+				angular.forEach($scope.addedRooms,function(value,key){
+					
+					if(value.room_number == $scope.newfield.newfield_room_number)
+					{						
+						errors += '<li>Room number already exists for this hotel.</li>';
+						errorRestrict = true;
+					}
+
+				});	
+				
+
+			}	
+
+			if(!errorRestrict)
+			{					
+
+				$scope.addedRooms.push({
+					name          : $scope.newfield.newfield_room_name, 
+					room_number   : $scope.newfield.newfield_room_number,
+					capacity      : $scope.newfield.newfield_capacity,
+					cost          : $scope.newfield.newfield_cost
+				});
+				
+				$scope.newfield.newfield_room_name = '';
+				$scope.newfield.newfield_room_number = '';
+				$scope.newfield.newfield_capacity = '';
+				$scope.newfield.newfield_cost = '';
+			} else {
+				var popup = {"message":errors,"class":""};
+				toastService.errors(popup);
 			}
-		});	
+
+			
+		};
 
 
-		/************************************
-		* Edit document
-		*************************************/		
+		/************************************************
+		* Step5 form submit
+		*************************************************/
 
-		$scope.editDC = function(){	
+		$scope.step5FormSubmit = function(){
+			var selectedRooms = [];
 
-			/*********************************************
-			* Check files exists in scope to upload
-			* if yes, upload doument
-			* if no, save the information without files
-			*********************************************/
+			angular.forEach($scope.stepsCtrl.selected_room,function(value,key){
+				if($scope.stepsCtrl.selected_room[key])
+				{
+					value.hotel_id = $rootScope.newProcessingHotel._id;					
+					selectedRooms.push(value);
+				}
 
-			var popup;
-			if ($scope.newFiles && $scope.newFiles.length) {
+			});
+				
+			
+			if(selectedRooms.length > 0)
+			{					
 
-				globalRequest.uploadFiles($rootScope.activeHotelData._id,'document_center',$scope.newFiles).then(function (response) {				
-	                $timeout(function () {
-		                if(response.status == 1)
-		                {
-		                   /*********************************************
-							* Save document information
-							*********************************************/
-							$scope.newFiles= '';
-							Array.prototype.push.apply($scope.filesData,response.result);
+				 var hotelDataObj = {
+				 		hotel_id     	   : $rootScope.newProcessingHotel._id,
+				 		room_list 	       : selectedRooms	
+				};
 
-							var request = {
-						            url:window.__API_PATH.UPDATE_DOCUMENT,
-						            method:"PUT",
-						            data:{
-						            	_id      	   			:  $scope._id,
-						            	document_name   		:  $scope.document_name,
-						            	department      		:  $rootScope.department,
-						            	tags        			:  $scope.ctrl.itemTagModel,
-						            	document_description    :  $scope.document_description,
-						            	files       		    :  $scope.filesData,
-						            	upload_date				:  new Date().getTime()
-						            }
-						          };
+				var request={
+						url:window.__API_PATH.CONFIGURE_ROOMS,
+						method:"POST",
+						data:hotelDataObj
+					};
 
-							globalRequest.jotCRUD(request).then(function(dcresponse){	 
-							 	if(dcresponse.status ==1)
-							 	{
-							 		$mdDialog.cancel();
-							 		globalRequest.getDocument();
+				globalRequest.jotCRUD(request).then(function(response){	
+					
+					if(response.status == 1)
+					{	
 
-							 		popup = {"message":dcresponse.message,"class":dcresponse.class};
-									toastService.alert(popup);
 
-							 	}  else {
-							 		var errors = '<ul class="mdToast-error-list">';
-									angular.forEach(dcresponse.errors,function(value,key){
-										errors += '<li>'+value.message+'</li>';
-									});
-									errors += '</ul>';
-									popup = {"message":errors,"class":""};
-									toastService.errors(popup);
-							 	}
+						if($rootScope.nextStep)
+						{
+							var nextStep   = parseInt($routeParams.steps) +1;			
+							$location.path('/dashboard/hotel-setup/'+nextStep);
 
-							 });	
-						}   else {
-					 		var errors = '<ul class="mdToast-error-list">';
-							angular.forEach(response.errors,function(value,key){
-								errors += '<li>'+value.message+'</li>';
+						}	else {
+							
+							/************************************************
+							* Mark steps completed
+							*************************************************/
+
+							var hotelrequest={
+									url:window.__API_PATH.UPDATE_HOTEL,
+									method:"PUT",
+									data:{hotel_id : $rootScope.newProcessingHotel._id,step:'completed'}
+								};
+
+							globalRequest.jotCRUD(hotelrequest).then(function(hotelresponse){
+								if(hotelresponse.status == 1)
+								{	
+									$location.path('/dashboard/hotel-setup');
+								}	
 							});
-							errors += '</ul>';
-							popup = {"message":errors,"class":""};
-							toastService.errors(popup);
-					 	}				
+						}												
+					}				
 
-	                });
-	            });
-
+				});
 
 			} else {
-
-				/*************************************************
-				* Save document information if no files in scope
-				*************************************************/
-
-				var request = {
-			            url:window.__API_PATH.UPDATE_DOCUMENT,
-			            method:"PUT",
-			            data:{
-			            	_id      	   			:  $scope._id,
-			            	document_name   		:  $scope.document_name,
-			            	department      		:  $rootScope.department,
-			            	tags        			:  $scope.ctrl.itemTagModel,
-			            	document_description    :  $scope.document_description,			            	
-			            	upload_date				:  new Date().getTime()
-			            }
-			          };
-
-				globalRequest.jotCRUD(request).then(function(response){
-				 	
-				 	if(response.status ==1)
-				 	{
-				 		$mdDialog.cancel();
-				 		globalRequest.getDocument();
-				 		popup = {"message":response.message,"class":response.class};
-						toastService.alert(popup);
-
-				 	}   else {
-				 		var errors = '<ul class="mdToast-error-list">';
-						angular.forEach(response.errors,function(value,key){
-							errors += '<li>'+value.message+'</li>';
-						});
-						errors += '</ul>';
-						popup = {"message":errors,"class":""};
-						toastService.errors(popup);
-				 	}
-
-				 });
 				
-			}		
-			
-
-		};
-
-		/************************************
-		* Remove files by index
-		*************************************/	
-
-		$scope.removeImageIndex = function(fData){
-			$scope.filesData = $scope.filesData.filter(function( obj ) {
-					    return obj.filename != fData.filename;
-					});
-
-		};	
-  
-
-		/*****************************************
-		* Append selected files in scope variable 
-		*****************************************/
-
-
-		$scope.$watch('files', function () {		
-	        $scope.uploadDocument($scope.files);
-	    });
-
-	    $scope.$watch('file', function () {
-	        if ($scope.file != null) {
-	            $scope.files = [$scope.file];
-	        }
-	    });
-
-
-		$scope.uploadDocument = function(files, errFiles) {	
-			$scope.newFiles = files;
-	    };
-
-
-	    /*****************************************
-		* delete  file from scope variable 
-		*****************************************/
-
-	    $scope.deleteAttachment = function(hashKey){
-			$scope.newFiles = $scope.newFiles.filter(function(key){
-				return key.$$hashKey != hashKey;
-			});
-		};
-
-	}
-]);
-"use strict";
-
-app.controller('documentCenterController',['$scope','$rootScope','globalRequest','$mdDialog','toastService','$timeout',function($scope,$rootScope,globalRequest,$mdDialog,toastService,$timeout){
-	
-
-	/************************************
-	* Blank all field before open form
-	*************************************/	
-
-	$scope.blank = function(){
-		$scope.document_name 		= "";		
-		$scope.document_description = "";
-		$scope.fileData 			= "";		
-		$rootScope.department 		= "";
-		$scope.documentProgress 	= -1;
-		$scope.documentResult 		= "";	
-	};
-
-	$scope.blankFields = function(){
-		$scope.blank();
-		$scope.ctrl.itemTagModel 	= [];
-	};
-
-
-	/**********************************************************
-    * Item tags 
-    **********************************************************/
-
-	var self = this;
-    self.readonly = false;	    
-    self.itemTag = [];
-    self.itemTagModel = angular.copy(self.itemTag);
-    self.editableitemTag = angular.copy(self.itemTag);
-    self.tags = [];	    
-    self.newVeg = function(chip) {
-      return {
-        name: chip,
-        type: 'unknown'
-      };
-    };
-
-    /************************************
-	* Get documents
-	*************************************/
-
-    globalRequest.getDocument();
-
-    /************************************
-	* Get department list
-	*************************************/			
-	
-	globalRequest.getDepartments();
-
-	/************************************
-	* Add documents
-	*************************************/	
-	
-	$scope.addDC = function(){
-
-		/*********************************************
-		* Check files exists in scope to upload
-		* if yes, upload doument
-		* if no, save the information without files
-		*********************************************/
-
-		var popup;
-		if ($scope.fileData && $scope.fileData.length) {
-
-
-			globalRequest.uploadFiles($rootScope.activeHotelData._id,'document_center',$scope.fileData).then(function (response) {			
-                $timeout(function () {
-	                if(response.status == 1)
-	                {
-	                   /*********************************************
-						* Save document information
-						*********************************************/
-
-	                   var request = {
-						            url:window.__API_PATH.ADD_DOCUMENT,
-						            method:"POST",
-						            data:{
-						            	hotel_id      			:  $rootScope.activeHotelData._id,
-						            	document_name   		:  $scope.document_name,
-						            	department      		:  $rootScope.department,
-						            	tags        			:  $scope.ctrl.itemTagModel,
-						            	document_description    :  $scope.document_description,
-						            	files       		    :  response.result,
-						            	upload_date				:  new Date().getTime()
-						            }
-						    };
-
-						globalRequest.jotCRUD(request).then(function(dcresponse){
-						 	var popup;
-						 	if(dcresponse.status == 1)
-						 	{
-						 		$scope.blankFields();				
-						 		if(!$scope.documentList)
-						 		{
-						 			$scope.documentList = [];
-						 		}
-						 		$scope.documentList.push(dcresponse.result);
-						 		popup = {"message":dcresponse.message,"class":dcresponse.class};
-								toastService.alert(popup);
-						 		
-						 	}  else {
-						 		var errors = '<ul class="mdToast-error-list">';
-								angular.forEach(dcresponse.errors,function(value,key){
-									errors += '<li>'+value.message+'</li>';
-								});
-								errors += '</ul>';
-								popup = {"message":errors,"class":""};
-								toastService.errors(popup);
-						 	}
-						 });
-					}  else {
-				 		var errors = '<ul class="mdToast-error-list">';
-						angular.forEach(response.errors,function(value,key){
-							errors += '<li>'+value.message+'</li>';
-						});
-						errors += '</ul>';
-						popup = {"message":errors,"class":""};
-						toastService.errors(popup);
-				 	}
-                });
-            });            
-
-
-		} else {
-
-			/*************************************************
-			* Save document information if no files in scope
-			*************************************************/
-
-			var request = {
-			            url:window.__API_PATH.ADD_DOCUMENT,
-			            method:"POST",
-			            data:{
-			            	hotel_id      			:  $rootScope.activeHotelData._id,
-			            	document_name   		:  $scope.document_name,
-			            	department      		:  $rootScope.department,
-			            	tags        			:  $scope.ctrl.itemTagModel,
-			            	document_description    :  $scope.document_description,			            	
-			            	upload_date				:  new Date().getTime()
-			            }
-			    };
-
-			globalRequest.jotCRUD(request).then(function(response){
-			 	
-			 	if(response.status == 1)
-			 	{
-			 		$scope.blankFields();				
-			 		if(!$scope.documentList)
-			 		{
-			 			$scope.documentList = [];
-			 		}
-			 		$scope.documentList.push(response.result);
-
-			 		popup = {"message":response.message,"class":response.class};
-					toastService.alert(popup);
-			 		
-			 	}  else {
-
-			 		var errors = '<ul class="mdToast-error-list">';
-					angular.forEach(response.errors,function(value,key){
-						errors += '<li>'+value.message+'</li>';
-					});
-					errors += '</ul>';
-					popup = {"message":errors,"class":""};
-					toastService.errors(popup);
-			 	}
-			 });
-		}
-		
-
-	};
-
-	/*****************************************
-	* Open edit Contact
-	*****************************************/	
-
-	$scope.openDocumentFileView = function(detail){
-			$mdDialog.show({
-				controller: 'documentViewController',
-				templateUrl: '/modules/document_center/views/view_files.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				clickOutsideToClose:true,	
-				locals:{Detail:{detail:detail,prevScope:$scope}}				
-			}).then(function(answer) {}, function() {});
-
-	};
-
-	/*****************************************
-	* Open edit Contact
-	*****************************************/	
-
-	$scope.openDocumentEditPopup = function(detail){
-			$mdDialog.show({
-				controller: 'EditDocumentController',
-				controllerAs: 'ctrl',
-				templateUrl: '/modules/document_center/views/edit_document.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				clickOutsideToClose:true,	
-				locals:{Detail:{detail:detail,prevScope:$scope}}				
-			}).then(function(answer) {}, function() {});
-
-	};
-
-	
-
-	/*****************************************
-	* Delete contact
-	*****************************************/	
-
-	$scope.removeDc = function(detail,index){
-
-		var request={
-			url:window.__API_PATH.DELETE_DOCUMENT,
-			method:"DELETE",
-			params:{_id:detail}
-		};
-		
-		globalRequest.jotCRUD(request).then(function(response){	
-
-			if(response.status == 1)
-			{
-				$scope.documentList.splice(index, 1);
-			}			
-			var popup = {"message":response.message,"class":response.class};
-			toastService.alert(popup);
-		});
-
-	};
-
-	$scope.$watch('files', function () {
-        $scope.uploadDocument($scope.files);
-    });
-
-    $scope.$watch('file', function () {
-        if ($scope.file != null) {
-            $scope.files = [$scope.file];
-        }
-    });
-  
-
-	/*****************************************
-	* Append selected files in scope variable 
-	*****************************************/	
-
-	$scope.uploadDocument = function(files, errFiles) {	
-		$scope.fileData = 	files;
-    };
-
-    /*****************************************
-	* delete  file from scope variable 
-	*****************************************/
-
-    $scope.deleteAttachment = function(hashKey){
-		$scope.fileData = $scope.fileData.filter(function(key){
-			return key.$$hashKey != hashKey;
-		});
-	};
-	
-	
-}]);
-"use strict";
-
-app.controller('documentViewController', ['$scope','Detail',
-	function($scope,Detail) {
-		
-		/***********************************************
-		* Pass edited employee value in current scope
-		***********************************************/
-		angular.forEach(Detail.detail,function (value,key) {
-		    $scope[key] = value;
-		});	
-	}
-]);
-
-
-
-
-"use strict";
-
-app.filter('dcDepartmentFilter',function(){
-	return function(input,scope){
-		if(input)
-		{
-
-			var searchDepartment        = scope.searchDepartment;
-			if(!searchDepartment){
-				return input;
+				var popup = {"message":"Please enter at least one employee.","class":""};
+				toastService.errors(popup);
 			}
+			
+		};			
+			
+	}
+]);
 
-	
-			input   =   input.filter(function( obj ) {
-							if(obj.department.indexOf(searchDepartment) != -1)
-							{
-								return true;
-							}
-						});
-		}
-		return input;
-	};
+"use strict";
 
-});
+app.controller('aboutUsCtrl',['$scope',
+	function($scope){
+}]);
 "use strict";
 
 app.controller('editEmployeeController', ['$scope','$rootScope','globalRequest','$timeout','empDetail','$mdDialog','toastService',
@@ -4219,6 +3814,7 @@ app.controller('employeeController', ['$scope','$rootScope','globalRequest','$ti
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
+				
 				$rootScope.staffList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
@@ -5081,6 +4677,241 @@ app.directive('outsideClickColorSwatch', function ($window) {
     };
 });
 
+"use Strict";
+
+app.controller('contactController',['$scope',
+	function($scope){
+
+}]);
+"use strict";
+
+app.controller('departmentController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+		
+
+
+		/************************************
+		* Blank all field before open form
+		*************************************/	
+
+		$scope.blank = function(){
+			$scope.department_name = "";		
+			$scope.department_abbreviation = "";		
+			$scope.department_desc = "";
+		};	
+
+		
+		/************************************
+		* Get department list
+		*************************************/	
+				
+		globalRequest.getDepartments();
+
+		/************************************
+		* Add Department
+		*************************************/		
+		
+
+		$scope.addDepartment = function(){	
+
+			var departmentName	=	$scope.department_name;
+			var Abbreviation	=	$scope.department_abbreviation;
+			if(!Abbreviation){
+				if(departmentName){
+					var departmentNameArray = departmentName.match(/\b(\w)/g);
+				    Abbreviation        = departmentNameArray.join('');
+				} 				
+			}
+
+			var request = {
+			            url:window.__API_PATH.ADD_DEPARTMENT,
+			            method:"POST",
+			            data:{
+			            	hotel_id      	   :  $rootScope.activeHotelData._id,
+			            	department_name    :  departmentName,
+			            	abbreviation       :  Abbreviation,			            	
+			            	description        :  $scope.department_desc
+			            }
+			          };
+			globalRequest.jotCRUD(request).then(function(response){
+			 	var popup;
+				
+			 	if(response.status == 1)
+			 	{
+			 		$scope.blank();
+			 		if(!$scope.departmentList)
+			 		{
+			 			$scope.departmentList = [];
+			 		}
+			 		$scope.departmentList.push(response.result);
+			 		
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);		 		
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 });
+
+		};
+
+
+		/*****************************************
+		* Open edit department
+		*****************************************/	
+
+		$scope.openEditDepartment = function(detail){
+				$mdDialog.show({
+					controller: 'editDepartmentController',
+					templateUrl: '/modules/department/views/edit_department.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,	
+					locals:{deptDetail:{detail:detail,prevScope:$scope}}				
+				}).then(function(answer) {}, function() {});
+
+		};
+
+
+		/*****************************************
+		* Delete department
+		*****************************************/	
+
+		$scope.removeDepartment = function(detail,index){
+
+			var request={
+				url:window.__API_PATH.DELETE_DEPARTMENT,
+				method:"DELETE",
+				params:{_id:detail}
+			};
+			
+			globalRequest.jotCRUD(request).then(function(response){				
+				$scope.departmentList.splice(index, 1);
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+			});
+
+		};
+		
+	}
+]);
+
+
+
+
+
+
+"use strict";
+
+app.controller('editDepartmentController', ['$scope','globalRequest','deptDetail','$mdDialog','toastService',
+	function($scope,globalRequest,deptDetail,$mdDialog,toastService) {
+		
+
+		
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+				
+
+		angular.forEach(deptDetail.detail,function (value,key) {
+		    $scope[key] = value;
+		});
+		
+		/************************************
+		* Edit employee
+		*************************************/		
+		
+
+		$scope.updateDepartment = function(){
+			
+
+			var departmentName	=	$scope.department_name;
+			var Abbreviation	=	$scope.abbreviation;
+			if(!Abbreviation){
+				if(departmentName){
+					var departmentNameArray = departmentName.match(/\b(\w)/g);
+				    Abbreviation        = departmentNameArray.join('');
+				} 				
+			}
+
+			var request = {
+			            url:window.__API_PATH.UPDATE_DEPARTMENT,
+			            method:"PUT",
+			            data:{
+			            	_id      	       :  $scope._id,
+			            	department_name    :  departmentName,
+			            	abbreviation       :  Abbreviation,			            	
+			            	description        :  $scope.description
+			            }
+			          };
+			globalRequest.jotCRUD(request).then(function(response){
+			 	var popup;
+			 	if(response.status ==1)
+			 	{
+			 		$mdDialog.cancel();
+			 		globalRequest.getDepartments();
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 	
+			});
+
+		};		
+		
+	}
+]);
+
+
+
+
+"use strict";
+
+app.filter('departmentfilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+
+			var searchDepartmentName  = scope.searchDepartment;
+			if(!searchDepartmentName)
+			{
+				return input;
+			}
+
+
+			input   =   input.filter(function( obj ) {							
+
+							if(searchDepartmentName)
+							{
+								if (obj.department_name.match(new RegExp("(" + searchDepartmentName + ")", "i"))) 
+								{
+							       return true;
+							    }
+							}
+
+						});
+		}
+		return input;
+
+	};
+
+});
 "use strict";
 
 app.filter('employeefilter',function(){
@@ -5114,52 +4945,6 @@ app.filter('employeefilter',function(){
 });
 
 
-"use Strict";
-
-app.controller('faqController',['$scope',
-	function($scope){
-
-		$scope.panesA = [
-        {
-          id: 'pane-1a',
-          header: 'Do I get to keep the bag?',
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.',
-          isExpanded: true
-        },
-        {
-          id: 'pane-2a',
-          header: 'How can I tell the weight of my laundry?',
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'
-        },
-        {
-          id: 'pane-3a',
-          header: 'How can I tell the weight of my laundry?',
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
-        },
-         {
-          id: 'pane-4a',
-         header: 'How can I tell the weight of my laundry?',
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
-        },
-         {
-          id: 'pane-5a',
-          header: 'How can I tell the weight of my laundry?',
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
-        },
-         {
-          id: 'pane-6a',
-          header: 'How can I tell the weight of my laundry?',
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
-        },
-         {
-          id: 'pane-7a',
-          header: 'How can I tell the weight of my laundry?',
-          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
-        },
-      ];
-          
-
-}]);
 "use strict";
 
 app.controller('homeController',['$scope','$rootScope','$routeParams','$mdDialog','globalRequest','localStorageService','$location','$timeout',
@@ -5345,12 +5130,15 @@ app.controller('homeController',['$scope','$rootScope','$routeParams','$mdDialog
 		********************************/
 
   		$scope.config={
-		     navigation: false,
-		     items:1,	     
-		     navContainer: '#customNav',
-		     pagination: false,
-		     rewindNav : true
-		 };		 
+		    navigation: false,
+		    items:1,	     
+		    navContainer: '#customNav',
+		    pagination: false,
+		    rewindNav : true,
+		    autoplay:true,
+		    autoplayTimeout:3000,	
+		    autoplayHoverPause:true
+		};		 
 	 
 }]);
 "use strict";
@@ -5387,214 +5175,11 @@ app.directive('owlCarouselItem', [function() {
 		}
 	};
 }]);
-"use strict";
+"use Strict";
 
-app.controller('invitationController',['$scope','$rootScope','empDetail','globalRequest','$timeout','$mdDialog','$location','loginFactory','localStorageService','AuthSrv',
-	function($scope,$rootScope,empDetail,globalRequest,$timeout,$mdDialog,$location,loginFactory,localStorageService,AuthSrv){
+app.controller('demoController',['$scope',
+	function($scope){
 
-		function getUrlParameter(param, dummyPath) {
-		        var sPageURL = dummyPath || window.location.search.substring(1),
-		            sURLVariables = sPageURL.split(/[&||?]/),
-		            res;
-
-		        for (var i = 0; i < sURLVariables.length; i += 1) {
-		            var paramName = sURLVariables[i],
-		                sParameterName = (paramName || '').split('=');
-
-		            if (sParameterName[0] === param) {
-		                res = sParameterName[1];
-		            }
-		        }
-
-		        return res;
-		}
-
-
-		$scope.invite_first_name 	  = getUrlParameter('first_name',empDetail);
-		$scope.invite_last_name  	  = getUrlParameter('last_name',empDetail);
-		$scope.invite_contact_number  = getUrlParameter('contact_number',empDetail);
-		$scope.invite_email           = getUrlParameter('email',empDetail);
-		$scope.token                  = getUrlParameter('token',empDetail);
-		$scope.profileImage  		  = [];
-		
-
-
-		/************************************************
-		* Register user for invited hotel
-		************************************************/	
-
-		$scope.inviteRegisterUser = function(){
-
-			var request={
-				url:window.__API_PATH.MEMBER_SIGNUP,
-				method:"POST",
-				data:{
-					first_name 			: $scope.invite_first_name,
-					last_name 		    : $scope.invite_last_name,
-					contact_number 		: getUrlParameter('contact_number',empDetail),
-					email 			    : getUrlParameter('email',empDetail),
-					token				: $scope.token,
-					profile_image  		: '',
-					password            : $scope.invite_password
-				}
-			};
-
-			
-			if($scope.profileImage.length > 0)
-			{	
-
-			/********************************************
-			*  Upload profile image if exists
-			********************************************/		
-
-
-				globalRequest.uploadFiles(null,'profile_image',$scope.profileImage).then(function(profileResponse){
-					$scope.registerImageResult =  profileResponse;
-
-
-					/********************************************
-					*  Register user with profile image
-					********************************************/
-
-					request.data.profile_image = profileResponse.result[0].filename;
-					
-					globalRequest.jotCRUD(request).then(function(response){					
-						if(response.status == 1)
-						{
-							$mdDialog.cancel();					
-							$location.path('/');
-							$rootScope.popupData  = {
-										text:  'Congratulations! You have successfully registered.',
-										action: 'redirect'
-							};
-							 $timeout(function() {
-							 	$rootScope.popup = true;
-							 }, 500);
-						} else {
-							$mdDialog.cancel();					
-							$location.path('/');
-						}
-					});
-
-				});
-
-
-			} else {
-
-				/********************************************
-				*  Register user without profile image
-				********************************************/
-				
-				globalRequest.jotCRUD(request).then(function(response){					
-					if(response.status == 1)
-					{
-						$mdDialog.cancel();					
-						$location.path('/');
-						$rootScope.popupData  = {
-									text:  'Congratulations! You have successfully registered.',
-									action: 'redirect'
-						};
-						 $timeout(function() {
-						 	$rootScope.popup = true;
-						 }, 500);
-					} else {
-						$mdDialog.cancel();					
-						$location.path('/');
-					}
-				});
-
-			}
-			
-			
-		};
-
-
-		/************************************************
-		* Add use in invited hotel if already registered
-		************************************************/
-
-
-		$scope.inviteSignINUser  = function(){
-			
-			var loginrequest={
-					url:window.__API_PATH.LOGIN,
-					method:"POST",
-					data:{
-							email    : $scope.invite_login,
-							password : $scope.invite_signinpassword
-					}
-				};
-
-				loginFactory.login(loginrequest).then(function(response){
-				$scope.loginresult = response;
-
-				if(response.status == 1)
-				{
-
-					localStorageService.set('token', response.result.token);
-					localStorageService.set('user', response.result.user);
-					AuthSrv.isLogged = true;
-					inviteRequest();
-				}
-				
-			});				
-
-		};
-
-		/********************************************
-		*  Keep uploaded file in temp scope
-		********************************************/
-
-		$scope.uploadprofileImage = function(files, errFiles) {
-			$scope.profileImage = files;
-		};
-
-
-		/****************************************
-		* Update invited user information 
-		****************************************/
-
-		function inviteRequest(){
-			var signInRequest={
-				url:window.__API_PATH.UPDATE_EMPLOYEE,
-				method:"POST",
-				data:{
-					employee_id 			: getUrlParameter('employee_id',empDetail),	
-					hotel_id 				: getUrlParameter('hotel_id',empDetail),
-					contact_number          : $scope.invite_login
-				}
-			};
-
-			globalRequest.jotCRUD(signInRequest).then(function(response){	
-				
-				if(response.status == 1)
-				{
-
-					var user = localStorageService.get('user', user);
-
-					user.hotel_id.push(getUrlParameter('hotel_id',empDetail));
-					localStorageService.set('user', user);
-
-					$mdDialog.cancel();
-					$location.path('/dashboard');
-					$rootScope.popupData  = {
-								text:  'Congratulations! You have successfully registered.',
-								action: 'redirect'
-					};
-					 $timeout(function() {
-					 	$rootScope.popup = true;
-					 }, 500);
-				}							
-				
-			});
-		}
-
-
-
-
-
-		 
-	 
 }]);
 "use strict";
 
@@ -5834,8 +5419,8 @@ app.controller('checklistCtlr', ['$scope','$rootScope','toastService','$timeout'
 
 "use strict";
 
-app.controller('departmentCtlr', ['$scope',
-	function($scope) {
+app.controller('departmentCtlr', ['$scope','$rootScope','globalRequest',
+	function($scope,$rootScope,globalRequest) {
 		
 
 		/*****************************************
@@ -5849,6 +5434,11 @@ app.controller('departmentCtlr', ['$scope',
 	        $scope.deparmentfocus = true;
 	         
 	    };
+
+	    if(!$rootScope.departmentList)
+	    {
+	   		globalRequest.getDepartments();
+	    }
 
 	}
 ]);
@@ -7622,7 +7212,7 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
               * Appned staff member of click of icon
               **************************************/
 
-              $scope.selectStaff = function(userName){
+              /*$scope.selectStaff = function(userName){
                 var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi);
                 var match = -1;
                 if(checkAlreadyExists)
@@ -7634,6 +7224,27 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                   return false;
                 }
                 $rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+              };*/
+
+              $scope.selectStaff = function(userName){
+        
+                if($rootScope.jot_members)
+                { 
+                  var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi); 
+                  var match = -1;
+                  if(checkAlreadyExists)
+                  {
+                    match = checkAlreadyExists.indexOf('@'+userName);
+                  }
+                  if(match > -1)
+                  {
+                    return false;
+                  }
+                  $rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+                } else {
+                  $rootScope.jot_members = ' @'+userName+' ';
+                }
+                
               };
 
               /**************************************
@@ -7976,11 +7587,505 @@ app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', func
 
 "use strict";
 
+app.controller('EditDocumentController', ['$scope','$rootScope','globalRequest','Detail','$mdDialog','$timeout','toastService',
+	function($scope,$rootScope,globalRequest,Detail,$mdDialog,$timeout,toastService) {
+		
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+		angular.forEach(Detail.detail,function (value,key) {
+		    if(key == 'tags')
+			{
+				$scope.ctrl.itemTagModel = value;
+
+			} else if(key == 'department'){
+
+				$rootScope.department = value;
+
+			} else if(key == 'files'){
+
+				$scope.filesData = value;
+
+			} else {
+				$scope[key] = value;
+			}
+		});	
+
+
+		/************************************
+		* Edit document
+		*************************************/		
+
+		$scope.editDC = function(){	
+
+			/*********************************************
+			* Check files exists in scope to upload
+			* if yes, upload doument
+			* if no, save the information without files
+			*********************************************/
+
+			var popup;
+			if ($scope.newFiles && $scope.newFiles.length) {
+
+				globalRequest.uploadFiles($rootScope.activeHotelData._id,'document_center',$scope.newFiles).then(function (response) {				
+	                $timeout(function () {
+		                if(response.status == 1)
+		                {
+		                   /*********************************************
+							* Save document information
+							*********************************************/
+							$scope.newFiles= '';
+							Array.prototype.push.apply($scope.filesData,response.result);
+
+							var request = {
+						            url:window.__API_PATH.UPDATE_DOCUMENT,
+						            method:"PUT",
+						            data:{
+						            	_id      	   			:  $scope._id,
+						            	document_name   		:  $scope.document_name,
+						            	department      		:  $rootScope.department,
+						            	tags        			:  $scope.ctrl.itemTagModel,
+						            	document_description    :  $scope.document_description,
+						            	files       		    :  $scope.filesData,
+						            	upload_date				:  new Date().getTime()
+						            }
+						          };
+
+							globalRequest.jotCRUD(request).then(function(dcresponse){	 
+							 	if(dcresponse.status ==1)
+							 	{
+							 		$mdDialog.cancel();
+							 		globalRequest.getDocument();
+
+							 		popup = {"message":dcresponse.message,"class":dcresponse.class};
+									toastService.alert(popup);
+
+							 	}  else {
+							 		var errors = '<ul class="mdToast-error-list">';
+									angular.forEach(dcresponse.errors,function(value,key){
+										errors += '<li>'+value.message+'</li>';
+									});
+									errors += '</ul>';
+									popup = {"message":errors,"class":""};
+									toastService.errors(popup);
+							 	}
+
+							 });	
+						}   else {
+					 		var errors = '<ul class="mdToast-error-list">';
+							angular.forEach(response.errors,function(value,key){
+								errors += '<li>'+value.message+'</li>';
+							});
+							errors += '</ul>';
+							popup = {"message":errors,"class":""};
+							toastService.errors(popup);
+					 	}				
+
+	                });
+	            });
+
+
+			} else {
+
+				/*************************************************
+				* Save document information if no files in scope
+				*************************************************/
+
+				var request = {
+			            url:window.__API_PATH.UPDATE_DOCUMENT,
+			            method:"PUT",
+			            data:{
+			            	_id      	   			:  $scope._id,
+			            	document_name   		:  $scope.document_name,
+			            	department      		:  $rootScope.department,
+			            	tags        			:  $scope.ctrl.itemTagModel,
+			            	document_description    :  $scope.document_description,			            	
+			            	upload_date				:  new Date().getTime()
+			            }
+			          };
+
+				globalRequest.jotCRUD(request).then(function(response){
+				 	
+				 	if(response.status ==1)
+				 	{
+				 		$mdDialog.cancel();
+				 		globalRequest.getDocument();
+				 		popup = {"message":response.message,"class":response.class};
+						toastService.alert(popup);
+
+				 	}   else {
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(response.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+
+				 });
+				
+			}		
+			
+
+		};
+
+		/************************************
+		* Remove files by index
+		*************************************/	
+
+		$scope.removeImageIndex = function(fData){
+			$scope.filesData = $scope.filesData.filter(function( obj ) {
+					    return obj.filename != fData.filename;
+					});
+
+		};	
+  
+
+		/*****************************************
+		* Append selected files in scope variable 
+		*****************************************/
+
+
+		$scope.$watch('files', function () {		
+	        $scope.uploadDocument($scope.files);
+	    });
+
+	    $scope.$watch('file', function () {
+	        if ($scope.file != null) {
+	            $scope.files = [$scope.file];
+	        }
+	    });
+
+
+		$scope.uploadDocument = function(files, errFiles) {	
+			$scope.newFiles = files;
+	    };
+
+
+	    /*****************************************
+		* delete  file from scope variable 
+		*****************************************/
+
+	    $scope.deleteAttachment = function(hashKey){
+			$scope.newFiles = $scope.newFiles.filter(function(key){
+				return key.$$hashKey != hashKey;
+			});
+		};
+
+	}
+]);
+"use strict";
+
+app.controller('documentCenterController',['$scope','$rootScope','globalRequest','$mdDialog','toastService','$timeout',function($scope,$rootScope,globalRequest,$mdDialog,toastService,$timeout){
+	
+
+	/************************************
+	* Blank all field before open form
+	*************************************/	
+
+	$scope.blank = function(){
+		$scope.document_name 		= "";		
+		$scope.document_description = "";
+		$scope.fileData 			= "";		
+		$rootScope.department 		= "";
+		$scope.documentProgress 	= -1;
+		$scope.documentResult 		= "";	
+	};
+
+	$scope.blankFields = function(){
+		$scope.blank();
+		$scope.ctrl.itemTagModel 	= [];
+	};
+
+
+	/**********************************************************
+    * Item tags 
+    **********************************************************/
+
+	var self = this;
+    self.readonly = false;	    
+    self.itemTag = [];
+    self.itemTagModel = angular.copy(self.itemTag);
+    self.editableitemTag = angular.copy(self.itemTag);
+    self.tags = [];	    
+    self.newVeg = function(chip) {
+      return {
+        name: chip,
+        type: 'unknown'
+      };
+    };
+
+    /************************************
+	* Get documents
+	*************************************/
+
+    globalRequest.getDocument();
+
+    /************************************
+	* Get department list
+	*************************************/			
+	
+	globalRequest.getDepartments();
+
+	/************************************
+	* Add documents
+	*************************************/	
+	
+	$scope.addDC = function(){
+
+		/*********************************************
+		* Check files exists in scope to upload
+		* if yes, upload doument
+		* if no, save the information without files
+		*********************************************/
+
+		var popup;
+		if ($scope.fileData && $scope.fileData.length) {
+
+
+			globalRequest.uploadFiles($rootScope.activeHotelData._id,'document_center',$scope.fileData).then(function (response) {			
+                $timeout(function () {
+	                if(response.status == 1)
+	                {
+	                   /*********************************************
+						* Save document information
+						*********************************************/
+
+	                   var request = {
+						            url:window.__API_PATH.ADD_DOCUMENT,
+						            method:"POST",
+						            data:{
+						            	hotel_id      			:  $rootScope.activeHotelData._id,
+						            	document_name   		:  $scope.document_name,
+						            	department      		:  $rootScope.department,
+						            	tags        			:  $scope.ctrl.itemTagModel,
+						            	document_description    :  $scope.document_description,
+						            	files       		    :  response.result,
+						            	upload_date				:  new Date().getTime()
+						            }
+						    };
+
+						globalRequest.jotCRUD(request).then(function(dcresponse){
+						 	var popup;
+						 	if(dcresponse.status == 1)
+						 	{
+						 		$scope.blankFields();				
+						 		if(!$scope.documentList)
+						 		{
+						 			$scope.documentList = [];
+						 		}
+						 		$scope.documentList.push(dcresponse.result);
+						 		popup = {"message":dcresponse.message,"class":dcresponse.class};
+								toastService.alert(popup);
+						 		
+						 	}  else {
+						 		var errors = '<ul class="mdToast-error-list">';
+								angular.forEach(dcresponse.errors,function(value,key){
+									errors += '<li>'+value.message+'</li>';
+								});
+								errors += '</ul>';
+								popup = {"message":errors,"class":""};
+								toastService.errors(popup);
+						 	}
+						 });
+					}  else {
+				 		var errors = '<ul class="mdToast-error-list">';
+						angular.forEach(response.errors,function(value,key){
+							errors += '<li>'+value.message+'</li>';
+						});
+						errors += '</ul>';
+						popup = {"message":errors,"class":""};
+						toastService.errors(popup);
+				 	}
+                });
+            });            
+
+
+		} else {
+
+			/*************************************************
+			* Save document information if no files in scope
+			*************************************************/
+
+			var request = {
+			            url:window.__API_PATH.ADD_DOCUMENT,
+			            method:"POST",
+			            data:{
+			            	hotel_id      			:  $rootScope.activeHotelData._id,
+			            	document_name   		:  $scope.document_name,
+			            	department      		:  $rootScope.department,
+			            	tags        			:  $scope.ctrl.itemTagModel,
+			            	document_description    :  $scope.document_description,			            	
+			            	upload_date				:  new Date().getTime()
+			            }
+			    };
+
+			globalRequest.jotCRUD(request).then(function(response){
+			 	
+			 	if(response.status == 1)
+			 	{
+			 		$scope.blankFields();				
+			 		if(!$scope.documentList)
+			 		{
+			 			$scope.documentList = [];
+			 		}
+			 		$scope.documentList.push(response.result);
+
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);
+			 		
+			 	}  else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 });
+		}
+		
+
+	};
+
+	/*****************************************
+	* Open edit Contact
+	*****************************************/	
+
+	$scope.openDocumentFileView = function(detail){
+			$mdDialog.show({
+				controller: 'documentViewController',
+				templateUrl: '/modules/document_center/views/view_files.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{Detail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+
+	};
+
+	/*****************************************
+	* Open edit Contact
+	*****************************************/	
+
+	$scope.openDocumentEditPopup = function(detail){
+			$mdDialog.show({
+				controller: 'EditDocumentController',
+				controllerAs: 'ctrl',
+				templateUrl: '/modules/document_center/views/edit_document.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{Detail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+
+	};
+
+	
+
+	/*****************************************
+	* Delete contact
+	*****************************************/	
+
+	$scope.removeDc = function(detail,index){
+
+		var request={
+			url:window.__API_PATH.DELETE_DOCUMENT,
+			method:"DELETE",
+			params:{_id:detail}
+		};
+		
+		globalRequest.jotCRUD(request).then(function(response){	
+
+			if(response.status == 1)
+			{
+				$scope.documentList.splice(index, 1);
+			}			
+			var popup = {"message":response.message,"class":response.class};
+			toastService.alert(popup);
+		});
+
+	};
+
+	$scope.$watch('files', function () {
+        $scope.uploadDocument($scope.files);
+    });
+
+    $scope.$watch('file', function () {
+        if ($scope.file != null) {
+            $scope.files = [$scope.file];
+        }
+    });
+  
+
+	/*****************************************
+	* Append selected files in scope variable 
+	*****************************************/	
+
+	$scope.uploadDocument = function(files, errFiles) {	
+		$scope.fileData = 	files;
+    };
+
+    /*****************************************
+	* delete  file from scope variable 
+	*****************************************/
+
+    $scope.deleteAttachment = function(hashKey){
+		$scope.fileData = $scope.fileData.filter(function(key){
+			return key.$$hashKey != hashKey;
+		});
+	};
+	
+	
+}]);
+"use strict";
+
+app.controller('documentViewController', ['$scope','Detail',
+	function($scope,Detail) {
+		
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+		angular.forEach(Detail.detail,function (value,key) {
+		    $scope[key] = value;
+		});	
+	}
+]);
+
+
+
+
+"use strict";
+
+app.filter('dcDepartmentFilter',function(){
+	return function(input,scope){
+		if(input)
+		{
+
+			var searchDepartment        = scope.searchDepartment;
+			if(!searchDepartment){
+				return input;
+			}
+
+	
+			input   =   input.filter(function( obj ) {
+							if(obj.department.indexOf(searchDepartment) != -1)
+							{
+								return true;
+							}
+						});
+		}
+		return input;
+	};
+
+});
+"use strict";
+
 app.filter("filterdepartment", function(cursorPosition) {
-
-
          return function(input,scope) {
-         	
          	var text     = document.getElementById("department");
 			var caretPos = cursorPosition.GetCaretPosition(text);
             var word     = cursorPosition.ReturnWord(text.value, caretPos);
@@ -8014,10 +8119,8 @@ app.filter("filterdepartment", function(cursorPosition) {
 			}
 			
          };
-});
 
-
-app.filter("filterstaff", function(cursorPosition) {
+}).filter("filterstaff", function(cursorPosition) {
 
          return function(input,scope) {
 
@@ -8058,13 +8161,9 @@ app.filter("filterstaff", function(cursorPosition) {
 				}		
 				return searchedString;
 			}
-			
          };
-});
 
-
-
-app.filter("filterstaffJotDesc", function(cursorPosition) {
+}).filter("filterstaffJotDesc", function(cursorPosition) {
 
          return function(input,scope) {
 	         	var text     = document.getElementById("jot_description");
@@ -8107,12 +8206,8 @@ app.filter("filterstaffJotDesc", function(cursorPosition) {
 				}
 			
          };
-});
 
-
-
-
-app.filter("descDepartmentFilter", function(cursorPosition) {
+}).filter("descDepartmentFilter", function(cursorPosition) {
 
          return function(input,scope) {
          		
@@ -8152,11 +8247,9 @@ app.filter("descDepartmentFilter", function(cursorPosition) {
 					}									
 					return searchedString;
 				}
-			
          };
-});
 
-app.filter("checklistFilter", function() {
+}).filter("checklistFilter", function() {
          return function(input,scope) {         		
          		var totalComplete = 0;
 	         	angular.forEach(input,function(value,key){
@@ -8176,171 +8269,1605 @@ app.filter("checklistFilter", function() {
 
 	         	return totalComplete+'/'+input.length;
          };
+
+}).filter('departmentJotFilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+			var searchDeptWise        = scope.searchDepartment;
+			if(!searchDeptWise || searchDeptWise.length == 0){
+				return input;
+			}
+
+			input   =   input.filter(function( obj ) {
+							var jotAssignedDept = obj.assigned_departments;
+
+							for(var i=0; i< searchDeptWise.length; i++){
+								var getIndex = jotAssignedDept.indexOf(searchDeptWise[i]);
+								if(getIndex != -1)
+								{
+									return true;
+								}
+							}							
+						});
+		}		
+		return input;
+	};
+
+}).filter('empJotFilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+			var searchEmpWise  = scope.searchEmp;
+			if(!searchEmpWise || searchEmpWise.length == 0){
+				return input;
+			}
+
+			input   =   input.filter(function( obj ) {
+							var jotAssignedDept = obj.assigned_members;
+							for(var i=0; i< searchEmpWise.length; i++){
+								var getIndex = jotAssignedDept.indexOf(searchEmpWise[i]);
+								if(getIndex != -1)
+								{
+									return true;
+								}
+							}							
+						});
+		}		
+		return input;
+	};
 });
 "use strict";
 
-app.controller('loginController', ['$scope','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','$cookies',
-	function($scope,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,$cookies) {	
+app.controller('bookingReportController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+		
+		$scope.position_list = window.__API_PATH.POSITION;
+
+		var that = this;
+
+		    this.isOpen = false;
+
+		    this.openCalendar = function(e) {
+		    	console.log('test');
+		        e.preventDefault();
+		        e.stopPropagation();
+
+		        that.isOpen = true;
+		    };
 
 
-		/*********************************************
-		* Submit login form
-		***********************************************/
+		/************************************
+		* Get reports list
+		*************************************/			
 		
-		$scope.loginUser = function (obj) {
-		
-	        var dataObj = {
-					email : $scope.email,
-					password : $scope.password
-			};	
+		globalRequest.getBookingReports();
+
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = $rootScope.activeHotelData.jot_types;
+
+
+		/************************************
+		* Cancel booking
+		*************************************/
+
+		$scope.cancelBooking = function(id,$index){
 
 			var request={
-					url:window.__API_PATH.LOGIN,
-					method:"POST",
-					data:dataObj
-				};
+				url:window.__API_PATH.CANCEL_BOOKING,
+				method:"PUT",
+				data:{_id:id}
+			};
 
-			loginFactory.login(request).then(function(response){
-				$scope.loginresult = response;
-				if(response.status == 1)
-				{
-					/*if(remember && remember == 1)
-					{
-
-					}*/
-
-					 /*var now = new Date().toString();
-					 var expiry;					 
-					 expiry = now;
-					 
-					  console.log("about to put cookie");
-					  $cookies.put('sample', "Abc", {expires: expiry});*/
-					   
-										
-
-					/*$cookies.put('hoteljot',response.result.token,[{
-			            expires: 'test'
-			        }]);*/
-
-					localStorageService.set('token', response.result.token);
-					localStorageService.set('user', response.result.user);
-					AuthSrv.isLogged = true;
-				    $mdDialog.cancel();
-					$location.path('/dashboard');
-
-				}									
-				
-				
-			});				
-	               
+			globalRequest.jotCRUD(request).then(function(response){				
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+				globalRequest.getBookingReports();
+			});
 		};
 
-		/*********************************************
-		* Forget password
-		***********************************************/
 
-		$scope.forgetPassword = function(){
+		/************************************
+		* Change payment status
+		*************************************/
 
-			var data = {email:$scope.forget_email};
+		$scope.paymentStatus = function(report,status){
+
 			var request={
-					url:window.__API_PATH.FORGET_PASSWORD,
-					method:"POST",
-					data:data
-				};
+				url:window.__API_PATH.PAYMENT_STATUS,
+				method:"PUT",
+				data:{_id:report._id,payment_status:status}
+			};
 
-			loginFactory.login(request).then(function(response){
-					$scope.forgetresult = response;
-					if(response.status == 1)
-						{
-							
-						$rootScope.popupData = {text:response.message,action:'ok'};
-						$timeout(function() {
-						 	$mdDialog.cancel();
-						 }, 200);
-						 $timeout(function() {
-						 	$rootScope.popup = true;
-						 }, 300);	
-					 }
+			globalRequest.jotCRUD(request).then(function(response){				
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+				globalRequest.getReports();
+			});
+		};
+
+
+		/*****************************************
+		* Open reports detail
+		*****************************************/	
+
+		$scope.openReportDetail = function(detail){
+			$mdDialog.show({
+				controller: 'detailController',
+				templateUrl: '/modules/meeting/views/reports_detail.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{infoDetail:detail}				
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
+		/************************************
+		* Show seller information in popup
+		*************************************/
+
+		$scope.showSellerInfo = function(report){
+				
+			var infoDetail = report.seller_detail[0];
+			infoDetail.hotel_id = report.hotel_id;
+			$mdDialog.show({
+					controller: 'detailController',
+					templateUrl: '/modules/meeting/views/seller_detail.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,	
+					locals:{infoDetail:infoDetail}				
+				}).then(function(answer) {}, function() {});
+		};
+
+		/************************************
+		* Show room information in popup
+		*************************************/
+
+		$scope.showRoomInfo = function(report){
+
+			var infoDetail = report.room_detail[0];
+			infoDetail.hotel_id = report.hotel_id;
+			$mdDialog.show({
+					controller: 'detailController',
+					templateUrl: '/modules/meeting/views/room_detail.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,	
+					locals:{infoDetail:infoDetail}				
+				}).then(function(answer) {}, function() {});
+		};
+	
+		
+	}
+]);
+
+
+
+
+
+"use strict";
+
+app.controller('detailController', ['$scope','infoDetail',
+	function($scope,infoDetail) {
+
+
+		/************************************
+		* Get facilities
+		*************************************/
+
+		$scope.roomStyleList = [
+			{
+				_id: 1,
+				name: "Auditorium",
+				attachment_type: "image",
+				capacity: '40max',
+				src:"assets/images/audi.gif",
+			},
+			{
+				_id: 2,
+				name: "Banquet",
+				attachment_type: "image",
+				capacity: '10max',
+				src:"assets/images/Banquet.gif"
+			},
+			{
+				_id: 3,
+				name: "Hollow Square",
+				attachment_type: "image",
+				capacity: '50max',
+				src:"assets/images/hollow.gif"
+			},
+			{
+				_id: 4,
+				name: "Classroom",
+				attachment_type: "image",
+				capacity: '100max',
+				src:"assets/images/class.gif"
+			},
+			{
+				_id: 5,
+				name: "U-Shape",
+				attachment_type: "image",
+				capacity: '50max',
+				src:"assets/images/u-shape.gif"
+			},
+			{
+				_id: 6,
+				name: "Conference",
+				attachment_type: "image",
+				capacity: '100',
+				src:"assets/images/confrence.gif"
+			},
+			{
+				_id: 7,
+				name: "Theater",
+				attachment_type: "image",
+				capacity: '10max',
+				src:"assets/images/lay_img3.png"
+			}
+		];
+
+		/************************************
+		* Get facilities
+		*************************************/
+
+		$scope.facilityList = [
+			{
+				label: "Wifi",
+				attachment_type: "image",
+				src:"assets/images/tv1_icon.png",
+			},
+			{
+				label: "Tv",
+				attachment_type: "image",
+				src:"assets/images/tv_icon.png"
+			},
+			{
+				label: "Room Service",
+				attachment_type: "image",
+				src:"assets/images/tv2_icon.png"
+			},
+			{
+				label: "Music",
+				attachment_type: "image",
+				src:"assets/images/tv4_icon.png"
+			},
+			{
+				label: "Parking",
+				attachment_type: "icon",
+				src:"local_parking"
+			}
+		];
+		
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+		angular.forEach(infoDetail,function (value,key) {
+		    $scope[key] = value;
+		});	
+	}
+]);
+
+
+
+
+"use strict";
+
+app.controller('editMeetingManagementController', ['$scope','globalRequest','$mdDialog','toastService','roomDetail',
+	function($scope,globalRequest,$mdDialog,toastService,roomDetail) {
+
+
+		/***********************************************
+		* Take editable item value in current scope
+		***********************************************/		
+
+
+		angular.forEach(roomDetail,function (value,key) {
+		    $scope[key] = value;
+		});
+		
+		if($scope.room_image)
+		{
+			$scope.room_image = '/images/hotel/'+$scope.hotel_id+'/rooms/'+$scope.room_image;
+		} else {
+			$scope.room_image = '/assets/images/metting_list.png';
+		}
+
+		/************************************
+		* Get facilities
+		*************************************/
+
+		$scope.facilityList = [
+			{
+				label: "Wifi",
+				attachment_type: "image",
+				src:"assets/images/tv1_icon.png",
+			},
+			{
+				label: "Tv",
+				attachment_type: "image",
+				src:"assets/images/tv_icon.png"
+			},
+			{
+				label: "Room Service",
+				attachment_type: "image",
+				src:"assets/images/tv2_icon.png"
+			},
+			{
+				label: "Music",
+				attachment_type: "image",
+				src:"assets/images/tv4_icon.png"
+			},
+			{
+				label: "Parking",
+				attachment_type: "icon",
+				src:"local_parking"
+			}
+		];
+
+
+
+
+		/************************************
+		* Add room
+		*************************************/		
+		
+
+		$scope.editRoom = function(){
+			var status  = ($scope.status)?$scope.status:'inactive';			
+			var request = {
+			            url:window.__API_PATH.UPDATE_MEETINGROOM,
+			            method:"PUT",
+			            data:{
+			            	_id     	 :  $scope._id,
+			            	name    	 :  $scope.name,
+			            	dimension    :  $scope.dimension,
+			            	capacity     :  $scope.capacity,
+			            	facilities   :  $scope.facilities,
+			            	room_number  :  $scope.room_number,
+			            	cost 		 :  $scope.cost,		            
+			            	status 	 	 :  $scope.status,		            	            
+			            }
+			          };
+			globalRequest.jotCRUD(request).then(function(response){
+			 	var popup;
+			 	
+			 	if(response.status == 1)
+			 	{
+			 		
+			 		/****************************
+		            * Upload file if exists
+		            ****************************/
+
+		            if($scope.roomImages && $scope.roomImages.length > 0)
+		            {
+
+		            	globalRequest.uploadFiles($scope.hotel_id,'rooms',$scope.roomImages).then(function(fileRasponse){
+		                    if(fileRasponse.status == 1)
+		                    {	                    	
+
+		                        var updateRequest={
+		                            url:window.__API_PATH.UPDATE_MEETINGROOM,
+		                            method:"PUT",
+		                            data:{  
+		                              _id     	    :  $scope._id,
+		                              room_image   	 	: fileRasponse.result[0].filename						  
+		                            }
+		                        };
+
+
+			                      /****************************
+			                      * Update files 
+			                      ****************************/
+
+			                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+			                        if(updateResponse.status == 1)
+			                        {
+			                            
+			                            globalRequest.getRoomList();
+			                            popup = {"message":response.message,"class":"success"};
+										toastService.alert(popup);
+										$mdDialog.cancel();
+			                        }
+
+			                      });  
+			                    }
+			                });
+
+				    } else {				    	
+                        globalRequest.getRoomList();
+                        popup = {"message":response.message,"class":"success"};
+						toastService.alert(popup);
+						$mdDialog.cancel();
+				    }
+
+			 	}  else {
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 });
+		};
+
+
+
+		/*****************************************
+		* Profile image upload
+		*****************************************/	
+
+		$scope.uploadRoomImage = function(files, errFiles) {
+			$scope.roomImages = files;	
+
+	    };
+	
+	}
+]);
+
+"use strict";
+
+app.controller('meetingController', ['$scope','$rootScope','globalRequest','toastService',
+	function($scope,$rootScope,globalRequest,toastService) {
+
+		/************************************
+		* Get rooms
+		*************************************/
+		 globalRequest.getRoomList('');
+
+
+		/**********************************************
+		* Filter room by availability on selected date
+		**********************************************/
+		$scope.$watch("search_from", function(newValue, oldValue) {
+		 	
+		 	if(newValue && newValue != oldValue)
+		 	{
+		 		if($scope.search_from && $scope.search_to)
+		 		{
+			 		var from = new Date($scope.search_from).getTime();
+			 		var to   = new Date($scope.search_to).getTime();
+
+			 		console.log({from:from,to:to});			 		
+			 		globalRequest.getRoomList({from:from,to:to});
+			 	}
+		 	}
+		});
+
+		$scope.$watch("search_to", function(newValue, oldValue) {
+		 	
+		 	if(newValue && newValue != oldValue)
+		 	{
+		 		if($scope.search_from && $scope.search_to)
+		 		{
+		 			console.log({from:from,to:to});
+			 		var from = new Date($scope.search_from).getTime();
+			 		var to   = new Date($scope.search_to).getTime();			 		
+			 		globalRequest.getRoomList({from:from,to:to});
+			 	}
+		 	}
+		});
+
+		/**********************************************************
+	    * Item tags 
+	    **********************************************************/
+
+		var self = this;
+	    self.readonly = false;	    
+	    self.itemTag = [];
+	    self.roomTagModel = angular.copy(self.itemTag);
+	    self.editableitemTag = angular.copy(self.itemTag);
+	    self.tags = [];	    
+	    self.newVeg = function(chip) {
+	      return {
+	        name: chip,
+	        type: 'unknown'
+	      };
+	    };
+
+	    /************************************
+		* Get facilities
+		*************************************/
+
+		$scope.facilityList = [
+			{
+				label: "Wifi",
+				attachment_type: "image",
+				src:"assets/images/tv1_icon.png",
+			},
+			{
+				label: "Tv",
+				attachment_type: "image",
+				src:"assets/images/tv_icon.png"
+			},
+			{
+				label: "Room Service",
+				attachment_type: "image",
+				src:"assets/images/tv2_icon.png"
+			},
+			{
+				label: "Music",
+				attachment_type: "image",
+				src:"assets/images/tv4_icon.png"
+			},
+			{
+				label: "Parking",
+				attachment_type: "icon",
+				src:"local_parking"
+			}
+		];
+
+
+		/************************************
+		* Get facilities
+		*************************************/
+
+		$scope.roomStyleList = [
+			{
+				_id: 1,
+				name: "Auditorium",
+				attachment_type: "image",
+				capacity: '40max',
+				src:"assets/images/audi.gif",
+			},
+			{
+				_id: 2,
+				name: "Banquet",
+				attachment_type: "image",
+				capacity: '10max',
+				src:"assets/images/Banquet.gif"
+			},
+			{
+				_id: 3,
+				name: "Hollow Square",
+				attachment_type: "image",
+				capacity: '50max',
+				src:"assets/images/hollow.gif"
+			},
+			{
+				_id: 4,
+				name: "Classroom",
+				attachment_type: "image",
+				capacity: '100max',
+				src:"assets/images/class.gif"
+			},
+			{
+				_id: 5,
+				name: "U-Shape",
+				attachment_type: "image",
+				capacity: '50max',
+				src:"assets/images/u-shape.gif"
+			},
+			{
+				_id: 6,
+				name: "Conference",
+				attachment_type: "image",
+				capacity: '100',
+				src:"assets/images/confrence.gif"
+			},
+			{
+				_id: 7,
+				name: "Theater",
+				attachment_type: "image",
+				capacity: '10max',
+				src:"assets/images/lay_img3.png"
+			}
+		];
+		
+		/*$scope.slider = {
+		    minValue: 10,
+		    maxValue: 90,
+		    options: {
+		        floor: 0,
+		        ceil: 100,
+		        step: 1
+		    }
+		};*/
+
+		$scope.selectLayout = function(layoutID){
+
+			$scope.selectedLayout = layoutID;
+		};
+
+		/**************************************
+		* Appned staff member of click of icon
+		**************************************/
+
+		$scope.selectStaff = function(userName){
+			
+			if($rootScope.jot_members)
+			{	
+				var checkAlreadyExists = $rootScope.jot_members.match(/\@[a-z,0-9,_\/.-]+/gmi);	
+				var match = -1;
+				if(checkAlreadyExists)
+				{
+					match = checkAlreadyExists.indexOf('@'+userName);
+				}
+
+
+				if(match > -1)
+				{
+					return false;
+				}
+				$rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
+			} else {
+				$rootScope.jot_members = '@'+userName+' ';
+			}
+			
+		};
+
+
+		/**************************************
+		* Room booking
+		**************************************/
+
+		$scope.roomBooking = function(){
+			var reserved = {from:new Date($scope.start_time).getTime(),to:new Date($scope.end_time).getTime()};
+			var bookingRequest = {
+				recipient_first_name     : $scope.recipient_first_name,
+				recipient_last_name      : $scope.recipient_last_name,
+				recipient_contact_number : $scope.recipient_contact_number,
+				recipient_email     	 : $scope.recipient_email,
+				recipient_address     	 : $scope.recipient_address,
+				payment     			 : $scope.payment,
+				reserved     			 : reserved,
+				staff     			     : $rootScope.jot_members,
+				tags     			     : $scope.ctrl.roomTagModel,
+				description     		 : $rootScope.jot_description,
+				room_layout_id     		 : $scope.selectedLayout,
+				room_number     		 : $scope.ctrl.room_number,				
+				user_id     		     : $rootScope.currentUser._id,				
+				hotel_id     		     : $rootScope.activeHotelData._id,				
+				booking_time     		 : new Date().getTime()					
+			};
+
+
+			var request={
+				url:window.__API_PATH.ADD_BOOKING,
+				method:"POST",
+				data:bookingRequest
+			};
+					
+			
+			globalRequest.jotCRUD(request).then(function(response){				
+				var popup;
+				
+			 	if(response.status == 1)
+			 	{			 		
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup);	
+
+			 	} else {
+
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			});			
+		};
+	
+
+		
+	}
+]);
+
+"use strict";
+
+app.controller('meetingManagementController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,toastService) {
+		var hotel = $rootScope.activeHotelData;
+
+		/************************************
+		* Get rooms
+		*************************************/
+		globalRequest.getRoomList('');
+
+		/************************************
+		* Get facilities
+		*************************************/
+
+		$scope.facilityList = [
+			{
+				label: "Wifi",
+				attachment_type: "image",
+				src:"assets/images/tv1_icon.png",
+			},
+			{
+				label: "Tv",
+				attachment_type: "image",
+				src:"assets/images/tv_icon.png"
+			},
+			{
+				label: "Room Service",
+				attachment_type: "image",
+				src:"assets/images/tv2_icon.png"
+			},
+			{
+				label: "Music",
+				attachment_type: "image",
+				src:"assets/images/tv4_icon.png"
+			},
+			{
+				label: "Parking",
+				attachment_type: "icon",
+				src:"local_parking"
+			}
+		];
+
+
+		/************************************
+		* Blank all field before open form
+		*************************************/
+
+		$scope.blank = function(){
+			$scope.name = "";
+			$scope.dimension = "";
+			$scope.capacity = "";
+			$scope.facilities = "";
+			$scope.cost = "";
+			$scope.status = "";
+			$scope.roomImages = "";
+		};
+
+
+		/************************************
+		* Add room
+		*************************************/		
+		
+
+		$scope.addRoom = function(){
+			var status  = ($scope.status)?$scope.status:'inactive';			
+			var request = {
+			            url:window.__API_PATH.ADD_MEETINGROOM,
+			            method:"POST",
+			            data:{
+			            	hotel_id     :  hotel._id,
+			            	name    	 :  $scope.name,
+			            	dimension    :  $scope.dimension,
+			            	capacity     :  $scope.capacity,
+			            	facilities   :  $scope.facilities,
+			            	cost 		 :  $scope.cost,		            
+			            	room_number 		 :  $scope.room_number,		            
+			            	status 	 	 :  $scope.status,		            
+			            	/*image 	     :  $scope.roomImages*/		            
+			            }
+			          };
+			globalRequest.jotCRUD(request).then(function(response){
+			 	var popup;
+			 	
+			 	if(response.status == 1)
+			 	{
+			 		var roomID = response.result._id;
+			 		
+			 		/****************************
+		            * Upload file if exists
+		            ****************************/
+
+		            if($scope.roomImages && $scope.roomImages.length > 0)
+		            {
+
+		            	globalRequest.uploadFiles(hotel._id,'rooms',$scope.roomImages).then(function(fileRasponse){
+		                    if(fileRasponse.status == 1)
+		                    {	                    	
+
+		                        var updateRequest={
+		                            url:window.__API_PATH.UPDATE_MEETINGROOM,
+		                            method:"PUT",
+		                            data:{  
+		                              _id  		     : roomID,
+		                              room_image   	 : fileRasponse.result[0].filename						  
+		                            }
+		                        };
+
+
+			                      /****************************
+			                      * Update files 
+			                      ****************************/
+
+			                      globalRequest.jotCRUD(updateRequest).then(function(updateResponse){
+			                        if(updateResponse.status == 1)
+			                        {
+			                            $scope.roomImages = '';
+			                            globalRequest.getRoomList();
+			                            popup = {"message":response.message,"class":"success"};
+										toastService.alert(popup);
+										$scope.blank();
+			                        }
+
+			                      });  
+			                    }
+			                });
+
+				    } else {
+				    	$scope.roomImages = '';
+                        globalRequest.getRoomList();
+                        popup = {"message":response.message,"class":"success"};
+						toastService.alert(popup);
+						$scope.blank();
+				    }
+
+			 	}  else {
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			 });
+		};
+
+
+		/*****************************************
+		* Open edit room
+		*****************************************/	
+
+		$scope.openEditForm = function(detail){
+
+			$mdDialog.show({
+				controller: 'editMeetingManagementController',
+				templateUrl: '/modules/meeting/views/edit_meeting_room_management.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{roomDetail:detail}				
+			}).then(function(answer) {}, function() {});
+
+		};
+
+
+		/*****************************************
+		* Delete room
+		*****************************************/	
+
+		$scope.removeRoom = function(detail,index){
+			var request={
+				url:window.__API_PATH.DELETE_MEETINGROOM,
+				method:"DELETE",
+				params:{_id:detail}
+			};
+			
+			globalRequest.jotCRUD(request).then(function(response){				
+				$rootScope.meetingRoomList .splice(index, 1);
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
 			});
 
 		};
 
-		/*********************************************
-		* Redirect to signup form
-		***********************************************/
 
-		$scope.openSignupForm = function (obj) {
-	          $mdDialog.show({
+		/*****************************************
+		* Profile image upload
+		*****************************************/	
+
+		$scope.uploadRoomImage = function(files, errFiles) {
+			$scope.roomImages = files;	
+
+	    };
+	
+	}
+]);
+
+"use strict";
+
+app.filter('roomNamefilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+
+			var searchRoom  = scope.searchRoom;
+			if(!searchRoom)
+			{
+				return input;
+			}
+
+
+			input   =   input.filter(function( obj ) {							
+
+							if(searchRoom)
+							{
+								if (obj.name.match(new RegExp("(" + searchRoom + ")", "i"))) 
+								{
+							       return true;
+							    }
+							}
+
+						});
+		}
+		return input;
+
+	};
+
+}).filter('roomSearchfilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+
+			var searchRoom  = scope.search_capacity;
+			if(!searchRoom)
+			{
+				return input;
+			}
+
+
+			input   =   input.filter(function( obj ) {							
+							return obj.capacity >= searchRoom;
+						});
+		}
+		return input;
+
+	};
+
+}).filter('filterBookingByDate',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+			var fromDate, toDate, fromDateTime, toDateTime;
+
+			fromDate        = scope.search_from_date;
+			toDate          = scope.search_to_date;
+
+			if(!fromDate & !toDate){
+				return input;
+			}
+
+
+			if(fromDate){
+				fromDateTime = 	new Date(fromDate).getTime();
+			}
+
+			if(toDate){
+				toDateTime = 	new Date(toDate).getTime();
+			}	
+
+
+			input   =   input.filter(function( obj ) {
+						var bookingFrom = obj.reserved.from;
+						var bookingTo   = obj.reserved.to;
+
+						if(fromDate && !toDate){							
+							if(fromDateTime <= bookingFrom){
+								return true;
+							}
+						} else if(!fromDate && toDate){
+
+							if(toDateTime >= bookingTo){
+								return true;
+							}
+
+						} else {
+							if(fromDateTime <= bookingFrom && toDateTime >= bookingTo){	
+								return true;
+							}
+						}
+						//console.log(bookingFrom);
+						});
+		}
+		
+		return input;
+
+	};
+
+});
+
+
+"use strict";
+
+app.controller('footerController', ['$scope','$rootScope','$location',
+	function($scope,$rootScope,$location) {
+		//$rootScope.popup = true;
+		$scope.callClosePopup = function(){
+			$rootScope.popup = false;
+			$rootScope.popupData = {text:'',action:''};
+		};	
+
+		$scope.redirectToHome = function(){
+			$rootScope.popup = false;
+			$rootScope.popupData = {text:'',action:''};
+			$location.url($location.path());
+			
+		};
+	}
+]);
+
+
+
+"use strict";
+
+app.controller('frontHeaderController', ['$scope','$rootScope','$mdDialog','$location','anchorSmoothScroll','$timeout','$routeParams',
+	function($scope,$rootScope,$mdDialog,$location,anchorSmoothScroll,$timeout,$routeParams) {	
+
+		$scope.menus = window.__API_PATH.HEADER_MENU;
+
+		if($routeParams.verify && $routeParams.verify == 'true')
+		{
+
+			$rootScope.popupData  = {
+						text:  '<strong>Congratulations! </strong> <br>You have successfully verified the email address.<br> Please sign-in and start managing your hotels.',
+						action: 'redirect'
+			};
+		
+			 $timeout(function() {
+			 	$rootScope.popup = true;
+			 }, 300);
+		}
+
+
+
+		/******************************************
+		* Scroll page to the section
+		******************************************/
+		$scope.activemenu = $scope.menus[0].label;
+		$scope.gotoElement = function (eID){			
+			if(eID.id && eID.id != "")
+			{				
+				$location.path('/');
+				$timeout(function(){
+					anchorSmoothScroll.scrollTo(eID.id);
+				},200);    		
+	
+			}
+			$timeout(function(){
+				$scope.activemenu = eID.label;
+			},200);
+			      
+	    };
+
+	    
+
+		$scope.openLoginForm = function(){
+			$mdDialog.show({
+				templateUrl : "/modules/login/views/login.tpl.html",
+       			controller: "loginController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true							
+			}).then(function(answer) {}, function() {});
+		};
+
+
+		$scope.openRegisterFormpopup = function(){
+			$mdDialog.show({
 				templateUrl : "/modules/register/views/register.tpl.html",
        			controller  :  "registerController",
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
 				clickOutsideToClose:true								
-			}).then(function(answer) {}, function() {});  
+			}).then(function(answer) {}, function() {});
 		};
+
+
+	}
+]);
+
+"use strict";
+
+app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','globalRequest','$timeout','$location','$mdSidenav','socket',
+	function($scope,localStorageService,$rootScope,$mdDialog,globalRequest,$timeout,$location,$mdSidenav,socket) {
+
+		/*******************************************************
+		* Sidebar
+		*******************************************************/	
+	
+	    $rootScope.toggleSidebar      = buildToggler('sidebar');
+	    $rootScope.toggleNotification = buildToggler('notification');
+
+	    /*$scope.isOpenRight = function(){
+	      return $mdSidenav('right').isOpen();
+	    };*/
+
+	   
+
+	    function buildToggler(navID) {
+	    	/*$rootScope.activeSidebar = !$rootScope.activeSidebar;*/
+	      return function() {
+	        $mdSidenav(navID)
+	          .toggle()
+	          .then();
+	      };
+	    }
+
+	   
+
+
+	    /*******************************************************
+		* Get notificatoin
+		*******************************************************/
+		globalRequest.getNotification();
+		
+
+	    socket.on('notification',function(resp){
+	    	
+	    	$rootScope.message.push(resp.result);
+		});
+		
+		/*******************************************************
+		* Callback function to close jot circle on outside click
+		*******************************************************/
+
+		$scope.circleToggle = function(){			
+				$scope.logocircle = false;
+				$timeout(function() {				
+				   $rootScope.$apply();
+				});								
+		};
+
+		/*
+		* Jot form tab list
+		*/
+
+		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
+
+
+	    if($rootScope.activeHotelData)
+	    {
+
+			/************************************************
+			* Get list of Jot types selected by current user
+			*************************************************/
+
+			$scope.boards =  $rootScope.activeHotelData.jot_types;
+		}
+
+		/*
+		*
+		* Get hotels list
+		*
+		*/
+		
+		globalRequest.getHotels();		
+
+
+		/*
+		* Function
+		*
+		* Set hotel id in local storage and redirect to jot related to selected hotel
+		*
+		*/
+		
+
+		$scope.changeJotView = function(hotel){				
+			globalRequest.getJotCount();
+			localStorageService.set('hotel', hotel);
+			$rootScope.activeHotelData = localStorageService.get('hotel');
+			window.location.reload();
+			
+		};
+
+
+
+
+		/**************************************
+		* Open jot popup
+		**************************************/
+
+			$scope.quickTaskPopup = function(){
+				$mdDialog.show({
+					controller: 'jotPopupCtrl',
+					templateUrl: '/modules/jot/views/jot-form.html',
+					parent: angular.element(document.body),
+					fullscreen: $scope.customFullscreen,
+					clickOutsideToClose:true,
+					locals: {ActivateTab:{label:"Quick Jot",id:'quick',directory:'jot'}}
+				}).then(function(answer) {}, function() {});
+
+			};
+
+		
+
+
+		/**************************************
+		* Open popup direct by jot type 
+		**************************************/
+
+		$rootScope.openFormByType = function(formType){
+			$scope.circleToggle();
+			$mdDialog.show({
+				controller: 'jotPopupCtrl',
+				templateUrl: '/modules/jot/views/jot-form.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,				
+				locals: {ActivateTab:formType}
+			}).then(function(answer) {}, function() {
+				
+			});
+		};
+
+
+
+		$scope.openLoginForm = function(detail){
+			$mdDialog.show({
+				templateUrl : "/modules/login/views/login.tpl.html",
+       			controller: "loginController",
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{empDetail:{detail:detail,prevScope:$scope}}				
+			}).then(function(answer) {}, function() {});
+		};
+
+
 	}
 ]);
 "use strict";
 
-app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location','$mdDialog','$timeout',
-	function($scope,loginFactory,$rootScope,$routeParams,$location,$mdDialog,$timeout) {	
+app.controller('notificationController', ['$scope','$rootScope','globalRequest',
+	function($scope,$rootScope,globalRequest) {
 
-		var token = $routeParams.token;
-		if($routeParams.expired && $routeParams.expired == 'true')
-		{
-			$mdDialog.cancel();
-			$location.path('/');
-			$rootScope.popupData  = {
-						text:  'Link has been expired.',
-						action: 'redirect'
-			};
-			 $timeout(function() {
-			 	$rootScope.popup = true;
-			 }, 500);
-		}
-		
-		
+		/*****************************************
+		* Delete notification
+		*****************************************/	
 
-		/*********************************************
-		* Forget password
-		***********************************************/
-		$scope.resetResult = {message:"",class:""};
-		
-		$scope.resetPass = function(){
-			if($scope.forget_password == $scope.forget_confirm_password)
-			{
-				var data = {password:$scope.forget_password,token:token};
-				var request={
-						url:window.__API_PATH.PASSWORD_RESET,
-						method:"POST",
-						data:data
-				};
-
-				loginFactory.login(request).then(function(response){
-						$scope.resetResult = response;
-						
-						if(response.status == 1)
-						{
-							
-							$timeout(function() {
-							 	$location.path('/');
-							 }, 200);
-							$rootScope.popupData = {text:response.message,action:'ok'};	
-							 $timeout(function() {
-							 	$rootScope.popup = true;
-							 }, 300);	
-						 }
-				});
-			} else {
-				$scope.resetResult.message = 'Password is not match with confirm password.';
-				$scope.resetResult.class = 'Autherror';
-				$scope.resetResult.status = 2;
-			}			
+		$scope.removeNotification = function(aid,index){
 			
+			var request={
+				url:window.__API_PATH.UPDATE_ALERT,
+				method:"PUT",
+				data:{_id:aid, user_id:$rootScope.currentUser._id}
+			};
+			
+			globalRequest.jotCRUD(request).then(function(response){
+				$rootScope.message.splice(index, 1);
+			});
+
 		};
 
 	}
 ]);
+
+
+
+"use strict";
+
+app.controller('sidebarCntroller',['$scope','$location','$mdSidenav',function($scope,$location,$mdSidenav){
+
+	/*$scope.closeSidebar = function(){			
+			$rootScope.leftopen = false;
+			$timeout(function() {				
+			   $rootScope.$apply();
+			});			
+	};
+
+
+	$rootScope.$on('handleSidebar', function() {
+		$scope.closeSidebar();   	
+	});*/
+
+	$scope.getClass = function (path) {
+	  return ($location.path() === path) ? 'active' : '';
+	};
+	
+
+	$scope.closeSidebar = function(){
+		$mdSidenav('sidebar').close();
+	};
+}]);
+"use strict";
+
+app.directive('circleToggle',['$document',function($document){
+
+	return{
+		link: function(scope,element){
+
+			$document.on('click', function(event){
+				
+			});
+		}
+	
+	};
+}]);
+"use strict";
+
+app.directive('header',[ function(){
+	return{
+		templateUrl:'/modules/partials/header.html',
+		link: function(scope,ele){}
+	
+	};
+}]);
+
+
+
+
+"use strict";
+
+app.directive('outsideClickJotButton', function ($window) {    
+    return {                 
+        scope: {
+            outsideCallback: '&outsideClickJotButton',
+        },      
+        link: function(scope, element, attrs) {
+
+         var expressionHandler = scope.outsideCallback();               
+
+          angular.element($window).on('click', function (event) {    
+              var clickedContainerID = angular.element(event.target).attr('clickedContainer');
+              if(clickedContainerID != 'jotButton')
+              {
+                  if (element[0].contains(event.target))
+                  {} else {                 
+                    expressionHandler();                    
+                  }
+              }          
+            });
+        }
+    };
+});
+
+"use strict";
+
+app.controller('invitationController',['$scope','$rootScope','empDetail','globalRequest','$timeout','$mdDialog','$location','loginFactory','localStorageService','AuthSrv',
+	function($scope,$rootScope,empDetail,globalRequest,$timeout,$mdDialog,$location,loginFactory,localStorageService,AuthSrv){
+
+		function getUrlParameter(param, dummyPath) {
+		        var sPageURL = dummyPath || window.location.search.substring(1),
+		            sURLVariables = sPageURL.split(/[&||?]/),
+		            res;
+
+		        for (var i = 0; i < sURLVariables.length; i += 1) {
+		            var paramName = sURLVariables[i],
+		                sParameterName = (paramName || '').split('=');
+
+		            if (sParameterName[0] === param) {
+		                res = sParameterName[1];
+		            }
+		        }
+
+		        return res;
+		}
+
+
+		$scope.invite_first_name 	  = getUrlParameter('first_name',empDetail);
+		$scope.invite_last_name  	  = getUrlParameter('last_name',empDetail);
+		$scope.invite_contact_number  = getUrlParameter('contact_number',empDetail);
+		$scope.invite_email           = getUrlParameter('email',empDetail);
+		$scope.token                  = getUrlParameter('token',empDetail);
+		$scope.profileImage  		  = [];
+		
+
+
+		/************************************************
+		* Register user for invited hotel
+		************************************************/	
+
+		$scope.inviteRegisterUser = function(){
+
+			var request={
+				url:window.__API_PATH.MEMBER_SIGNUP,
+				method:"POST",
+				data:{
+					first_name 			: $scope.invite_first_name,
+					last_name 		    : $scope.invite_last_name,
+					contact_number 		: getUrlParameter('contact_number',empDetail),
+					email 			    : getUrlParameter('email',empDetail),
+					token				: $scope.token,
+					profile_image  		: '',
+					password            : $scope.invite_password
+				}
+			};
+
+			
+			if($scope.profileImage.length > 0)
+			{	
+
+			/********************************************
+			*  Upload profile image if exists
+			********************************************/		
+
+
+				globalRequest.uploadFiles(null,'profile_image',$scope.profileImage).then(function(profileResponse){
+					$scope.registerImageResult =  profileResponse;
+
+
+					/********************************************
+					*  Register user with profile image
+					********************************************/
+
+					request.data.profile_image = profileResponse.result[0].filename;
+					
+					globalRequest.jotCRUD(request).then(function(response){					
+						if(response.status == 1)
+						{
+							$mdDialog.cancel();					
+							$location.path('/');
+							$rootScope.popupData  = {
+										text:  'Congratulations! You have successfully registered.',
+										action: 'redirect'
+							};
+							 $timeout(function() {
+							 	$rootScope.popup = true;
+							 }, 500);
+						} else {
+							$mdDialog.cancel();					
+							$location.path('/');
+						}
+					});
+
+				});
+
+
+			} else {
+
+				/********************************************
+				*  Register user without profile image
+				********************************************/
+				
+				globalRequest.jotCRUD(request).then(function(response){					
+					if(response.status == 1)
+					{
+						$mdDialog.cancel();					
+						$location.path('/');
+						$rootScope.popupData  = {
+									text:  'Congratulations! You have successfully registered.',
+									action: 'redirect'
+						};
+						 $timeout(function() {
+						 	$rootScope.popup = true;
+						 }, 500);
+					} else {
+						$mdDialog.cancel();					
+						$location.path('/');
+					}
+				});
+
+			}
+			
+			
+		};
+
+
+		/************************************************
+		* Add use in invited hotel if already registered
+		************************************************/
+
+
+		$scope.inviteSignINUser  = function(){
+			
+			var loginrequest={
+					url:window.__API_PATH.LOGIN,
+					method:"POST",
+					data:{
+							email    : $scope.invite_login,
+							password : $scope.invite_signinpassword
+					}
+				};
+
+				loginFactory.login(loginrequest).then(function(response){
+				$scope.loginresult = response;
+
+				if(response.status == 1)
+				{
+
+					localStorageService.set('token', response.result.token);
+					localStorageService.set('user', response.result.user);
+					AuthSrv.isLogged = true;
+					inviteRequest();
+				}
+				
+			});				
+
+		};
+
+		/********************************************
+		*  Keep uploaded file in temp scope
+		********************************************/
+
+		$scope.uploadprofileImage = function(files, errFiles) {
+			$scope.profileImage = files;
+		};
+
+
+		/****************************************
+		* Update invited user information 
+		****************************************/
+
+		function inviteRequest(){
+			var signInRequest={
+				url:window.__API_PATH.UPDATE_EMPLOYEE,
+				method:"POST",
+				data:{
+					employee_id 			: getUrlParameter('employee_id',empDetail),	
+					hotel_id 				: getUrlParameter('hotel_id',empDetail),
+					contact_number          : $scope.invite_login
+				}
+			};
+
+			globalRequest.jotCRUD(signInRequest).then(function(response){	
+				
+				if(response.status == 1)
+				{
+
+					var user = localStorageService.get('user', user);
+
+					user.hotel_id.push(getUrlParameter('hotel_id',empDetail));
+					localStorageService.set('user', user);
+
+					$mdDialog.cancel();
+					$location.path('/dashboard');
+					$rootScope.popupData  = {
+								text:  'Congratulations! You have successfully registered.',
+								action: 'redirect'
+					};
+					 $timeout(function() {
+					 	$rootScope.popup = true;
+					 }, 500);
+				}							
+				
+			});
+		}
+
+
+
+
+
+		 
+	 
+}]);
+"use Strict";
+
+app.controller('faqController',['$scope',
+	function($scope){
+
+		$scope.panesA = [
+        {
+          id: 'pane-1a',
+          header: 'Do I get to keep the bag?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.',
+          isExpanded: true
+        },
+        {
+          id: 'pane-2a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'
+        },
+        {
+          id: 'pane-3a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+         {
+          id: 'pane-4a',
+         header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+         {
+          id: 'pane-5a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+         {
+          id: 'pane-6a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+         {
+          id: 'pane-7a',
+          header: 'How can I tell the weight of my laundry?',
+          content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sem lorem, venenatis eget mauris vitae, faucibus tincidunt elit. Phasellus nec quam eu quam pharetra suscipit faucibus at magna. Curabitur maximus nulla vitae tellus semper molestie.'          
+        },
+      ];
+          
+
+}]);
 'use strict';
 
 app.factory('loginFactory', ['$http', function ($http) {
@@ -8357,6 +9884,176 @@ app.factory('loginFactory', ['$http', function ($http) {
 		},		
 	};
 }]);
+"use strict";
+
+app.controller('reportDetailController', ['$scope','$rootScope','globalRequest','$mdDialog','reportDetail',
+	function($scope,$rootScope,globalRequest,$mdDialog,reportDetail) {
+		
+		console.log(reportDetail);
+		/***********************************************
+		* Pass edited employee value in current scope
+		***********************************************/
+		angular.forEach(reportDetail,function (value,key) {
+		    $scope[key] = value;
+		});	
+	}
+]);
+
+
+
+
+"use strict";
+
+app.controller('reportsController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
+	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+		
+		$scope.position_list = window.__API_PATH.POSITION;
+
+
+		/************************************
+		* Get reports list
+		*************************************/			
+		
+		globalRequest.getReports();
+
+
+
+
+		/************************************
+		* Change order status
+		*************************************/
+
+		$scope.cancelOrder = function(id,$index){
+
+			var request={
+				url:window.__API_PATH.CANCEL_ORDER,
+				method:"PUT",
+				data:{_id:id}
+			};
+
+			globalRequest.jotCRUD(request).then(function(response){				
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+				globalRequest.getReports();
+			});
+		};
+
+
+		/************************************
+		* Change payment status
+		*************************************/
+
+		$scope.paymentStatus = function(report,status){
+
+			var request={
+				url:window.__API_PATH.PAYMENT_STATUS,
+				method:"PUT",
+				data:{_id:report._id,payment_status:status}
+			};
+
+			globalRequest.jotCRUD(request).then(function(response){				
+				var popup = {"message":response.message,"class":response.class};
+				toastService.alert(popup);
+				globalRequest.getReports();
+			});
+		};
+
+
+		/*****************************************
+		* Open reports detail
+		*****************************************/	
+
+		$scope.openReportDetail = function(detail){
+			$mdDialog.show({
+				controller: 'reportDetailController',
+				templateUrl: '/modules/reports/views/reports_detail.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{reportDetail:detail}				
+			}).then(function(answer) {}, function() {});
+
+		};
+	
+		
+	}
+]);
+
+
+
+
+
+"use strict";
+
+app.filter('searchCustomerFilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+
+			var searchCustomer        = scope.searchCustomer;
+			if(!searchCustomer){
+				return input;
+			}
+
+			if(searchCustomer)
+			{
+				var removeSpaceFromString = searchCustomer.replace(/\s/g,'');			
+			}
+			input   =   input.filter(function( obj ) {
+							
+								if(obj.user_info.match(new RegExp("(" + removeSpaceFromString + ")", "i")))
+								{
+									return true;
+								}
+						});
+		}
+		
+		return input;
+
+	};
+
+});
+
+
+
+
+
+app.filter('searchDateFilter',function(){
+	return function(input,scope){
+/*.getTime()*/
+		if(input)
+		{
+
+			var search_date        = scope.search_date;
+			if(!search_date){
+				return input;
+			}
+			var date = new Date(search_date);
+			var selectedDate =   date.getFullYear()+','+(parseInt(date.getMonth())+1) +','+ date.getDate();
+
+			selectedDate = 	new Date(selectedDate).getTime();			
+			input   =   input.filter(function( obj ) {
+
+						var inputDate = new Date(obj.date);
+						inputDate     =   inputDate.getFullYear()+','+(parseInt(inputDate.getMonth())+1) +','+ inputDate.getDate();
+
+						inputDate = 	new Date(inputDate).getTime();
+
+							if(inputDate == selectedDate)								
+							{
+								return true;
+							}
+						});
+		}
+		
+		return input;
+
+	};
+
+});
+
+
 "use strict";
 
 app.controller('editLostFoundController', ['$scope','$rootScope','globalRequest','lstFndDetail','$mdDialog','toastService',
@@ -8858,310 +10555,179 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 }]);
 "use strict";
 
-app.controller('footerController', ['$scope','$rootScope','$location',
-	function($scope,$rootScope,$location) {
-		//$rootScope.popup = true;
-		$scope.callClosePopup = function(){
-			$rootScope.popup = false;
-			$rootScope.popupData = {text:'',action:''};
-		};	
-
-		$scope.redirectToHome = function(){
-			$rootScope.popup = false;
-			$rootScope.popupData = {text:'',action:''};
-			$location.url($location.path());
-			
-		};
-	}
-]);
+app.controller('loginController', ['$scope','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','$cookies','socket',
+	function($scope,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,$cookies,socket) {	
 
 
-
-"use strict";
-
-app.controller('frontHeaderController', ['$scope','$rootScope','$mdDialog','$location','anchorSmoothScroll','$timeout','$routeParams',
-	function($scope,$rootScope,$mdDialog,$location,anchorSmoothScroll,$timeout,$routeParams) {	
-
-		$scope.menus = window.__API_PATH.HEADER_MENU;
-
-		if($routeParams.verify && $routeParams.verify == 'true')
-		{
-
-			$rootScope.popupData  = {
-						text:  '<strong>Congratulations! </strong> <br>You have successfully verified the email address.<br> Please sign-in and start managing your hotels.',
-						action: 'redirect'
-			};
+		/*********************************************
+		* Submit login form
+		***********************************************/
 		
-			 $timeout(function() {
-			 	$rootScope.popup = true;
-			 }, 300);
-		}
+		$scope.loginUser = function (obj) {
+		
+	        var dataObj = {
+					email : $scope.email,
+					password : $scope.password
+			};	
+
+			var request={
+					url:window.__API_PATH.LOGIN,
+					method:"POST",
+					data:dataObj
+				};
+				
+			loginFactory.login(request).then(function(response){
+				$scope.loginresult = response;
+
+				if(response.status == 1)
+				{
+					
+					// socket.emit('web.login',response.result.user);
+					// socket.on('web.login',function(resp){						
+					// 	console.log(resp);
+					// });
+					
 
 
 
-		/******************************************
-		* Scroll page to the section
-		******************************************/
-		$scope.activemenu = $scope.menus[0].label;
-		$scope.gotoElement = function (eID){			
-			if(eID.id && eID.id != "")
-			{				
-				$location.path('/');
-				$timeout(function(){
-					anchorSmoothScroll.scrollTo(eID.id);
-				},200);    		
-	
-			}
-			$timeout(function(){
-				$scope.activemenu = eID.label;
-			},200);
-			      
-	    };
 
-	    
+					var now = new Date();
+					if($scope.remember && $scope.remember == 1)
+					{		
 
-		$scope.openLoginForm = function(){
-			$mdDialog.show({
-				templateUrl : "/modules/login/views/login.tpl.html",
-       			controller: "loginController",
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				clickOutsideToClose:true							
-			}).then(function(answer) {}, function() {});
+				       now.setFullYear(now.getFullYear() + 1);
+				       $cookies.put("hoteljot", window.btoa('rememberloggedin'), {
+					            expires: now
+					    });	
+
+					} else {											
+					   now.setDate(now.getDate() + 1);
+					   $cookies.put("hoteljot", window.btoa('sessionloggedin'), []);	
+					}	
+		
+					localStorageService.set('token', response.result.token);
+					localStorageService.set('user', response.result.user);
+					AuthSrv.isLogged = true;
+				    $mdDialog.cancel();
+
+					$location.path('/dashboard');
+
+
+
+				}									
+				
+				
+			});				
+	               
 		};
 
+		/*********************************************
+		* Forget password
+		***********************************************/
 
-		$scope.openRegisterFormpopup = function(){
-			$mdDialog.show({
+		$scope.forgetPassword = function(){
+
+			var data = {email:$scope.forget_email};
+			var request={
+					url:window.__API_PATH.FORGET_PASSWORD,
+					method:"POST",
+					data:data
+				};
+
+			loginFactory.login(request).then(function(response){
+					$scope.forgetresult = response;
+					if(response.status == 1)
+						{
+							
+						$rootScope.popupData = {text:response.message,action:'ok'};
+						$timeout(function() {
+						 	$mdDialog.cancel();
+						 }, 200);
+						 $timeout(function() {
+						 	$rootScope.popup = true;
+						 }, 300);	
+					 }
+			});
+
+		};
+
+		/*********************************************
+		* Redirect to signup form
+		***********************************************/
+
+		$scope.openSignupForm = function (obj) {
+	          $mdDialog.show({
 				templateUrl : "/modules/register/views/register.tpl.html",
        			controller  :  "registerController",
 				parent: angular.element(document.body),
 				fullscreen: $scope.customFullscreen,
 				clickOutsideToClose:true								
-			}).then(function(answer) {}, function() {});
+			}).then(function(answer) {}, function() {});  
 		};
-
-
 	}
 ]);
-
 "use strict";
 
-app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','$window','globalRequest','$timeout','$location',
-	function($scope,localStorageService,$rootScope,$mdDialog,$window,globalRequest,$timeout,$location) {	
+app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$routeParams','$location','$mdDialog','$timeout',
+	function($scope,loginFactory,$rootScope,$routeParams,$location,$mdDialog,$timeout) {	
 
-	
-		
-		/*******************************************************
-		* Callback function to close jot circle on outside click
-		*******************************************************/
+		var token = $routeParams.token;
 
-		$scope.circleToggle = function(){			
-				$scope.logocircle = false;
-				$timeout(function() {				
-				   $rootScope.$apply();
-				});								
-		};
-
-		/*
-		* Jot form tab list
-		*/
-
-		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
-
-
-			
-
-
-	    if($rootScope.activeHotelData)
-	    {
-
-			/************************************************
-			* Get list of Jot types selected by current user
-			*************************************************/
-
-			$scope.boards =  $rootScope.activeHotelData.jot_types;
-		}
-
-		/*
-		*
-		* Get hotels list
-		*
-		*/
-		
-		globalRequest.getHotels();		
-
-
-		/*
-		* Function
-		*
-		* Set hotel id in local storage and redirect to jot related to selected hotel
-		*
-		*/
-		
-
-		$scope.changeJotView = function(hotel){				
-			globalRequest.getJotCount();
-			localStorageService.set('hotel', hotel);
-			$rootScope.activeHotelData = localStorageService.get('hotel');
-			$window.location.reload();
-			
-		};
-
-
-
-
-		/**************************************
-		* Open jot popup
-		**************************************/
-
-			$scope.quickTaskPopup = function(){
-				$mdDialog.show({
-					controller: 'jotPopupCtrl',
-					templateUrl: '/modules/jot/views/jot-form.html',
-					parent: angular.element(document.body),
-					fullscreen: $scope.customFullscreen,
-					clickOutsideToClose:true,
-					locals: {ActivateTab:{label:"Quick Jot",id:'quick',directory:'jot'}}
-				}).then(function(answer) {}, function() {});
-
+		if($routeParams.expired && $routeParams.expired == 'true')
+		{
+			$mdDialog.cancel();
+			//$location.path('/');
+			$rootScope.popupData  = {
+						text:  'Link has been expired.',
+						action: 'redirect'
 			};
-
+			 $timeout(function() {
+			 	$rootScope.popup = true;
+			 }, 500);
+		}
+		
 		
 
+		/*********************************************
+		* Forget password
+		***********************************************/
+		$scope.resetResult = {message:"",class:""};
+		
+		$scope.resetPass = function(){
+			if($scope.forget_password == $scope.forget_confirm_password)
+			{
+				var data = {password:$scope.forget_password,token:token};
+				var request={
+						url:window.__API_PATH.PASSWORD_RESET,
+						method:"POST",
+						data:data
+				};
 
-		/**************************************
-		* Open popup direct by jot type 
-		**************************************/
-
-		$rootScope.openFormByType = function(formType){
-			$scope.circleToggle();
-			$mdDialog.show({
-				controller: 'jotPopupCtrl',
-				templateUrl: '/modules/jot/views/jot-form.html',
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,				
-				locals: {ActivateTab:formType}
-			}).then(function(answer) {}, function() {
-				
-			});
+				loginFactory.login(request).then(function(response){
+						$scope.resetResult = response;
+						
+						if(response.status == 1)
+						{
+							
+							$timeout(function() {
+							 	$location.path('/');
+							 }, 200);
+							$rootScope.popupData = {text:response.message,action:'ok'};	
+							 $timeout(function() {
+							 	$rootScope.popup = true;
+							 }, 300);	
+						 }
+				});
+			} else {
+				$scope.resetResult.message = 'Password is not match with confirm password.';
+				$scope.resetResult.class = 'Autherror';
+				$scope.resetResult.status = 2;
+			}			
+			
 		};
-
-
-
-		$scope.openLoginForm = function(detail){
-			$mdDialog.show({
-				templateUrl : "/modules/login/views/login.tpl.html",
-       			controller: "loginController",
-				parent: angular.element(document.body),
-				fullscreen: $scope.customFullscreen,
-				clickOutsideToClose:true,	
-				locals:{empDetail:{detail:detail,prevScope:$scope}}				
-			}).then(function(answer) {}, function() {});
-		};
-
 
 	}
 ]);
-
-"use strict";
-
-app.controller('sidebarCntroller',['$scope','$rootScope','$location','$timeout',function($scope,$rootScope,$location,$timeout){
-
-	$scope.closeSidebar = function(){			
-			$rootScope.leftopen = false;
-			$timeout(function() {				
-			   $rootScope.$apply();
-			});			
-	};
-
-
-	$rootScope.$on('handleSidebar', function() {
-		$scope.closeSidebar();   	
-	});
-
-	$scope.getClass = function (path) {
-	  return ($location.path() === path) ? 'active' : '';
-	};
-}]);
-"use strict";
-
-app.directive('circleToggle',['$document',function($document){
-
-	return{
-		link: function(scope,element){
-
-			$document.on('click', function(event){
-				
-			});
-		}
-	
-	};
-}]);
-"use strict";
-
-app.directive('header',[ function(){
-	return{
-		templateUrl:'/modules/partials/header.html',
-		link: function(scope,ele){}
-	
-	};
-}]);
-
-
-
-
-"use strict";
-
-app.directive('outsideClickJotButton', function ($window) {    
-    return {                 
-        scope: {
-            outsideCallback: '&outsideClickJotButton',
-        },      
-        link: function(scope, element, attrs) {
-
-         var expressionHandler = scope.outsideCallback();               
-
-          angular.element($window).on('click', function (event) {    
-              var clickedContainerID = angular.element(event.target).attr('clickedContainer');
-              if(clickedContainerID != 'jotButton')
-              {
-                  if (element[0].contains(event.target))
-                  {} else {                 
-                    expressionHandler();                    
-                  }
-              }          
-            });
-        }
-    };
-});
-
-"use strict";
-
-app.directive('outsideClickSidebar', function ($window) {    
-    return {                 
-        scope: {
-            outsideCallback: '&outsideClickSidebar',
-        },      
-        link: function(scope, element, attrs) {
-
-         var expressionHandler = scope.outsideCallback();               
-
-          angular.element($window).on('click', function (event) {
-              var clickedContainerID = angular.element(event.target).attr('clickedContainer');
-              if(clickedContainerID != 'sidebar')
-              {
-                  if (element[0].contains(event.target))
-                  {} else {                 
-                  expressionHandler();
-                  }
-              }            
-                         
-          });
-        }
-    };
-});
-
 "use strict";
 
 app.controller('editContactController', ['$scope','globalRequest','contactDetail','$mdDialog','toastService',
@@ -9537,6 +11103,22 @@ app.controller('profileController',['$scope','$rootScope','globalRequest','local
 				$scope.old_password = $scope.new_password = $scope.confirm_password = '';
 		};
 }]);
+'use strict';
+
+app.factory('registerFactory', ['$http', function ($http) {
+	return{		
+	
+		register: function(obj){
+			return $http(obj).then(function(response){
+				return response.data;
+			}, function(response){
+				return {
+					errors: response.data.errors
+				};
+			});
+		},		
+	};
+}]);
 "use strict";
 
 app.controller('registerController', ['$scope','$rootScope','registerFactory','$mdDialog','$timeout','globalRequest',
@@ -9645,22 +11227,6 @@ app.controller('registerController', ['$scope','$rootScope','registerFactory','$
 ]);
 
 
-'use strict';
-
-app.factory('registerFactory', ['$http', function ($http) {
-	return{		
-	
-		register: function(obj){
-			return $http(obj).then(function(response){
-				return response.data;
-			}, function(response){
-				return {
-					errors: response.data.errors
-				};
-			});
-		},		
-	};
-}]);
 "use strict";
 
 app.controller('editCategoryController', ['$scope','globalRequest','$timeout','catDetail','$mdDialog','toastService',
@@ -10316,16 +11882,20 @@ app.controller('vendingMachineCtlr', ['$scope','$rootScope','globalRequest',
 	        	};
         	}
 
+        	paymentData.totalprice = $scope.getTotal();
+        	paymentData.currency   = hotel.currency;
+
 
         	var request = {
 				            url:window.__API_PATH.PURCHASE,
 				            method:"POST",
 				            data:{
-				            	hotel_id  : hotel._id,
-				            	items     : $scope.cart,
-				            	payment   : paymentData,
-				            	user_info : cartTags,				      
-	        					date      : new Date().getTime()
+				            	hotel_id  	: hotel._id,
+				            	user_id	    : $rootScope.currentUser._id,			            	
+				            	items     	: $scope.cart,
+				            	payment   	: paymentData,
+				            	user_info 	: cartTags,				      
+	        					date      	: new Date().getTime()
 				            }
 				          };
 			 globalRequest.jotCRUD(request).then(function(response){
@@ -10836,6 +12406,41 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 			});
 		},
 
+		getReports:function(){
+			$rootScope.reportsList = '';
+			var reportsRequest = {
+					url:window.__API_PATH.GET_REPORTS,
+					method:"GET",
+					params: { 
+								"hotel_id" : $rootScope.activeHotelData._id,
+								"user_id"  : $rootScope.currentUser._id,						
+							}
+				};			
+			return $http(reportsRequest).then(function(response){	
+				$rootScope.reportsList =  response.data.result;
+
+			}, function(response){
+				$rootScope.reportsList = response.data.errors;				
+			});
+		},
+
+		getBookingReports:function(){
+			$rootScope.bookingReportsList = '';
+			var bookReportsRequest = {
+					url:window.__API_PATH.GET_BOOK_REPORTS,
+					method:"GET",
+					params: { 
+								"hotel_id" : $rootScope.activeHotelData._id,					
+							}
+				};			
+			return $http(bookReportsRequest).then(function(response){	
+				$rootScope.bookingReportsList =  response.data.result;
+
+			}, function(response){
+				$rootScope.bookingReportsList = response.data.errors;				
+			});
+		},
+
 		getVendingCategory:function(){
 				var hotel   = localStorageService.get('hotel');
 				var request = {
@@ -10927,6 +12532,26 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 		},
 
 
+		getRoomList:function(range){
+				var hotel   = localStorageService.get('hotel');
+
+				var request = {
+			            url:window.__API_PATH.GET_MEETINGROOMS,
+			            method:"GET",
+			            params:{
+			            	hotel_id      	:  hotel._id,
+			            	range           :  range
+			            }
+			          };
+
+			return $http(request).then(function(response){
+				$rootScope.meetingRoomList = response.data.result;			
+
+			}, function(response){
+				$rootScope.meetingRoomList = response.data.errors;				
+			});
+		},
+
 		getJotList:function(JotType){
 				var hotel   	 = localStorageService.get('hotel');
 				var userDetail   = localStorageService.get('user');
@@ -10950,7 +12575,37 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 		},
 
 
-		
+		getAlertList:function(){
+			var userDetail   = localStorageService.get('user');
+			var getAlertRequest = {
+			            url:window.__API_PATH.GET_ALERTS,
+			            method:"GET"			            			            
+			          };
+			return $http(getAlertRequest).then(function(response){				
+				$rootScope.alertList = response.data.result;
+
+
+			}, function(response){
+				$rootScope.alertList = response.data.errors;				
+			});
+		},
+		getNotification:function(){
+			var userDetail   = localStorageService.get('user');
+			var getAlertRequest = {
+			            url:window.__API_PATH.GET_NOTIFICATION,
+			            method:"GET",
+			            params:{
+			            	user_id      	:  userDetail._id
+			            }			            
+			          };
+			return $http(getAlertRequest).then(function(response){				
+				$rootScope.message	 = response.data.result;				
+
+
+			}, function(response){
+				$rootScope.alertList = response.data.errors;				
+			});
+		},
 
 		
 	};
@@ -11025,6 +12680,35 @@ app.directive('slideable', function () {
 
 
 
+"use strict";
+
+app.factory('socket', function($rootScope) {
+
+    //var socket = io.connect('localhost:5040');
+
+    var socket =io.connect('http://localhost:8020');
+    return {
+        on: function(eventName, callback) {
+            socket.on(eventName, function() {
+                var args = arguments;
+                //console.log(args);
+                $rootScope.$apply(function() {
+                    callback.apply(socket, args);
+                });
+            });
+        },
+        emit: function(eventName, data, callback) {            
+            socket.emit(eventName, data, function() {
+                var args = arguments;
+                $rootScope.$apply(function() {
+                    if (callback) {
+                        callback.apply(socket, args);
+                    }
+                });
+            });
+        }
+    };
+});
 "use strict";
 app.filter('timeConvertorfilter', function() {
 	return function(input, scope) {

@@ -6,6 +6,7 @@ require('dotenv').config({silent: true});
 const 	express 	= require('express'),
 		app 		= express(),
 		path 		= require('path'),
+		server 		= require('http').createServer(app),	   
 		bodyParser 	= require('body-parser'),
 		routes 		= require(path.resolve('./config/routes')),
 		mongoose 	= require('mongoose'),
@@ -13,7 +14,10 @@ const 	express 	= require('express'),
 		
 //app.set('view engine', 'ejs');
 mongoose.connect(config.db.URL);
-app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
 app.use(bodyParser.json());
 
 app.use(express.static(path.resolve('./public')));
@@ -24,11 +28,12 @@ app.use(express.static(path.resolve('./admin')));
 app.use('/api', routes.router);
 //app.use('/admin', routes.admin);
 
+
 app.get(/^((?!\/(api|admin)).)*$/, function (req, res) {
 	res.sendFile(path.resolve('public/index.html'));
 });
 
-// if( process.env.NODE_ENV === 'production' ){
-app.listen(config.server.PORT,function(){
-    console.log('Listening on server port:'+config.server.PORT);
+/*Listen on Server Port*/
+server.listen(config.server.PORT || 3000, function(){
+	console.log('listening on', server.address().port);
 });

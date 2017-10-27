@@ -11,6 +11,7 @@
     font-size: 26px;
 ">My Hotels</div>
 	<div class="hotel_list_top">
+
 		
 		<div class="circle_container" ng-repeat="hotel in hotels" 
 			             ng-click="redirectToJot(hotel)"   title="{{(hotel.step == 'completed')?'Manage your hotel':'Complete hotel setup process'}}">
@@ -26,7 +27,7 @@
 
 
 					<div class="hotel_action_btn">
-						<ng-md-icon class="cursor" icon="mode_edit" style="fill: #4d4d4d"   title="Edit" ng-click="openHotelEditForm($event,hotel)" ng-if="hotel.step == 'completed'"></ng-md-icon>
+						<ng-md-icon class="cursor" icon="mode_edit" style="fill: #4d4d4d"   title="Edit" size="22" ng-click="openHotelEditForm($event,hotel)" ng-if="hotel.step == 'completed'"></ng-md-icon>
 
 						<!-- <ng-md-icon class="cursor closr_icon tableredtag" confirmed-click="deleteHotel($event,hotel._id)" ng-confirm-delete-hotel="Are you sure to delete this the Hotel?"  icon="close"  class="cursor"  size="22"  title="Delete"></ng-md-icon> -->  
 

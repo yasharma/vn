@@ -1,0 +1,56 @@
+<md-dialog class="newhotel_dialog custom_size">
+<md-toolbar>
+      <div class="md-toolbar-tools custom_padding">
+        <h2>
+        <div class="show_profile_image">
+		<img src="{{(profile_image)?'/images/profile_image/'+profile_image:'/assets/images/default_profile.png'}}" class="cn_profile_image" style="width: 66px;"> 
+			<label class="full_name capitalize">{{first_name}} {{last_name}}</label>
+		</div></h2>
+
+         <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+
+<div class="user_info">
+
+<ul>
+
+<li ng-if="email">
+	<div class="heading-left">Email Address:</div>
+	<div class="desc-right"> <a href="mailto:{{email}}">{{email}}</a></div>
+	<div class="clearfix"></div>
+</li>
+<li ng-if="contact_number">
+	<div class="heading-left" >Contact Number:</div>
+	<div class="desc-right"><a href="tel:{{contact_number}}">{{contact_number}}</a></div>
+	<div class="clearfix"></div>
+</li>
+<li ng-if="departments.length">
+	<div class="heading-left" >Department:</div>
+	<div class="desc-right capitalize">
+	
+	<label ng-repeat="dept in departments">
+
+		{{($root.departmentList | filter : {abbreviation : dept } : true)[0].department_name}}{{($index < departments.length-1)?",&nbsp;":''}}
+	</label>
+	</div>
+	<div class="clearfix"></div>
+</li>
+
+<li ng-if="position != 'false'">
+	<div class="heading-left" >Position:</div>
+	<div class="desc-right capitalize">{{position.join(", ")}}</div>
+	<div class="clearfix"></div>
+</li>
+</li><li>
+	<div class="heading-left">Status:</div>
+	<div class="desc-right capitalize">{{status}}</div>
+	<div class="clearfix"></div>
+</li>
+</ul>
+</div>
+
+</md-dialog>

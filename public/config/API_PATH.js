@@ -55,10 +55,16 @@ __API_PATH.ADD_ITEM                     = '/api/add_item';
 __API_PATH.DELETE_ITEM                  = '/api/delete_item';
 __API_PATH.PURCHASE                     = '/api/add_to_cart';
 
+__API_PATH.CANCEL_ORDER                 = '/api/cancle_sale';
+__API_PATH.PAYMENT_STATUS               = '/api/change_paymentstatus';
+
 __API_PATH.ADD_INVENTORY_CATEGORY       = '/api/add_inventory_category';
 __API_PATH.UPDATE_INVENTORY_CATEGORY    = '/api/update_inventory_category';
 __API_PATH.DELETE_INVENTORY_CATEGORY    = '/api/delete_inventory_category';
 __API_PATH.GET_INVENTORY_CATEGORY       = '/api/get_inventory_category';
+__API_PATH.GET_REPORTS                  = '/api/get_mysale';
+
+__API_PATH.GET_BOOK_REPORTS             = '/api/get_booking_report';
 
 __API_PATH.ADD_MEMBER                   = '/api/add_member';
 __API_PATH.UPDATE_MEMBER                = '/api/update_member';
@@ -96,8 +102,28 @@ __API_PATH.DELETE_DOCUMENT              = '/api/delete_document';
 __API_PATH.GET_DOCUMENT                 = '/api/get_document';
 __API_PATH.MOVE_DOCUMENT                = '/api/move_document';
 __API_PATH.CONFIGURE_MEMBERS            = '/api/configure_members';
+__API_PATH.CONFIGURE_ROOMS              = '/api/configure_rooms';
 
 __API_PATH.GET_HOTEL_STATUS             = '/api/getHotelStatus';
+
+
+
+
+__API_PATH.ADD_MEETINGROOM              = '/api/add_meetingroom';
+__API_PATH.UPDATE_MEETINGROOM           = '/api/update_meetingroom';
+__API_PATH.DELETE_MEETINGROOM           = '/api/delete_meetingroom';
+__API_PATH.GET_MEETINGROOMS             = '/api/get_meetingrooms';
+
+
+__API_PATH.BOOK_ROOM                    = '/api/book_room';
+__API_PATH.ADD_BOOKING                  = '/api/add_booking';
+__API_PATH.CANCEL_BOOKING               = '/api/cancel_booking';
+
+__API_PATH.ADD_ALERT                    = '/api/add_alert';
+__API_PATH.GET_ALERTS                   = '/api/get_alerts';
+__API_PATH.UPDATE_ALERT                 = '/api/update_alert';
+__API_PATH.GET_NOTIFICATION             = '/api/get_notification';
+
 
 
 __API_PATH.HEADER_MENU =  [
@@ -125,8 +151,19 @@ __API_PATH.JOT_TYPES  = {
                             
                             vending_machine:{label:"Vending Machine",id:'vending_machine',data:'assets/images/vending_icon.png',icontype:'image',directory:'vending_machine',bgcolor:"#e37f4b",class:"",default:false,order:7},
 
-                            /*meeting_room:{label:"Meeting Room",id:'meeting_room',data:'assets/images/metting_icon.png',icontype:'image',directory:'jot',bgcolor:"#f8553a",class:"",default:true}*/
+                            meeting_room:{label:"Meeting Room",id:'meeting_room',data:'assets/images/metting_icon.png',icontype:'image',directory:'meeting',bgcolor:"#f8553a",class:"",default:true}
                         };                        
+
+
+
+__API_PATH.Hotel_STEPS  =[
+                            {label:"Basic Information",id:"default",description:"Fill out basic information of hotel",next:"default"},
+                            {label:"Jots",id:"default",description:"You can add or remove the features as per your hotel need",next:"default"},
+                            {label:"Departments",id:"default",description:"Add the department your hotel have",next:"default"},
+                            {label:"Employees",id:"default",description:"Add your hotel hotel staff",next:"meeting_room"},
+                            {label:"Rooms & Common Area",id:"meeting_room",description:"Add rooms & common area",next:"false"}
+                        ]; 
+
 
  
 
@@ -1336,13 +1373,7 @@ __API_PATH.COLOR_CODE = {
 
 
 
-__API_PATH.Hotel_STEPS  =[
-                            {label:"Basic Information"},
-                            {label:"Jots"},
-                            {label:"Departments"},
-                            {label:"Employees"},
-                            {label:"Rooms"}
-                        ]; 
+
 
 
 __API_PATH.DEFAULT_DEPARTMENT  = [

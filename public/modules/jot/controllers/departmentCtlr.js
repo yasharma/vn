@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('departmentCtlr', ['$scope',
-	function($scope) {
+app.controller('departmentCtlr', ['$scope','$rootScope','globalRequest',
+	function($scope,$rootScope,globalRequest) {
 		
 
 		/*****************************************
@@ -15,6 +15,11 @@ app.controller('departmentCtlr', ['$scope',
 	        $scope.deparmentfocus = true;
 	         
 	    };
+
+	    if(!$rootScope.departmentList)
+	    {
+	   		globalRequest.getDepartments();
+	    }
 
 	}
 ]);

@@ -14,6 +14,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 		}
 		
 
+
 		/************************************************
 		* Navigate on previous page
 		*************************************************/
@@ -26,7 +27,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 		/************************************************
 		* Add new employee in list
 		*************************************************/
-		$scope.addedEmployee = [];
+		//$scope.addedEmployee = [];
 		$scope.addNewEmp = function(){
 
 			var errorRestrict = false;
@@ -117,8 +118,8 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 		*************************************************/
 
 		$scope.step4FormSubmit = function(){
+			console.log($rootScope.nextStep);
 			var selectedEmployee = [];
-
 			angular.forEach($scope.stepsCtrl.selected_emp,function(value,key){
 				if($scope.stepsCtrl.selected_emp[key])
 				{
@@ -132,9 +133,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 				}
 
 			});
-					
-
-				
+		
 			
 			if(selectedEmployee.length > 0)
 			{					
@@ -153,24 +152,33 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 				globalRequest.jotCRUD(request).then(function(response){	
 					
 					if(response.status == 1)
-					{	
+					{
 
-						/************************************************
-						* Mark steps completed
-						*************************************************/
+						if($rootScope.nextStep)
+						{
+							var nextStep   = parseInt($routeParams.steps) +1;			
+							$location.path('/dashboard/hotel-setup/'+nextStep);
 
-						var hotelrequest={
-								url:window.__API_PATH.UPDATE_HOTEL,
-								method:"PUT",
-								data:{hotel_id : $rootScope.newProcessingHotel._id,step:'completed'}
-							};
+						}	else {
+							/************************************************
+							* Mark steps completed
+							*************************************************/
 
-						globalRequest.jotCRUD(hotelrequest).then(function(hotelresponse){
-							if(hotelresponse.status == 1)
-							{	
-								$location.path('/dashboard/hotel-setup');
-							}	
-						});						
+							var hotelrequest={
+									url:window.__API_PATH.UPDATE_HOTEL,
+									method:"PUT",
+									data:{hotel_id : $rootScope.newProcessingHotel._id,step:'completed'}
+								};
+
+							globalRequest.jotCRUD(hotelrequest).then(function(hotelresponse){
+								if(hotelresponse.status == 1)
+								{	
+									$location.path('/dashboard/hotel-setup');
+								}	
+							});
+						}						
+
+										
 					}				
 
 				});

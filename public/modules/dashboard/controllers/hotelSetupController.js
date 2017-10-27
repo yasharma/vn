@@ -4,6 +4,11 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 	function($scope,$rootScope,$routeParams,$location,globalRequest,localStorageService) {	
 
 		$rootScope.newProcessingHotel   = localStorageService.get('processingHotel');
+
+		/*********   Get setup steps  ************/
+
+		$scope.hotelStepList = window.__API_PATH.Hotel_STEPS;
+
 		
 		/*********   Get hotel setup wizard current hotel  ************/		
 		
@@ -20,18 +25,27 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 			$location.path('/dashboard/hotel-setup/1');
 			//return false;
 
-		} else {						
+		} else {
+
 
 			/**************************************************
 			* Check hotel blank steps
 			***************************************************/
 
 			globalRequest.getHotelStatus($rootScope.newProcessingHotel._id).then(function(response){
-				
-				$rootScope.hotelStatus = response[0];
 
-				$scope.selectedDepartment = response[0].departments;
+				$scope.addedEmployee       = [];
+				$scope.selectedDepartment  = [];
+
+				$rootScope.hotelStatus	   = response[0];
+				$scope.selectedDepartment  = response[0].departments;
+				$scope.addedEmployee       = response[0].members;
+
+
+
+
 				
+	
 				var completedStep = 1;
 				var redirectPath = '/dashboard';
 
@@ -46,6 +60,9 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 
 					} else if(response[0].members.length == 0) {
 						completedStep = 4;
+
+					} else if(response[0].rooms.length == 0) {
+						completedStep = 5;
 					} else {
 						completedStep = 'completed';
 					}
@@ -56,10 +73,12 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 					completedStep = 'completed';
 				}
 
+				
 				$scope.ActiveStep = $routeParams.steps;
 
 				if(completedStep != 'completed')
 				{			
+
 
 					/**************************************************
 					* Redirect on step from where user left the process
@@ -91,6 +110,17 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 
 				$location.path(redirectPath);
 
+				
+				/*********   Check Next step exixts  ************/
+
+				var getNextStepID = $scope.hotelStepList[$routeParams.steps-1].next;
+				if($rootScope.hotelStatus.jot_types.indexOf(getNextStepID) >-1 )
+				{
+					$rootScope.nextStep  = true;
+				} else {				
+					$rootScope.nextStep  = false;
+				}
+
 				if(redirectPath == '/dashboard')
 				{
 					return false;
@@ -100,9 +130,9 @@ app.controller('hotelSetupController', ['$scope','$rootScope','$routeParams','$l
 			
 		}
 
-		/*********   Get setup steps  ************/
+		
 
-		$scope.hotelStepList = window.__API_PATH.Hotel_STEPS;
+		
 
 		/***********************************************************			
 		* Render page template according to step in route url			

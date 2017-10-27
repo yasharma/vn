@@ -1,0 +1,202 @@
+<div class="clearfix mar-bot20 aligninput" ng-controller="meetingController as ctrl">      
+      <div class="clearfix lost_panel" ng-init="lfTab = 'lost'">          
+
+         <div class="lost_tab_content"> 
+         	<div class="bgwhite20">
+            <ul class="lost_tab_content_list lasthalf clearfix">
+	            <li> 
+	
+	                <md-input-container md-no-float class="md-block datepicker date">
+				        <label>Start Date/Time</label>        
+
+				        <input ng-model="search_from" string-to-timestamp  datetime-picker hour="23" minute='59' style="padding-left: 22px;width: 100%;" ng-change="getAvailableRoom()" id="search_from"/>
+				        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20" class="calendr_icon align_calendr_icon" ></ng-md-icon>
+				    </md-input-container> 
+	            </li>
+	            <li> 
+	            	<md-input-container md-no-float class="md-block datepicker date">
+				        <label>End Date/Time</label>        
+
+				        <input ng-model="search_to" string-to-timestamp  datetime-picker hour="23" minute='59' style="padding-left: 22px;width: 100%;" ng-keyup="getAvailableRoom()"/>
+				        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20" class="calendr_icon align_calendr_icon" ></ng-md-icon>
+				    </md-input-container>
+	            </li>
+	            <li> 
+	            	<!-- <md-input-container  class="md-block">
+	                 	<input type="number"  ng-model="lost_date"  md-placeholder="Number of People"/>
+	                </md-input-container> -->
+
+	                <md-input-container  class="md-block">
+		                  <input  type="number" ng-model="search_capacity" placeholder="Number of People">
+		            </md-input-container>
+	            </li> 
+            </ul>
+        	</div>
+        	<!-- <div class="bgwhite20" >
+        		<div class="rangeslider_cending">
+                         <rzslider rz-slider-model="slider.minValue"
+                          rz-slider-high="slider.maxValue" 
+                          rz-slider-options="slider.options"></rzslider>
+                    </div>
+        	</div> -->
+        	<div class="search_result_header"  ng-show="ctrl.book_detail_form" ng-click="ctrl.book_detail_form = !ctrl.book_detail_form">
+        	<ng-md-icon icon="{{(ctrl.book_detail_form)?'add_circle_outline':'remove_circle_outline'}}" style="fill: #fff" size="20"></ng-md-icon>   Search Result</div>
+
+        	<div class="bgwhite20 pad20" ng-hide="ctrl.book_detail_form">
+
+        		<p class="mettin_result">
+        			<span>{{filteredroom.length}} Meeting Rooms Available</span> {{(search_capacity)?"for":""}}  <span>{{search_capacity}} {{(search_capacity)?"people":""}}</span> {{(search_from)?"from":""}}  <span>{{search_from | date : "EEE d MMM, yyyy h:m a" }}</span> {{(search_to)?"To":""}} <span>{{search_to | date : "EEE d MMM, yyyy h:m a" }} </span></p>
+        		<ul class="metting_laylist clearfix">
+
+
+
+        			<li ng-repeat="rm in filteredroom = 
+	              ($root.meetingRoomList |
+	              roomSearchfilter:this |
+	              orderBy : 'cost':reverse
+	              ) 
+	              track by $index">
+        				<div class="metting_laylist_img">
+        					<img src="{{(rm.room_image)?'/images/hotel/'+rm.hotel_id+'/rooms/'+rm.room_image:'/assets/images/metting_list.png'}}">
+        				</div>	
+        				<div class=" metting_laylist_top">
+        					<div class="clearfix mar-bot15">
+	        					<div class="metting_laylist_left">
+	        						<span class="met_nam">{{rm.name}}</span>
+	        						<span style="display: block">{{rm.dimension}}</span>
+	        						<span style="display: block">Capacity: {{rm.capacity}}</span>
+	        						<span style="display: block">Price: {{(rm.cost)?rm.cost:0 | currency}}</span>
+	        					</div>	
+	        
+	        					<div class="metting_laylist_lright" ng-if="rm.facilities.length">
+	        						<p>Facilities:</p>
+	        						<ul>
+	        							<li ng-repeat="facy in rm.facilities" title="{{facy}}" style="display: inline-block;    margin-right: 10px;">
+	    								<img ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'image'" src="{{(facilityList | filter : {label : facy } : true)[0].src}}">
+	    								
+	    								<ng-md-icon ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'icon'" icon="{{(facilityList | filter : {label : facy } : true)[0].src}}" style="fill: #a5a7a7" size="20"></ng-md-icon> 	
+    							</li> 
+	        						</ul>
+	        					</div>	
+        					</div>
+        					<div class="clearfix">
+        						
+        						<md-button class="md-primary addyellobtn yellowbtn" ng-click="ctrl.book_detail_form = !ctrl.book_detail_form;ctrl.room_number = rm.room_number">BOOK</md-button>
+        						
+        					</div>
+        				</div>
+        			</li>
+        			
+        		</ul>	
+        		
+        	</div>	
+        	
+			<div class="Meeting_Details"  ng-show="ctrl.book_detail_form">
+				<div class="met_hd">Customer Details</div>
+
+				<form name="roomBookingform" ng-submit="roomBooking(roomBookingform.$valid)" novalidate>
+					<br>
+		            <ul class="lost_tab_content_list">
+			            <li>
+			               <md-input-container  class="md-block">
+			                  <input  ng-model="recipient_first_name" placeholder="First Name">
+			               </md-input-container>
+			            </li>
+			            <li>
+			               <md-input-container  class="md-block">
+			                  <input  ng-model="recipient_last_name" placeholder="Last Name">
+			               </md-input-container>
+			            </li>       
+			            <li>
+			               <md-input-container  class="md-block">
+			                  <input type="number" ng-model="recipient_contact_number" placeholder="Contact Number">
+			               </md-input-container>
+			            </li>
+			            <li>
+			               	<md-input-container  class="md-block">
+			                  <input type="email" ng-model="recipient_email" placeholder="Email Address">
+			               	</md-input-container>
+			            </li>
+			            <li>
+			               <md-input-container  class="md-block">
+			                  <input type="text"  ng-model="recipient_address" placeholder="Address">
+			               </md-input-container>
+			            </li>
+			            <li>
+			               <md-input-container  class="md-block">
+			                  <input type="text"  ng-model="payment" placeholder="Payment">
+			               </md-input-container>
+			            </li>
+
+
+			            <li> 
+
+			                <md-input-container md-no-float class="md-block date">
+						        <label>Start Date/Time</label>        
+
+						        <input ng-model="start_time" string-to-timestamp  datetime-picker hour="23" minute='59' style="padding-left: 22px;width: 100%;"/>
+						        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20" class="calendr_icon align_calendr_icon" ></ng-md-icon>
+						    </md-input-container>  
+			            </li>
+			            <li>          
+
+			                <md-input-container md-no-float class="md-block date">
+						        <label>End Date/Time</label>  
+						        <input ng-model="end_time" string-to-timestamp  datetime-picker hour="23" minute='59' style="padding-left: 22px;width: 100%;"/>
+						        <ng-md-icon icon="date_range" style="fill:#a5a7a7" size="20" class="calendr_icon align_calendr_icon" ></ng-md-icon>
+						    </md-input-container> 
+		            </li>
+
+
+
+
+			            <li class="fullWidth">
+			               <div class="clearfix newhotel_dialog_form_top" ng-include="'/modules/jot/views/staff.html'"></div>
+
+			                <div class="clearfix"></div>
+							<ul class="quick_member_list" style="margin: 0px 0px 15px 16px">
+							  <li ng-repeat="member in $root.staffList"  title="{{member.first_name+' '+member.last_name}}">
+							    <div class="quick_member" ng-click="selectStaff(member.user_name)">
+							    {{member.first_name.substring(0,1)+''+member.last_name.substring(0,1)}}
+							    </div>
+							    </li>	    
+							</ul>
+							<div class="clearfix"></div>
+			            </li>
+			            <li class="fullWidth">
+			               <md-chips ng-model="ctrl.roomTagModel" name="itemTag" readonly="ctrl.readonly"
+			                  md-removable="ctrl.removable" placeholder="#Item tag" class="tag_name">
+			                  <md-chip-template>
+			                     <span class="entered_tags">{{$chip}}</span>                          
+			                  </md-chip-template>
+			               </md-chips>
+			            </li>
+			            <li class="fullWidth">
+			          
+			              <div class="clearfix  hideattachment" style="height: 170px" ng-include="'/modules/jot/views/jot_desc.html'"></div>
+			            </li>
+			            <div class="clearfix"></div>
+		            </ul>
+		        
+					<div class="met_hd">Select Room Layout</div>
+					<div class="layout_pane">
+						<ul class="layout_pane_list clearfix">
+
+							<li class="{{(selectedLayout == style._id)?'active':''}}" ng-repeat="style in roomStyleList" ng-click="selectLayout(style._id)">
+								<!-- <div class="room_images" style="background: url({{style.src}})"></div> -->
+								<img src="{{style.src}}">
+								<span>{{style.name}} <br>({{style.capacity}})</span>
+							</li>						
+						</ul>
+					</div>	
+					<br>
+					<div class="clearfix">
+						 <md-button type="submit" class="md-primary addyellobtn bluebtn" >BOOK</md-button>
+					</div>
+				</form>
+			</div>	   
+         </div>
+      </div>
+
+</div>
+ 

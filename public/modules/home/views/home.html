@@ -1,9 +1,12 @@
 <section class="static_middle" id = "home">
-    <data-owl-carousel class="owl-carousel" data-options="config">
+    <!-- <data-owl-carousel class="owl-carousel" data-options="config">
       <div owl-carousel-item="" ng-repeat="item in ::[1,2,3,4,5]" class="item">
         <img src="assets/images/slider.jpg">
       </div>
-    </data-owl-carousel>
+    </data-owl-carousel> -->
+    <div  class="item banner">
+        <img src="assets/images/slider.jpg" style="width: 100%;">
+    </div>
 
 	<div class="about_section" id="about-us">
 		<div class="container clearfix positionrel">
@@ -29,11 +32,30 @@
 	<div class="jotworks_section" id="work">
 		<div class="container clearfix positionrel">
 			<div class="statichd tac">
-				<h4>How It Works</h4>
+				<h4>Welcome to Hotel Jot</h4>
 				<i>Lorem Ipsum is simply dummy text of the printing and typesetting. Ipsum is simply dummy text of the printing.</i>
 			</div>
 			<div class="work_lay">
-				<img src="assets/images/work_lay.png">
+				<ul class="work_lay_list">
+					<li class="one">
+						<div class="home_manage_pic"><img src="assets/images/home_manage.png"></div>
+						<h5>user create task</h5>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec congue nibh, nec venenatis orci.</p>
+					</li>
+					<li class="two">
+						<div class="home_manage_pic"><img src="assets/images/home_manage1.png"></div>
+						<h5>user create task</h5>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec congue nibh, nec venenatis orci.</p>
+					</li>
+					<li class="three">
+						<div class="home_manage_pic"><img src="assets/images/home_manage2.png"></div>
+						<h5>user create task</h5>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec congue nibh, nec venenatis orci.</p>
+					</li>
+				</ul>
+				<div class="work_lay_center">
+					<img src="assets/images/work_lay.png">
+				</div>
 			</div>
 		</div>
 	</div>
@@ -89,10 +111,15 @@
 	<!-- Work -->
 	<div class="jotworks_section" id="testimonial">
 		<div class="container clearfix positionrel">
-			<div class="statichd tac">
-				<h4>Testimonials</h4>
-				<i>Lorem Ipsum is simply dummy text of the printing and typesetting. Ipsum is simply dummy text of the printing.</i>
-			</div>
+
+			<data-owl-carousel class="owl-carousel" data-options="config">
+		    	<div class="statichd tac" owl-carousel-item="" ng-repeat="item in ::[1,2,3,4,5,6,7,8,9]">
+					<h4>Testimonials</h4>
+					<i>Lorem Ipsum is simply dummy text of the printing and typesetting. Ipsum is simply dummy text of the printing.</i>
+				</div>
+		    </data-owl-carousel>
+
+			
 		</div>
 	</div>
 

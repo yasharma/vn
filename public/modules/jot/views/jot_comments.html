@@ -4,7 +4,7 @@
         <h2>{{jot_title}}</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="close()">
-          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+          <ng-md-icon icon="close" style="fill:#4d4d4d" size="24"></ng-md-icon>
         </md-button>
       </div>
     </md-toolbar>
@@ -58,13 +58,22 @@
             </div>
 
 
-             <div class="room_edit add_hotel_room_proty clearfix capitalize" style=" background: #ddd;padding: 10px;">
-            
-              <label class="capitalize"  style="width: 100px;">Priority: </label><span class="highttag capitalize {{$root.priority}}">{{$root.priority}}</span><br><br>
-
-              <label class="capitalize" style="width: 96px;">Satus:</label>  <span class="yellowtag capitalize status {{$root.status}}" style="float: none;">{{$root.status}}</span>
-
-
+             <div class="room_edit add_hotel_room_proty clearfix capitalize" style=" padding: 10px 0;border: 1px solid #ddd; border-left:0; border-right:0; ">
+              <table width="100%" class="pri_table" cellpadding="0" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th width="10%">Priority:</th>
+                    <th width="10%">Satus:</th>
+                    <th width="10%">Due Date:</th>
+                  </tr>
+                   <tr>
+                    <td><span class="highttag capitalize {{$root.priority}}">{{$root.priority}}</span></td>
+                    <td><span class="yellowtag capitalize status {{$root.status}}" style="float: none;">{{$root.status}}</span>
+                    </td>
+                    <td>{{$root.due_date| date: 'MMM d, y'}} </td>
+                  </tr>
+                </thead>
+              </table>
             </div>
 
 
@@ -110,11 +119,11 @@
 
 
 
-             <div class="room_edit capitalize" ng-if="$root.directory !='task'">
-                 <div class="addtxt">Due Date</div> 
-                 {{$root.due_date| date: 'MMM d, y'}}      
+             <!-- <div class="room_edit capitalize" ng-if="$root.directory !='task'">
+                 <div class="addtxt"></div> 
+                      
           
-            </div>
+            </div> -->
 
 
 
@@ -366,7 +375,8 @@
 
                   <li ng-repeat = "comment in commentList | orderBy:'_id':true">
                     <div class="acti_pic">
-                    <img style="width: 35px;" src="{{(comment.userdata.profile_image)?'/images/hotel/'+edit_jot.hotel_id+'/profile/'+comment.userdata.profile_image:'/assets/images/default_profile.png'}}">
+                   
+                    <img style="width: 35px;" src="{{(comment.userdata[0].profile_image)?'/images/profile_image/'+comment.userdata[0].profile_image:'/assets/images/default_profile.png'}}">
 
 
                     </div>

@@ -1,0 +1,48 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2 class="capitalize">Report Details</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+<div class="FilesList">
+	<div class="addmember_data_table">
+			<div class="table_div">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table">
+          <thead>
+              <tr>
+                  <th width="3%">#</th>
+                  <th width="22%">Item Name</th>
+                  <th width="15%">Category</th>
+                  <th width="15%">Sku Code</th>
+                  <th width="15%">Quantity</th>
+                  <th width="15%">Price/item </th>
+                  <th width="15%">Total Price</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr  ng-repeat="item in itemslist = (items  | orderBy:'_id':true) track by $index">
+                  <td>{{$index+1}}</td>
+                  <td>
+                    <span class="invent_img">
+                        <img src="{{(item.image)?'/images/hotel/'+hotel_id+'/inventory/'+ item.image :'/assets/images/vending_default.jpg' }}"  style="margin-right: 10px;max-width: 70px;">
+                    </span>
+                  	{{item.item_name}}
+              		</td>
+                  <td>{{item.category}}</td>
+                  <td>{{item.sku_code}}</td>
+                  <td>{{item.editquantity}}</td>
+                  <td>{{(item.price)?item.price:0 | currency}}</td>
+                  <td>{{(item.totalprice)?item.totalprice:0 | currency}}</td>                  
+              </tr>
+                        
+          </tbody>
+        </table>
+
+      </div>
+		</div>
+</div>
+</md-dialog>

@@ -227,6 +227,15 @@ exports.getHotelStatus = (reqst, respe) => {
                               foreignField: "hotel_id",
                               as: "members"
                             }
+                        },
+                        {
+                          $lookup:
+                            {
+                              from: "meetingrooms",
+                              localField: "_id",
+                              foreignField: "hotel_id",
+                              as: "rooms"
+                            }
                         }], function (err, result) {
             
             if(result){
@@ -530,7 +539,7 @@ exports.listDepartment = (reqst, respe) => {
         }
     }else{
         Department.find({hotel_id : hotel_id}, function (err, result) {
-            if(result.length > 0){
+            if(result && result.length > 0){
                 return respe.json(response.success(result,'Department Data Found.'));
             }else{
                 return respe.json(response.errors(err,"Error In Department Listing."));

@@ -1,0 +1,243 @@
+<section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
+	<div class="dash_hd_txt mar-bot20 clearfix">
+		<div class="dash_hd mar-bot0 dash_hd-left">Rooms & Common Area</div>
+		<div class="rightfilter_right">
+			<div class="chane_pass_btn_right">
+				
+				<md-button  slide-toggle="#emp" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+					{{(invForm)?"Close":"Add Rooms"}}
+				</md-button>
+
+			</div>	
+				
+	    </div>    
+	</div>
+
+
+	<div class="dash_pro_inform slideable" id="emp">
+	<form name="addRoomform" ng-submit="addRoom(addRoomform.$valid)" novalidate>	
+		<div class="dash_pro_inform_inner boxunoversal">
+			<div class="row">
+
+				<div class="col-sm-3">
+					<md-input-container  class="md-block">
+				            <input  ng-model="name" placeholder="Room Name" ng-required="true">				             
+				    </md-input-container>
+				</div>
+
+				<div class="col-sm-3">
+					<md-input-container class="md-block">
+				            <input  ng-model="room_number" placeholder="Room Number">
+				    </md-input-container>
+				</div>
+
+				<div class="col-sm-3">
+					<md-input-container class="md-block">
+				            <input  ng-model="dimension" placeholder="Dimension">				            
+				    </md-input-container>
+				</div>
+
+				<div class="col-sm-3">
+					<md-input-container class="md-block">
+				            <input  ng-model="capacity" placeholder="Capacity">
+				    </md-input-container>
+				</div>
+
+
+				 <div class="col-sm-4">
+					<md-input-container  md-no-float class="md-block">					
+						<md-select ng-model="facilities"
+				                   md-on-close="clearSearchTerm()"
+				                   data-md-container-class="selectdemoSelectHeader"
+				                   multiple aria-label="Facility" placeholder="Select Facilities">					          
+				          <md-optgroup label="Facilities">
+				           <md-option  ng-repeat="facy in facilityList" value="{{facy.label}}">
+	                            <img ng-if="facy.attachment_type == 'image'" src="{{facy.src}}">
+	                            <ng-md-icon ng-if="facy.attachment_type == 'icon'" icon="{{facy.src}}" style="fill: #a5a7a7" size="24"></ng-md-icon>  
+	                            {{facy.label}}
+	                        </md-option> 
+				          </md-optgroup>
+				        </md-select>
+					</md-input-container>	
+
+				</div>
+
+				<div class="col-sm-4">
+					<md-input-container class="md-block">
+				            <input  type="number" ng-model="cost" placeholder="Cost">
+				    </md-input-container>
+				</div>
+
+				<div class="col-sm-4">
+					<md-input-container md-no-float class="md-block">
+		                <md-select ng-model="status" placeholder="Status" style="padding:0">
+		                <md-option value="">
+	                        Select
+	                      </md-option>
+		                <md-option class="capitalize" ng-repeat="status in ['available','booked']" value="{{status}}">
+	                		{{status}}
+	                      </md-option>                    
+	                    </md-select>
+		            </md-input-container>
+	            </div>
+								
+				<div class="clearfix"></div>
+
+			</div>
+			
+			<div class="clearfix ">
+				<div class="Selectdep_txt">Upload Images</div>
+
+				<div class="change_pro positionrel big">
+					
+					<img ngf-thumbnail="roomImages[0] || 'assets/images/metting_list.png'"  class="width100" style="height:100%">
+					<div class="hover_de" ng-if="!roomImages[0]">
+						<ng-md-icon icon="photo_camera" style="fill: #fff" size="24"></ng-md-icon> 
+						<span class="text-center" style="    font-size: 14px;">
+							Upload room image
+						</span>
+					</div>
+					<input type="file" ngf-select ="uploadRoomImage($files, $invalidFiles)" ngf-resize="{width: 290, height: 168}" ng-model="room_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
+				</div>			
+				
+				<br>
+			</div>
+
+			
+
+			<div class="clearfix">
+				<div class="chane_pass_btn">
+					<md-button   type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+				</div>
+					
+			</div>
+
+		</div>
+		</form>
+	</div>
+
+
+
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch deptsrch_gray">
+			<div class="deptsrch_gray_top mar-bot0 clearfix">
+					
+
+				<div class="montfilter vending_left_top_serch positionrel">
+					<md-input-container class="md-block">
+			      <input  ng-model="searchRoom" placeholder="Search Room Name">
+			  	</md-input-container>			  	
+				</div>
+
+				<div class="" style="float: right; padding: 10px 0px 0 10px;cursor: pointer;" ng-click="searchRoom = search_capacity = search_status = ''" title="Reset filters">
+						<img src="assets/images/reset_filter.png" style="width: 30px;">
+				</div>
+
+				<div class="right_montfilter">
+					<ul class="clearfix">
+						
+						<li style="width: 200px;">
+							<div class="selectwhite">
+					            <md-input-container class="md-block">
+							            <input  ng-model="search_capacity" type="number" placeholder="Capacity">				            
+							    </md-input-container>
+		        			</div>
+	        			</li>
+	        			<li style="width: 200px;">
+							<div class="selectwhite">
+					            <md-input-container md-no-float class="md-block selectgeneral48">
+					                <md-select ng-model="search_status" placeholder="Status">
+					                <md-option value="">
+			                            Select Status
+			                          </md-option>
+					                  <md-option class="capitalize" ng-repeat="status in ['available','booked']" value="{{status}}">
+			                		{{status}}
+			                      </md-option> 
+					                </md-select>
+					            </md-input-container>
+		        			</div>
+	        			</li>
+        			</ul>
+				</div>
+
+				
+			</div>
+		</div>
+
+		<div class="addmember_data_table">
+				<div class="table_div">
+	        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table" ng-init="ctrl.hideEmp = []">
+	          <thead>
+	              <tr>
+	                  <th width="2%"># </th>                  
+	                  <th width="20%">Room Name</th>
+	                  <th width="10%">Room Number</th>
+	                  <th width="10%">Dimension</th>
+	                  <th width="10%">Capacity</th>
+	                  <th width="10%">Cost</th>
+	                  <th width="18%">Facilities</th>
+	                  <th width="10%">Status</th>
+	                  <th width="10%">Action</th>
+	              </tr>
+	          </thead>
+	          <tbody>
+	              <tr ng-repeat="rm in filteredroom = 
+	              ($root.meetingRoomList |
+	              filter:(!!search_capacity || undefined) && {capacity:search_capacity} |
+	              filter: (!!search_status || undefined) && {status: search_status}: true |
+	              roomNamefilter : this
+	              ) 
+	              track by $index">
+	                  <td>{{$index+1}}</td>
+	                 
+	                  <td class="capitalize" >
+	                  	<img  src="{{(rm.room_image)?'/images/hotel/'+rm.hotel_id+'/rooms/'+rm.room_image:'/assets/images/metting_list.png'}}" style="margin-right: 10px;width: 100px;">
+
+	                  	
+	                  {{rm.name}}
+	                  </td>
+	                  <td>
+	                  {{rm.room_number}}
+	                  </td>
+	                  <td>
+	                  {{rm.dimension}}
+	                  </td>
+	                  <td>                 
+
+	                 {{rm.capacity}}
+	                
+	                  </td>
+	                  <td>{{(rm.cost)?rm.cost:0 | currency}}</td>
+
+	                  <td>
+	                  		<ul>
+    							<li ng-repeat="facy in rm.facilities" title="{{facy}}" style="display: inline-block;    margin-right: 10px;">
+    								<img ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'image'" src="{{(facilityList | filter : {label : facy } : true)[0].src}}">
+    								
+    								<ng-md-icon ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'icon'" icon="{{(facilityList | filter : {label : facy } : true)[0].src}}" style="fill: #a5a7a7" size="24"></ng-md-icon> 	
+    							</li>  						
+    						</ul>
+	                 <!--  {{rm.facilities}} -->
+	                  </td>
+
+	                  <td class="capitalize">{{rm.status}}</td>
+	                  <td>	          
+	                  <!-- {{rm}} -->
+	                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(rm);" title="Edit"></ng-md-icon>
+
+	                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeRoom(rm._id,$index)" ng-confirm-title="Delete Room" ng-confirm-delete="Are you sure you want to remove this room."></ng-md-icon>
+
+	                  	<ng-md-icon ng-if="emp.invitationstatus == 'verified' " class="cursor" style="fill: green;float: right;" icon="check_circle" class="cursor"  size="22" title="Verified"></ng-md-icon>
+	                  </td>
+	              </tr>	              
+	          </tbody>
+	        </table>
+
+	        <div ng-show="!filteredroom.length" class="itemnotfound">
+	                No rooms found.                
+	         </div>
+	      </div>
+		</div>
+	</div>
+</section>

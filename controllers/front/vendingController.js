@@ -233,3 +233,79 @@ exports.listCategory = (reqst, respe) => {
         });
     }
 };
+
+
+
+/*************************************************
+***** Function to list all sale made by user *****
+**************************************************/
+
+
+exports.vendingSale = (reqst, respe) => {
+    
+    var hotel_id          =         reqst.query.hotel_id;
+    var user_id           =         reqst.query.user_id;
+
+    if(!hotel_id || !user_id){
+        var errors =    { _id: {'message':'Filter data is required.'}}
+        return respe.json(response.errors(errors,"Filter data is required."));
+    }else{
+        Cart.find({hotel_id:ObjectId(hotel_id),user_id:ObjectId(user_id)},function (err, result) {
+            if(result && result.length > 0){
+                return respe.json(response.success(result,'Sale Data Found.'));
+            }else{
+                return respe.json(response.errors(err,"Error in sale listing."));
+            }
+        });
+    }
+};
+
+
+/*************************************************
+***** Function to cancle the particular sale *****
+**************************************************/
+
+
+exports.vendingCancleSale = (reqst, respe) => {
+
+    var sale_id           =         reqst.body._id;
+
+    if(!sale_id){
+        var errors =    { _id: {'message':'Data is required.'}}
+        return respe.json(response.errors(errors,"Data is required."));
+    }else{
+        Cart.findByIdAndUpdate(sale_id,{status:'cancelled'},{new: true},function(err, result) {
+            if(result){
+              return respe.json(response.success(result,'Sale cancelled successfully.'));
+            }else{
+                return respe.json(response.errors(err.errors,"Error in Sale canclelation."));
+            }
+        });
+    }
+};
+
+
+
+/********************************************************
+***** Function to change the payment status of sale *****
+*********************************************************/
+
+
+exports.vendingPaymentStatus = (reqst, respe) => {
+
+    var sale_id           =         reqst.body._id;
+    var payment_status    =         reqst.body.payment_status;
+
+    if(!sale_id){
+        var errors =    { _id: {'message':'Data is required.'}}
+        return respe.json(response.errors(errors,"Data is required."));
+    }else{
+        Cart.findByIdAndUpdate(sale_id,{"payment.payment_status":payment_status},{new: true},function(err, result) {
+            if(result){
+              return respe.json(response.success(result,'Sale cancelled successfully.'));
+            }else{
+                return respe.json(response.errors(err.errors,"Error in Sale canclelation."));
+            }
+        });
+    }
+};

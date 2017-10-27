@@ -125,6 +125,7 @@ app.controller('employeeController', ['$scope','$rootScope','globalRequest','$ti
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){				
+				
 				$rootScope.staffList.splice(index, 1);
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);

@@ -1,0 +1,120 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Edit Room</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+<div class="dash-main-con aligninput">
+
+	<div class="dash_pro_inform">
+
+			<form name="editRoomform" ng-submit="editRoom(editRoomform.$valid)" novalidate>	
+				<div class="dash_pro_inform_inner boxunoversal">
+					<div class="row">
+
+						<div class="col-sm-3">
+							<md-input-container  class="md-block">
+						            <input  ng-model="name" placeholder="Room Name" ng-required="true">				             
+						    </md-input-container>
+						</div>
+
+						<div class="col-sm-3">
+							<md-input-container class="md-block">
+						            <input  ng-model="room_number" placeholder="Room Number">
+						    </md-input-container>
+						</div>
+
+						<div class="col-sm-3">
+							<md-input-container class="md-block">
+						            <input  ng-model="dimension" placeholder="Dimension">				            
+						    </md-input-container>
+						</div>
+
+						<div class="col-sm-3">
+							<md-input-container class="md-block">
+						            <input  ng-model="capacity" placeholder="Capacity">
+						    </md-input-container>
+						</div>
+
+
+						 <div class="col-sm-4">
+							<md-input-container  md-no-float class="md-block">					
+								<md-select ng-model="facilities"
+						                   md-on-close="clearSearchTerm()"
+						                   data-md-container-class="selectdemoSelectHeader"
+						                   multiple aria-label="Facility" placeholder="Select Facilities">					          
+						          <md-optgroup label="Facilities">
+						           <md-option  ng-repeat="facy in facilityList" value="{{facy.label}}">
+			                            <img ng-if="facy.attachment_type == 'image'" src="{{facy.src}}">
+			                            <ng-md-icon ng-if="facy.attachment_type == 'icon'" icon="{{facy.src}}" style="fill: #a5a7a7" size="24"></ng-md-icon>  
+			                            {{facy.label}}
+			                        </md-option> 
+						          </md-optgroup>
+						        </md-select>
+							</md-input-container>	
+
+						</div>
+
+						<div class="col-sm-4">
+							<md-input-container class="md-block">
+						            <input  type="number" ng-model="cost" placeholder="Cost">
+						    </md-input-container>
+						</div>
+
+						<div class="col-sm-4">
+							<md-input-container md-no-float class="md-block">
+				                <md-select ng-model="status" placeholder="Status" style="padding:0">
+				                <md-option value="">
+			                        Select
+			                      </md-option>
+				                <md-option class="capitalize" ng-repeat="status in ['available','booked']" value="{{status}}">
+			                		{{status}}
+			                      </md-option>                    
+			                    </md-select>
+				            </md-input-container>
+			            </div>
+										
+						<div class="clearfix"></div>
+
+					</div>
+					
+					<div class="clearfix ">
+						<div class="Selectdep_txt">Upload Images</div>
+
+						<div class="change_pro positionrel big">
+							
+							<img ngf-thumbnail="roomImages[0] || '{{room_image}}'"  class="width100" style="height:100%">
+							<div class="hover_de" ng-if="!roomImages[0]">
+								<ng-md-icon icon="photo_camera" style="fill: #fff" size="24"></ng-md-icon> 
+								<span class="text-center" style="    font-size: 14px;">
+									Upload room image
+								</span>
+							</div>
+							<input type="file" ngf-select ="uploadRoomImage($files, $invalidFiles)" ngf-resize="{width: 290, height: 168}" ng-model="room_image_src" ngf-max-size="5MB" class="uplosd_img_ab" name="">
+						</div>			
+						
+						<br>
+					</div>
+
+					
+
+					<div class="clearfix">
+						<div class="chane_pass_btn">
+							<md-button   type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+						</div>
+							
+					</div>
+
+				</div>
+				</form>
+		
+	</div>	
+</div>
+
+</md-dialog>
+
+

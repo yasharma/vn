@@ -4,10 +4,11 @@ app.controller('resetPasswordCtlr', ['$scope','loginFactory','$rootScope','$rout
 	function($scope,loginFactory,$rootScope,$routeParams,$location,$mdDialog,$timeout) {	
 
 		var token = $routeParams.token;
+
 		if($routeParams.expired && $routeParams.expired == 'true')
 		{
 			$mdDialog.cancel();
-			$location.path('/');
+			//$location.path('/');
 			$rootScope.popupData  = {
 						text:  'Link has been expired.',
 						action: 'redirect'

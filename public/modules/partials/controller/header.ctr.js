@@ -1,9 +1,43 @@
 "use strict";
 
-app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','$window','globalRequest','$timeout','$location',
-	function($scope,localStorageService,$rootScope,$mdDialog,$window,globalRequest,$timeout,$location) {	
+app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','globalRequest','$timeout','$location','$mdSidenav','socket',
+	function($scope,localStorageService,$rootScope,$mdDialog,globalRequest,$timeout,$location,$mdSidenav,socket) {
 
+		/*******************************************************
+		* Sidebar
+		*******************************************************/	
 	
+	    $rootScope.toggleSidebar      = buildToggler('sidebar');
+	    $rootScope.toggleNotification = buildToggler('notification');
+
+	    /*$scope.isOpenRight = function(){
+	      return $mdSidenav('right').isOpen();
+	    };*/
+
+	   
+
+	    function buildToggler(navID) {
+	    	/*$rootScope.activeSidebar = !$rootScope.activeSidebar;*/
+	      return function() {
+	        $mdSidenav(navID)
+	          .toggle()
+	          .then();
+	      };
+	    }
+
+	   
+
+
+	    /*******************************************************
+		* Get notificatoin
+		*******************************************************/
+		globalRequest.getNotification();
+		
+
+	    socket.on('notification',function(resp){
+	    	
+	    	$rootScope.message.push(resp.result);
+		});
 		
 		/*******************************************************
 		* Callback function to close jot circle on outside click
@@ -21,9 +55,6 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		*/
 
 		$rootScope.jotTypes        	= window.__API_PATH.JOT_TYPES;
-
-
-			
 
 
 	    if($rootScope.activeHotelData)
@@ -57,7 +88,7 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 			globalRequest.getJotCount();
 			localStorageService.set('hotel', hotel);
 			$rootScope.activeHotelData = localStorageService.get('hotel');
-			$window.location.reload();
+			window.location.reload();
 			
 		};
 

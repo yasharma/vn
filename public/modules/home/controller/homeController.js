@@ -183,11 +183,14 @@ app.controller('homeController',['$scope','$rootScope','$routeParams','$mdDialog
 		********************************/
 
   		$scope.config={
-		     navigation: false,
-		     items:1,	     
-		     navContainer: '#customNav',
-		     pagination: false,
-		     rewindNav : true
-		 };		 
+		    navigation: false,
+		    items:1,	     
+		    navContainer: '#customNav',
+		    pagination: false,
+		    rewindNav : true,
+		    autoplay:true,
+		    autoplayTimeout:3000,	
+		    autoplayHoverPause:true
+		};		 
 	 
 }]);

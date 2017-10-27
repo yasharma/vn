@@ -1,10 +1,7 @@
 "use strict";
 
 app.filter("filterdepartment", function(cursorPosition) {
-
-
          return function(input,scope) {
-         	
          	var text     = document.getElementById("department");
 			var caretPos = cursorPosition.GetCaretPosition(text);
             var word     = cursorPosition.ReturnWord(text.value, caretPos);
@@ -38,10 +35,8 @@ app.filter("filterdepartment", function(cursorPosition) {
 			}
 			
          };
-});
 
-
-app.filter("filterstaff", function(cursorPosition) {
+}).filter("filterstaff", function(cursorPosition) {
 
          return function(input,scope) {
 
@@ -82,13 +77,9 @@ app.filter("filterstaff", function(cursorPosition) {
 				}		
 				return searchedString;
 			}
-			
          };
-});
 
-
-
-app.filter("filterstaffJotDesc", function(cursorPosition) {
+}).filter("filterstaffJotDesc", function(cursorPosition) {
 
          return function(input,scope) {
 	         	var text     = document.getElementById("jot_description");
@@ -131,12 +122,8 @@ app.filter("filterstaffJotDesc", function(cursorPosition) {
 				}
 			
          };
-});
 
-
-
-
-app.filter("descDepartmentFilter", function(cursorPosition) {
+}).filter("descDepartmentFilter", function(cursorPosition) {
 
          return function(input,scope) {
          		
@@ -176,11 +163,9 @@ app.filter("descDepartmentFilter", function(cursorPosition) {
 					}									
 					return searchedString;
 				}
-			
          };
-});
 
-app.filter("checklistFilter", function() {
+}).filter("checklistFilter", function() {
          return function(input,scope) {         		
          		var totalComplete = 0;
 	         	angular.forEach(input,function(value,key){
@@ -200,4 +185,53 @@ app.filter("checklistFilter", function() {
 
 	         	return totalComplete+'/'+input.length;
          };
+
+}).filter('departmentJotFilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+			var searchDeptWise        = scope.searchDepartment;
+			if(!searchDeptWise || searchDeptWise.length == 0){
+				return input;
+			}
+
+			input   =   input.filter(function( obj ) {
+							var jotAssignedDept = obj.assigned_departments;
+
+							for(var i=0; i< searchDeptWise.length; i++){
+								var getIndex = jotAssignedDept.indexOf(searchDeptWise[i]);
+								if(getIndex != -1)
+								{
+									return true;
+								}
+							}							
+						});
+		}		
+		return input;
+	};
+
+}).filter('empJotFilter',function(){
+	return function(input,scope){
+
+		if(input)
+		{
+			var searchEmpWise  = scope.searchEmp;
+			if(!searchEmpWise || searchEmpWise.length == 0){
+				return input;
+			}
+
+			input   =   input.filter(function( obj ) {
+							var jotAssignedDept = obj.assigned_members;
+							for(var i=0; i< searchEmpWise.length; i++){
+								var getIndex = jotAssignedDept.indexOf(searchEmpWise[i]);
+								if(getIndex != -1)
+								{
+									return true;
+								}
+							}							
+						});
+		}		
+		return input;
+	};
 });

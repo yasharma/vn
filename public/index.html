@@ -18,19 +18,51 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-      <body style="height: auto;">
-        <header ng-if="isAuth"><!--@header template--> </header>
+      <body style="height: auto;" >
+        <header ng-if="isAuth"><!--@header template--> </header>       
 
-        <div ng-if="isAuth.sidebar=='yes'" 
-        class="left_side_menu my-scroll-area 
-        " ng-class="{'leftopen':leftopen,'active':(isAuth.sidebar=='yes')}"   ng-include="'/modules/partials/sidebar.html'" ng-nicescroll nice-option="{cursorcolor: '#e2edff',horizrailenabled: false}" nice-scroll-end="endScroll()"></div>
+
+          <section layout="row" flex style="background: rgb(49, 57, 66);" ng-if="isAuth.sidebar=='yes'"> 
+            <md-sidenav class="md-sidenav-right md-whiteframe-4dp my-scroll-area" md-component-id="sidebar" style="background: rgb(49, 57, 66);" ng-nicescroll nice-option="{cursorcolor: '#e2edff',horizrailenabled: false}" nice-scroll-end="endScroll()">
+              <md-content layout-padding style="background: rgb(49, 57, 66);">
+              <div ng-include="'/modules/partials/sidebar.html'"></div>     
+              </md-content>
+            </md-sidenav>
+          </section>
+
+
+          <section layout="row" flex style="background: #f4f8f9;" class="{{$root.hideclass}}" ng-controller="notificationController"> 
+            <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="notification" style="background:#f4f8f9;">
+
+              <md-content layout-padding style="background: #f4f8f9;">
+              <div class="quick_edit_small_section_header" style="text-align: left;border-bottom-color: #ddd;">
+               <ng-md-icon icon="notifications" class="cursor" style="fill:#7a7a7a" size="24"></ng-md-icon>
+                <span class="quick_edit_section_title"> Notification</span>
+                <ng-md-icon class="quick_close_btn" icon="close" style="fill:#7a7a7a" size="24"  ng-click="$root.toggleNotification()" role="button" tabindex="0"></ng-md-icon> 
+                </div>
+                
+
+                <div class="notification_content">  
+                    <div class="alert alert-info" ng-repeat="msg in $root.message | orderBy:'_id':true track by $index">
+                      <a class="close" data-dismiss="alert" ng-click="removeNotification(msg._id,$index);">×</a>
+                      <ng-md-icon ng-if="msg.title" icon="add_alert" style="fill: #3da0d3" size="20"></ng-md-icon> 
+                    <strong>{{msg.title}}</strong><br>
+                     &nbsp;  {{msg.description}}
+                    </div>
+                    
+                </div>
+
+              </md-content>
+            </md-sidenav>
+          </section>
 
         <ng-view ng-style="{height: $root.iframeHeight + 'px'}" style="display: block;" class="view" autoscroll> </ng-view>
         
         <footer  ng-include="'/modules/partials/footer.html'"> </footer>       
         
         <script type="text/javascript" src="/js/jquery.min.js"></script> 
+        <script src="/js/socket.io.js"></script>
         <script src="/js/vendor.js"></script> 
-        <script src="/js/main.js"></script>      
+        <script src="/js/main.js"></script>          
      </body>
 </html>

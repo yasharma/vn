@@ -1,8 +1,8 @@
 <div ng-controller="step4Controller as stepsCtrl">	
-<form name="step4Form" ng-submit="step4FormSubmit(step1Form.$valid)" novalidate ng-show="!forget">		
+<form name="step4Form" ng-submit="step4FormSubmit(step4Form.$valid)" novalidate ng-show="!forget">		
 	<div class="deprtment_list">	
 	<ul class="clearfix">
-			<li ng-repeat="emp in addedEmployee track by $index">
+			<li ng-repeat="emp in addedEmployee track by $index" style="margin-top: 0;">
 				<div class="yellowlay clearfix">
 					<div class="pull-left capitalize FULLMANE"> 
 						{{emp.first_name}} {{emp.last_name}}
@@ -101,13 +101,14 @@
 	</div>			
 		
 	</div>
-	<div class="clearfix mar-top20">
+	<div class="clearfix mar-top20" style="text-align: right;">
 
 		<div class="chane_pass_btn">
 			<md-button ng-click="navigateBack()" class="md-primary addyellobtn graybtn" >PREVIOUS</md-button>
 		</div>	
 		<div class="chane_pass_btn">
-			<md-button  type="submit" class="md-primary addyellobtn yellowbtn">Finish</md-button> 
+			<md-button  type="submit" class="md-primary addyellobtn yellowbtn">
+			{{($root.nextStep)?"Next":"Finish"}}</md-button> 
 		</div>
 	</div>
 </form>	

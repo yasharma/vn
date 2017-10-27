@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('loginController', ['$scope','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','$cookies',
-	function($scope,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,$cookies) {	
+app.controller('loginController', ['$scope','$location','localStorageService','loginFactory','$rootScope','AuthSrv','$mdDialog','$timeout','$cookies','socket',
+	function($scope,$location, localStorageService,loginFactory,$rootScope,AuthSrv,$mdDialog,$timeout,$cookies,socket) {	
 
 
 		/*********************************************
@@ -20,34 +20,44 @@ app.controller('loginController', ['$scope','$location','localStorageService','l
 					method:"POST",
 					data:dataObj
 				};
-
+				
 			loginFactory.login(request).then(function(response){
 				$scope.loginresult = response;
+
 				if(response.status == 1)
 				{
-					/*if(remember && remember == 1)
-					{
+					
+					// socket.emit('web.login',response.result.user);
+					// socket.on('web.login',function(resp){						
+					// 	console.log(resp);
+					// });
+					
 
-					}*/
 
-					 /*var now = new Date().toString();
-					 var expiry;					 
-					 expiry = now;
-					 
-					  console.log("about to put cookie");
-					  $cookies.put('sample', "Abc", {expires: expiry});*/
-					   
-										
 
-					/*$cookies.put('hoteljot',response.result.token,[{
-			            expires: 'test'
-			        }]);*/
 
+					var now = new Date();
+					if($scope.remember && $scope.remember == 1)
+					{		
+
+				       now.setFullYear(now.getFullYear() + 1);
+				       $cookies.put("hoteljot", window.btoa('rememberloggedin'), {
+					            expires: now
+					    });	
+
+					} else {											
+					   now.setDate(now.getDate() + 1);
+					   $cookies.put("hoteljot", window.btoa('sessionloggedin'), []);	
+					}	
+		
 					localStorageService.set('token', response.result.token);
 					localStorageService.set('user', response.result.user);
 					AuthSrv.isLogged = true;
 				    $mdDialog.cancel();
+
 					$location.path('/dashboard');
+
+
 
 				}									
 				
