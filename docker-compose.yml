@@ -9,9 +9,7 @@ services:
      - "8080:8080"
     environment:
      - NODE_ENV=development
-     - DB_1_PORT_27017_TCP_ADDR=db
-    depends_on:
-     - db
+     - MONGODB_URL=mongodb://hoteljotdb:eGkNCtz4cy8a6XNj0a5smQSPwzCpnroiIrOqru4EWaQe1XnQv67UWkQMgwsbiwVBnc6uFcfMMB7ikMyPAdSVXw==@hoteljotdb.documents.azure.com:10255/?ssl=true&replicaSet=globaldb
     volumes_from:
      - web-data
   web-data:
@@ -22,17 +20,4 @@ services:
      - /opt/hoteljot/node_modules
      - /opt/hoteljot/public
      - /opt/hoteljot/uploads
-  db:
-    image: mongo:3.2
-    restart: always
-    ports:
-     - "27017:27017"
-    volumes_from:
-      - db-data
-  db-data:
-    image: mongo:3.2
-    volumes:
-      - /data/db
-      - /var/lib/mongodb
-      - /var/log/mongodb
     entrypoint: /bin/true
