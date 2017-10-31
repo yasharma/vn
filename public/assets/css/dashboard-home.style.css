@@ -1,6 +1,5 @@
-
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,500,400,400i,600,600i,700,700i,800,800i');
-.hideclass{display: none !important;}
+.hideclass{display: block !important;}
 .dash-main-con{background: #f4f8f9; min-height: 100%; position: relative;}
 .dash_home_header{width: 100%; background: #4ebdf6;   z-index: 11; position: fixed; left: 0; top:0; right: 0;}
 .dash_home_header_logo{padding: 11px 20px; display: block;}
@@ -53,7 +52,7 @@
 .leftnav_list.panel .panel-heading .panel-title ng-md-icon{vertical-align: top;}
 .toogle_menu_list{padding:15px 0;} 
 .toogle_menu_list > ul > li{display: block;     border-bottom: 1px solid #292f37;}
-.toogle_menu_list > ul > li > a{display: block; padding: 15px 20px; white-space: nowrap; }
+.toogle_menu_list > ul > li > a{display: block; padding: 15px 15px; white-space: nowrap; }
 .toogle_menu_list > ul > li > a:hover, .toogle_menu_list ul > li > a:focus{text-decoration: none; }
 .toogle_menu_list > ul > li > a.active span, .toogle_menu_list ul > li > a:hover span{color: #fff;}
 .toogle_menu_list > ul > li > a span{color: #9299a2; font-size: 15px; line-height: 24px; font-weight: 600; padding-left: 10px;  text-transform: uppercase; }

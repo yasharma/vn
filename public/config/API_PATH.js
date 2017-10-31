@@ -121,7 +121,7 @@ __API_PATH.CANCEL_BOOKING               = '/api/cancel_booking';
 
 __API_PATH.ADD_ALERT                    = '/api/add_alert';
 __API_PATH.GET_ALERTS                   = '/api/get_alerts';
-__API_PATH.UPDATE_ALERT                 = '/api/update_alert';
+__API_PATH.UPDATE_NOTIFICATION          = '/api/update_notification';
 __API_PATH.GET_NOTIFICATION             = '/api/get_notification';
 
 

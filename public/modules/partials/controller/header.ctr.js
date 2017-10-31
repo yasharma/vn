@@ -10,12 +10,6 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 	    $rootScope.toggleSidebar      = buildToggler('sidebar');
 	    $rootScope.toggleNotification = buildToggler('notification');
 
-	    /*$scope.isOpenRight = function(){
-	      return $mdSidenav('right').isOpen();
-	    };*/
-
-	   
-
 	    function buildToggler(navID) {
 	    	/*$rootScope.activeSidebar = !$rootScope.activeSidebar;*/
 	      return function() {
@@ -34,16 +28,18 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		globalRequest.getNotification();
 		
 
-	    socket.on('notification',function(resp){
-	    	
+	    socket.on('notificationToAll',function(resp){	    	
 	    	$rootScope.message.push(resp.result);
 		});
 
-		socket.on('jot_create_notification',function(resp){
-			console.log(resp.result);
-	    	$rootScope.message.push(resp.result);
-	    	$rootScope.message2 = resp.result;
+		socket.on('notificationToRoom',function(resp){		
+	    	globalRequest.getNotification();
 		});
+
+
+		/*$scope.$on('$destroy', function (event) {        
+		    socket.removeAllListeners();	        
+		});*/
 		
 		/*******************************************************
 		* Callback function to close jot circle on outside click

@@ -14,8 +14,8 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 		*************************************/	
 
 		$scope.blank = function(){
-			$scope.title = "";		
-			$scope.description = "";		
+			$scope.alert_title = "";		
+			$scope.alert_description = "";		
 			
 		};	
 
@@ -23,13 +23,9 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 
 		/************************************
 		* Add alert
-		*************************************/		
-		
+		*************************************/			
 
 		$scope.addAlert = function(){	
-
-		/*socket.emit('notification2','hello');
-		return false;	*/	
 
 			var request = {
 			            url:window.__API_PATH.ADD_ALERT,
@@ -47,11 +43,12 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 			 	if(response.status == 1)
 			 	{
 			 		$scope.blank();			 		
-			 		socket.emit('notification',response.result);
-			 		
+			 		socket.emit('notificationToAll',response.result);			 		
 			 		
 			 		popup = {"message":response.message,"class":response.class};
-					toastService.alert(popup);		 		
+					toastService.alert(popup);	
+					globalRequest.getAlertList();	 
+
 			 	} else {
 
 			 		var errors = '<ul class="mdToast-error-list">';
@@ -64,6 +61,21 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 			 	}
 			 });
 
+		};
+
+		/*****************************************
+		* Open  more detail view
+		*****************************************/
+
+		$scope.openSenderDetail = function(data){
+			$mdDialog.show({
+				controller: 'detailViewController',
+				templateUrl: '/modules/alerts/views/view_detail.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{viewDetail:data}				
+			}).then(function(answer) {}, function() {});
 		};
 		
 	}

@@ -175,7 +175,7 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
 	};
 
 	/*****************************************
-	* Open edit Contact
+	* Open  document files view
 	*****************************************/	
 
 	$scope.openDocumentFileView = function(detail){

@@ -24,26 +24,27 @@ module.exports =  (io) => {
 	  		}
 
 	    });		
-	  
+
+	    socket.on('web.logout', function(data) {
+			for(var i = 0; i<data.hotel_id.length;i++)
+			{
+				socket.leave(data.hotel_id[i]);
+			}
+	    });
+		  
 	  	/**********************************************
-		* Alert notification
+		* Send Notification to all
 		/**********************************************/
 
-	  	socket.on('notification', (data) => {  
-	  		io.sockets.emit('notification', {result:data});
+	  	socket.on('notificationToAll', (data) => {  
+	  		io.sockets.emit('notificationToAll', {result:data});
 	    });
 
 	  	/**********************************************
-		* Jot notification
+		* Send Notification to selected users
 		/**********************************************/
-	     socket.on('jot_create_notification', (data) => { 
-	     	
-	     	var newjotFound = { 
-	     		title: "New "+data.jot_type +" jot :- "+data.jot_title,
-	     		description: data.jot_description
-	     	};
-
-	  		io.sockets.in(data.hotel_id).emit('jot_create_notification',{result:newjotFound});
+	     socket.on('notificationToRoom', (data) => {
+	  		io.sockets.in(data.hotel_id).emit('notificationToRoom');
 	    });
 	    
 	});

@@ -8,31 +8,15 @@
          <div class="rightfilter_right dash-home_right">
             <div class="chane_pass_btn_right mrright0 positionrel">
                <!-- <a href="javascript:void(0)" ng-click="$root.openFormByType($root.jotTypes[activetype])" class="create_new_jot_label"> {{'Create '+ $root.jotTypes[activetype].label+' Jot'}}</a> -->
-               <md-button ng-show="BoardsPage" class="md-primary addyellobtn yellowbtn widthauto" ng-click="$root.openFormByType($root.jotTypes[activetype])" style="width: auto;display: inline-block;margin-right: 15px;">{{'Create '+ $root.jotTypes[activetype].label+' Jot'}}</md-button>
-               <ng-md-icon ng-show="BoardsPage" title="Features" icon="settings" style="fill:#7a7a7a" size="25" ng-click="orderBy = !orderBy"></ng-md-icon>
-               <!-- <md-button class="md-primary addyellobtn yellowbtn widthauto" ng-click="orderBy = !orderBy">SETTING</md-button> -->
-               <div class="settingdrop" ng-show="orderBy">
-                  <ul class="settingdrop_list">
-                     <li class="clearfix" ng-repeat="itemTyles in $root.jotTypes">
-                        <a href="javascript:void(0);">
-                           <div class="icon_circle messange_color" style="background: {{itemTyles.bgcolor}}">
-                              <img src="{{itemTyles.data}}">
-                           </div>
-                           <span class="txtdrop">{{itemTyles.label}}</span>
-                           <span class="pull-right">
-                              <md-checkbox  ng-model="enableItems[$index]" aria-label="enableItems[$index]" ng-checked = "{{((boards|filter:itemTyles.id)[0])?true:false}}"  ng-click="updateItemList(itemTyles.id)">
-                              </md-checkbox>
-                           </span>
-                        </a>
-                     </li>
-                  </ul>
-               </div>
+               <md-button ng-show="BoardsPage" class="md-primary addyellobtn yellowbtn widthauto" ng-click="$root.openFormByType($root.jotTypes[activetype])" style="width: auto;display: inline-block;">{{'Create '+ $root.jotTypes[activetype].label+' Jot'}}</md-button>
+
+               
             </div>
          </div>
       </div>
       <div class="hotel_list_top" ng-hide="BoardsPage">
          <div class="circle_container" ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
-            <a class="circle" href="{{(board.id == 'lost_found')?'/dashboard/lost-found':(board.id == 'vending_machine')?'/dashboard/inventory':(board.id == 'meeting_room')?'/dashboard/booking-report':'/dashboard/hotelboard/'+board.id}}">
+            <a class="circle" href="{{(board.id == 'lost_found')?'/dashboard/lost-found':(board.id == 'vending_machine')?'/dashboard/inventory':(board.id == 'meeting_room')?'/dashboard/meeting-rooms':'/dashboard/hotelboard/'+board.id}}">
                <div class="circle__inner">
                   <div class="circle__wrapper">
                      <div class="hover_effect_home" style='background: {{(board.bgcolor)?board.bgcolor:"#71adf7";}}'>
@@ -40,17 +24,20 @@
                            <img  class="hotel-list-icon" src="{{board.data}}" ng-if="board.icontype == 'image'">
                         </div>
                         <h4>{{board.label}}</h4>
-                        <div class="messange_jotnum numberdigit">
+
+                        <div class="messange_jotnum numberdigit" ng-if=" ['meeting_room','lost_found','vending_machine'].indexOf(board.id) == -1">
                            {{
                            (($root.JotCount | filter : {_id: board.id})[0].count)?($root.JotCount | filter : {_id: board.id})[0].count:0;
                            }}
                         </div>
+
                      </div>
                   </div>
                </div>
             </a>
          </div>
       </div>
+
       <div class="clearfix"></div>
       <div class="withparams" ng-show="BoardsPage">
          <div class="hotel_message">
@@ -66,7 +53,7 @@
                         <a href="{{(board.id == 'lost_found')
                         ?'/dashboard/lost-found'
                         :(board.id == 'vending_machine')?'/dashboard/inventory'
-                        :(board.id == 'meeting_room')?'/dashboard/booking-report'
+                        :(board.id == 'meeting_room')?'/dashboard/meeting-rooms'
                         :'/dashboard/hotelboard/'+board.id}}">
                            <span class="txtdrop">{{board.label}}</span>
                            <div class="icon_circle messange_color" style="background:{{board.bgcolor}}">

@@ -2,6 +2,9 @@ html {
     overflow-y: auto !important;
     overflow-x: hidden !important;
 }
+.deactive {
+    background: #ccc !important;
+}
 .wizard_department_list{display: block;color: #444;}
 .uplaod_area{position: relative;}
 .inside_cover_image {position: absolute;width: 180px;left: 40px;top: 12px;}

@@ -1,6 +1,6 @@
 <!-- <close-on-outside-click> -->
 <div class="quick_edit_small_section_header" style="text-align: left;border-bottom-color: #ddd;">
-   <ng-md-icon icon="home" class="cursor" style="fill:#fff;top: -2px;left: 6px;margin-right: 14px;   position: relative;" size="25;"></ng-md-icon>
+   <ng-md-icon icon="home" class="cursor" style="fill:#fff;top: -2px;margin-right: 10px;   position: relative;" size="25;"></ng-md-icon>
     <span class="quick_edit_section_title" style="color:#fff;font-weight: 600;    font-size: 17px;"> Dashboard</span>
     <ng-md-icon class="quick_close_btn" icon="close" style="fill:#fff;right: 26px;" size="24"  ng-click="$root.toggleSidebar()" role="button" tabindex="0"></ng-md-icon> 
     </div> 
@@ -14,7 +14,7 @@
 			<a href="javaScript:void(0);" ng-click="sideEmp = !sideEmp">	
 				<ng-md-icon icon="group_add" class="cursor"  size="24"></ng-md-icon> 
 				<span>Employees</span>
-				<ng-md-icon icon="{{(sideEmp)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 9px;" class="cursor expand_icon"  size="24"></ng-md-icon>
+				<ng-md-icon icon="{{(sideEmp)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 25px;" class="cursor expand_icon"  size="24"></ng-md-icon>
 			</a>
 			<ul class="sub_menu" ng-show="sideEmp">
 				<li><a href="/dashboard/employee" ng-class="getClass('/dashboard/employee')" ng-click="closeSidebar();">Manage Employees</a></li>
@@ -37,7 +37,7 @@
 			<a href="javascript:void(0);" ng-click="sideinv = !sideinv;">	
 				<ng-md-icon icon="shop" class="cursor" style="" size="24"></ng-md-icon> 
 				<span>Inventory</span>
-				<ng-md-icon icon="{{(sideinv)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 9px;"  size="24"></ng-md-icon>
+				<ng-md-icon icon="{{(sideinv)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 25px;"  size="24"></ng-md-icon>
 			</a>
 
 
@@ -60,7 +60,7 @@
 			<a href="javascript:void(0);" ng-click="sidemeeting = !sidemeeting;">	
 				<ng-md-icon icon="event_seat" class="cursor" style="" size="24"></ng-md-icon> 
 				<span>Meeting Rooms</span>
-				<ng-md-icon icon="{{(sidemeeting)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 9px;"  size="24"></ng-md-icon>
+				<ng-md-icon icon="{{(sidemeeting)?'expand_less':'expand_more'}}"  style="fill:#fff;position: absolute; right: 25px;"  size="24"></ng-md-icon>
 			</a>
 
 
@@ -99,6 +99,13 @@
 			<a href="/dashboard/sales-report" ng-class="getClass('/dashboard/sales-report')">	
 				<ng-md-icon icon="receipt" class="cursor" style="" size="24"></ng-md-icon> 
 				<span>Sales Report</span>
+			</a>
+		</li>
+
+		<li title="Features" ng-click="closeSidebar();">
+			<a href="/dashboard/features" ng-class="getClass('/dashboard/features')">	
+				<ng-md-icon icon="settings" class="cursor" style="" size="24"></ng-md-icon> 
+				<span>Settings</span>
 			</a>
 		</li>
 	

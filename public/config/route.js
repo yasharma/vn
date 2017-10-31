@@ -287,6 +287,17 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
+    .when("/dashboard/features", {
+        templateUrl   : "/modules/partials/features.html",
+        controller    : "featureController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
    .otherwise({
     redirectTo: '/modules/error/views/404.html'
 

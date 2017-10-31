@@ -52,6 +52,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 								attachment 			: result, 
 								post_date 			: new Date().getTime(), 
 								message 			: $scope.message, 
+								type 				: "comment"
 							}
 						};
 
@@ -59,7 +60,6 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 									
 							var popup = {"message":response.message,"class":response.class};
 							toastService.alert(popup);
-
 							if(response.status == 1)
 							{
 								getComments();
@@ -108,6 +108,32 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 			}
 
 		};
+
+
+		/**************************************
+		* Save user activities
+		**************************************/
+
+		function save_activities(message){
+			var commentRequest={
+					url:window.__API_PATH.ADD_COMMENT,
+					method:"POST",
+					data:{					
+						hotel_id 			: jotData.hotel_id, 
+						jot_id 				: jotData._id, 
+						user_id 			: userDetail._id, 						
+						post_date 			: new Date().getTime(), 
+						message 			: message, 
+						type 				: "activity"
+					}
+				};
+
+			globalRequest.jotCRUD(commentRequest).then(function(response){	
+				getComments();
+			});
+
+		}
+
 
 		/**************************************
 		* Clear comment
@@ -209,7 +235,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 							jotData.image = jotData.image.filter(function(key){
 									if(key){ return key;}
 							});	
-							updateJotMethod({image:jotData.image});
+							updateJotMethod({image:jotData.image},'uploadFiles');
 					    	
 
 		                });
@@ -238,7 +264,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		* Save comment
 		**************************************/
 
-		function updateJotMethod(paramArgs){
+		function updateJotMethod(paramArgs,actions){
 
 			var JotRequest = {
 					url:window.__API_PATH.UPDATE_JOT,
@@ -257,6 +283,50 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 				globalRequest.getJotList(JotType); 
 				$rootScope.files   		 = '';				
 				$scope.showDesc = false;
+
+				var message;
+				if(actions == 'saveDescription')
+				{
+					message = "Update the jot description.";					
+
+				} else if(actions == 'saveMember'){
+
+					message = "Update the jot members list.";
+
+				} else if(actions == 'saveDueDate'){
+
+					message = "Changed the jot due date.";
+
+				} else if(actions == 'saveDept'){
+
+					message = "Update the jot department list.";
+
+				} else if(actions == 'savePriority'){
+
+					message = "Changed the jot priority.";
+
+				} else if(actions == 'savePattern'){
+
+					message = "Update the task pattern.";
+
+				} else if(actions == 'changeStatus'){
+
+					message = "Changed the jot status to "+paramArgs.status;
+
+				} else if(actions == 'saveChecklist'){
+
+					message = "Update the jot checklist.";
+
+				} else if(actions == 'uploadFiles'){
+
+					message = "Update attachment list.";
+
+				} else if(actions == 'deleteAttachment'){
+
+					message = "Delete the attachment.";
+				}
+
+				save_activities(message);
 
 			});
 		}
@@ -285,7 +355,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 					image           : jotData.image
 				};
 
-			updateJotMethod(imageRequest);			
+			updateJotMethod(imageRequest,'deleteAttachment');			
 		};
 
 
@@ -317,7 +387,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 								image           : jotData.image
 							};
 
-						updateJotMethod(descRequest);
+						updateJotMethod(descRequest,'saveDescription');
 	                }
 	            });
 			} else {
@@ -325,7 +395,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 				var descRequest = {
 						jot_description : $rootScope.jot_description,						
 					};
-				updateJotMethod(descRequest);
+				updateJotMethod(descRequest,'saveDescription');
 
 			}
 		};
@@ -345,7 +415,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		    	}	    		
 	    	});
 	    	
-	    	updateJotMethod(memberRequest);
+	    	updateJotMethod(memberRequest,'saveMember');
 	    	
 
 	    };
@@ -356,7 +426,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 	    $scope.saveDueDate = function(){
 	    	var memberRequest = {due_date : new Date($rootScope.due_date).getTime()};
-			updateJotMethod(memberRequest);
+			updateJotMethod(memberRequest,'saveDueDate');
 
 	    };
 
@@ -376,7 +446,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		    	}	    		
 	    	});
 
-			updateJotMethod(deptRequest);
+			updateJotMethod(deptRequest,'saveDept');
 	    };
 
 	    /**************************************
@@ -385,7 +455,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 	    $scope.savePriority = function(){
 	    	var priorityRequest = {priority : $rootScope.priority};
-			updateJotMethod(priorityRequest);
+			updateJotMethod(priorityRequest,'savePriority');
 	    };
 
 	    /**************************************
@@ -451,7 +521,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 	    	var patternRequest = {task_type : task};
 
 	    	$scope.task_type = task;
-			updateJotMethod(patternRequest);
+			updateJotMethod(patternRequest,'savePattern');
 	    };
 
 
@@ -469,7 +539,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 			}
 
 			var stausRequst = {status:$rootScope.status};
-			updateJotMethod(stausRequst);
+			updateJotMethod(stausRequst,'changeStatus');
 
 		};
 			
@@ -697,7 +767,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 		$scope.saveChecklist = function(){	
 			var checklistRequest = {checklist : $scope.checklist};
-			updateJotMethod(checklistRequest);
+			updateJotMethod(checklistRequest,'saveChecklist');
 		};
 
 	}

@@ -25,11 +25,7 @@ app.controller('bookingReportController', ['$scope','$rootScope','globalRequest'
 		globalRequest.getBookingReports();
 
 
-		/************************************************
-		* Get list of Jot types selected by current user
-		*************************************************/
-
-		$scope.boards = $rootScope.activeHotelData.jot_types;
+		
 
 
 		/************************************

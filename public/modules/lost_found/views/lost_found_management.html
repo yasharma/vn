@@ -106,7 +106,7 @@
 		<div class="all_option">
 			<ul class="all_option_list">
 				<li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
-					<a href="{{(board.id == 'lost_found')?'/dashboard/lost-found':(board.id == 'vending_machine')?'/dashboard/inventory' :(board.id == 'meeting_room')?'/dashboard/booking-report':'/dashboard/hotelboard/'+board.id}}">
+					<a href="{{(board.id == 'lost_found')?'/dashboard/lost-found':(board.id == 'vending_machine')?'/dashboard/inventory' :(board.id == 'meeting_room')?'/dashboard/meeting-rooms':'/dashboard/hotelboard/'+board.id}}">
 						<span class="txtdrop">{{board.label}}</span>
 						<div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
 							<img src="{{board.data}}" ng-if="board.icontype == 'image'">

@@ -20,13 +20,9 @@ var AlertSchema 	= new Schema({
         type: String,
          required: 'Description is required.',
     },
-    from_hotel: {
+    hotel_id: {
         type: ObjectId,        
-    },
-
-    read_status: {
-        type: Array,        
-    },   
+    },  
     
 },{
     timestamps: {

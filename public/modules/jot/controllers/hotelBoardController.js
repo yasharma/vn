@@ -115,40 +115,6 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
             
 			$rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
 		};
-
-		/**************************************
-		* Update item list
-		**************************************/
-
-		$scope.updateItemList = function(item){
-
-			var itemIndex = $scope.boards.indexOf(item);
-			if(itemIndex > -1)
-			{
-				$scope.boards.splice(itemIndex, 1);
-			} else {
-				$scope.boards.push(item);
-			}
-
-			var hotelDataObj = {
-				 		hotel_id     	   : $rootScope.activeHotelData._id,
-				 		jot_types 		   : $scope.boards
-				};
-
-			var request={
-						url:window.__API_PATH.UPDATE_HOTEL,
-						method:"PUT",
-						data:hotelDataObj
-				};
-
-			globalRequest.jotCRUD(request).then(function(response){	
-				localStorageService.set('hotel',response.result);
-				window.location.reload();
-			});
-
-
-		};
-
 		
 	}
 ]);

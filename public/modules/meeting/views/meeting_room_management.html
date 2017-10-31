@@ -7,15 +7,13 @@
 				<md-button  slide-toggle="#emp" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
 					{{(invForm)?"Close":"Add Rooms"}}
 				</md-button>
-
-			</div>	
-				
+			</div>				
 	    </div>    
 	</div>
 
 
 	<div class="dash_pro_inform slideable" id="emp">
-	<form name="addRoomform" ng-submit="addRoom(addRoomform.$valid)" novalidate>	
+	 <form name="addRoomform" ng-submit="addRoom(addRoomform.$valid)" novalidate>	
 		<div class="dash_pro_inform_inner boxunoversal">
 			<div class="row">
 
@@ -116,7 +114,26 @@
 		</form>
 	</div>
 
-
+	<div class="top_tab_panel clearfix" style="margin-bottom: 10px;">
+		<div class="all_option">
+			<ul class="all_option_list">
+				<li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
+					<a href="
+					{{(board.id == 'lost_found')
+					?'/dashboard/lost-found':(board.id == 'vending_machine')
+					?'/dashboard/inventory'
+					:(board.id == 'meeting_room')?'/dashboard/meeting-rooms'
+					:'/dashboard/hotelboard/'+board.id}}">
+						<span class="txtdrop">{{board.label}}</span>
+						<div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
+							<img src="{{board.data}}" ng-if="board.icontype == 'image'">
+						</div>
+					</a>
+				</li>				
+			</ul>
+		</div>
+		<br>
+	</div>
 
 
 	<div class="clearfix depart_midle">

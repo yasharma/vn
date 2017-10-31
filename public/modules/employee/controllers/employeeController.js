@@ -166,6 +166,7 @@ app.controller('employeeController', ['$scope','$rootScope','globalRequest','$ti
 	    	var url   = 'http://localhost:3000/invitation/'+edata;
 
 	    	console.log(url);
+	    	
 	    };
 
 	    /*$scope.viewDetail = function(){

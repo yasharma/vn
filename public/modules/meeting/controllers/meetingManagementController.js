@@ -57,6 +57,14 @@ app.controller('meetingManagementController', ['$scope','$rootScope','localStora
 		};
 
 
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = $rootScope.activeHotelData.jot_types;
+		
+
 		/************************************
 		* Add room
 		*************************************/		

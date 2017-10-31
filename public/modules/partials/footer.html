@@ -1,12 +1,8 @@
 <div ng-controller="footerController">
-
 <div layout="row" layout-sm="column" ng-show = "$root.hoteljotLoader" class="hoteljot_loader">
 	<md-progress-circular class="hoteljot_loader_icon" md-mode="indeterminate"></md-progress-circular>
 	<span class="loading_text">Please Wait...</span>
 </div>
-
-
-
 <div class="frontfoter" ng-if="isAuth.footer=='yes'">
 	<div class="frontfoter_inner">
 		<div class="container clearfix">
@@ -25,7 +21,6 @@
 		</div>
 	</div>
 </div>
-
 <!-- ng-style="{'top':($root.popup)?'50%':'-100%'}" -->
 <div class="bglayout" ng-show="$root.popup"></div>
 
@@ -38,5 +33,4 @@
 	<button id="ok" ng-if="$root.popupData.action == 'ok'" ng-click="callClosePopup();"> OK </button>
 	<button id="ok" ng-if="$root.popupData.action == 'redirect'" ng-click="redirectToHome()">OK </button>
 </div>
-
 </div>

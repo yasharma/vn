@@ -41,8 +41,11 @@ app.directive('editJotDirectives', ['globalRequest','$rootScope','$mdDialog','to
 					/**************************************
 					* Update Jot
 					**************************************/
+	
 
 					$scope.saveUpdatedJot = function(){
+
+
 						$scope.edit_jot.jot_id				= $scope.edit_jot._id;
 						$scope.edit_jot.jot_title			= $scope.jot_title;
 						$scope.edit_jot.jot_description		= $rootScope.jot_description;
@@ -51,26 +54,64 @@ app.directive('editJotDirectives', ['globalRequest','$rootScope','$mdDialog','to
 						$scope.edit_jot.priority   		    = $rootScope.priority;
 						$scope.edit_jot.department 		 	= $rootScope.department;
 						$scope.edit_jot.hotel_room 		 	= $rootScope.hotel_room;
-					
 
-						var request={
+						
+					
+						var request= {
 							url:window.__API_PATH.UPDATE_JOT,
 							method:"put",
 							data:$scope.edit_jot
 						};
 
+						
+
 						globalRequest.jotCRUD(request).then(function(response){
 							var popup;	
 							if(response.status ==1)
 							{
-								var JotType = $scope.edit_jot.jot_type;
-								globalRequest.getJotList(JotType); 	
+												 									
+								/*console.log($scope.edit_jot);
 
-								$mdDialog.cancel();
-								popup = {"message":response.message,"class":response.class};
-								toastService.alert(popup);
+								var message,actions;	
+
+								if(jot.jot_members != $scope.edit_jot.jot_members)
+								{
+									//message = "Update the jot members list.";
+									console.log('diff');
+								} else {
+									console.log('same');
+								}*/
+
+
+
+								/*if(actions == 'saveMember'){
+
+									message = "Update the jot members list.";
+
+								} else if(actions == 'saveDueDate'){
+
+									message = "Changed the jot due date.";
+
+								} else if(actions == 'saveDept'){
+
+									message = "Update the jot department list.";
+
+								} else if(actions == 'savePriority'){
+
+									message = "Changed the jot priority.";								
+
+								} else if(actions == 'changeStatus'){
+
+									message = "Changed the jot status";								
+								} 
+*/
+							var JotType = $scope.edit_jot.jot_type;
+							globalRequest.getJotList(JotType);
+							$mdDialog.cancel();
+							popup = {"message":response.message,"class":response.class};
+							toastService.alert(popup);
+
 							} else {
-
 								var errors = '<ul class="mdToast-error-list">';
 								angular.forEach(response.errors,function(value,key){
 										console.log(value);

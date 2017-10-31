@@ -372,11 +372,16 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 		},
 		getNotification:function(){
 			var userDetail   = localStorageService.get('user');
+			var hotel   = localStorageService.get('hotel');
 			var getAlertRequest = {
 			            url:window.__API_PATH.GET_NOTIFICATION,
 			            method:"GET",
 			            params:{
-			            	user_id      	:  userDetail._id
+			            	user_id      	:  userDetail._id,
+			            	user_name      	:  userDetail.user_name,
+			            	contact_number  :  userDetail.contact_number,
+			            	hotels          :  userDetail.hotel_id,
+			            	
 			            }			            
 			          };
 			return $http(getAlertRequest).then(function(response){				

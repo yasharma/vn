@@ -415,7 +415,7 @@ __API_PATH.CANCEL_BOOKING               = '/api/cancel_booking';
 
 __API_PATH.ADD_ALERT                    = '/api/add_alert';
 __API_PATH.GET_ALERTS                   = '/api/get_alerts';
-__API_PATH.UPDATE_ALERT                 = '/api/update_alert';
+__API_PATH.UPDATE_NOTIFICATION          = '/api/update_notification';
 __API_PATH.GET_NOTIFICATION             = '/api/get_notification';
 
 
@@ -1745,13 +1745,13 @@ app.config(['$httpProvider', function($httpProvider){
  localStorageServiceProvider.setPrefix(prefix);
 
 }])
-.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$cookies',
-	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$cookies){ 	        
+.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$cookies','socket',
+	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$cookies,socket){ 	        
         
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) { 
 
-                $rootScope.hideclass            = 'hideclass';
+                $rootScope.hideclass            = '';
                 $rootScope.currentPage          = $location.$$path;
                 $rootScope.activeHotelData      = localStorageService.get('hotel');
                 $rootScope.currentUser          = localStorageService.get('user');
@@ -1797,32 +1797,23 @@ app.config(['$httpProvider', function($httpProvider){
         });
 
         $rootScope.$on("$routeChangeSuccess", function(event, next, current) {
-          $rootScope.hideclass = '';
+          $rootScope.hideclass = 'hideclass';
           $templateCache.removeAll(); 
-
-          
         });
 
 
     	
     	/* This will logout the user from the application */
     	$rootScope.clearToken = function () {
+            socket.emit('web.logout',localStorageService.get('user'));
             localStorageService.remove('token');
             localStorageService.remove('user');
             localStorageService.remove('hotel');
             $cookies.remove("hoteljot");
             delete $rootScope.user;
-            AuthSrv.isLogged = false;
+            AuthSrv.isLogged = false;            
             $location.path('/');
         };
-
-        // $rootScope.$on( 'TokenExpiredError', function( event, eventData ) {
-        //    toastService.alert( {message: eventData.message , class: 'error'});
-        // });
-        
-        /* Set user for entire application */
-    	//$rootScope.admin = localStorageService.get('admin');
-
 	
 }]);
 
@@ -2115,6 +2106,17 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
         }
     })
 
+    .when("/dashboard/features", {
+        templateUrl   : "/modules/partials/features.html",
+        controller    : "featureController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
    .otherwise({
     redirectTo: '/modules/error/views/404.html'
 
@@ -2174,8 +2176,8 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 		*************************************/	
 
 		$scope.blank = function(){
-			$scope.title = "";		
-			$scope.description = "";		
+			$scope.alert_title = "";		
+			$scope.alert_description = "";		
 			
 		};	
 
@@ -2183,13 +2185,9 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 
 		/************************************
 		* Add alert
-		*************************************/		
-		
+		*************************************/			
 
 		$scope.addAlert = function(){	
-
-		/*socket.emit('notification2','hello');
-		return false;	*/	
 
 			var request = {
 			            url:window.__API_PATH.ADD_ALERT,
@@ -2207,11 +2205,12 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 			 	if(response.status == 1)
 			 	{
 			 		$scope.blank();			 		
-			 		socket.emit('notification',response.result);
-			 		
+			 		socket.emit('notificationToAll',response.result);			 		
 			 		
 			 		popup = {"message":response.message,"class":response.class};
-					toastService.alert(popup);		 		
+					toastService.alert(popup);	
+					globalRequest.getAlertList();	 
+
 			 	} else {
 
 			 		var errors = '<ul class="mdToast-error-list">';
@@ -2225,11 +2224,47 @@ app.controller('alertsController', ['$scope','$rootScope','globalRequest','$mdDi
 			 });
 
 		};
+
+		/*****************************************
+		* Open  more detail view
+		*****************************************/
+
+		$scope.openSenderDetail = function(data){
+			$mdDialog.show({
+				controller: 'detailViewController',
+				templateUrl: '/modules/alerts/views/view_detail.html',
+				parent: angular.element(document.body),
+				fullscreen: $scope.customFullscreen,
+				clickOutsideToClose:true,	
+				locals:{viewDetail:data}				
+			}).then(function(answer) {}, function() {});
+		};
 		
 	}
 ]);
 
 
+
+
+
+
+"use strict";
+
+app.controller('detailViewController', ['$scope','viewDetail',
+	function($scope,viewDetail) {
+		
+		/***********************************************
+		* Pass report detail value in current scope
+		***********************************************/
+
+		console.log(viewDetail);
+		angular.forEach(viewDetail,function (value,key) {
+		    $scope[key] = value;
+		});	
+
+
+	}
+]);
 
 
 
@@ -4065,7 +4100,7 @@ app.controller('documentCenterController',['$scope','$rootScope','globalRequest'
 	};
 
 	/*****************************************
-	* Open edit Contact
+	* Open  document files view
 	*****************************************/	
 
 	$scope.openDocumentFileView = function(detail){
@@ -4601,6 +4636,7 @@ app.controller('employeeController', ['$scope','$rootScope','globalRequest','$ti
 	    	var url   = 'http://localhost:3000/invitation/'+edata;
 
 	    	console.log(url);
+	    	
 	    };
 
 	    /*$scope.viewDetail = function(){
@@ -6337,40 +6373,6 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
             
 			$rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
 		};
-
-		/**************************************
-		* Update item list
-		**************************************/
-
-		$scope.updateItemList = function(item){
-
-			var itemIndex = $scope.boards.indexOf(item);
-			if(itemIndex > -1)
-			{
-				$scope.boards.splice(itemIndex, 1);
-			} else {
-				$scope.boards.push(item);
-			}
-
-			var hotelDataObj = {
-				 		hotel_id     	   : $rootScope.activeHotelData._id,
-				 		jot_types 		   : $scope.boards
-				};
-
-			var request={
-						url:window.__API_PATH.UPDATE_HOTEL,
-						method:"PUT",
-						data:hotelDataObj
-				};
-
-			globalRequest.jotCRUD(request).then(function(response){	
-				localStorageService.set('hotel',response.result);
-				window.location.reload();
-			});
-
-
-		};
-
 		
 	}
 ]);
@@ -6474,6 +6476,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 								attachment 			: result, 
 								post_date 			: new Date().getTime(), 
 								message 			: $scope.message, 
+								type 				: "comment"
 							}
 						};
 
@@ -6481,7 +6484,6 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 									
 							var popup = {"message":response.message,"class":response.class};
 							toastService.alert(popup);
-
 							if(response.status == 1)
 							{
 								getComments();
@@ -6530,6 +6532,32 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 			}
 
 		};
+
+
+		/**************************************
+		* Save user activities
+		**************************************/
+
+		function save_activities(message){
+			var commentRequest={
+					url:window.__API_PATH.ADD_COMMENT,
+					method:"POST",
+					data:{					
+						hotel_id 			: jotData.hotel_id, 
+						jot_id 				: jotData._id, 
+						user_id 			: userDetail._id, 						
+						post_date 			: new Date().getTime(), 
+						message 			: message, 
+						type 				: "activity"
+					}
+				};
+
+			globalRequest.jotCRUD(commentRequest).then(function(response){	
+				getComments();
+			});
+
+		}
+
 
 		/**************************************
 		* Clear comment
@@ -6631,7 +6659,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 							jotData.image = jotData.image.filter(function(key){
 									if(key){ return key;}
 							});	
-							updateJotMethod({image:jotData.image});
+							updateJotMethod({image:jotData.image},'uploadFiles');
 					    	
 
 		                });
@@ -6660,7 +6688,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		* Save comment
 		**************************************/
 
-		function updateJotMethod(paramArgs){
+		function updateJotMethod(paramArgs,actions){
 
 			var JotRequest = {
 					url:window.__API_PATH.UPDATE_JOT,
@@ -6679,6 +6707,50 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 				globalRequest.getJotList(JotType); 
 				$rootScope.files   		 = '';				
 				$scope.showDesc = false;
+
+				var message;
+				if(actions == 'saveDescription')
+				{
+					message = "Update the jot description.";					
+
+				} else if(actions == 'saveMember'){
+
+					message = "Update the jot members list.";
+
+				} else if(actions == 'saveDueDate'){
+
+					message = "Changed the jot due date.";
+
+				} else if(actions == 'saveDept'){
+
+					message = "Update the jot department list.";
+
+				} else if(actions == 'savePriority'){
+
+					message = "Changed the jot priority.";
+
+				} else if(actions == 'savePattern'){
+
+					message = "Update the task pattern.";
+
+				} else if(actions == 'changeStatus'){
+
+					message = "Changed the jot status to "+paramArgs.status;
+
+				} else if(actions == 'saveChecklist'){
+
+					message = "Update the jot checklist.";
+
+				} else if(actions == 'uploadFiles'){
+
+					message = "Update attachment list.";
+
+				} else if(actions == 'deleteAttachment'){
+
+					message = "Delete the attachment.";
+				}
+
+				save_activities(message);
 
 			});
 		}
@@ -6707,7 +6779,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 					image           : jotData.image
 				};
 
-			updateJotMethod(imageRequest);			
+			updateJotMethod(imageRequest,'deleteAttachment');			
 		};
 
 
@@ -6739,7 +6811,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 								image           : jotData.image
 							};
 
-						updateJotMethod(descRequest);
+						updateJotMethod(descRequest,'saveDescription');
 	                }
 	            });
 			} else {
@@ -6747,7 +6819,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 				var descRequest = {
 						jot_description : $rootScope.jot_description,						
 					};
-				updateJotMethod(descRequest);
+				updateJotMethod(descRequest,'saveDescription');
 
 			}
 		};
@@ -6767,7 +6839,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		    	}	    		
 	    	});
 	    	
-	    	updateJotMethod(memberRequest);
+	    	updateJotMethod(memberRequest,'saveMember');
 	    	
 
 	    };
@@ -6778,7 +6850,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 	    $scope.saveDueDate = function(){
 	    	var memberRequest = {due_date : new Date($rootScope.due_date).getTime()};
-			updateJotMethod(memberRequest);
+			updateJotMethod(memberRequest,'saveDueDate');
 
 	    };
 
@@ -6798,7 +6870,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		    	}	    		
 	    	});
 
-			updateJotMethod(deptRequest);
+			updateJotMethod(deptRequest,'saveDept');
 	    };
 
 	    /**************************************
@@ -6807,7 +6879,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 	    $scope.savePriority = function(){
 	    	var priorityRequest = {priority : $rootScope.priority};
-			updateJotMethod(priorityRequest);
+			updateJotMethod(priorityRequest,'savePriority');
 	    };
 
 	    /**************************************
@@ -6873,7 +6945,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 	    	var patternRequest = {task_type : task};
 
 	    	$scope.task_type = task;
-			updateJotMethod(patternRequest);
+			updateJotMethod(patternRequest,'savePattern');
 	    };
 
 
@@ -6891,7 +6963,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 			}
 
 			var stausRequst = {status:$rootScope.status};
-			updateJotMethod(stausRequst);
+			updateJotMethod(stausRequst,'changeStatus');
 
 		};
 			
@@ -7119,7 +7191,7 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 		$scope.saveChecklist = function(){	
 			var checklistRequest = {checklist : $scope.checklist};
-			updateJotMethod(checklistRequest);
+			updateJotMethod(checklistRequest,'saveChecklist');
 		};
 
 	}
@@ -7564,8 +7636,11 @@ app.directive('editJotDirectives', ['globalRequest','$rootScope','$mdDialog','to
 					/**************************************
 					* Update Jot
 					**************************************/
+	
 
 					$scope.saveUpdatedJot = function(){
+
+
 						$scope.edit_jot.jot_id				= $scope.edit_jot._id;
 						$scope.edit_jot.jot_title			= $scope.jot_title;
 						$scope.edit_jot.jot_description		= $rootScope.jot_description;
@@ -7574,26 +7649,64 @@ app.directive('editJotDirectives', ['globalRequest','$rootScope','$mdDialog','to
 						$scope.edit_jot.priority   		    = $rootScope.priority;
 						$scope.edit_jot.department 		 	= $rootScope.department;
 						$scope.edit_jot.hotel_room 		 	= $rootScope.hotel_room;
-					
 
-						var request={
+						
+					
+						var request= {
 							url:window.__API_PATH.UPDATE_JOT,
 							method:"put",
 							data:$scope.edit_jot
 						};
 
+						
+
 						globalRequest.jotCRUD(request).then(function(response){
 							var popup;	
 							if(response.status ==1)
 							{
-								var JotType = $scope.edit_jot.jot_type;
-								globalRequest.getJotList(JotType); 	
+												 									
+								/*console.log($scope.edit_jot);
 
-								$mdDialog.cancel();
-								popup = {"message":response.message,"class":response.class};
-								toastService.alert(popup);
+								var message,actions;	
+
+								if(jot.jot_members != $scope.edit_jot.jot_members)
+								{
+									//message = "Update the jot members list.";
+									console.log('diff');
+								} else {
+									console.log('same');
+								}*/
+
+
+
+								/*if(actions == 'saveMember'){
+
+									message = "Update the jot members list.";
+
+								} else if(actions == 'saveDueDate'){
+
+									message = "Changed the jot due date.";
+
+								} else if(actions == 'saveDept'){
+
+									message = "Update the jot department list.";
+
+								} else if(actions == 'savePriority'){
+
+									message = "Changed the jot priority.";								
+
+								} else if(actions == 'changeStatus'){
+
+									message = "Changed the jot status";								
+								} 
+*/
+							var JotType = $scope.edit_jot.jot_type;
+							globalRequest.getJotList(JotType);
+							$mdDialog.cancel();
+							popup = {"message":response.message,"class":response.class};
+							toastService.alert(popup);
+
 							} else {
-
 								var errors = '<ul class="mdToast-error-list">';
 								angular.forEach(response.errors,function(value,key){
 										console.log(value);
@@ -8112,6 +8225,7 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                       jot_members         : $rootScope.jot_members,
                       priority            : $rootScope.priority,
                       hotel_id            : hotel._id,
+                      user_id             : $rootScope.currentUser._id,
                       jot_type            : $rootScope.jot_type,
                       hotel_room          : $rootScope.hotel_room,
                       due_date            : new Date($rootScope.due_date).getTime() || '',
@@ -8137,7 +8251,8 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                     {
                       var jotID = response.result._id;
 
-                      socket.emit('jot_create_notification',response.result);
+                      socket.emit('notificationToRoom',response.result);
+                      globalRequest.getNotification();
 
                       /****************************
                       * Upload file if exists
@@ -9289,11 +9404,7 @@ app.controller('bookingReportController', ['$scope','$rootScope','globalRequest'
 		globalRequest.getBookingReports();
 
 
-		/************************************************
-		* Get list of Jot types selected by current user
-		*************************************************/
-
-		$scope.boards = $rootScope.activeHotelData.jot_types;
+		
 
 
 		/************************************
@@ -9968,6 +10079,14 @@ app.controller('meetingManagementController', ['$scope','$rootScope','localStora
 		};
 
 
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = $rootScope.activeHotelData.jot_types;
+		
+
 		/************************************
 		* Add room
 		*************************************/		
@@ -10215,6 +10334,55 @@ app.filter('roomNamefilter',function(){
 
 "use strict";
 
+app.controller("featureController",['$scope','$rootScope','$routeParams','globalRequest','localStorageService','$location','$mdDialog','$route',
+	function($scope,$rootScope,$routeParams,globalRequest,localStorageService,$location,$mdDialog,$route){
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = $rootScope.activeHotelData.jot_types;
+
+
+		/**************************************
+		* Update item list
+		**************************************/
+
+		$scope.updateItemList = function(item){
+
+			var itemIndex = $scope.boards.indexOf(item);
+
+			if(itemIndex > -1)
+			{
+				$scope.boards.splice(itemIndex, 1);
+			} else {
+				$scope.boards.push(item);
+			}
+
+			var hotelDataObj = {
+				 		hotel_id     	   : $rootScope.activeHotelData._id,
+				 		jot_types 		   : $scope.boards
+				};
+
+			var request={
+						url:window.__API_PATH.UPDATE_HOTEL,
+						method:"PUT",
+						data:hotelDataObj
+				};
+
+			globalRequest.jotCRUD(request).then(function(response){	
+				localStorageService.set('hotel',response.result);
+				$scope.$digest();
+				/*window.location.reload();*/
+			});
+
+
+		};
+		
+	}
+]);
+"use strict";
+
 app.controller('footerController', ['$scope','$rootScope','$location','$interval',
 	function($scope,$rootScope,$location,$interval) {
 		//$rootScope.popup = true;
@@ -10331,12 +10499,6 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 	    $rootScope.toggleSidebar      = buildToggler('sidebar');
 	    $rootScope.toggleNotification = buildToggler('notification');
 
-	    /*$scope.isOpenRight = function(){
-	      return $mdSidenav('right').isOpen();
-	    };*/
-
-	   
-
 	    function buildToggler(navID) {
 	    	/*$rootScope.activeSidebar = !$rootScope.activeSidebar;*/
 	      return function() {
@@ -10355,16 +10517,18 @@ app.controller('headerController', ['$scope','localStorageService','$rootScope',
 		globalRequest.getNotification();
 		
 
-	    socket.on('notification',function(resp){
-	    	
+	    socket.on('notificationToAll',function(resp){	    	
 	    	$rootScope.message.push(resp.result);
 		});
 
-		socket.on('jot_create_notification',function(resp){
-			console.log(resp.result);
-	    	$rootScope.message.push(resp.result);
-	    	$rootScope.message2 = resp.result;
+		socket.on('notificationToRoom',function(resp){		
+	    	globalRequest.getNotification();
 		});
+
+
+		/*$scope.$on('$destroy', function (event) {        
+		    socket.removeAllListeners();	        
+		});*/
 		
 		/*******************************************************
 		* Callback function to close jot circle on outside click
@@ -10483,16 +10647,16 @@ app.controller('notificationController', ['$scope','$rootScope','globalRequest',
 		* Delete notification
 		*****************************************/	
 
-		$scope.removeNotification = function(aid,index){
+		$scope.removeNotification = function(aid){
 			
 			var request={
-				url:window.__API_PATH.UPDATE_ALERT,
+				url:window.__API_PATH.UPDATE_NOTIFICATION,
 				method:"PUT",
-				data:{_id:aid, user_id:$rootScope.currentUser._id}
+				data:{_id:aid, contact_number:$rootScope.currentUser.contact_number}
 			};
 			
 			globalRequest.jotCRUD(request).then(function(response){
-				$rootScope.message.splice(index, 1);
+				globalRequest.getNotification();
 			});
 
 		};
@@ -12612,11 +12776,16 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 		},
 		getNotification:function(){
 			var userDetail   = localStorageService.get('user');
+			var hotel   = localStorageService.get('hotel');
 			var getAlertRequest = {
 			            url:window.__API_PATH.GET_NOTIFICATION,
 			            method:"GET",
 			            params:{
-			            	user_id      	:  userDetail._id
+			            	user_id      	:  userDetail._id,
+			            	user_name      	:  userDetail.user_name,
+			            	contact_number  :  userDetail.contact_number,
+			            	hotels          :  userDetail.hotel_id,
+			            	
 			            }			            
 			          };
 			return $http(getAlertRequest).then(function(response){				
@@ -12727,6 +12896,9 @@ app.factory('socket', function($rootScope) {
                     }
                 });
             });
+        },
+        removeAllListeners: function (eventName, callback) {
+          socket.removeAllListeners();
         }
     };
 });

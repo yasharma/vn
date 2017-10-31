@@ -169,6 +169,7 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                       jot_members         : $rootScope.jot_members,
                       priority            : $rootScope.priority,
                       hotel_id            : hotel._id,
+                      user_id             : $rootScope.currentUser._id,
                       jot_type            : $rootScope.jot_type,
                       hotel_room          : $rootScope.hotel_room,
                       due_date            : new Date($rootScope.due_date).getTime() || '',
@@ -194,7 +195,8 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                     {
                       var jotID = response.result._id;
 
-                      socket.emit('jot_create_notification',response.result);
+                      socket.emit('notificationToRoom',response.result);
+                      globalRequest.getNotification();
 
                       /****************************
                       * Upload file if exists

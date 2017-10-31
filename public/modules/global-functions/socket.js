@@ -24,6 +24,9 @@ app.factory('socket', function($rootScope) {
                     }
                 });
             });
+        },
+        removeAllListeners: function (eventName, callback) {
+          socket.removeAllListeners();
         }
     };
 });

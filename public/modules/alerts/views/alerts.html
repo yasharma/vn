@@ -63,11 +63,15 @@
 		<div class="deptsrch_data">
 			 <ul class="deptsrch_data_list clearfix">
 			 		<li ng-repeat="alerts in filtereddepartment = ($root.alertList | orderBy:'_id':true |  
-	              filter: {alert_title: search_alert})">
+	              filter:(!!search_alert || undefined) &&  {alert_title: search_alert})">
 			 			<div class="deptsrch_data_title">
 			 				<ng-md-icon icon="add_alert" style="fill: #3da0d3" size="20"></ng-md-icon> 
-			 				{{alerts.title}}
-                  
+			 				<span class="capitalize">
+		                        {{alerts.title}}
+		                     </span>
+		                     <span style="position: absolute; right: 15px;">
+		                        <ng-md-icon   class="cursor edit_icon tablebluetag" icon="remove_red_eye" class="cursor"  size="22" ng-click="openSenderDetail(alerts);" title="View more detail"></ng-md-icon>
+		                     </span>
 			 			</div>
 			 			<div class="deptsrch_data_para">
 			 				<p>

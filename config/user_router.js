@@ -151,7 +151,7 @@ module.exports = {
 
 	 	{ url: '/add_alert', method: ctrls.alertController.addAlert, type: 'POST'},
 	 	{ url: '/get_alerts', method: ctrls.alertController.listAlerts, type: 'GET'},
-	 	{ url: '/update_alert', method: ctrls.alertController.updateAlerts, type: 'PUT'},
+	 	{ url: '/update_notification', method: ctrls.alertController.updateNotification, type: 'PUT'},
 
 	 	{ url: '/get_notification', method: ctrls.alertController.listNotification, type: 'GET'},
 	  	

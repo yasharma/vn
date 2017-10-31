@@ -56,7 +56,7 @@
 			</li>
 			<li class="noti_icon positionrel" ng-click="$root.toggleNotification()">
 				<ng-md-icon icon="notifications" style="fill: white" size="30"></ng-md-icon>
-				<!-- <small class="notification-badge">5</small> -->
+				<small class="notification-badge" ng-if="$root.message.length">{{$root.message.length}}</small>
 			</li>
 			<li class="usermenu" title="{{$root.currentUser.first_name}} {{$root.currentUser.last_name}}">
 				<md-menu md-position-mode="target-right target" md-offset="0 80">
@@ -66,6 +66,7 @@
 		          	<!-- <img src="{{($root.userData.profile_image)?'images/profile_image/'+$root.userData.profile_image:'assets/images/default_profile.png'}}"  style="max-width: 100%;"> -->
 		          	</i>
 		          	<ng-md-icon icon="keyboard_arrow_down" style="fill: white" size="25"></ng-md-icon>
+
 		          </md-button>
 
 		            <md-menu-content width="3.5" >           
@@ -162,14 +163,14 @@
 				</md-menu>
 			</div>
 
-			<div class="heder_srch">
+			<!-- <div class="heder_srch">
 
 			<md-input-container md-no-float="" class="md-block md-input-has-placeholder" autocomplete="off" style="margin: 0 !important;">
 			<ng-md-icon icon="search"  class="search_icon" style="fill:#a3a3a3" size="24"></ng-md-icon>
 	        <input  placeholder="Search here..." class="ng-pristine searchbar ng-untouched ng-valid ng-isolate-scope md-input ng-empty" aria-label="@ Staff Manager Name with Note for Manager" aria-invalid="false">	        
 
 	    </md-input-container>
-			</div>
+			</div> -->
 		</div>
 	</div>
 
