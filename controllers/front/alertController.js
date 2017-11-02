@@ -149,7 +149,6 @@ exports.updateNotification = (reqst, respe) => {
 exports.listNotification = (reqst, respe) => {
     var uid                =   reqst.query.user_id;
     var contactNumber      =   reqst.query.contact_number;
-
         User.findOne({'contact_number': contactNumber},{role: 1, email: 1, status: 1, hotel_id: 1 }, function (err, userdata) {
 
             if(!_.isNull(userdata)) 
@@ -165,50 +164,52 @@ exports.listNotification = (reqst, respe) => {
 
                             var assigenedUserName = [];
                             var assigenedUserDept = [];
-                            employee.filter(function(obj){
-                                assigenedUserName.push(obj.user_name);
-                                assigenedUserDept = assigenedUserDept.concat(obj.departments);
-                            });
-                            
-                            Hotel.find({user_id: userdata._id}, function(err, hoteldata){
-                              var myHotels = [];
-                              hoteldata.filter(function(obj){
-                                  myHotels.push(obj._id);
-                            });
-                              
-                              
-                                condition = { 
-                                    $and:[
-                                        {
-                                          $or:[
-                                              {"to_users"         : { $in: assigenedUserName}},
-                                              {"to_departments"   : { $in:assigenedUserDept}},
-                                              {"from_hotel"       : { $in: myHotels}},
-                                              {"type"             : "alert"}            
-                                          ]
-                                        },                                        
-                                        {"read_status" : { $nin: [contactNumber]}}
-                                    ]                                           
-                                                
-                                  };
 
-                                  NotificationDB.find(condition, function (err, result) {
-                                    
-                                      if(result && result.length > 0){  
-                                          respe.json(response.success(result,'Notification Found.'));
-                                      }else{
-                                          respe.json(response.errors(err,"Error in notification listing."));
-                                      }
-                                  });
-                            }); 
+
+                          for(var i=0; i<employee.length; i++)
+                          {
+                              var empObj = employee[i];
+
+
+
+                                condition = { 
+                                              $and:[
+                                                  {
+                                                    $or:[  
+                                                      {
+                                                        $and:[
+                                                          {"to_users"         : { $in: [empObj.user_name]}},
+                                                          {"from_hotel"  : { $in:[empObj.hotel_id]}},
+                                                        ]
+                                                      },
+
+                                                      {
+                                                        $and:[
+                                                          {"to_departments"   : { $in:empObj.departments}},
+                                                          {"from_hotel"       : { $in:[empObj.hotel_id]}}
+                                                        ]
+                                                      }
+                                                    ]
+                                                  },                                        
+                                                  {"read_status" : { $nin: [contactNumber]}}
+                                              ]           
+                                            };
+
+                                NotificationDB.find(condition, function (err, result) {
+                          
+                                    if(result && result.length > 0){                                             
+                                        respe.json(response.success(result,'Notification Found.'));
+                                    }
+                                });
+                          }  
                         } else {
 
                           Hotel.find({user_id: userdata._id}, function(err, hoteldata){
                               var myHotels = [];
                               hoteldata.filter(function(obj){
                                   myHotels.push(obj._id);
-                            });                         
-                              
+                              });                         
+                                
                                                                   
                                   NotificationDB.find({   
                                     $and:[

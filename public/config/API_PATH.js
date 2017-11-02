@@ -15,7 +15,7 @@ __API_PATH.GET_COMMENT                  = '/api/get_jotactivity';
 __API_PATH.LOGIN                        = '/api/login';
 __API_PATH.REGISTER                     = '/api/register';
 __API_PATH.UPDATE_PROFILE               = '/api/edit_profile';
-__API_PATH.CHANGE_PASSWORD               = '/api/changePassword';
+__API_PATH.CHANGE_PASSWORD              = '/api/changePassword';
 
 __API_PATH.GET_HOTELS                   = '/api/get_hotels';
 __API_PATH.GET_HOTEL_DETAIL             = '/api/hotel_detail';
@@ -25,7 +25,7 @@ __API_PATH.UPDATE_HOTEL                 = '/api/update_hotel';
 
 
 __API_PATH.STAFF_SUGGESTION             = '/api/get_members';
-__API_PATH.MEMBER_SIGNUP               = '/api/member_signup';
+__API_PATH.MEMBER_SIGNUP                = '/api/member_signup';
 
 
 
@@ -124,180 +124,333 @@ __API_PATH.GET_ALERTS                   = '/api/get_alerts';
 __API_PATH.UPDATE_NOTIFICATION          = '/api/update_notification';
 __API_PATH.GET_NOTIFICATION             = '/api/get_notification';
 
+__API_PATH.ADD_LOST_FOUND_CATEGORY      = '/api/add_lost_found_category';
+__API_PATH.UPDATE_LOST_FOUND_CATEGORY   = '/api/update_lost_found_category';
+__API_PATH.DELETE_LOST_FOUND_CATEGORY   = '/api/delete_lost_found_category';
+__API_PATH.GET_LOST_FOUND_CATEGORY      = '/api/get_lost_found_category';
+
+__API_PATH.ADD_FACILITY                 = '/api/add_facility';
+__API_PATH.UPDATE_FACILITY              = '/api/update_facility';
+__API_PATH.DELETE_FACILITY              = '/api/delete_facility';
+__API_PATH.GET_FACILITY                 = '/api/get_facility';
 
 
-__API_PATH.HEADER_MENU =  [
-    {label:"Home", id:"home", href:"/"},
-    {label:"ABOUT", id:"about-us", href:"#" ,class:"active"},
-    {label:"HOW IT WORKS", id:"work", href:'#',class:""},
-    {label:"FEATURES", id:"feature", href:'#',class:""},
-    {label:"TESTIMONALS", id:"testimonial", href:'#',class:""}
+
+__API_PATH.HEADER_MENU = [{
+        label: "Home",
+        id: "home",
+        href: "/"
+    },
+    {
+        label: "ABOUT",
+        id: "about-us",
+        href: "#",
+        class: "active"
+    },
+    {
+        label: "HOW IT WORKS",
+        id: "work",
+        href: '#',
+        class: ""
+    },
+    {
+        label: "FEATURES",
+        id: "feature",
+        href: '#',
+        class: ""
+    },
+    {
+        label: "TESTIMONALS",
+        id: "testimonial",
+        href: '#',
+        class: ""
+    }
 ];
 
 
 
-__API_PATH.JOT_TYPES  = {
-                            quick:{label:"Quick",id:'quick',data:'assets/images/jot_icon.png',icontype:'image',directory:'jot',bgcolor:"#3953a8",class:"cirsularhide",default:true,order:1},
-                            
-                            issue:{label:"Issue",id:'issue',data:'assets/images/issue_icon.png',icontype:'image',directory:'jot',bgcolor:"#53ad78",class:"",default:true,order:2},
-                           
-                            task:{label:"Task",id:'task',data:'assets/images/task_icon.png',icontype:'image',directory:'jot',bgcolor:"#aba0ef",class:"",default:true,order:3},
-                            
-                            note:{label:"Note",id:'note',data:'assets/images/note_icon.png',icontype:'image',directory:'jot',bgcolor:"#71adf7",class:"",default:true,order:4},
+__API_PATH.JOT_TYPES = {
+    quick: {
+        label: "Quick",
+        id: 'quick',
+        data: 'assets/images/jot_icon.png',
+        icontype: 'image',
+        directory: 'jot',
+        bgcolor: "#3953a8",
+        class: "cirsularhide",
+        default: true,
+        order: 1
+    },
 
-                            messages:{label:"Messages",id:'messages',data:'assets/images/message_icon.png',icontype:'image',directory:'jot',bgcolor:"#198cc6",class:"",default:true,order:5},
-                            
-                            lost_found:{label:"Lost & Found",id:'lost_found',data:'assets/images/lost_icon.png',icontype:'image',directory:'lost_found',bgcolor:"#e37f4b",class:"",default:false,order:6},
-                            
-                            vending_machine:{label:"Vending Machine",id:'vending_machine',data:'assets/images/vending_icon.png',icontype:'image',directory:'vending_machine',bgcolor:"#e37f4b",class:"",default:false,order:7},
+    issue: {
+        label: "Issue",
+        id: 'issue',
+        data: 'assets/images/issue_icon.png',
+        icontype: 'image',
+        directory: 'jot',
+        bgcolor: "#53ad78",
+        class: "",
+        default: true,
+        order: 2
+    },
 
-                            meeting_room:{label:"Meeting Room",id:'meeting_room',data:'assets/images/metting_icon.png',icontype:'image',directory:'meeting',bgcolor:"#f8553a",class:"",default:true}
-                        };                        
+    task: {
+        label: "Task",
+        id: 'task',
+        data: 'assets/images/task_icon.png',
+        icontype: 'image',
+        directory: 'jot',
+        bgcolor: "#aba0ef",
+        class: "",
+        default: true,
+        order: 3
+    },
+
+    note: {
+        label: "Note",
+        id: 'note',
+        data: 'assets/images/note_icon.png',
+        icontype: 'image',
+        directory: 'jot',
+        bgcolor: "#71adf7",
+        class: "",
+        default: true,
+        order: 4
+    },
+
+    messages: {
+        label: "Messages",
+        id: 'messages',
+        data: 'assets/images/message_icon.png',
+        icontype: 'image',
+        directory: 'jot',
+        bgcolor: "#198cc6",
+        class: "",
+        default: true,
+        order: 5
+    },
+
+    lost_found: {
+        label: "Lost & Found",
+        id: 'lost_found',
+        data: 'assets/images/lost_icon.png',
+        icontype: 'image',
+        directory: 'lost_found',
+        bgcolor: "#e37f4b",
+        class: "",
+        default: false,
+        order: 6
+    },
+
+    vending_machine: {
+        label: "Vending Machine",
+        id: 'vending_machine',
+        data: 'assets/images/vending_icon.png',
+        icontype: 'image',
+        directory: 'vending_machine',
+        bgcolor: "#e37f4b",
+        class: "",
+        default: false,
+        order: 7
+    },
+
+    meeting_room: {
+        label: "Meeting Room",
+        id: 'meeting_room',
+        data: 'assets/images/metting_icon.png',
+        icontype: 'image',
+        directory: 'meeting',
+        bgcolor: "#f8553a",
+        class: "",
+        default: true
+    }
+};
 
 
 
-__API_PATH.Hotel_STEPS  =[
-                            {label:"Basic Information",id:"default",description:"Fill out basic information of hotel",next:"default"},
-                            {label:"Jots",id:"default",description:"You can add or remove the features as per your hotel need",next:"default"},
-                            {label:"Departments",id:"default",description:"Add the department your hotel have",next:"default"},
-                            {label:"Employees",id:"default",description:"Add your hotel hotel staff",next:"meeting_room"},
-                            {label:"Rooms & Common Area",id:"meeting_room",description:"Add rooms & common area",next:"false"}
-                        ]; 
+__API_PATH.Hotel_STEPS = [{
+        label: "Basic Information",
+        id: "default",
+        description: "Fill out basic information of hotel",
+        next: "default"
+    },
+    {
+        label: "Jots",
+        id: "default",
+        description: "You can add or remove the features as per your hotel need",
+        next: "default"
+    },
+    {
+        label: "Departments",
+        id: "default",
+        description: "Add the department your hotel have",
+        next: "default"
+    },
+    {
+        label: "Employees",
+        id: "default",
+        description: "Add your hotel hotel staff",
+        next: "meeting_room"
+    },
+    {
+        label: "Rooms & Common Area",
+        id: "meeting_room",
+        description: "Add rooms & common area",
+        next: "false"
+    }
+];
 
 
- 
-
-__API_PATH.JOT_PRIORITY   = [{name:'urgent',class:'urgent'},{name:'high',class:'high'},{name:'medium',class:'medium'},{name:'low',class:'low'}]; 
 
 
-
-__API_PATH.DEFAULT_CHECKLIST    =  [
-                                        {
-                                            name   :"Prepare Room 7 AM @Jon",
-                                            sublist:[{name:"tea1"},{name:"tea2"}]
-                                        },
-                                        {
-                                            name   :"Prepare Room 7 AM @Jon2",
-                                            sublist:[{name:"tea3"},{name:"tea4"}]
-                                        }           
-                                    ];
-
+__API_PATH.JOT_PRIORITY = [{
+    name: 'urgent',
+    class: 'urgent'
+}, {
+    name: 'high',
+    class: 'high'
+}, {
+    name: 'medium',
+    class: 'medium'
+}, {
+    name: 'low',
+    class: 'low'
+}];
 
 
 
-__API_PATH.RECURRING_PATTERN = [
-                                    {
-                                        label        :"Daily",
-                                        id           :"daily",  
-                                        description  : "Daily Recurring"                    
-                                    },
-                                    {
-                                        label        :"Weekly",
-                                        id           :"weekly",
-                                        description  : "Recurring Every Week" 
-                                    },
-                                    {
-                                        label        :"Monthly",
-                                        id           :"monthly",
-                                        description  : "Recurring Every Month"
-                                    },
-                                    {
-                                        label        :"Yearly",
-                                        id           :"yearly",
-                                        description  : "Recurring Every Year"
-                                    }
-
-                                ]; 
+__API_PATH.DEFAULT_CHECKLIST = [{
+        name: "Prepare Room 7 AM @Jon",
+        sublist: [{
+            name: "tea1"
+        }, {
+            name: "tea2"
+        }]
+    },
+    {
+        name: "Prepare Room 7 AM @Jon2",
+        sublist: [{
+            name: "tea3"
+        }, {
+            name: "tea4"
+        }]
+    }
+];
 
 
-__API_PATH.MONTH = [
-                                {
-                                    label        : "January",
-                                    value        : "1"          
-                                },
-                                {
-                                    label        : "February",
-                                    value        : "2"          
-                                },
-                                {
-                                    label        : "March",
-                                    value        : "3"          
-                                },
-                                {
-                                    label        : "April",
-                                    value        : "4"          
-                                },
-                                {
-                                    label        : "May",
-                                    value        : "5"          
-                                },
-                                {
-                                    label        : "June",
-                                    value        : "6"          
-                                },
-                                {
-                                    label        : "July",
-                                    value        : "7"          
-                                },
-                                {
-                                    label        : "August",
-                                    value        : "8"          
-                                },
-                                {
-                                    label        : "September",
-                                    value        : "9"          
-                                },
-                                {
-                                    label        : "October",
-                                    value        : "10"         
-                                },
-                                {
-                                    label        : "Novemmber",
-                                    value        : "11"         
-                                },
-                                {
-                                    label        : "December",
-                                    value        : "12"         
-                                },
 
-                            ];
+
+__API_PATH.RECURRING_PATTERN = [{
+        label: "Daily",
+        id: "daily",
+        description: "Daily Recurring"
+    },
+    {
+        label: "Weekly",
+        id: "weekly",
+        description: "Recurring Every Week"
+    },
+    {
+        label: "Monthly",
+        id: "monthly",
+        description: "Recurring Every Month"
+    },
+    {
+        label: "Yearly",
+        id: "yearly",
+        description: "Recurring Every Year"
+    }
+
+];
+
+
+__API_PATH.MONTH = [{
+        label: "January",
+        value: "1"
+    },
+    {
+        label: "February",
+        value: "2"
+    },
+    {
+        label: "March",
+        value: "3"
+    },
+    {
+        label: "April",
+        value: "4"
+    },
+    {
+        label: "May",
+        value: "5"
+    },
+    {
+        label: "June",
+        value: "6"
+    },
+    {
+        label: "July",
+        value: "7"
+    },
+    {
+        label: "August",
+        value: "8"
+    },
+    {
+        label: "September",
+        value: "9"
+    },
+    {
+        label: "October",
+        value: "10"
+    },
+    {
+        label: "Novemmber",
+        value: "11"
+    },
+    {
+        label: "December",
+        value: "12"
+    },
+
+];
 
 
 __API_PATH.WEEK_NAME = [
-                            
-                            {
-                                label :"Monday",
-                                value :'monday',
-                            },
-                            {
-                                label  :"Tuesday",
-                                value  :'tuesday'
-                            },
-                            {
-                                label  :"Wednesday",
-                                value  :'wednesday'
-                            },  
-                            {
-                                label  :"Thursday",
-                                value  :'thursday'
-                            },
-                            {
-                                label  :"Friday",
-                                value  :'friday'
-                            },
-                            {
-                                label  :"Saturday",
-                                value  :'saturday'
-                            },
-                            {
-                                label :"Sunday",
-                                value :'sunday',                        
-                            },      
-                        ];          
 
-__API_PATH.POSITION = ['Executive Assistant','General Manager','Hotel Manager','Operations Director','Operations Manager','Event Planner','Front Desk Clerk','Housekeeper'];
+    {
+        label: "Monday",
+        value: 'monday',
+    },
+    {
+        label: "Tuesday",
+        value: 'tuesday'
+    },
+    {
+        label: "Wednesday",
+        value: 'wednesday'
+    },
+    {
+        label: "Thursday",
+        value: 'thursday'
+    },
+    {
+        label: "Friday",
+        value: 'friday'
+    },
+    {
+        label: "Saturday",
+        value: 'saturday'
+    },
+    {
+        label: "Sunday",
+        value: 'sunday',
+    },
+];
 
-__API_PATH.CURRENCY_LIST  = {
+__API_PATH.POSITION = ['Executive Assistant', 'General Manager', 'Hotel Manager', 'Operations Director', 'Operations Manager', 'Event Planner', 'Front Desk Clerk', 'Housekeeper'];
+
+__API_PATH.CURRENCY_LIST = {
     "USD": {
         "symbol": "$",
         "name": "US Dollar",
@@ -325,7 +478,7 @@ __API_PATH.CURRENCY_LIST  = {
     "AED": {
         "symbol": "AED",
         "name": "United Arab Emirates Dirham",
-            "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "AED",
         "name_plural": "UAE dirhams"
@@ -341,7 +494,7 @@ __API_PATH.CURRENCY_LIST  = {
     "ALL": {
         "symbol": "ALL",
         "name": "Albanian Lek",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "ALL",
         "name_plural": "Albanian lekë"
@@ -349,7 +502,7 @@ __API_PATH.CURRENCY_LIST  = {
     "AMD": {
         "symbol": "AMD",
         "name": "Armenian Dram",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "AMD",
         "name_plural": "Armenian drams"
@@ -373,7 +526,7 @@ __API_PATH.CURRENCY_LIST  = {
     "AZN": {
         "symbol": "man.",
         "name": "Azerbaijani Manat",
-           "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "AZN",
         "name_plural": "Azerbaijani manats"
@@ -381,7 +534,7 @@ __API_PATH.CURRENCY_LIST  = {
     "BAM": {
         "symbol": "KM",
         "name": "Bosnia-Herzegovina Convertible Mark",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "BAM",
         "name_plural": "Bosnia-Herzegovina convertible marks"
@@ -397,7 +550,7 @@ __API_PATH.CURRENCY_LIST  = {
     "BGN": {
         "symbol": "BGN",
         "name": "Bulgarian Lev",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "BGN",
         "name_plural": "Bulgarian leva"
@@ -405,7 +558,7 @@ __API_PATH.CURRENCY_LIST  = {
     "BHD": {
         "symbol": "BD",
         "name": "Bahraini Dinar",
-            "decimal_digits": 3,
+        "decimal_digits": 3,
         "rounding": 0,
         "code": "BHD",
         "name_plural": "Bahraini dinars"
@@ -413,7 +566,7 @@ __API_PATH.CURRENCY_LIST  = {
     "BIF": {
         "symbol": "FBu",
         "name": "Burundian Franc",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "BIF",
         "name_plural": "Burundian francs"
@@ -429,7 +582,7 @@ __API_PATH.CURRENCY_LIST  = {
     "BOB": {
         "symbol": "Bs",
         "name": "Bolivian Boliviano",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "BOB",
         "name_plural": "Bolivian bolivianos"
@@ -437,7 +590,7 @@ __API_PATH.CURRENCY_LIST  = {
     "BRL": {
         "symbol": "R$",
         "name": "Brazilian Real",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "BRL",
         "name_plural": "Brazilian reals"
@@ -453,7 +606,7 @@ __API_PATH.CURRENCY_LIST  = {
     "BYR": {
         "symbol": "BYR",
         "name": "Belarusian Ruble",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "BYR",
         "name_plural": "Belarusian rubles"
@@ -469,7 +622,7 @@ __API_PATH.CURRENCY_LIST  = {
     "CDF": {
         "symbol": "CDF",
         "name": "Congolese Franc",
-           "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "CDF",
         "name_plural": "Congolese francs"
@@ -477,7 +630,7 @@ __API_PATH.CURRENCY_LIST  = {
     "CHF": {
         "symbol": "CHF",
         "name": "Swiss Franc",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0.05,
         "code": "CHF",
         "name_plural": "Swiss francs"
@@ -493,7 +646,7 @@ __API_PATH.CURRENCY_LIST  = {
     "CNY": {
         "symbol": "CN¥",
         "name": "Chinese Yuan",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "CNY",
         "name_plural": "Chinese yuan"
@@ -517,7 +670,7 @@ __API_PATH.CURRENCY_LIST  = {
     "CVE": {
         "symbol": "CV$",
         "name": "Cape Verdean Escudo",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "CVE",
         "name_plural": "Cape Verdean escudos"
@@ -525,7 +678,7 @@ __API_PATH.CURRENCY_LIST  = {
     "CZK": {
         "symbol": "Kč",
         "name": "Czech Republic Koruna",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "CZK",
         "name_plural": "Czech Republic korunas"
@@ -533,7 +686,7 @@ __API_PATH.CURRENCY_LIST  = {
     "DJF": {
         "symbol": "Fdj",
         "name": "Djiboutian Franc",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "DJF",
         "name_plural": "Djiboutian francs"
@@ -541,7 +694,7 @@ __API_PATH.CURRENCY_LIST  = {
     "DKK": {
         "symbol": "Dkr",
         "name": "Danish Krone",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "DKK",
         "name_plural": "Danish kroner"
@@ -549,7 +702,7 @@ __API_PATH.CURRENCY_LIST  = {
     "DOP": {
         "symbol": "RD$",
         "name": "Dominican Peso",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "DOP",
         "name_plural": "Dominican pesos"
@@ -557,7 +710,7 @@ __API_PATH.CURRENCY_LIST  = {
     "DZD": {
         "symbol": "DA",
         "name": "Algerian Dinar",
-            "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "DZD",
         "name_plural": "Algerian dinars"
@@ -565,7 +718,7 @@ __API_PATH.CURRENCY_LIST  = {
     "EEK": {
         "symbol": "Ekr",
         "name": "Estonian Kroon",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "EEK",
         "name_plural": "Estonian kroons"
@@ -573,7 +726,7 @@ __API_PATH.CURRENCY_LIST  = {
     "EGP": {
         "symbol": "EGP",
         "name": "Egyptian Pound",
-            "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "EGP",
         "name_plural": "Egyptian pounds"
@@ -581,7 +734,7 @@ __API_PATH.CURRENCY_LIST  = {
     "ERN": {
         "symbol": "Nfk",
         "name": "Eritrean Nakfa",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "ERN",
         "name_plural": "Eritrean nakfas"
@@ -589,7 +742,7 @@ __API_PATH.CURRENCY_LIST  = {
     "ETB": {
         "symbol": "Br",
         "name": "Ethiopian Birr",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "ETB",
         "name_plural": "Ethiopian birrs"
@@ -605,7 +758,7 @@ __API_PATH.CURRENCY_LIST  = {
     "GEL": {
         "symbol": "GEL",
         "name": "Georgian Lari",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "GEL",
         "name_plural": "Georgian laris"
@@ -613,7 +766,7 @@ __API_PATH.CURRENCY_LIST  = {
     "GHS": {
         "symbol": "GH₵",
         "name": "Ghanaian Cedi",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "GHS",
         "name_plural": "Ghanaian cedis"
@@ -621,7 +774,7 @@ __API_PATH.CURRENCY_LIST  = {
     "GNF": {
         "symbol": "FG",
         "name": "Guinean Franc",
-         "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "GNF",
         "name_plural": "Guinean francs"
@@ -653,7 +806,7 @@ __API_PATH.CURRENCY_LIST  = {
     "HRK": {
         "symbol": "kn",
         "name": "Croatian Kuna",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "HRK",
         "name_plural": "Croatian kunas"
@@ -661,7 +814,7 @@ __API_PATH.CURRENCY_LIST  = {
     "HUF": {
         "symbol": "Ft",
         "name": "Hungarian Forint",
-         "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "HUF",
         "name_plural": "Hungarian forints"
@@ -669,7 +822,7 @@ __API_PATH.CURRENCY_LIST  = {
     "IDR": {
         "symbol": "Rp",
         "name": "Indonesian Rupiah",
-         "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "IDR",
         "name_plural": "Indonesian rupiahs"
@@ -685,7 +838,7 @@ __API_PATH.CURRENCY_LIST  = {
     "INR": {
         "symbol": "Rs",
         "name": "Indian Rupee",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "INR",
         "name_plural": "Indian rupees"
@@ -693,7 +846,7 @@ __API_PATH.CURRENCY_LIST  = {
     "IQD": {
         "symbol": "IQD",
         "name": "Iraqi Dinar",
-            "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "IQD",
         "name_plural": "Iraqi dinars"
@@ -709,7 +862,7 @@ __API_PATH.CURRENCY_LIST  = {
     "ISK": {
         "symbol": "Ikr",
         "name": "Icelandic Króna",
-         "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "ISK",
         "name_plural": "Icelandic krónur"
@@ -725,7 +878,7 @@ __API_PATH.CURRENCY_LIST  = {
     "JOD": {
         "symbol": "JD",
         "name": "Jordanian Dinar",
-            "decimal_digits": 3,
+        "decimal_digits": 3,
         "rounding": 0,
         "code": "JOD",
         "name_plural": "Jordanian dinars"
@@ -741,7 +894,7 @@ __API_PATH.CURRENCY_LIST  = {
     "KES": {
         "symbol": "Ksh",
         "name": "Kenyan Shilling",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "KES",
         "name_plural": "Kenyan shillings"
@@ -757,7 +910,7 @@ __API_PATH.CURRENCY_LIST  = {
     "KMF": {
         "symbol": "CF",
         "name": "Comorian Franc",
-         "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "KMF",
         "name_plural": "Comorian francs"
@@ -773,7 +926,7 @@ __API_PATH.CURRENCY_LIST  = {
     "KWD": {
         "symbol": "KD",
         "name": "Kuwaiti Dinar",
-            "decimal_digits": 3,
+        "decimal_digits": 3,
         "rounding": 0,
         "code": "KWD",
         "name_plural": "Kuwaiti dinars"
@@ -781,7 +934,7 @@ __API_PATH.CURRENCY_LIST  = {
     "KZT": {
         "symbol": "KZT",
         "name": "Kazakhstani Tenge",
-           "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "KZT",
         "name_plural": "Kazakhstani tenges"
@@ -789,7 +942,7 @@ __API_PATH.CURRENCY_LIST  = {
     "LBP": {
         "symbol": "LB£",
         "name": "Lebanese Pound",
-            "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "LBP",
         "name_plural": "Lebanese pounds"
@@ -797,7 +950,7 @@ __API_PATH.CURRENCY_LIST  = {
     "LKR": {
         "symbol": "SLRs",
         "name": "Sri Lankan Rupee",
-            "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "LKR",
         "name_plural": "Sri Lankan rupees"
@@ -805,7 +958,7 @@ __API_PATH.CURRENCY_LIST  = {
     "LTL": {
         "symbol": "Lt",
         "name": "Lithuanian Litas",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "LTL",
         "name_plural": "Lithuanian litai"
@@ -813,7 +966,7 @@ __API_PATH.CURRENCY_LIST  = {
     "LVL": {
         "symbol": "Ls",
         "name": "Latvian Lats",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "LVL",
         "name_plural": "Latvian lati"
@@ -821,7 +974,7 @@ __API_PATH.CURRENCY_LIST  = {
     "LYD": {
         "symbol": "LD",
         "name": "Libyan Dinar",
-            "decimal_digits": 3,
+        "decimal_digits": 3,
         "rounding": 0,
         "code": "LYD",
         "name_plural": "Libyan dinars"
@@ -829,7 +982,7 @@ __API_PATH.CURRENCY_LIST  = {
     "MAD": {
         "symbol": "MAD",
         "name": "Moroccan Dirham",
-            "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "MAD",
         "name_plural": "Moroccan dirhams"
@@ -837,7 +990,7 @@ __API_PATH.CURRENCY_LIST  = {
     "MDL": {
         "symbol": "MDL",
         "name": "Moldovan Leu",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "MDL",
         "name_plural": "Moldovan lei"
@@ -845,7 +998,7 @@ __API_PATH.CURRENCY_LIST  = {
     "MGA": {
         "symbol": "MGA",
         "name": "Malagasy Ariary",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "MGA",
         "name_plural": "Malagasy Ariaries"
@@ -853,7 +1006,7 @@ __API_PATH.CURRENCY_LIST  = {
     "MKD": {
         "symbol": "MKD",
         "name": "Macedonian Denar",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "MKD",
         "name_plural": "Macedonian denari"
@@ -869,7 +1022,7 @@ __API_PATH.CURRENCY_LIST  = {
     "MOP": {
         "symbol": "MOP$",
         "name": "Macanese Pataca",
-           "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "MOP",
         "name_plural": "Macanese patacas"
@@ -877,7 +1030,7 @@ __API_PATH.CURRENCY_LIST  = {
     "MUR": {
         "symbol": "MURs",
         "name": "Mauritian Rupee",
-           "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "MUR",
         "name_plural": "Mauritian rupees"
@@ -893,7 +1046,7 @@ __API_PATH.CURRENCY_LIST  = {
     "MYR": {
         "symbol": "RM",
         "name": "Malaysian Ringgit",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "MYR",
         "name_plural": "Malaysian ringgits"
@@ -901,7 +1054,7 @@ __API_PATH.CURRENCY_LIST  = {
     "MZN": {
         "symbol": "MTn",
         "name": "Mozambican Metical",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "MZN",
         "name_plural": "Mozambican meticals"
@@ -909,7 +1062,7 @@ __API_PATH.CURRENCY_LIST  = {
     "NAD": {
         "symbol": "N$",
         "name": "Namibian Dollar",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "NAD",
         "name_plural": "Namibian dollars"
@@ -925,7 +1078,7 @@ __API_PATH.CURRENCY_LIST  = {
     "NIO": {
         "symbol": "C$",
         "name": "Nicaraguan Córdoba",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "NIO",
         "name_plural": "Nicaraguan córdobas"
@@ -933,7 +1086,7 @@ __API_PATH.CURRENCY_LIST  = {
     "NOK": {
         "symbol": "Nkr",
         "name": "Norwegian Krone",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "NOK",
         "name_plural": "Norwegian kroner"
@@ -941,7 +1094,7 @@ __API_PATH.CURRENCY_LIST  = {
     "NPR": {
         "symbol": "NPRs",
         "name": "Nepalese Rupee",
-           "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "NPR",
         "name_plural": "Nepalese rupees"
@@ -957,7 +1110,7 @@ __API_PATH.CURRENCY_LIST  = {
     "OMR": {
         "symbol": "OMR",
         "name": "Omani Rial",
-            "decimal_digits": 3,
+        "decimal_digits": 3,
         "rounding": 0,
         "code": "OMR",
         "name_plural": "Omani rials"
@@ -965,7 +1118,7 @@ __API_PATH.CURRENCY_LIST  = {
     "PAB": {
         "symbol": "B/.",
         "name": "Panamanian Balboa",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "PAB",
         "name_plural": "Panamanian balboas"
@@ -973,7 +1126,7 @@ __API_PATH.CURRENCY_LIST  = {
     "PEN": {
         "symbol": "S/.",
         "name": "Peruvian Nuevo Sol",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "PEN",
         "name_plural": "Peruvian nuevos soles"
@@ -997,7 +1150,7 @@ __API_PATH.CURRENCY_LIST  = {
     "PLN": {
         "symbol": "zł",
         "name": "Polish Zloty",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "PLN",
         "name_plural": "Polish zlotys"
@@ -1013,7 +1166,7 @@ __API_PATH.CURRENCY_LIST  = {
     "QAR": {
         "symbol": "QR",
         "name": "Qatari Rial",
-            "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "QAR",
         "name_plural": "Qatari rials"
@@ -1021,7 +1174,7 @@ __API_PATH.CURRENCY_LIST  = {
     "RON": {
         "symbol": "RON",
         "name": "Romanian Leu",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "RON",
         "name_plural": "Romanian lei"
@@ -1029,7 +1182,7 @@ __API_PATH.CURRENCY_LIST  = {
     "RSD": {
         "symbol": "din.",
         "name": "Serbian Dinar",
-           "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "RSD",
         "name_plural": "Serbian dinars"
@@ -1037,7 +1190,7 @@ __API_PATH.CURRENCY_LIST  = {
     "RUB": {
         "symbol": "RUB",
         "name": "Russian Ruble",
-           "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "RUB",
         "name_plural": "Russian rubles"
@@ -1045,7 +1198,7 @@ __API_PATH.CURRENCY_LIST  = {
     "RWF": {
         "symbol": "RWF",
         "name": "Rwandan Franc",
-         "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "RWF",
         "name_plural": "Rwandan francs"
@@ -1053,7 +1206,7 @@ __API_PATH.CURRENCY_LIST  = {
     "SAR": {
         "symbol": "SR",
         "name": "Saudi Riyal",
-            "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "SAR",
         "name_plural": "Saudi riyals"
@@ -1061,7 +1214,7 @@ __API_PATH.CURRENCY_LIST  = {
     "SDG": {
         "symbol": "SDG",
         "name": "Sudanese Pound",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "SDG",
         "name_plural": "Sudanese pounds"
@@ -1069,7 +1222,7 @@ __API_PATH.CURRENCY_LIST  = {
     "SEK": {
         "symbol": "Skr",
         "name": "Swedish Krona",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "SEK",
         "name_plural": "Swedish kronor"
@@ -1085,7 +1238,7 @@ __API_PATH.CURRENCY_LIST  = {
     "SOS": {
         "symbol": "Ssh",
         "name": "Somali Shilling",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "SOS",
         "name_plural": "Somali shillings"
@@ -1093,7 +1246,7 @@ __API_PATH.CURRENCY_LIST  = {
     "SYP": {
         "symbol": "SY£",
         "name": "Syrian Pound",
-            "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "SYP",
         "name_plural": "Syrian pounds"
@@ -1109,7 +1262,7 @@ __API_PATH.CURRENCY_LIST  = {
     "TND": {
         "symbol": "DT",
         "name": "Tunisian Dinar",
-            "decimal_digits": 3,
+        "decimal_digits": 3,
         "rounding": 0,
         "code": "TND",
         "name_plural": "Tunisian dinars"
@@ -1117,7 +1270,7 @@ __API_PATH.CURRENCY_LIST  = {
     "TOP": {
         "symbol": "T$",
         "name": "Tongan Paʻanga",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "TOP",
         "name_plural": "Tongan paʻanga"
@@ -1125,7 +1278,7 @@ __API_PATH.CURRENCY_LIST  = {
     "TRY": {
         "symbol": "TL",
         "name": "Turkish Lira",
-         "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "TRY",
         "name_plural": "Turkish Lira"
@@ -1141,7 +1294,7 @@ __API_PATH.CURRENCY_LIST  = {
     "TWD": {
         "symbol": "NT$",
         "name": "New Taiwan Dollar",
-          "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "TWD",
         "name_plural": "New Taiwan dollars"
@@ -1149,7 +1302,7 @@ __API_PATH.CURRENCY_LIST  = {
     "TZS": {
         "symbol": "TSh",
         "name": "Tanzanian Shilling",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "TZS",
         "name_plural": "Tanzanian shillings"
@@ -1165,7 +1318,7 @@ __API_PATH.CURRENCY_LIST  = {
     "UGX": {
         "symbol": "USh",
         "name": "Ugandan Shilling",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "UGX",
         "name_plural": "Ugandan shillings"
@@ -1181,7 +1334,7 @@ __API_PATH.CURRENCY_LIST  = {
     "UZS": {
         "symbol": "UZS",
         "name": "Uzbekistan Som",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "UZS",
         "name_plural": "Uzbekistan som"
@@ -1189,7 +1342,7 @@ __API_PATH.CURRENCY_LIST  = {
     "VEF": {
         "symbol": "Bs.F.",
         "name": "Venezuelan Bolívar",
-            "decimal_digits": 2,
+        "decimal_digits": 2,
         "rounding": 0,
         "code": "VEF",
         "name_plural": "Venezuelan bolívars"
@@ -1205,7 +1358,7 @@ __API_PATH.CURRENCY_LIST  = {
     "XAF": {
         "symbol": "FCFA",
         "name": "CFA Franc BEAC",
-           "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "XAF",
         "name_plural": "CFA francs BEAC"
@@ -1213,7 +1366,7 @@ __API_PATH.CURRENCY_LIST  = {
     "XOF": {
         "symbol": "CFA",
         "name": "CFA Franc BCEAO",
-          "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "XOF",
         "name_plural": "CFA francs BCEAO"
@@ -1221,7 +1374,7 @@ __API_PATH.CURRENCY_LIST  = {
     "YER": {
         "symbol": "YR",
         "name": "Yemeni Rial",
-            "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "YER",
         "name_plural": "Yemeni rials"
@@ -1237,7 +1390,7 @@ __API_PATH.CURRENCY_LIST  = {
     "ZMK": {
         "symbol": "ZK",
         "name": "Zambian Kwacha",
-         "decimal_digits": 0,
+        "decimal_digits": 0,
         "rounding": 0,
         "code": "ZMK",
         "name_plural": "Zambian kwachas"
@@ -1248,139 +1401,205 @@ __API_PATH.CURRENCY_LIST  = {
 
 
 __API_PATH.COLOR_CODE = {
-              "antiquewhite": "#faebd7",             
-              "beige": "#f5f5dc",
-              "bisque": "#ffe4c4",
-              "blanchedalmond": "#ffebcd",
-            
-              "burlywood": "#deb887",
-              "cadetblue": "#5f9ea0",
-              "chartreuse": "#7fff00",
-              "chocolate": "#d2691e",
-              "coral": "#ff7f50",
-              "cornflowerblue": "#6495ed",
-              "cornsilk": "#fff8dc",
-              "crimson": "#dc143c",
-              "cyan": "#00ffff",           
-              "darkcyan": "#008b8b",
-              "darkgoldenrod": "#b8860b",
-              "darkgray": "#a9a9a9",              
-              "darkgrey": "#a9a9a9",
-              "darkkhaki": "#bdb76b",
-                        
-              "darkorange": "#ff8c00",
-                           
-              "darksalmon": "#e9967a",
-              "darkseagreen": "#8fbc8f",                          
-              "darkturquoise": "#00ced1",
-              
-              "deeppink": "#ff1493",
-              "deepskyblue": "#00bfff", 
-              "dodgerblue": "#1e90ff",
-              
-              "floralwhite": "#fffaf0",
-              "forestgreen": "#228b22",
-              "fuchsia": "#ff00ff",
-              "gainsboro": "#dcdcdc",
-              "ghostwhite": "#f8f8ff",
-              "gold": "#ffd700",
-              "goldenrod": "#daa520",                           
-              "greenyellow": "#adff2f",
-              "grey": "#808080",
-              "honeydew": "#f0fff0",
-              "hotpink": "#ff69b4",
-              "indianred": "#cd5c5c",
-              "ivory": "#fffff0",
-              "khaki": "#f0e68c",
-              "lavender": "#e6e6fa",
-              "lavenderblush": "#fff0f5",
-              "lawngreen": "#7cfc00",
-              "lemonchiffon": "#fffacd",
-              "lightblue": "#add8e6",
-              "lightcoral": "#f08080",
-              "lightcyan": "#e0ffff",
-              "lightgoldenrodyellow": "#fafad2",
-              "lightgray": "#d3d3d3",
-              "lightgreen": "#90ee90",
-              "lightgrey": "#d3d3d3",
-              "lightpink": "#ffb6c1",
-              "lightsalmon": "#ffa07a",
-              "lightseagreen": "#20b2aa",
-              "lightskyblue": "#87cefa",
-            
-             
-              "lightsteelblue": "#b0c4de",
-              "lightyellow": "#ffffe0",
-              "lime": "#00ff00",
-              "limegreen": "#32cd32",
-              "linen": "#faf0e6",
-              "magenta": "#ff00ff",             
-              "mediumaquamarine": "#66cdaa",
-              "mediumorchid": "#ba55d3",
-              "mediumpurple": "#9370db",
-              "mediumseagreen": "#3cb371",
-              "mediumslateblue": "#7b68ee",
-              "mediumspringgreen": "#00fa9a",
-              "mediumturquoise": "#48d1cc",
-             
-              "mintcream": "#f5fffa",
-              "mistyrose": "#ffe4e1",
-              "moccasin": "#ffe4b5",
-              "navajowhite": "#ffdead",
-              "oldlace": "#fdf5e6",
-              "olive": "#808000",
-              "olivedrab": "#6b8e23",
-              "orange": "#ffa500",
-              
-              "orchid": "#da70d6",
-              "palegoldenrod": "#eee8aa",
-              "palegreen": "#98fb98",
-              "paleturquoise": "#afeeee",
-              "palevioletred": "#db7093",
-              "papayawhip": "#ffefd5",
-              "peachpuff": "#ffdab9",
-              "peru": "#cd853f",
-              "pink": "#ffc0cb",
-              "plum": "#dda0dd",
-              "powderblue": "#b0e0e6",                            
-              "red": "#ff0000",
-              "rosybrown": "#bc8f8f",
-              "royalblue": "#4169e1",
-             
-              "salmon": "#fa8072",
-              "sandybrown": "#f4a460",
-              "seagreen": "#2e8b57",
-              "seashell": "#fff5ee",
-     
-              "silver": "#c0c0c0",
-              "skyblue": "#87ceeb",
-              
-              "snow": "#fffafa",
-              "springgreen": "#00ff7f",
-              "steelblue": "#4682b4",
-              "tan": "#d2b48c",
-              
-              "thistle": "#d8bfd8",
-              "tomato": "#ff6347",
-              "turquoise": "#40e0d0",
-              "violet": "#ee82ee",
-              "wheat": "#f5deb3",
-              "white": "#ffffff",
-              "whitesmoke": "#f5f5f5",
-              "yellow": "#ffff00",
-              "yellowgreen": "#9acd32"
-            };
+    "antiquewhite": "#faebd7",
+    "beige": "#f5f5dc",
+    "bisque": "#ffe4c4",
+    "blanchedalmond": "#ffebcd",
+
+    "burlywood": "#deb887",
+    "cadetblue": "#5f9ea0",
+    "chartreuse": "#7fff00",
+    "chocolate": "#d2691e",
+    "coral": "#ff7f50",
+    "cornflowerblue": "#6495ed",
+    "cornsilk": "#fff8dc",
+    "crimson": "#dc143c",
+    "cyan": "#00ffff",
+    "darkcyan": "#008b8b",
+    "darkgoldenrod": "#b8860b",
+    "darkgray": "#a9a9a9",
+    "darkgrey": "#a9a9a9",
+    "darkkhaki": "#bdb76b",
+
+    "darkorange": "#ff8c00",
+
+    "darksalmon": "#e9967a",
+    "darkseagreen": "#8fbc8f",
+    "darkturquoise": "#00ced1",
+
+    "deeppink": "#ff1493",
+    "deepskyblue": "#00bfff",
+    "dodgerblue": "#1e90ff",
+
+    "floralwhite": "#fffaf0",
+    "forestgreen": "#228b22",
+    "fuchsia": "#ff00ff",
+    "gainsboro": "#dcdcdc",
+    "ghostwhite": "#f8f8ff",
+    "gold": "#ffd700",
+    "goldenrod": "#daa520",
+    "greenyellow": "#adff2f",
+    "grey": "#808080",
+    "honeydew": "#f0fff0",
+    "hotpink": "#ff69b4",
+    "indianred": "#cd5c5c",
+    "ivory": "#fffff0",
+    "khaki": "#f0e68c",
+    "lavender": "#e6e6fa",
+    "lavenderblush": "#fff0f5",
+    "lawngreen": "#7cfc00",
+    "lemonchiffon": "#fffacd",
+    "lightblue": "#add8e6",
+    "lightcoral": "#f08080",
+    "lightcyan": "#e0ffff",
+    "lightgoldenrodyellow": "#fafad2",
+    "lightgray": "#d3d3d3",
+    "lightgreen": "#90ee90",
+    "lightgrey": "#d3d3d3",
+    "lightpink": "#ffb6c1",
+    "lightsalmon": "#ffa07a",
+    "lightseagreen": "#20b2aa",
+    "lightskyblue": "#87cefa",
+
+
+    "lightsteelblue": "#b0c4de",
+    "lightyellow": "#ffffe0",
+    "lime": "#00ff00",
+    "limegreen": "#32cd32",
+    "linen": "#faf0e6",
+    "magenta": "#ff00ff",
+    "mediumaquamarine": "#66cdaa",
+    "mediumorchid": "#ba55d3",
+    "mediumpurple": "#9370db",
+    "mediumseagreen": "#3cb371",
+    "mediumslateblue": "#7b68ee",
+    "mediumspringgreen": "#00fa9a",
+    "mediumturquoise": "#48d1cc",
+
+    "mintcream": "#f5fffa",
+    "mistyrose": "#ffe4e1",
+    "moccasin": "#ffe4b5",
+    "navajowhite": "#ffdead",
+    "oldlace": "#fdf5e6",
+    "olive": "#808000",
+    "olivedrab": "#6b8e23",
+    "orange": "#ffa500",
+
+    "orchid": "#da70d6",
+    "palegoldenrod": "#eee8aa",
+    "palegreen": "#98fb98",
+    "paleturquoise": "#afeeee",
+    "palevioletred": "#db7093",
+    "papayawhip": "#ffefd5",
+    "peachpuff": "#ffdab9",
+    "peru": "#cd853f",
+    "pink": "#ffc0cb",
+    "plum": "#dda0dd",
+    "powderblue": "#b0e0e6",
+    "red": "#ff0000",
+    "rosybrown": "#bc8f8f",
+    "royalblue": "#4169e1",
+
+    "salmon": "#fa8072",
+    "sandybrown": "#f4a460",
+    "seagreen": "#2e8b57",
+    "seashell": "#fff5ee",
+
+    "silver": "#c0c0c0",
+    "skyblue": "#87ceeb",
+
+    "snow": "#fffafa",
+    "springgreen": "#00ff7f",
+    "steelblue": "#4682b4",
+    "tan": "#d2b48c",
+
+    "thistle": "#d8bfd8",
+    "tomato": "#ff6347",
+    "turquoise": "#40e0d0",
+    "violet": "#ee82ee",
+    "wheat": "#f5deb3",
+    "white": "#ffffff",
+    "whitesmoke": "#f5f5f5",
+    "yellow": "#ffff00",
+    "yellowgreen": "#9acd32"
+};
 
 
 
 
+__API_PATH.DEFAULT_DEPARTMENT = [{
+        department_name: "Housekeeper",
+        abbreviation: "H/K",
+        checked: true
+    },
+    {
+        department_name: "Electric",
+        abbreviation: "ELEC",
+        checked: true
+    },
+    {
+        department_name: "Mechanical",
+        abbreviation: "MACH",
+        checked: true
+    },
+    {
+        department_name: "Account",
+        abbreviation: "A/C"
+    },
+    {
+        department_name: "Admin",
+        abbreviation: "ADMIN"
+    },
 
+];
 
-__API_PATH.DEFAULT_DEPARTMENT  = [
-                                    {department_name:"Housekeeper", abbreviation:"H/K",checked:true},
-                                    {department_name:"Electric", abbreviation:"ELEC",checked:true},
-                                    {department_name:"Mechanical", abbreviation:"MACH",checked:true},
-                                    {department_name:"Account", abbreviation:"A/C"},
-                                    {department_name:"Admin", abbreviation:"ADMIN"},
-                                    
-                                 ];
+__API_PATH.ROOM_STYLE = [{
+        _id: 1,
+        name: "Auditorium",
+        attachment_type: "image",
+        capacity: '40max',
+        src: "assets/images/audi.gif",
+    },
+    {
+        _id: 2,
+        name: "Banquet",
+        attachment_type: "image",
+        capacity: '10max',
+        src: "assets/images/Banquet.gif"
+    },
+    {
+        _id: 3,
+        name: "Hollow Square",
+        attachment_type: "image",
+        capacity: '50max',
+        src: "assets/images/hollow.gif"
+    },
+    {
+        _id: 4,
+        name: "Classroom",
+        attachment_type: "image",
+        capacity: '100max',
+        src: "assets/images/class.gif"
+    },
+    {
+        _id: 5,
+        name: "U-Shape",
+        attachment_type: "image",
+        capacity: '50max',
+        src: "assets/images/u-shape.gif"
+    },
+    {
+        _id: 6,
+        name: "Conference",
+        attachment_type: "image",
+        capacity: '100',
+        src: "assets/images/confrence.gif"
+    },
+    {
+        _id: 7,
+        name: "Theater",
+        attachment_type: "image",
+        capacity: '10max',
+        src: "assets/images/lay_img3.png"
+    }
+];

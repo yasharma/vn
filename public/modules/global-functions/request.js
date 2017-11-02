@@ -237,6 +237,35 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 			});
 		},
 
+		getLostFoundCategory:function(){
+			var hotel   = localStorageService.get('hotel');
+			var request = {
+					url:window.__API_PATH.GET_LOST_FOUND_CATEGORY,
+					method:"GET",
+					params:{hotel_id: hotel._id}
+			};
+
+			return $http(request).then(function(response){
+				$rootScope.lostFoundCategoryList = response.data.result;
+			}, function(response){
+				$rootScope.lostFoundCategoryList = response.data.errors;				
+			});
+		},
+		getFacilityList:function(){
+			var hotel   = localStorageService.get('hotel');
+			var request = {
+					url:window.__API_PATH.GET_FACILITY,
+					method:"GET",
+					params:{hotel_id: hotel._id}
+			};
+
+			return $http(request).then(function(response){
+				$rootScope.facilityList = response.data.result;
+			}, function(response){
+				$rootScope.facilityList = response.data.errors;				
+			});
+		},
+
 		getFoundList:function(){
 				var hotel   = localStorageService.get('hotel');
 				var request = {

@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('outsideClickJotButton', function ($window) {    
+app.directive('outsideClickJotButton', ['$window', function ($window) {    
     return {                 
         scope: {
             outsideCallback: '&outsideClickJotButton',
@@ -21,4 +21,4 @@ app.directive('outsideClickJotButton', function ($window) {
             });
         }
     };
-});
+}]);

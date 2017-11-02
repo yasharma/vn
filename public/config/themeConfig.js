@@ -1,6 +1,6 @@
 "use strict";
 
-app.config(function($mdThemingProvider) {
+app.config(['$mdThemingProvider',function($mdThemingProvider) {
   $mdThemingProvider.theme('default');
 
     $mdThemingProvider.definePalette('hoteljot', {
@@ -29,4 +29,4 @@ app.config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('hoteljot')
     .accentPalette('blue');
-});
+}]);

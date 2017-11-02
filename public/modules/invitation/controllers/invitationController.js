@@ -198,12 +198,5 @@ app.controller('invitationController',['$scope','$rootScope','empDetail','global
 				}							
 				
 			});
-		}
-
-
-
-
-
-		 
-	 
+		}	 
 }]);

@@ -67,16 +67,14 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 		**************************************/
 
 		$scope.jotEditPopup = function(jotData){
-			$scope.edit_jot		   		= jotData;		
-			$scope.jot_title   			= jotData.jot_title;
-			$rootScope.jot_description	= jotData.jot_description;
-			$rootScope.jot_members		= jotData.jot_members;
-			$rootScope.due_date    		= new Date(jotData.due_date);
-			$rootScope.priority    		= jotData.priority;
-			$rootScope.department  		= jotData.department;
-			$rootScope.hotel_room  		= jotData.hotel_room;
-			
-			
+			$scope.edit_jot		   				= jotData;		
+			$scope.jot_title   					= jotData.jot_title;
+			$rootScope.jot_description			= jotData.jot_description;
+			$rootScope.jot_members				= jotData.jot_members;
+			$rootScope.due_date    				= new Date(jotData.due_date);
+			$rootScope.priority    				= jotData.priority;
+			$rootScope.department  				= jotData.department;
+			$rootScope.hotel_room  				= jotData.hotel_room;
 		};
 
 

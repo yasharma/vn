@@ -2,6 +2,12 @@
 
 app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','toastService','$mdDialog',
 	function($scope,$rootScope,globalRequest,toastService,$mdDialog) {
+
+		/*******************************************
+		* Redirect user if lost found is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('lost_found');
+
 		var hotel = $rootScope.activeHotelData;
 		$rootScope.directory = 'lost_found';
 		$rootScope.jot_description = $rootScope.files = '';
@@ -17,6 +23,12 @@ app.controller('lostFoundCtlr', ['$scope','$rootScope','globalRequest','toastSer
 		******************************************/
 
 	    globalRequest.getDepartments();
+
+	    /************************************
+		* Get Category list
+		*************************************/			
+		
+		globalRequest.getLostFoundCategory();
 
 		/**********************************************************
 	    * Item tags 

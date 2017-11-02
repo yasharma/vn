@@ -4,6 +4,12 @@ app.controller('meetingManagementController', ['$scope','$rootScope','localStora
 	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,toastService) {
 		var hotel = $rootScope.activeHotelData;
 
+		/*******************************************
+		* Redirect user if meeting room is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('meeting_room');
+
+		
 		/************************************
 		* Get rooms
 		*************************************/
@@ -11,36 +17,9 @@ app.controller('meetingManagementController', ['$scope','$rootScope','localStora
 
 		/************************************
 		* Get facilities
-		*************************************/
-
-		$scope.facilityList = [
-			{
-				label: "Wifi",
-				attachment_type: "image",
-				src:"assets/images/tv1_icon.png",
-			},
-			{
-				label: "Tv",
-				attachment_type: "image",
-				src:"assets/images/tv_icon.png"
-			},
-			{
-				label: "Room Service",
-				attachment_type: "image",
-				src:"assets/images/tv2_icon.png"
-			},
-			{
-				label: "Music",
-				attachment_type: "image",
-				src:"assets/images/tv4_icon.png"
-			},
-			{
-				label: "Parking",
-				attachment_type: "icon",
-				src:"local_parking"
-			}
-		];
-
+		*************************************/			
+		
+		globalRequest.getFacilityList();
 
 		/************************************
 		* Blank all field before open form
@@ -55,7 +34,6 @@ app.controller('meetingManagementController', ['$scope','$rootScope','localStora
 			$scope.status = "";
 			$scope.roomImages = "";
 		};
-
 
 
 		/************************************************

@@ -297,6 +297,27 @@ app.config(['$routeProvider','$locationProvider',function($routeProvider, $locat
             sidebar: 'yes'
         }
     })
+    .when("/dashboard/lost-found-category", {
+        templateUrl   : "/modules/lost_found/views/category.html",
+        controller    : "categoryController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
+
+    .when("/dashboard/facility", {
+        templateUrl   : "/modules/meeting/views/facility.html",
+        controller    : "facilityController",
+        controllerAs    : "ctrl",
+        access: {
+            requiredLogin: true,
+            headerType:'dashboard_header',
+            sidebar: 'yes'
+        }
+    })
 
    .otherwise({
     redirectTo: '/modules/error/views/404.html'

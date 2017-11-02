@@ -22,35 +22,9 @@ app.controller('editMeetingManagementController', ['$scope','globalRequest','$md
 
 		/************************************
 		* Get facilities
-		*************************************/
-
-		$scope.facilityList = [
-			{
-				label: "Wifi",
-				attachment_type: "image",
-				src:"assets/images/tv1_icon.png",
-			},
-			{
-				label: "Tv",
-				attachment_type: "image",
-				src:"assets/images/tv_icon.png"
-			},
-			{
-				label: "Room Service",
-				attachment_type: "image",
-				src:"assets/images/tv2_icon.png"
-			},
-			{
-				label: "Music",
-				attachment_type: "image",
-				src:"assets/images/tv4_icon.png"
-			},
-			{
-				label: "Parking",
-				attachment_type: "icon",
-				src:"local_parking"
-			}
-		];
+		*************************************/			
+		
+		globalRequest.getFacilityList();
 
 
 

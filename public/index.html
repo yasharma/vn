@@ -4,10 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>HotelJot</title>
     <link rel="icon" href="/assets/images/favicon.ico" type="image/gif" sizes="16x16">
-
     <link rel="stylesheet" href="/css/vendor-theme-css.css">
     <link rel="stylesheet" href="/css/main-style.css">
     <base href="/">
@@ -25,7 +23,6 @@
               </md-content>
             </md-sidenav>
           </section>
-
           <section layout="row" flex style="background: #f4f8f9;display: none" class="{{$root.hideclass}}" ng-controller="notificationController"> 
             <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="notification" style="background:#f4f8f9;position: fixed;">
               <md-content layout-padding style="background: #f4f8f9;">
@@ -34,25 +31,21 @@
                 <span class="quick_edit_section_title"> Notification</span>
                 <ng-md-icon class="quick_close_btn" icon="close" style="fill:#7a7a7a" size="24"  ng-click="$root.toggleNotification()" role="button" tabindex="0"></ng-md-icon> 
                 </div>  
-                <div class="notification_content">                  
-
+                <div class="notification_content"> 
                     <div class="alert alert-info" ng-repeat="msg in $root.message | orderBy:'_id':true track by $index">
-                                    
                       <a class="close" data-dismiss="alert" ng-click="removeNotification(msg._id);">×</a>
                       <ng-md-icon ng-if="msg.title" icon="add_alert" style="fill: #3da0d3" size="20"></ng-md-icon> 
                     <strong>{{msg.title}}</strong><br>
                      &nbsp;  {{msg.description}}
                     </div>
-
                 </div>
               </md-content>
             </md-sidenav>
           </section>
         <ng-view ng-style="{height: $root.iframeHeight + 'px'}" style="display: block;" class="view" autoscroll> </ng-view>        
-        <footer  ng-include="'/modules/partials/footer.html'"> </footer>  
-        
+        <footer  ng-include="'/modules/partials/footer.html'"> </footer> 
         <script type="text/javascript" src="/js/jquery.min.js"></script> 
-        <script src="/js/socket.io.js"></script>
+         <script src="/js/socket.io.js"></script>
         <script src="/js/vendor.js"></script> 
         <script src="/js/main.js"></script>          
      </body>

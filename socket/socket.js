@@ -43,7 +43,7 @@ module.exports =  (io) => {
 	  	/**********************************************
 		* Send Notification to selected users
 		/**********************************************/
-	     socket.on('notificationToRoom', (data) => {
+	     socket.on('notificationToRoom', (data) => {	     	
 	  		io.sockets.in(data.hotel_id).emit('notificationToRoom');
 	    });
 	    

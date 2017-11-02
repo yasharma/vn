@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','globalRequest','$timeout','$location','$mdSidenav','socket',
-	function($scope,localStorageService,$rootScope,$mdDialog,globalRequest,$timeout,$location,$mdSidenav,socket) {
+app.controller('headerController', ['$scope','localStorageService','$rootScope','$mdDialog','globalRequest','$timeout','$mdSidenav','socket',
+	function($scope,localStorageService,$rootScope,$mdDialog,globalRequest,$timeout,$mdSidenav,socket) {
 
 		/*******************************************************
 		* Sidebar

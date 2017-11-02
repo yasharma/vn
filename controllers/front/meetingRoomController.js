@@ -9,6 +9,7 @@ const    express            = require('express'),
          bodyParser         = require('body-parser'),
          MeetingRoom        = require(path.resolve('models/MeetingRoom')),
          BookingReport      = require(path.resolve('models/RoomBooking')),
+         FacilityModel      = require(path.resolve('models/Facility')),
          response           = require(path.resolve('./config/lib/response')),
          config             = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
          ObjectId           = mongoose.Types.ObjectId;         
@@ -284,5 +285,92 @@ exports.bookingReport = (reqst, respe) => {
 
 
 
+/***************************************
+*** Function to add new facility *******
+****************************************/
+   
+exports.addFacility = (reqst, respe) => {
+
+    var FacilityModelsave       = new FacilityModel(reqst.body);
+    if(reqst.body){
+        FacilityModelsave.save(function (err, result) {
+            if(result){
+                return respe.json(response.success(result,'Facility has been Added Successfully.'));
+            }else{
+                return respe.json(response.errors(err.errors,'Error in Facility Saved.'));
+            }
+        });
+    }else{
+        var errors =    { _id: {'message':'Facility data is required.'}}
+        return respe.json(response.errors(errors,"Error in facility data."));
+    }
+};
 
 
+/***************************************************
+******* Function to update facility ****************
+***************************************************/
+                                            
+exports.updateFacility = (reqst, respe) => {
+
+    var facilityID             =   reqst.body._id;
+
+    if(!facilityID){
+        var errors =    { _id: {'message':'Facility id is required.'}}
+        return respe.json(response.errors(errors,"Error in facility data."));
+    }else{
+        FacilityModel.findByIdAndUpdate(facilityID,{$set:reqst.body}, {new: true, runValidators: true, context: 'query'}, function(err, result) {
+            if(result){
+              return respe.json(response.success(result,'Facility Updated successfully.'));
+            }else{
+                return respe.json(response.errors(err,"Error in facility update."));
+            }
+        });
+    }
+};
+
+
+/***************************************************
+****** Function to Delete Existing facility ********
+****************************************************/
+
+exports.deleteFacility = (reqst, respe) => {
+
+    var facilityID             =         reqst.query._id;
+    if(!facilityID){
+       var errors =    { _id: {'message':'Facility id is required.'}}
+        return respe.json(response.errors(errors,"Error in facility data."));
+    }else{
+        FacilityModel.findByIdAndRemove(facilityID, function(err, result) {
+            if(result){
+                return respe.json(response.success(result,'Facility deleted successfully.'));
+            }else{
+                return respe.json(response.errors(err,"Error in facility deletion."));
+            }
+        });
+    }
+};
+
+
+
+/******************************************
+***** Function to list all facility *******
+*******************************************/
+
+exports.listFacility = (reqst, respe) => {
+   
+   var hotel_id          =         reqst.query.hotel_id;
+
+    if(!hotel_id){
+        var errors =    { hotel_id: {'message':'Hotel id is required.'}}
+        return respe.json(response.errors(errors,"Error in facility data."));
+    }else{
+        FacilityModel.find({hotel_id: hotel_id}, function (err, result) {
+            if(result){
+                return respe.json(response.success(result,'Data Found.'));
+            }else{
+                return respe.json(response.errors(err,"Error in facility listing."));
+            }
+        });
+    }
+};

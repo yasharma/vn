@@ -94,12 +94,14 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 
 		Date.prototype.getDateAccordingToCurrentWeek = function(start,weekCount)
 		{
-		    start = start || 0;
-		    var today = new Date(this.setHours(0, 0, 0, 0));
-		    var day = today.getDay() - start;
-		    var date = today.getDate() - day;
+		    start 		  = start || 0;
+		    var today 	  = new Date(this.setHours(0, 0, 0, 0));		    
+		    var day 	  = today.getDay() - start;
+		    var date 	  = today.getDate() - day;
 		    var StartDate = new Date(today.setDate(date+1));
-   			var EndDate = new Date(today.setDate(date + 7 * weekCount));
+		    today 	      = new Date(this.setHours(0, 0, 0, 0));
+   			var EndDate   = new Date(today.setDate(date + 7 * weekCount));
+   			 
 		    return [StartDate, EndDate];
 		};
 
@@ -113,6 +115,7 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		***************************************************************************/
 
 		var AllDates  = function(startDate, endDate) {
+			
 
 							var dates = [],
 							  currentDate = startDate,
@@ -186,17 +189,22 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 		{
 			$scope.activeRangeMenu = 1;
 			var dateArray    				    = new Date().getDateAccordingToCurrentWeek('',1);
+			
+
 			$scope.datesData.dates        		= AllDates(dateArray[0],dateArray[1]);
 			$scope.datesData.monthStartDate     = new Date(date.getFullYear(), date.getMonth(), 1);
 
+
+			$scope.dateLabel 		 = {from:dateArray[0], to:dateArray[1]};
 			if(dateArray[0].getMonth() != dateArray[1].getMonth())
-			{
-				$scope.dateLabel 		 = {from:dateArray[0], to:dateArray[1]};
+			{				
 				$scope.scheduleRange     = true;
 			} 
 
 
 			$scope.getSchedule(dateArray[0],dateArray[1]);
+
+
 		}
 		setSchedulerOnLoad();
 
@@ -226,9 +234,9 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 			}			
 			
 			$scope.scheduleRange     = false;
+			$scope.dateLabel 		 = {from:firstViewDay, to:lastViewDay};
 			if(firstViewDay.getMonth() != lastViewDay.getMonth())
-			{
-				$scope.dateLabel 		 = {from:firstViewDay, to:lastViewDay};
+			{				
 				$scope.scheduleRange     = true;
 			} 
 
@@ -418,29 +426,21 @@ app.controller('schedulerController', ['$scope','$rootScope','localStorageServic
 
 		}; 
 
-		/*var isAllCheck = false;	
-		function togglecheckboxes(cn){			
-		    var cbarray = document.getElementsByName(cn);
-		    for(var i = 0; i < cbarray.length; i++){
-			        cbarray[i].setAttribute("aria-checked", false);
-			}   
-		}
-*/
+	
 
 		/*****************************************
 		 * Open shifts edit form
 		 *****************************************/	
 
 		$scope.openEmpSchedule = function(scheduleDate,empDetail,dept){
-			//togglecheckboxes('multipleSchedule');
-
+			
 				$mdDialog.show({
 					controller: 'scheduleEmpController',
 					templateUrl: '/modules/employee/views/schedule_employee.html',
 					parent: angular.element(document.body),
 					fullscreen: $scope.customFullscreen,
 					clickOutsideToClose:true,	
-					locals:{scheduledData:{scheduleDate:scheduleDate,empDetail:empDetail,ScheduleDepartment:dept,multipleSchedule:selectedField}}				
+					locals:{scheduledData:{scheduleDate:scheduleDate,empDetail:empDetail,ScheduleDepartment:dept,multipleSchedule:selectedField,calenderDate:$scope.dateLabel}}				
 				}).then(function(answer) {}, function() {});
 
 		};

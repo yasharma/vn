@@ -7,7 +7,9 @@ const    express            =   require('express'),
          bodyParser         =   require('body-parser'),
          formidable         =   require('formidable'),
          fs                 =   require('fs'),
+         _                  =   require('lodash'),
          LostFound          =   require(path.resolve('models/LostFound')),
+         Category           =   require(path.resolve('models/LostFoundCategory')),
          response           =   require(path.resolve('./config/lib/response')),
          ObjectId           =   mongoose.Types.ObjectId;
 
@@ -102,3 +104,90 @@ exports.listLostFound = (reqst, respe) => {
    
  };
 
+
+
+/************************************************
+*** Function to add new category ********
+*************************************************/
+   
+exports.addCategory = (reqst, respe) => {
+
+    if(!_.isEmpty(reqst.body)){
+
+        var Categorysave       = new Category(reqst.body);
+
+        Categorysave.save(function (err, result) {
+            if(result){
+                return respe.json(response.success(result,'Category has been Added Successfully.'));
+            }else{
+                return respe.json(response.errors(err.errors,'Error in category Saved.'));
+            }
+        });
+    }else{
+        var errors =    { _id: {'message':'Category data is required.'}}
+        return respe.json(response.errors(errors,"Error in Category data."));
+    }
+};
+
+/**********************************************************
+******* Function to Update Existing Vending category ******
+***********************************************************/
+                                            
+exports.updateCategory = (reqst, respe) => {
+
+    var category_id             =   reqst.body._id;
+    if(!category_id){
+        var errors =    { _id: {'message':'Category id is required.'}}
+        return respe.json(response.errors(errors,"Error in Category data."));
+    }else{
+        Category.findByIdAndUpdate(category_id,{$set:reqst.body},{new: true,runValidators:true},function(err, result) {
+            if(result){
+              return respe.json(response.success(result,'Category Updated successfully.'));
+            }else{
+                return respe.json(response.errors(err.errors,"Error in Category update."));
+            }
+        });
+    }
+};
+/**********************************************************
+****** Function to Delete Existing category *******
+***********************************************************/
+
+exports.deleteCategory = (reqst, respe) => {
+
+    var category_id             =         reqst.query._id;
+    if(!category_id){
+        var errors =    { _id: {'message':'Category id is required.'}}
+        return respe.json(response.errors(errors,"Error in Category data."));
+    }else{
+        Category.findByIdAndRemove(category_id, function(err, result) {
+            if(result){
+                return respe.json(response.success(result,'Category deleted successfully.'));
+            }else{
+                return respe.json(response.errors(err,"Error in Category Deletion."));
+            }
+        });
+    }
+};
+
+/********************************************
+***** Function to list category **
+*********************************************/
+
+exports.listCategory = (reqst, respe) => {
+   
+   var hotel_id          =         reqst.query.hotel_id;
+
+    if(!hotel_id){
+        var errors =    { hotel_id: {'message':'Hotel id is required.'}}
+        return respe.json(response.errors(errors,"Error in Hotel data."));
+    }else{
+        Category.find({hotel_id: ObjectId(hotel_id)}, function (err, result) {
+            if(result){
+                return respe.json(response.success(result,'Data Found.'));
+            }else{
+                return respe.json(response.errors(err,"Error in Category listing."));
+            }
+        });
+    }
+};

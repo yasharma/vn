@@ -1,6 +1,6 @@
 "use strict";
 
-app.filter('currency',function($rootScope) {
+app.filter('currency',['$rootScope',function($rootScope) {
 	return function(input,scope){
 		
 		var currency;
@@ -14,4 +14,4 @@ app.filter('currency',function($rootScope) {
 		}
 		return currency+input;
 	};
-});
+}]);

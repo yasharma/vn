@@ -4,8 +4,7 @@ app.controller('scheduleEmpController', ['$scope','$rootScope','globalRequest','
 	function($scope,$rootScope,globalRequest,$mdDialog,toastService,scheduledData) {
 		
 		var date         	= new Date(scheduledData.scheduleDate);
-		
-
+	
 		/*****************************************************
 		* Initialize time array if time not scheduled
 		*****************************************************/
@@ -74,7 +73,7 @@ app.controller('scheduleEmpController', ['$scope','$rootScope','globalRequest','
 
 
 		/************************************
-		* Add employee schedule data
+		* Schedule employee data
 		*************************************/
 
 
@@ -146,26 +145,28 @@ app.controller('scheduleEmpController', ['$scope','$rootScope','globalRequest','
 			}
 
 			
-			var popup;
-			
-			    globalRequest.jotCRUD(SchedRequest).then(function(response){	
-				 	if(response.status == 1)
-				 	{
-				 		$rootScope.$emit("CallgetSchedule", {firstDay:firstDay,lastDay:lastDay});
-				 		$rootScope.$emit('scheduleField');
-				 		$mdDialog.cancel();	
-				 		popup = {"message":response.message,"class":response.class};
-						toastService.alert(popup); 
-				 	} else {
-				 		var errors = '<ul class="mdToast-error-list">';
-						angular.forEach(response.errors,function(value,key){
-							errors += '<li>'+value.message+'</li>';
-						});
-						errors += '</ul>';
-						popup = {"message":errors,"class":""};
-						toastService.errors(popup);
-				 	}
-				});
+			var popup;			
+		    globalRequest.jotCRUD(SchedRequest).then(function(response){	
+			 	if(response.status == 1)
+			 	{
+			 		/* Get schedule */
+			 		$rootScope.$emit("CallgetSchedule", {firstDay:scheduledData.calenderDate.from,lastDay:scheduledData.calenderDate.to});
+
+			 		/* Uncheck mulitischecdule checkbox */
+			 		$rootScope.$emit('scheduleField');
+			 		$mdDialog.cancel();	
+			 		popup = {"message":response.message,"class":response.class};
+					toastService.alert(popup); 
+			 	} else {
+			 		var errors = '<ul class="mdToast-error-list">';
+					angular.forEach(response.errors,function(value,key){
+						errors += '<li>'+value.message+'</li>';
+					});
+					errors += '</ul>';
+					popup = {"message":errors,"class":""};
+					toastService.errors(popup);
+			 	}
+			});
 			
 
 		};

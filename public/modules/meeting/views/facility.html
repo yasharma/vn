@@ -1,0 +1,109 @@
+<div class="dash-main-con">
+<!--middle panel -->
+<section class="dashrightsection aligninput" ng-class="{'leftopen':$root.leftopen}">
+	
+	<div class="dash_hd_txt mar-bot20 clearfix">
+		<div class="dash_hd mar-bot0 dash_hd-left">Facility</div>
+
+
+		<div class="rightfilter_right">
+			<div class="chane_pass_btn_right">
+				
+
+		    <md-button  slide-toggle="#facility" ng-class="{activebtn:facilityForm}" ng-click="facilityForm = !facilityForm;" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+					{{(facilityForm)?"Close":"Add Facility"}}
+			</md-button>
+			</div>
+	    </div>    
+	</div>
+
+
+
+	<div class="dash_pro_inform slideable" id="facility">
+	<form name="addFacilityform" ng-submit="addFacility(addFacilityform.$valid)" novalidate>		
+		<div class="dash_pro_inform_inner boxunoversal">
+			<div class="row">
+				<div class="col-sm-3">
+					<md-input-container  class="md-block">
+				            <input  ng-model="name" placeholder="Name" ng-required="true">
+				    </md-input-container>
+				</div>
+
+				<div class="clearfix"></div>
+				<div class="col-sm-12">
+				<div class="Selectdep_txt">Upload Images</div>
+				<div class="change_pro positionrel">
+					
+					<img ngf-thumbnail="facilityPic[0]"  class="width50" style="max-width: 100%;width:auto">
+					<div class="hover_de">
+						<ng-md-icon icon="photo_camera" style="fill: #fff" size="24"></ng-md-icon> 
+						<span class="text-center">
+							Facility photo
+						</span>
+					</div>
+					<input type="file" ngf-accept="'image/*'" ngf-select ="uploadFacilityImage($files, $invalidFiles)" ngf-resize="{width: 30, height: 30}" ng-model="profile_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
+				</div>				
+				 
+				<br>
+			</div>
+			</div> 
+			<div class="clearfix">
+				<div class="chane_pass_btn">
+					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+				</div>				
+			</div>
+		</div>
+		</form>
+	</div>
+
+
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch deptsrch_gray">
+			<div class="deptsrch_gray_top mar-bot0 clearfix">
+			<div class="positionrel inventory_filter_top">
+				<div class="vending_left_top_serch positionrel" style="float: left;width: 90%;">
+					<md-input-container  class="md-block">
+			      <input  ng-model="search_name" placeholder="Search Facility" autocomplete="off">
+			  	</md-input-container>			  	
+				</div>
+
+				<div class="" style="float: right; padding: 10px 0px 0 5px;cursor: pointer;" ng-click="search_name = ''" title="Reset filters">
+					<img src="assets/images/reset_filter.png" style="width: 30px;">
+				</div>
+				
+			</div>
+			</div>
+		</div>
+
+
+		<div class="deptsrch_data">
+		<br><br>
+			 <ul class="deptsrch_data_list clearfix">
+			 		<li  ng-repeat="fac in filteredCat = 
+              (facilityList | filter:{name:search_name}) 
+              track by $index">
+			 			<div class="deptsrch_data_title capitalize" style="border-bottom:0">
+
+			 			<img ng-if="fac.hotel_id" src="{{'/images/hotel/'+fac.hotel_id+'/facility/'+ fac.image}}"  style="margin-right: 10px;max-width: 30px;"> 					
+			 				{{fac.name}}
+			 		
+                  	<span class="icon_btn">
+	                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(fac);"  title="Edit">
+				 		</ng-md-icon>
+	                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeFacility(fac._id,$index)" ng-confirm-title="Delete Facility" ng-confirm-delete="Are you sure you want to remove this facility."></ng-md-icon>
+                  	</span>
+			 			</div>			 			
+			 		</li>
+			 		
+			 </ul>
+
+			 <div ng-show="!filteredCat.length" class="itemnotfound">
+                No facility found.                
+        	 </div>
+		</div>
+		
+	</div> 
+	
+</section>
+</div>

@@ -3,13 +3,6 @@
 app.controller('dashboardController', ['$scope','$location','localStorageService','$rootScope','$mdDialog','toastService','globalRequest',
 	function($scope,$location, localStorageService,$rootScope,$mdDialog,toastService,globalRequest) {
 
-		/* socket.on("message", function(data){
-		    console.log(data);
-		});
-*/
-
-
-
 		/*
 		*
 		* Get hotels list

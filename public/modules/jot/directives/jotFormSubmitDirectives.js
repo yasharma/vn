@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastService,globalRequest,$routeParams,socket) {
+app.directive('jotFormSubmitDirectives', ['$rootScope', '$mdDialog','toastService','globalRequest','$routeParams','socket', function($rootScope, $mdDialog,toastService,globalRequest,$routeParams,socket) {
       return {
           
           link: function($scope, element, attrs) {
@@ -276,4 +276,4 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                 
           }
       };
-    });
+    }]);

@@ -129,9 +129,10 @@
 						
 						<ul>
 							<li ng-repeat="facy in room_detail[0].facilities" title="{{facy}}" style="display: inline-block;    margin-right: 10px;">
-									<img ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'image'" src="{{(facilityList | filter : {label : facy } : true)[0].src}}">
 									
-									<ng-md-icon ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'icon'" icon="{{(facilityList | filter : {label : facy } : true)[0].src}}" style="fill: #a5a7a7" size="20"></ng-md-icon> 	
+
+									<img  src="{{'/images/hotel/'+hotel_id+'/facility/'+ ($root.facilityList | filter : {name : facy } : true)[0].image}}">
+										
 							</li> 
 						</ul>
 

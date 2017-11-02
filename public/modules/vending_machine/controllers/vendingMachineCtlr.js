@@ -2,6 +2,12 @@
 
 app.controller('vendingMachineCtlr', ['$scope','$rootScope','globalRequest',
 	function($scope,$rootScope,globalRequest) {
+
+
+		/*******************************************
+		* Redirect user if vending machine is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('vending_machine');
 		
 		/**********************************************************
 	    * Get item category

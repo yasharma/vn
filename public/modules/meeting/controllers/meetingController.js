@@ -3,6 +3,11 @@
 app.controller('meetingController', ['$scope','$rootScope','globalRequest','toastService',
 	function($scope,$rootScope,globalRequest,toastService) {
 
+		/*******************************************
+		* Redirect user if meeting room is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('meeting_room');
+		
 		/************************************
 		* Get rooms
 		*************************************/
@@ -20,8 +25,6 @@ app.controller('meetingController', ['$scope','$rootScope','globalRequest','toas
 		 		{
 			 		var from = new Date($scope.search_from).getTime();
 			 		var to   = new Date($scope.search_to).getTime();
-
-			 		console.log({from:from,to:to});			 		
 			 		globalRequest.getRoomList({from:from,to:to});
 			 	}
 		 	}
@@ -58,105 +61,20 @@ app.controller('meetingController', ['$scope','$rootScope','globalRequest','toas
 	      };
 	    };
 
-	    /************************************
+	   /************************************
 		* Get facilities
-		*************************************/
-
-		$scope.facilityList = [
-			{
-				label: "Wifi",
-				attachment_type: "image",
-				src:"assets/images/tv1_icon.png",
-			},
-			{
-				label: "Tv",
-				attachment_type: "image",
-				src:"assets/images/tv_icon.png"
-			},
-			{
-				label: "Room Service",
-				attachment_type: "image",
-				src:"assets/images/tv2_icon.png"
-			},
-			{
-				label: "Music",
-				attachment_type: "image",
-				src:"assets/images/tv4_icon.png"
-			},
-			{
-				label: "Parking",
-				attachment_type: "icon",
-				src:"local_parking"
-			}
-		];
+		*************************************/			
+		
+		globalRequest.getFacilityList();
 
 
 		/************************************
 		* Get facilities
 		*************************************/
 
-		$scope.roomStyleList = [
-			{
-				_id: 1,
-				name: "Auditorium",
-				attachment_type: "image",
-				capacity: '40max',
-				src:"assets/images/audi.gif",
-			},
-			{
-				_id: 2,
-				name: "Banquet",
-				attachment_type: "image",
-				capacity: '10max',
-				src:"assets/images/Banquet.gif"
-			},
-			{
-				_id: 3,
-				name: "Hollow Square",
-				attachment_type: "image",
-				capacity: '50max',
-				src:"assets/images/hollow.gif"
-			},
-			{
-				_id: 4,
-				name: "Classroom",
-				attachment_type: "image",
-				capacity: '100max',
-				src:"assets/images/class.gif"
-			},
-			{
-				_id: 5,
-				name: "U-Shape",
-				attachment_type: "image",
-				capacity: '50max',
-				src:"assets/images/u-shape.gif"
-			},
-			{
-				_id: 6,
-				name: "Conference",
-				attachment_type: "image",
-				capacity: '100',
-				src:"assets/images/confrence.gif"
-			},
-			{
-				_id: 7,
-				name: "Theater",
-				attachment_type: "image",
-				capacity: '10max',
-				src:"assets/images/lay_img3.png"
-			}
-		];
+		$scope.roomStyleList = window.__API_PATH.ROOM_STYLE;
 		
-		/*$scope.slider = {
-		    minValue: 10,
-		    maxValue: 90,
-		    options: {
-		        floor: 0,
-		        ceil: 100,
-		        step: 1
-		    }
-		};*/
-
+		
 		$scope.selectLayout = function(layoutID){
 
 			$scope.selectedLayout = layoutID;

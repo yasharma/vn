@@ -51,7 +51,7 @@
 		<ul class="dash_home_header_menu_list">
 			<li class="noti_icon positionrel">
 				<a href="/dashboard">
-				<ng-md-icon class="cursor sidemenu" icon="home" style="fill: white" size="32"></ng-md-icon>
+				<ng-md-icon class="cursor sidemenu" icon="home" style="fill: white;" size="32"></ng-md-icon>
 				</a>
 			</li>
 			<li class="noti_icon positionrel" ng-click="$root.toggleNotification()">
@@ -120,7 +120,6 @@
 
             <a href="javascript:void(0);" ng-repeat="board in boards | filter:'!quick'"  title="{{$root.jotTypes[board].label}}" 
             ng-click="$root.openFormByType($root.jotTypes[board])" class="icon link{{$index+1}}"> 
-           
 				<img src="{{$root.jotTypes[board].data}}" ng-if="$root.jotTypes[board].icontype == 'image'" width="25px">
             </a>
         </div>	
@@ -181,7 +180,8 @@
 
 			<li class="noti_icon positionrel">
 				<a href="{{($root.currentPage == '/dashboard/hotelboard')?'/dashboard':'/dashboard/hotelboard'}}">
-				<ng-md-icon class="cursor sidemenu" icon="home" style="fill: white" size="32"></ng-md-icon>
+				<ng-md-icon class="cursor sidemenu" icon="home" style="fill: white;" size="32">
+				</ng-md-icon>
 				</a>
 			</li>
 			

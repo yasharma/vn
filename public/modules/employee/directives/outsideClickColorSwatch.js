@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('outsideClickColorSwatch', function ($window) {    
+app.directive('outsideClickColorSwatch', ['$window', function ($window) {    
     return {                 
         scope: {
             outsideCallback: '&outsideClickColorSwatch',
@@ -17,4 +17,4 @@ app.directive('outsideClickColorSwatch', function ($window) {
             });
         }
     };
-});
+}]);

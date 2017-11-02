@@ -10,6 +10,7 @@ const 	express 	= require('express'),
 		bodyParser 	= require('body-parser'),
 		routes 		= require(path.resolve('./config/routes')),
 		mongoose 	= require('mongoose'),
+		compression = require('compression'),
 		config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`));
 		
 //app.set('view engine', 'ejs');
@@ -19,6 +20,8 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.use(bodyParser.json());
+
+app.use(compression());
 
 app.use(express.static(path.resolve('./public')));
 app.use(express.static(path.resolve('./admin')));

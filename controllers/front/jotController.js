@@ -102,7 +102,7 @@ exports.addJot = (reqst, respe) => {
 
             /**************** Save notification ********************/
               
-              var notificationData = {
+            var notificationData = {
                 title            :   "New "+reqst.body.jot_type +" jot :- "+reqst.body.jot_title,
                 description      :   reqst.body.jot_description,
                 from_user_id     :   reqst.body.user_id,
@@ -112,10 +112,10 @@ exports.addJot = (reqst, respe) => {
                 to_departments   :   reqst.body.assigned_departments, 
               };
               
-              var notificationDataSave    = new NotificationDB(notificationData);
-              notificationDataSave.save();
+            var notificationDataSave    = new NotificationDB(notificationData);
+            notificationDataSave.save();
 
-              /**************** End notification ********************/
+            /**************** End notification ********************/
 
             return respe.json(response.success(result,'Jot Successfully Added.'));
         }else{
@@ -170,17 +170,17 @@ exports.updateJot = (reqst, respe) => {
     
     }
 
-    if(AssignedMembers){
-       
+    if(AssignedMembers && AssignedMembers.length > 0){       
         var AssignedMemberArr = AssignedMembers;
         var uniqueMember = AssignedMemberArr.filter(function(elem, index, self) {
                 return index == self.indexOf(elem);
-            });
-       
+            });       
         reqst.body.assigned_members                     =   uniqueMember;
+    }else{
+        delete reqst.body.assigned_members;
     }
 
-    if(AssignedDepartments.length > 0){
+    if(AssignedDepartments && AssignedDepartments.length > 0){
        
         var AssignedDeptArr         = AssignedDepartments;
         var uniqueDept              = AssignedDeptArr.filter(function(elem, index, self) {
@@ -203,6 +203,23 @@ exports.updateJot = (reqst, respe) => {
         
         Jot.findByIdAndUpdate(Jotid,{$set:reqst.body}, {new: true, runValidators: true}, function(err, result) {
             if(result){
+
+            /**************** Save notification ********************/
+              
+            var notificationData = {
+                title            :   "Jot updated  :- "+result.jot_title,
+                description      :   result.jot_description,
+                from_user_id     :   result.user_id,
+                from_hotel       :   result.hotel_id,
+                type             :   "jot",
+                to_users         :   result.assigned_members, 
+                to_departments   :   result.assigned_departments, 
+              };                     
+            var notificationDataSave    = new NotificationDB(notificationData);
+            notificationDataSave.save();
+
+            /**************** End notification ********************/
+
                 return respe.json(response.success(result,'Jot Updated successfully.'));
             }else{
                 return respe.json(response.errors(err.errors,"Error In Jot Update."));

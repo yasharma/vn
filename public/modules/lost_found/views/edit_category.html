@@ -1,0 +1,32 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Edit Category</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+<div class="dash-main-con">
+	<div class="dash_pro_inform">
+	<form name="editlostFoundCatform" ng-submit="editlostFoundCat(editlostFoundCatform.$valid)" novalidate>		
+		<div class="dash_pro_inform_inner boxunoversal">
+			<div class="row aligninput">
+				<div class="col-sm-12">
+					<md-input-container  class="md-block">
+				            <input  ng-model="category_name" placeholder="Category Name" ng-required="true">
+				    </md-input-container>
+				</div>
+			</div> 
+			<div class="clearfix">
+				<div class="chane_pass_btn">
+					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+				</div>				
+			</div>
+
+		</div>
+		</form>
+	</div>
+</div>
+</md-dialog>

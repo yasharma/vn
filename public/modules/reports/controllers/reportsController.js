@@ -2,15 +2,27 @@
 
 app.controller('reportsController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
 	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+
+		/*******************************************
+		* Redirect user if vending machine is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('vending_machine');
+		
 		
 		$scope.position_list = window.__API_PATH.POSITION;
-
 
 		/************************************
 		* Get reports list
 		*************************************/			
 		
 		globalRequest.getReports();
+
+
+		/************************************************
+		* Get list of Jot types selected by current user
+		*************************************************/
+
+		$scope.boards = $rootScope.activeHotelData.jot_types;
 
 
 
@@ -27,7 +39,7 @@ app.controller('reportsController', ['$scope','$rootScope','globalRequest','$mdD
 				data:{_id:id}
 			};
 
-			globalRequest.jotCRUD(request).then(function(response){				
+			globalRequest.jotCRUD(request).then(function(response){
 				var popup = {"message":response.message,"class":response.class};
 				toastService.alert(popup);
 				globalRequest.getReports();

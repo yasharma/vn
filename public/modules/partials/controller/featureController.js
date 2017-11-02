@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller("featureController",['$scope','$rootScope','$routeParams','globalRequest','localStorageService','$location','$mdDialog','$route',
-	function($scope,$rootScope,$routeParams,globalRequest,localStorageService,$location,$mdDialog,$route){
+app.controller("featureController",['$scope','$rootScope','globalRequest','localStorageService','$mdDialog',
+	function($scope,$rootScope,globalRequest,localStorageService,$mdDialog){
 
 		/************************************************
 		* Get list of Jot types selected by current user
@@ -39,6 +39,7 @@ app.controller("featureController",['$scope','$rootScope','$routeParams','global
 			globalRequest.jotCRUD(request).then(function(response){	
 				localStorageService.set('hotel',response.result);
 				$scope.$digest();
+				$scope.$apply();
 				/*window.location.reload();*/
 			});
 

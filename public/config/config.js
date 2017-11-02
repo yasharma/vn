@@ -53,7 +53,6 @@ app.config(['$httpProvider', function($httpProvider){
             prefix = 'default';
    }  
  localStorageServiceProvider.setPrefix(prefix);
-
 }])
 .run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$cookies','socket',
 	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$cookies,socket){ 	        
@@ -65,6 +64,20 @@ app.config(['$httpProvider', function($httpProvider){
                 $rootScope.currentPage          = $location.$$path;
                 $rootScope.activeHotelData      = localStorageService.get('hotel');
                 $rootScope.currentUser          = localStorageService.get('user');
+
+
+                $rootScope.redirectSettingsPage = function(id){
+
+                    if($rootScope.activeHotelData.jot_types && $rootScope.activeHotelData.jot_types.length>0)
+                    {
+                    var matchFound =   $rootScope.activeHotelData.jot_types.filter(function(obj){
+                        return (obj == id)?true:false;
+                      }); 
+                    if(matchFound.length == 0){
+                        $location.path('/dashboard');
+                    }                      
+                    }
+                };
                 
 
                 /*************************************************

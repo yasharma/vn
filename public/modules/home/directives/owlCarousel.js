@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive("owlCarousel", function() {
+app.directive("owlCarousel", [function() {
 	return {
 		restrict: 'E',
 		transclude: false,
@@ -19,7 +19,7 @@ app.directive("owlCarousel", function() {
 			};
 		}
 	};
-});
+}]);
 app.directive('owlCarouselItem', [function() {
 	return {
 		restrict: 'A',

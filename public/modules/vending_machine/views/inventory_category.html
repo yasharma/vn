@@ -57,35 +57,32 @@
 			</div>
 			</div>
 		</div>
-		<div class="addmember_data_table">
-			<div class="table_div">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="vending_table smalltable">
-          <thead>
-              <tr>
-                  <th width="10%">#</th>
-                  <th width="70%">Category</th>
-                  <th width="20%" style="text-align: right;">Action </th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr ng-repeat="invCat in filteredCat = 
+
+
+		<div class="deptsrch_data">
+		<br><br>
+			 <ul class="deptsrch_data_list clearfix">
+			 		<li  ng-repeat="invCat in filteredCat = 
               (invtList | filter:{inventory_category_name:search_cat_name}) 
               track by $index">
-                <td>{{$index+1}}</td>                   
-                <td>{{invCat.inventory_category_name}}</td>
-                <td  style="text-align: right;">
-                	<!-- <ng-md-icon class="cursor tablegreentag" icon="remove_red_eye" class="cursor"  size="22"></ng-md-icon> -->
-                	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(invCat);"  title="Edit"></ng-md-icon>
-                	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeCat(invCat._id,$index)" ng-confirm-title="Delete Category" ng-confirm-delete="Are you sure you want to remove this category."></ng-md-icon>
-                </td>
-              </tr>              
-          </tbody>
-        </table>
-        <div ng-show="!filteredCat.length" class="itemnotfound">
+			 			<div class="deptsrch_data_title" style="border-bottom:0">			 				
+			 				{{invCat.inventory_category_name}}
+			 		
+                  	<span class="icon_btn">
+	                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(invCat);"  title="Edit">
+				 		</ng-md-icon>
+	                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeCat(invCat._id,$index)" ng-confirm-title="Delete Category" ng-confirm-delete="Are you sure you want to remove this category."></ng-md-icon>
+                  	</span>
+			 			</div>			 			
+			 		</li>
+			 		
+			 </ul>
+
+			 <div ng-show="!filteredCat.length" class="itemnotfound">
                 No category found.                
-         </div>
-      </div>
+        	 </div>
 		</div>
+		
 	</div> 
 	
 </section>

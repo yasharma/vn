@@ -16,7 +16,7 @@
       </div>
       <div class="hotel_list_top" ng-hide="BoardsPage">
          <div class="circle_container" ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
-            <a class="circle" href="{{(board.id == 'lost_found')?'/dashboard/lost-found':(board.id == 'vending_machine')?'/dashboard/inventory':(board.id == 'meeting_room')?'/dashboard/meeting-rooms':'/dashboard/hotelboard/'+board.id}}">
+            <a class="circle" href="{{(board.id == 'lost_found')?'/dashboard/lost-found':(board.id == 'vending_machine')?'/dashboard/sales-report':(board.id == 'meeting_room')?'/dashboard/booking-report':'/dashboard/hotelboard/'+board.id}}">
                <div class="circle__inner">
                   <div class="circle__wrapper">
                      <div class="hover_effect_home" style='background: {{(board.bgcolor)?board.bgcolor:"#71adf7";}}'>
@@ -52,8 +52,8 @@
                      <li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
                         <a href="{{(board.id == 'lost_found')
                         ?'/dashboard/lost-found'
-                        :(board.id == 'vending_machine')?'/dashboard/inventory'
-                        :(board.id == 'meeting_room')?'/dashboard/meeting-rooms'
+                        :(board.id == 'vending_machine')?'/dashboard/sales-report'
+                        :(board.id == 'meeting_room')?'/dashboard/booking-report'
                         :'/dashboard/hotelboard/'+board.id}}">
                            <span class="txtdrop">{{board.label}}</span>
                            <div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
@@ -188,7 +188,7 @@
                         <div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation(); " ng-show="showQuickEdit"></div>
                         <div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">
                            <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
-                           <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+                           <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot(jot)">SAVE</md-button>
                            <div class="quick_edit_buttons" edit-jot-directives>
                               <ul class="quick_edit_buttons_list clearfix">
                                  <li>
@@ -228,12 +228,7 @@
                                           </li>
                                        </ul>
                                     </div>
-                                 </li>
-                                 <!--  <li>
-                                    <a href="javascript:void(0);">
-                                        <ng-md-icon icon="insert_drive_file" size="20"></ng-md-icon>Copy
-                                    </a>
-                                    </li> -->
+                                 </li>                                
                                  <li ng-if="jot.jot_type != 'task'">
                                     <a href="javascript:void(0);" ng-click="showMember = showDept =  prior = false;dDate = !dDate">
                                        <ng-md-icon icon="watch_later" size="20"></ng-md-icon>
@@ -266,8 +261,8 @@
                                        <div class="clearfix" ng-include="'/modules/jot/views/priority.html'" style="position:relative;top: -21px;"></div>
                                     </div>
                                  </li>
-                                 <li >
-                                    <a href="javascript:void(0);" ng-click="changeStatus()">
+                                 <li>
+                                    <a href="javascript:void(0);"  confirmed-click="changeStatus()" ng-confirm-title="Change Status" ng-confirm-delete="Are you sure you want to {{edit_jot.status == 'close' ? 'open':'close'}} this jot.">
                                        <ng-md-icon icon="done_all" size="20"></ng-md-icon>
                                        {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}
                                     </a>
@@ -347,7 +342,7 @@
                            <div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
                            <div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">
                               <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
-                              <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+                              <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot(jot)">SAVE</md-button>
                               <div class="quick_edit_buttons" edit-jot-directives>
                                  <ul class="quick_edit_buttons_list clearfix">
                                     <li>
@@ -431,7 +426,7 @@
                                        </div>
                                     </li>
                                     <li>
-                                       <a href="javascript:void(0);" ng-click="changeStatus()">
+                                      <a href="javascript:void(0);"  confirmed-click="changeStatus()" ng-confirm-title="Change Status" ng-confirm-delete="Are you sure you want to {{edit_jot.status == 'close' ? 'open':'close'}} this jot.">
                                           <ng-md-icon icon="done_all" size="20"></ng-md-icon>
                                           {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}
                                        </a>
@@ -506,7 +501,7 @@
                            <div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
                            <div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">
                               <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
-                              <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+                              <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot(jot)">SAVE</md-button>
                               <div class="quick_edit_buttons" edit-jot-directives>
                                  <ul class="quick_edit_buttons_list clearfix">
                                     <li>
@@ -590,7 +585,7 @@
                                        </div>
                                     </li>
                                     <li>
-                                       <a href="javascript:void(0);" ng-click="changeStatus()">
+                                       <a href="javascript:void(0);"  confirmed-click="changeStatus()" ng-confirm-title="Change Status" ng-confirm-delete="Are you sure you want to {{edit_jot.status == 'close' ? 'open':'close'}} this jot.">
                                           <ng-md-icon icon="done_all" size="20"></ng-md-icon>
                                           {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}
                                        </a>
@@ -665,7 +660,7 @@
                            <div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
                            <div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">
                               <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
-                              <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+                              <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot(jot)">SAVE</md-button>
                               <div class="quick_edit_buttons" edit-jot-directives>
                                  <ul class="quick_edit_buttons_list clearfix">
                                     <li>
@@ -749,7 +744,7 @@
                                        </div>
                                     </li>
                                     <li>
-                                       <a href="javascript:void(0);" ng-click="changeStatus()">
+                                       <a href="javascript:void(0);"  confirmed-click="changeStatus()" ng-confirm-title="Change Status" ng-confirm-delete="Are you sure you want to {{edit_jot.status == 'close' ? 'open':'close'}} this jot.">
                                           <ng-md-icon icon="done_all" size="20"></ng-md-icon>
                                           {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}
                                        </a>
@@ -824,7 +819,7 @@
                            <div class="bglayout" ng-click="showQuickEdit = !showQuickEdit;showMember = showDept = dDate = prior = false;$event.stopPropagation();" ng-show="showQuickEdit"></div>
                            <div ng-show="showQuickEdit" ng-click="$event.stopPropagation();">
                               <textarea  ng-model="jot_title" placeholder="Jot Title"  class="quick_edit_title" style="resize: none;"></textarea>
-                              <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot()">SAVE</md-button>
+                              <md-button class="md-primary addyellobtn bluebtn quick_edit_save" ng-click="saveUpdatedJot(jot)">SAVE</md-button>
                               <div class="quick_edit_buttons" edit-jot-directives>
                                  <ul class="quick_edit_buttons_list clearfix">
                                     <li>
@@ -908,7 +903,7 @@
                                        </div>
                                     </li>
                                     <li>
-                                       <a href="javascript:void(0);" ng-click="changeStatus()">
+                                       <a href="javascript:void(0);"  confirmed-click="changeStatus()" ng-confirm-title="Change Status" ng-confirm-delete="Are you sure you want to {{edit_jot.status == 'close' ? 'open':'close'}} this jot.">
                                           <ng-md-icon icon="done_all" size="20"></ng-md-icon>
                                           {{edit_jot.status == 'close' ? 'Mark Open':'Mark Close'}}
                                        </a>

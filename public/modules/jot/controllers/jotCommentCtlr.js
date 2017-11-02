@@ -1,7 +1,7 @@
 "use strict";
 
-app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','toastService','$timeout',
-	function($scope,globalRequest,$rootScope,$mdDialog,jotData,toastService,$timeout) {
+app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDialog','jotData','toastService','$timeout','socket',
+	function($scope,globalRequest,$rootScope,$mdDialog,jotData,toastService,$timeout,socket) {
 
 		var userDetail = $rootScope.currentUser;	
 		$scope.getMonthList = window.__API_PATH.MONTH;
@@ -160,7 +160,6 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
             {
               return false;
             }
-
 			$rootScope.jot_members = $rootScope.jot_members+' @'+userName+' ';
 		};
 
@@ -180,7 +179,6 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
             {
               return false;
             }
-
 			$rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
 		};
 		
@@ -216,7 +214,6 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 
 			if(uploadType == "comment")
 			{
-
 				$scope.Commentfiles = files;
 			}
 
@@ -236,8 +233,6 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 									if(key){ return key;}
 							});	
 							updateJotMethod({image:jotData.image},'uploadFiles');
-					    	
-
 		                });
 		            });
 		        
@@ -251,11 +246,9 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 		**************************************/
 
 		$scope.deleteCommentAttachment = function(imageHashKey){
-			
 			$scope.Commentfiles = $scope.Commentfiles.filter(function(key){
 				return key.$$hashKey != imageHashKey;
 			});
-
 		};
 
 
@@ -283,6 +276,9 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 				globalRequest.getJotList(JotType); 
 				$rootScope.files   		 = '';				
 				$scope.showDesc = false;
+
+				socket.emit('notificationToRoom',response.result);
+                globalRequest.getNotification();
 
 				var message;
 				if(actions == 'saveDescription')
@@ -324,6 +320,10 @@ app.controller('jotCommentCtlr', ['$scope','globalRequest','$rootScope','$mdDial
 				} else if(actions == 'deleteAttachment'){
 
 					message = "Delete the attachment.";
+
+				} else if(actions == 'saveChecklist'){
+
+					message = "Checklist Updated";
 				}
 
 				save_activities(message);

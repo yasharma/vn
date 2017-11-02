@@ -3,6 +3,11 @@
 app.controller('inventoryController', ['$scope','$rootScope','localStorageService','globalRequest','$mdDialog','toastService',
 	function($scope,$rootScope,localStorageService,globalRequest,$mdDialog,toastService) {
 		
+		/*******************************************
+		* Redirect user if vending machine is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('vending_machine');
+
 		var hotel = $rootScope.activeHotelData;
 
 		/************************************************
