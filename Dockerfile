@@ -5,10 +5,10 @@
 # Steps to push
 # --------------
 # 1. docker login hotelsjot.azurecr.io
-# 2. docker tag hello-world hotelsjot.azurecr.io/hello-world
-# 2. docker run -it hotelsjot.azurecr.io/hoteljot:1.1
+# 2. docker tag hoteljot/jot hotelsjot.azurecr.io/hoteljot/jot:latest
+# 2. docker run -it hotelsjot.azurecr.io/hoteljot:latest
 # 4. docker exec -it <mycontainer> bash
-# 5. docker push hotelsjot.azurecr.io/hoteljot:1.1
+# 5. docker push hotelsjot.azurecr.io/hoteljot:latest
 # 6. https://hoteljot.scm.azurewebsites.net/ -> to check application logs
 # ====================
 # Run:
@@ -25,7 +25,7 @@ EXPOSE 80 443 3000
 
 # Set development environment as default
 ENV NODE_ENV development
-ENV MONGODB_URL mongodb://hoteljotdb:eGkNCtz4cy8a6XNj0a5smQSPwzCpnroiIrOqru4EWaQe1XnQv67UWkQMgwsbiwVBnc6uFcfMMB7ikMyPAdSVXw==@hoteljotdb.documents.azure.com:10255/?ssl=true&replicaSet=globaldb 
+#ENV MONGODB_URL mongodb://hoteljotdb:eGkNCtz4cy8a6XNj0a5smQSPwzCpnroiIrOqru4EWaQe1XnQv67UWkQMgwsbiwVBnc6uFcfMMB7ikMyPAdSVXw==@hoteljotdb.documents.azure.com:10255/?ssl=true&replicaSet=globaldb 
 
 # Install Utilities
 RUN apt-get update -q  \
