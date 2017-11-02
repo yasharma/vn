@@ -27,9 +27,9 @@
 				<div class="col-sm-4">
 					<md-input-container  md-no-float class="md-block">
 		              <md-select ng-model="category" placeholder="Select Category">
-		                <md-option value="electronic">
-		                  Electronic
-		                </md-option>
+		                <md-option value="{{cat.category_name}}" ng-repeat="cat in $parent.lostFoundCategoryList">
+                        {{cat.category_name}}
+                      </md-option>
 		              </md-select>
 		          </md-input-container>
 				</div>

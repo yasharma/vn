@@ -75,7 +75,7 @@ app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', func
             elem.after($compile(template)(scope));
         }
     };
-}]).directive('focusStaff', function($timeout, $parse) {
+}]).directive('focusStaff', ['$timeout', '$parse', function($timeout, $parse) {
       return {
           
           link: function(scope, element, attrs) {
@@ -91,4 +91,4 @@ app.directive('stafftypeahead', ['$compile', '$timeout','replaceOccurence', func
               });
           }
       };
-    });
+    }]);

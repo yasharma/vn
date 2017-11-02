@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastService,globalRequest,$routeParams) {
+app.directive('jotFormSubmitDirectives', ['$rootScope', '$mdDialog','toastService','globalRequest','$routeParams','socket', function($rootScope, $mdDialog,toastService,globalRequest,$routeParams,socket) {
       return {
           
           link: function($scope, element, attrs) {
@@ -169,6 +169,7 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                       jot_members         : $rootScope.jot_members,
                       priority            : $rootScope.priority,
                       hotel_id            : hotel._id,
+                      user_id             : $rootScope.currentUser._id,
                       jot_type            : $rootScope.jot_type,
                       hotel_room          : $rootScope.hotel_room,
                       due_date            : new Date($rootScope.due_date).getTime() || '',
@@ -193,6 +194,9 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                     if(response.status == 1)
                     {
                       var jotID = response.result._id;
+
+                      socket.emit('notificationToRoom',response.result);
+                      globalRequest.getNotification();
 
                       /****************************
                       * Upload file if exists
@@ -272,4 +276,4 @@ app.directive('jotFormSubmitDirectives', function($rootScope, $mdDialog,toastSer
                 
           }
       };
-    });
+    }]);

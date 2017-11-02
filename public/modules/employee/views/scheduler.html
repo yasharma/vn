@@ -1,8 +1,5 @@
 <section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
 
-
-
-	
 	<div class="dash_hd_txt mar-bot20" layout="row" layout-align="space-between center">
 		<div class="dash_hd mar-bot0">Employee Schedule</div>
 		<div class="rightfilter">
@@ -11,10 +8,6 @@
 			</md-button>
 		</div>    
 	</div>
-
-
-
-
 
 
 	<div class="dash_pro_inform transformable slideable" id="makeshift">
@@ -331,7 +324,7 @@
 										<div class="capitalize" ng-click="showUserInfo(member);" style="text-align: left;padding-left: 12px;">
 											<label class="schedule_user_image">
 											<img src="{{(member.profile_image)?'/images/hotel/'+member.hotel_id+'/profile/'+member.profile_image: '/assets/images/default_profile.png'}}" style="width: 35px;"> 
-											</label>
+											</label><br>
 											{{member.first_name}} {{member.last_name}}
 											
 										</div>
@@ -429,6 +422,7 @@
 					        * If no employee found in department 
 					        ************************************-->
 					        <tr ng-repeat-end>
+					        <td></td>
 					       	   <td colspan="{{datesData.dates.length+3}}" ng-if="list.length == 0">					       	 	
 					       	 	 <div class="itemnotfound" style="text-align: left;padding-left:20px">
 									You have not added any employee in this department.               

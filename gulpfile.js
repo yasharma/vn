@@ -8,7 +8,8 @@ const gulp      = require('gulp'),
     pump        = require('pump'),
     fs          = require('fs'),
     exec        = require('child_process').exec,
-    watch       = require('gulp-watch'),
+    cleanCSS    = require('gulp-clean-css'),
+    //watch       = require('gulp-watch'),
     nodemon     = require('gulp-nodemon');
 
 gulp.task('nodemon', function () {
@@ -18,9 +19,6 @@ gulp.task('nodemon', function () {
     ignore: ['node_modules/','bower_components/','public/js/','test/', 'coverage/','*.html'],
   })
 });
-
-
-
 
 /********************************************************************************************************************************************************************************************************************************************************/
 
@@ -47,6 +45,7 @@ gulp.task('uglify:front-js', (cb) => {
     pump([
         gulp.src(watchFiles),
         concat('main.js'),
+        uglify(),
         gulp.dest('./public/js')
     ],cb);
 
@@ -70,23 +69,17 @@ gulp.task('vendor:js', (cb) => {
             './bower_components/angular-material/angular-material.min.js',
             './bower_components/angular-material-icons/angular-material-icons.min.js',
             './bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js',
-            './bower_components/ng-file-upload/ng-file-upload.min.js',
-            /*   './bower_components/angularjs-slider/dist/rzslider.min.js',*/
+            './bower_components/ng-file-upload/ng-file-upload.min.js',           
             './bower_components/angularjs-datetime-picker/angularjs-datetime-picker.min.js',            
             './bower_components/owl.carousel/dist/owl.carousel.min.js',
             './bower_components/angular-sanitize/angular-sanitize.js',
             './bower_components/angular-nicescroll/angular-nicescroll.js',  
             './bower_components/angular-confirm/dist/angular-confirm.min.js',
             './bower_components/v-accordion/dist/v-accordion.min.js',
-            './bower_components/angular-cookies/angular-cookies.js',
-  
-
-
-                    
-
+            './bower_components/angular-cookies/angular-cookies.js'
         ]),
         concat('vendor.js'),
-        uglify(),
+       uglify(),
         gulp.dest('./public/js')
     ],cb);
 
@@ -106,10 +99,9 @@ gulp.task('uglify:css', (cb) => {
     pump([
         gulp.src(watchCssFiles),
          concat('main-style.css'),
-        /*uglify(),*/
+        cleanCSS(),
         gulp.dest('./public/css')
     ],cb);
-
 });
 
 
@@ -127,14 +119,12 @@ gulp.task('vendor:theme-css', (cb) => {
             './bower_components/angular-material-icons/angular-material-icons.css',
             './bower_components/angularjs-slider/dist/rzslider.min.css',
              './bower_components/angularjs-datetime-picker/angularjs-datetime-picker.css',
-             './bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css',          
              './bower_components/owl.carousel/dist/assets/owl.carousel.min.css',
              './bower_components/angular-confirm/dist/angular-confirm.min.css', 
-             './bower_components/v-accordion/dist/v-accordion.min.css'         
-            
+             './bower_components/v-accordion/dist/v-accordion.min.css'
         ]),
          concat('vendor-theme-css.css'),
-        /*uglify(),*/
+        cleanCSS(),
         gulp.dest('./public/css')
     ],cb);
 });

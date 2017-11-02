@@ -1,28 +1,33 @@
 <section class="dashrightsection aligninput" ng-class="{'leftopen':leftopen}">
 	<div class="dash_hd_txt mar-bot20 clearfix">
-		<div class="dash_hd mar-bot0 dash_hd-left">Sales Reports</div>
-		<div class="rightfilter_right dash-home_right">
-
-            <div class="chane_pass_btn_right mrright0 positionrel" style="">             
-               
-                  <ul class="all_option_list">
-					<li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
-						<a href="
-						{{(board.id == 'lost_found')
-						?'/dashboard/lost-found':(board.id == 'vending_machine')
-						?'/dashboard/inventory'
-						:(board.id == 'meeting_room')?'/dashboard/booking-report'
-						:'/dashboard/hotelboard/'+board.id}}">
-							<span class="txtdrop" style="z-index: 99;">{{board.label}}</span>
-							<div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
-								<img src="{{board.data}}" ng-if="board.icontype == 'image'">
-							</div>
-						</a>
-					</li>				
-				</ul>
-               
-            </div>
-         </div>		   
+		<div class="dash_hd mar-bot0 dash_hd-left">Booking Reports</div>	
+		<div class="rightfilter_right">
+			<div class="chane_pass_btn_right">				
+				<md-button ng-click="$root.openFormByType($root.jotTypes['meeting_room'])" class="md-primary addyellobtn yellowbtn widthauto custom-transition">
+					Book a Room
+				</md-button>
+			</div>				
+	    </div>			   
+	</div>
+	<div class="top_tab_panel clearfix" style="margin-bottom: 10px;">
+		<div class="all_option">
+			<ul class="all_option_list">
+				<li ng-repeat="board in $root.jotTypes" ng-if="(boards | filter:board.id).length">
+					<a href="
+					{{(board.id == 'lost_found')
+					?'/dashboard/lost-found':(board.id == 'vending_machine')
+					?'/dashboard/sales-report'
+					:(board.id == 'meeting_room')?'/dashboard/booking-report'
+					:'/dashboard/hotelboard/'+board.id}}">
+						<span class="txtdrop">{{board.label}}</span>
+						<div class="icon_circle messange_color" style="background:{{board.bgcolor}}">
+							<img src="{{board.data}}" ng-if="board.icontype == 'image'">
+						</div>
+					</a>
+				</li>				
+			</ul>
+		</div>
+		<br>
 	</div>
 
 	<div class="clearfix depart_midle">

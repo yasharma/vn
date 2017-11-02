@@ -3,6 +3,10 @@
 app.controller('inventoryCatController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
 	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
 		
+		/*******************************************
+		* Redirect user if vending machine is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('vending_machine');
 		
 		/************************************
 		* Get Category list

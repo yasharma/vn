@@ -62,6 +62,9 @@ var JotSchema  = new Schema({
   hotel_id: {
     type: ObjectId,
   },
+  user_id: {
+    type: ObjectId,
+  },
   move_dc: {
     type: String,
     default: false

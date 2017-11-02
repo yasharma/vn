@@ -3,6 +3,11 @@
 app.controller('lostFoundManagementController',['$scope','$rootScope','globalRequest','toastService','$mdDialog',
 	function($scope,$rootScope,globalRequest,toastService,$mdDialog){
 
+		/*******************************************
+		* Redirect user if lost found is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('lost_found');
+
 		var hotel = $rootScope.activeHotelData;
 
 		/************************************************
@@ -10,6 +15,12 @@ app.controller('lostFoundManagementController',['$scope','$rootScope','globalReq
 		*************************************************/
 
 		$scope.boards = hotel.jot_types;
+
+		/************************************
+		* Get Category list
+		*************************************/			
+		
+		globalRequest.getLostFoundCategory();
 
 		/************************************
 		* Get employee list

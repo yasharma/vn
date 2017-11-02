@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('closepopup', function($mdDialog) {
+app.directive('closepopup', ['$mdDialog', function($mdDialog) {
       return {                
           link: function(scope, element, attrs) {
               
@@ -9,4 +9,4 @@ app.directive('closepopup', function($mdDialog) {
               };              
           }
       };
-});
+}]);

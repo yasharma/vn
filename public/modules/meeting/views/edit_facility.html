@@ -1,0 +1,58 @@
+<md-dialog class="newhotel_dialog">
+<md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Edit Facility</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+<div class="dash-main-con ">
+
+	<div class="dash_pro_inform">
+
+		<form name="editFacilityform" ng-submit="editFacility(editFacilityform.$valid)" novalidate>
+			
+			<div class="dash_pro_inform_inner boxunoversal">
+			<div class="row">
+				<div class="col-sm-3">
+					<md-input-container  class="md-block">
+				            <input  ng-model="name" placeholder="Name" ng-required="true">
+				    </md-input-container>
+				</div>
+
+				<div class="clearfix"></div>
+				<div class="col-sm-12">
+				<div class="Selectdep_txt">Upload Images</div>
+				<div class="change_pro positionrel">
+					
+					<img ngf-thumbnail="facilityPic[0] || '{{image}}'"  class="width100" style="height:100%">
+					<div class="hover_de">
+						<ng-md-icon icon="photo_camera" style="fill: #fff" size="24"></ng-md-icon> 
+						<span class="text-center">
+							Facility photo
+						</span>
+					</div>
+					<input type="file" ngf-accept="'image/*'" ngf-select ="uploadFacilityImage($files, $invalidFiles)" ngf-max-height ="30" ngf-max-width = "30"  ng-model="profile_image" ngf-max-size="5MB" class="uplosd_img_ab" name="">
+				</div>				
+				 
+				<br>
+			</div>
+			</div> 
+			<div class="clearfix">
+				<div class="chane_pass_btn">
+					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+				</div>				
+			</div>
+		</div>
+
+
+			</form>
+		
+	</div>	
+</div>
+
+</md-dialog>
+
+

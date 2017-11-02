@@ -1,6 +1,6 @@
 "use strict";
 
-app.filter("filterdepartment", function(cursorPosition) {
+app.filter("filterdepartment", ['cursorPosition', function(cursorPosition) {
          return function(input,scope) {
          	var text     = document.getElementById("department");
 			var caretPos = cursorPosition.GetCaretPosition(text);
@@ -36,7 +36,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 			
          };
 
-}).filter("filterstaff", function(cursorPosition) {
+}]).filter("filterstaff", ['cursorPosition', function(cursorPosition) {
 
          return function(input,scope) {
 
@@ -79,7 +79,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 			}
          };
 
-}).filter("filterstaffJotDesc", function(cursorPosition) {
+}]).filter("filterstaffJotDesc", ['cursorPosition',function(cursorPosition) {
 
          return function(input,scope) {
 	         	var text     = document.getElementById("jot_description");
@@ -123,7 +123,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 			
          };
 
-}).filter("descDepartmentFilter", function(cursorPosition) {
+}]).filter("descDepartmentFilter", ['cursorPosition',function(cursorPosition) {
 
          return function(input,scope) {
          		
@@ -165,7 +165,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 				}
          };
 
-}).filter("checklistFilter", function() {
+}]).filter("checklistFilter", [function() {
          return function(input,scope) {         		
          		var totalComplete = 0;
 	         	angular.forEach(input,function(value,key){
@@ -186,7 +186,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 	         	return totalComplete+'/'+input.length;
          };
 
-}).filter('departmentJotFilter',function(){
+}]).filter('departmentJotFilter',[function(){
 	return function(input,scope){
 
 		if(input)
@@ -211,7 +211,7 @@ app.filter("filterdepartment", function(cursorPosition) {
 		return input;
 	};
 
-}).filter('empJotFilter',function(){
+}]).filter('empJotFilter',[function(){
 	return function(input,scope){
 
 		if(input)
@@ -234,4 +234,4 @@ app.filter("filterdepartment", function(cursorPosition) {
 		}		
 		return input;
 	};
-});
+}]);

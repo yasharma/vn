@@ -3,7 +3,11 @@
 app.controller('reportDetailController', ['$scope','$rootScope','globalRequest','$mdDialog','reportDetail',
 	function($scope,$rootScope,globalRequest,$mdDialog,reportDetail) {
 		
-		console.log(reportDetail);
+		/*******************************************
+		* Redirect user if vending machine is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('vending_machine');
+		
 		/***********************************************
 		* Pass edited employee value in current scope
 		***********************************************/

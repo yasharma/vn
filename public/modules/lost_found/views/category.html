@@ -1,0 +1,89 @@
+<div class="dash-main-con">
+<!--middle panel -->
+<section class="dashrightsection aligninput" ng-class="{'leftopen':$root.leftopen}">
+	
+	<div class="dash_hd_txt mar-bot20 clearfix">
+		<div class="dash_hd mar-bot0 dash_hd-left">Lost & Found Category</div>
+
+
+		<div class="rightfilter_right">
+			<div class="chane_pass_btn_right">
+				
+
+		    <md-button  slide-toggle="#lst-fnd-cat" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; category_name = '';" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
+					{{(invForm)?"Close":"Add Category"}}
+			</md-button>
+			</div>
+	    </div>    
+	</div>
+
+
+
+	<div class="dash_pro_inform slideable" id="lst-fnd-cat">
+	<form name="addlostFoundCatform" ng-submit="addlostFoundCat(addlostFoundCatform.$valid)" novalidate>		
+		<div class="dash_pro_inform_inner boxunoversal">
+			<div class="row">
+				<div class="col-sm-3">
+					<md-input-container  class="md-block">
+				            <input  ng-model="category_name" placeholder="Category Name" ng-required="true">
+				    </md-input-container>
+				</div>
+			</div> 
+			<div class="clearfix">
+				<div class="chane_pass_btn">
+					<md-button type="submit" class="md-primary addyellobtn yellowbtn">submit</md-button>  
+				</div>				
+			</div>
+		</div>
+		</form>
+	</div>
+
+
+
+	<div class="clearfix depart_midle">
+		<div class="deptsrch deptsrch_gray">
+			<div class="deptsrch_gray_top mar-bot0 clearfix">
+			<div class="positionrel inventory_filter_top">
+				<div class="vending_left_top_serch positionrel" style="float: left;width: 90%;">
+					<md-input-container  class="md-block">
+			      <input  ng-model="search_cat_name" placeholder="Search Category" autocomplete="off">
+			  	</md-input-container>			  	
+				</div>
+
+				<div class="" style="float: right; padding: 10px 0px 0 5px;cursor: pointer;" ng-click="search_cat_name = ''" title="Reset filters">
+					<img src="assets/images/reset_filter.png" style="width: 30px;">
+				</div>
+				
+			</div>
+			</div>
+		</div>
+
+
+		<div class="deptsrch_data">
+		<br><br>
+			 <ul class="deptsrch_data_list clearfix">
+			 		<li  ng-repeat="lostFoundCat in filteredCat = 
+              (lostFoundCategoryList | filter:{category_name:search_cat_name}) 
+              track by $index">
+			 			<div class="deptsrch_data_title" style="border-bottom:0">			 				
+			 				{{lostFoundCat.category_name}}
+			 		
+                  	<span class="icon_btn">
+	                  	<ng-md-icon class="cursor edit_icon tablebluetag" icon="mode_edit" class="cursor"  size="20" ng-click="openEditForm(lostFoundCat);"  title="Edit">
+				 		</ng-md-icon>
+	                  	<ng-md-icon class="cursor closr_icon tableredtag" icon="close" class="cursor"  size="22" title="Delete" confirmed-click="removeCat(lostFoundCat._id,$index)" ng-confirm-title="Delete Category" ng-confirm-delete="Are you sure you want to remove this category."></ng-md-icon>
+                  	</span>
+			 			</div>			 			
+			 		</li>
+			 		
+			 </ul>
+
+			 <div ng-show="!filteredCat.length" class="itemnotfound">
+                No category found.                
+        	 </div>
+		</div>
+		
+	</div> 
+	
+</section>
+</div>

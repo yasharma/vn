@@ -71,10 +71,9 @@
 	        					<div class="metting_laylist_lright" ng-if="rm.facilities.length">
 	        						<p>Facilities:</p>
 	        						<ul>
-	        							<li ng-repeat="facy in rm.facilities" title="{{facy}}" style="display: inline-block;    margin-right: 10px;">
-	    								<img ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'image'" src="{{(facilityList | filter : {label : facy } : true)[0].src}}">
+	        							<li ng-repeat="facy in rm.facilities" title="{{facy}}" style="display: inline-block;    margin-right: 10px;">  
+	    								<img  src="{{'/images/hotel/'+rm.hotel_id+'/facility/'+ ($root.facilityList | filter : {name : facy } : true)[0].image}}">
 	    								
-	    								<ng-md-icon ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'icon'" icon="{{(facilityList | filter : {label : facy } : true)[0].src}}" style="fill: #a5a7a7" size="20"></ng-md-icon> 	
     							</li> 
 	        						</ul>
 	        					</div>	

@@ -67,16 +67,14 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
 		**************************************/
 
 		$scope.jotEditPopup = function(jotData){
-			$scope.edit_jot		   		= jotData;		
-			$scope.jot_title   			= jotData.jot_title;
-			$rootScope.jot_description	= jotData.jot_description;
-			$rootScope.jot_members		= jotData.jot_members;
-			$rootScope.due_date    		= new Date(jotData.due_date);
-			$rootScope.priority    		= jotData.priority;
-			$rootScope.department  		= jotData.department;
-			$rootScope.hotel_room  		= jotData.hotel_room;
-			
-			
+			$scope.edit_jot		   				= jotData;		
+			$scope.jot_title   					= jotData.jot_title;
+			$rootScope.jot_description			= jotData.jot_description;
+			$rootScope.jot_members				= jotData.jot_members;
+			$rootScope.due_date    				= new Date(jotData.due_date);
+			$rootScope.priority    				= jotData.priority;
+			$rootScope.department  				= jotData.department;
+			$rootScope.hotel_room  				= jotData.hotel_room;
 		};
 
 
@@ -115,40 +113,6 @@ app.controller("hotelBoardController",['$scope','$rootScope','$routeParams','glo
             
 			$rootScope.department = $rootScope.department+' #'+depatAbbr+' ';
 		};
-
-		/**************************************
-		* Update item list
-		**************************************/
-
-		$scope.updateItemList = function(item){
-
-			var itemIndex = $scope.boards.indexOf(item);
-			if(itemIndex > -1)
-			{
-				$scope.boards.splice(itemIndex, 1);
-			} else {
-				$scope.boards.push(item);
-			}
-
-			var hotelDataObj = {
-				 		hotel_id     	   : $rootScope.activeHotelData._id,
-				 		jot_types 		   : $scope.boards
-				};
-
-			var request={
-						url:window.__API_PATH.UPDATE_HOTEL,
-						method:"PUT",
-						data:hotelDataObj
-				};
-
-			globalRequest.jotCRUD(request).then(function(response){	
-				localStorageService.set('hotel',response.result);
-				window.location.reload();
-			});
-
-
-		};
-
 		
 	}
 ]);

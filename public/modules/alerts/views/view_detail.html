@@ -1,0 +1,69 @@
+<md-dialog class="newhotel_dialog custom_size">
+<md-toolbar style="padding: 10px 0px 10px 10px;min-height: 40px !important;">
+      <div class="md-toolbar-tools custom_padding">
+        <h2>
+        <div class="show_profile_image">
+		<img src="{{image}}" class="cn_profile_image" style="width: 66px;"> 
+			<label class="full_name capitalize">Details</label>
+		</div></h2>
+
+         <span flex></span>
+        <md-button class="md-icon-button" aria-label="close" closepopup ng-click="closePopUpByDirective();">
+          <ng-md-icon icon="close" style="fill:#a5a7a7" size="24"></ng-md-icon>
+        </md-button>
+      </div>
+</md-toolbar>
+
+<div class="user_info">
+
+<ul>
+
+	<li>
+		<div class="heading-left">Hotel Name:</div>
+		<div class="desc-right capitalize">{{hotelObjects[0].hotelname}}</div>
+		<div class="clearfix"></div>
+	</li>
+	<li>
+		<div class="heading-left">Owner Entity:</div>
+		<div class="desc-right capitalize">{{hotelObjects[0].ownername}}</div>
+		<div class="clearfix"></div>
+	</li>
+	<li>
+		<div class="heading-left">Contact Number:</div>
+		
+		<div class="desc-right"><a href="tel:{{contact_number}}">{{hotelObjects[0].phone}}</a></div>
+		<div class="clearfix"></div>
+	</li><li>
+		<div class="heading-left">Email Address:</div>
+		
+		<div class="desc-right"> <a href="mailto:{{email}}">{{hotelObjects[0].email}}</a></div>
+		<div class="clearfix"></div>
+	</li>
+	</li>
+	<li>
+		<div class="heading-left">City:</div>
+		<div class="desc-right capitalize">{{hotelObjects[0].city}}</div>
+		<div class="clearfix"></div>
+	</li>
+
+	<li>
+		<div class="heading-left">State:</div>
+		<div class="desc-right capitalize">{{hotelObjects[0].state}}</div>
+		<div class="clearfix"></div>
+	</li>
+
+	<li>
+		<div class="heading-left">Country:</div>
+		<div class="desc-right capitalize">{{hotelObjects[0].country}}</div>
+		<div class="clearfix"></div>
+	</li>
+	<li>
+		<div class="heading-left">Postal code:</div>
+		<div class="desc-right capitalize">{{hotelObjects[0].zipcode}}</div>
+		<div class="clearfix"></div>
+	</li>
+
+</ul>
+</div>
+
+</md-dialog>

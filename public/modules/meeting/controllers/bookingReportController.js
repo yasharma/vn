@@ -2,6 +2,13 @@
 
 app.controller('bookingReportController', ['$scope','$rootScope','globalRequest','$mdDialog','toastService',
 	function($scope,$rootScope,globalRequest,$mdDialog,toastService) {
+
+		/*******************************************
+		* Redirect user if meeting room is disabled
+		********************************************/
+		$rootScope.redirectSettingsPage('meeting_room');
+
+		
 		
 		$scope.position_list = window.__API_PATH.POSITION;
 
@@ -24,12 +31,12 @@ app.controller('bookingReportController', ['$scope','$rootScope','globalRequest'
 		
 		globalRequest.getBookingReports();
 
-
 		/************************************************
 		* Get list of Jot types selected by current user
 		*************************************************/
 
 		$scope.boards = $rootScope.activeHotelData.jot_types;
+		
 
 
 		/************************************

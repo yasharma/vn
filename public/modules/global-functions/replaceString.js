@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('replaceOccurence', ['$http', function ($http) {
+app.factory('replaceOccurence', [function () {
 	return{	
 		replaceAll: function(string, search, replacement){
 			

@@ -48,10 +48,11 @@
 						                   data-md-container-class="selectdemoSelectHeader"
 						                   multiple aria-label="Facility" placeholder="Select Facilities">					          
 						          <md-optgroup label="Facilities">
-						           <md-option  ng-repeat="facy in facilityList" value="{{facy.label}}">
-			                            <img ng-if="facy.attachment_type == 'image'" src="{{facy.src}}">
-			                            <ng-md-icon ng-if="facy.attachment_type == 'icon'" icon="{{facy.src}}" style="fill: #a5a7a7" size="24"></ng-md-icon>  
-			                            {{facy.label}}
+						           <md-option  ng-repeat="facy in $root.facilityList" value="{{facy.name}}">
+			                            
+			                            <img  src="{{'/images/hotel/'+hotel_id+'/facility/'+ facy.image}}">
+			                             
+			                            {{facy.name}}
 			                        </md-option> 
 						          </md-optgroup>
 						        </md-select>

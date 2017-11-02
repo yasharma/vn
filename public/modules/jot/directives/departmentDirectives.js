@@ -75,7 +75,7 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
             elem.after($compile(template)(scope));
         }
     };
-}]).directive('focusDepartment', function($timeout, $parse) {
+}]).directive('focusDepartment', ['$timeout', '$parse', function($timeout, $parse) {
       return {
           
           link: function(scope, element, attrs) {
@@ -91,4 +91,4 @@ app.directive('departmentypeahead', ['$compile', '$timeout','replaceOccurence', 
               });
           }
       };
-    });
+    }]);

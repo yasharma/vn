@@ -180,7 +180,7 @@ app.directive('textareastaffsuggestion', ['$compile', '$timeout','$rootScope','r
             
         }
     };
-}]).directive('focusDesc', function($timeout, $parse,$rootScope) {
+}]).directive('focusDesc', ['$timeout', '$parse','$rootScope', function($timeout, $parse,$rootScope) {
       return {          
 
           link: function(scope, element, attrs) {
@@ -197,4 +197,4 @@ app.directive('textareastaffsuggestion', ['$compile', '$timeout','$rootScope','r
               });
           }
       };
-  });
+  }]);

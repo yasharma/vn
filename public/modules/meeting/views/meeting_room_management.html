@@ -7,15 +7,13 @@
 				<md-button  slide-toggle="#emp" ng-class="{activebtn:invForm}" ng-click="invForm = !invForm; blank();" class="md-primary addyellobtn yellowbtn widthauto custom-transition">					
 					{{(invForm)?"Close":"Add Rooms"}}
 				</md-button>
-
-			</div>	
-				
+			</div>				
 	    </div>    
 	</div>
 
 
 	<div class="dash_pro_inform slideable" id="emp">
-	<form name="addRoomform" ng-submit="addRoom(addRoomform.$valid)" novalidate>	
+	 <form name="addRoomform" ng-submit="addRoom(addRoomform.$valid)" novalidate>	
 		<div class="dash_pro_inform_inner boxunoversal">
 			<div class="row">
 
@@ -51,10 +49,10 @@
 				                   data-md-container-class="selectdemoSelectHeader"
 				                   multiple aria-label="Facility" placeholder="Select Facilities">					          
 				          <md-optgroup label="Facilities">
-				           <md-option  ng-repeat="facy in facilityList" value="{{facy.label}}">
-	                            <img ng-if="facy.attachment_type == 'image'" src="{{facy.src}}">
-	                            <ng-md-icon ng-if="facy.attachment_type == 'icon'" icon="{{facy.src}}" style="fill: #a5a7a7" size="24"></ng-md-icon>  
-	                            {{facy.label}}
+				           <md-option  ng-repeat="facy in facilityList" value="{{facy.name}}">
+	                            <img  src="{{facy.image}}">
+	                              
+	                            {{facy.name}}
 	                        </md-option> 
 				          </md-optgroup>
 				        </md-select>
@@ -115,10 +113,7 @@
 		</div>
 		</form>
 	</div>
-
-
-
-
+	
 	<div class="clearfix depart_midle">
 		<div class="deptsrch deptsrch_gray">
 			<div class="deptsrch_gray_top mar-bot0 clearfix">
@@ -213,9 +208,11 @@
 	                  <td>
 	                  		<ul>
     							<li ng-repeat="facy in rm.facilities" title="{{facy}}" style="display: inline-block;    margin-right: 10px;">
-    								<img ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'image'" src="{{(facilityList | filter : {label : facy } : true)[0].src}}">
     								
-    								<ng-md-icon ng-if="(facilityList | filter : {label : facy } : true)[0].attachment_type == 'icon'" icon="{{(facilityList | filter : {label : facy } : true)[0].src}}" style="fill: #a5a7a7" size="24"></ng-md-icon> 	
+
+    								<img  src="{{'/images/hotel/'+rm.hotel_id+'/facility/'+ ($root.facilityList | filter : {name : facy } : true)[0].image}}">
+    								
+    									
     							</li>  						
     						</ul>
 	                 <!--  {{rm.facilities}} -->

@@ -53,18 +53,31 @@ app.config(['$httpProvider', function($httpProvider){
             prefix = 'default';
    }  
  localStorageServiceProvider.setPrefix(prefix);
-
 }])
-.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$cookies',
-	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$cookies){ 	        
+.run(['$location','$rootScope','localStorageService','AuthSrv','$templateCache','$cookies','socket',
+	function($location, $rootScope,localStorageService,AuthSrv,$templateCache,$cookies,socket){ 	        
         
         $rootScope.$on("$routeChangeStart", 
             function (event, nextRoute, currentRoute) { 
 
-                $rootScope.hideclass            = 'hideclass';
+                $rootScope.hideclass            = '';
                 $rootScope.currentPage          = $location.$$path;
                 $rootScope.activeHotelData      = localStorageService.get('hotel');
                 $rootScope.currentUser          = localStorageService.get('user');
+
+
+                $rootScope.redirectSettingsPage = function(id){
+
+                    if($rootScope.activeHotelData.jot_types && $rootScope.activeHotelData.jot_types.length>0)
+                    {
+                    var matchFound =   $rootScope.activeHotelData.jot_types.filter(function(obj){
+                        return (obj == id)?true:false;
+                      }); 
+                    if(matchFound.length == 0){
+                        $location.path('/dashboard');
+                    }                      
+                    }
+                };
                 
 
                 /*************************************************
@@ -107,31 +120,22 @@ app.config(['$httpProvider', function($httpProvider){
         });
 
         $rootScope.$on("$routeChangeSuccess", function(event, next, current) {
-          $rootScope.hideclass = '';
+          $rootScope.hideclass = 'hideclass';
           $templateCache.removeAll(); 
-
-          
         });
 
 
     	
     	/* This will logout the user from the application */
     	$rootScope.clearToken = function () {
+            socket.emit('web.logout',localStorageService.get('user'));
             localStorageService.remove('token');
             localStorageService.remove('user');
             localStorageService.remove('hotel');
             $cookies.remove("hoteljot");
             delete $rootScope.user;
-            AuthSrv.isLogged = false;
+            AuthSrv.isLogged = false;            
             $location.path('/');
         };
-
-        // $rootScope.$on( 'TokenExpiredError', function( event, eventData ) {
-        //    toastService.alert( {message: eventData.message , class: 'error'});
-        // });
-        
-        /* Set user for entire application */
-    	//$rootScope.admin = localStorageService.get('admin');
-
 	
 }]);

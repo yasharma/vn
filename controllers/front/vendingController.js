@@ -276,6 +276,20 @@ exports.vendingCancleSale = (reqst, respe) => {
     }else{
         Cart.findByIdAndUpdate(sale_id,{status:'cancelled'},{new: true},function(err, result) {
             if(result){
+
+                /*************************************************
+                * Add item back to inventory 
+                **************************************************/
+
+               for(var i=0; i<result.items.length; i++)
+               {
+
+                    Vending.update(
+                        { "_id" : ObjectId(result.items[i]._id) },
+                        { $inc: { "quantity" : parseInt(result.items[i].editquantity) } }
+                        ,function(err, invUpdateResult) {});
+               }
+
               return respe.json(response.success(result,'Sale cancelled successfully.'));
             }else{
                 return respe.json(response.errors(err.errors,"Error in Sale canclelation."));

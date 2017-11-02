@@ -1,6 +1,6 @@
 "use strict";
 
-app.directive('slideable', function () {
+app.directive('slideable', [function () {
     
     return {
         restrict:'C',
@@ -24,8 +24,8 @@ app.directive('slideable', function () {
             };
         }
     };
-})
-.directive('slideToggle', function($timeout) {
+}])
+.directive('slideToggle', ['$timeout', function($timeout) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -62,7 +62,7 @@ app.directive('slideable', function () {
             } );
         }
     };
-});
+}]);
 
 
 

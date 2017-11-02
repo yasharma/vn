@@ -12,6 +12,7 @@ const   express     = require('express'),
         Jot         = require(path.resolve('models/Jot')),
         Employee    = require(path.resolve('models/Employee')),
         JotActivity = require(path.resolve('models/JotActivity')),
+        NotificationDB     = require(path.resolve('models/Notification')),
         User        = require(path.resolve('models/User')),
         response    = require(path.resolve('./config/lib/response')),
         config      = require(path.resolve(`./config/env/${process.env.NODE_ENV}`)),
@@ -29,14 +30,11 @@ exports.addJot = (reqst, respe) => {
     if(!reqst.body.jot_title){
         var errors =    { jot_title: {'message':'Jot Title can not be empty'}}
         return respe.json(response.errors(errors,"Error in Jot Saved."));
-    }
-    
+    }    
 
     var jot_description             = reqst.body.jot_description;
     var jot_members                 = reqst.body.jot_members;
-    var departments                 = reqst.body.department;
-    
-
+    var departments                 = reqst.body.department; 
     var AtRateTagReg    = /(?:^assignedMembersArr|)@([a-zA-Z_0-9]+)/g;
     var HashTagReg      = /(?:^|)#([a-zA-Z_0-9&/-]+)/g;
 
@@ -77,7 +75,7 @@ exports.addJot = (reqst, respe) => {
     if(AssignedMembers){
        
        var AssignedMemberArr = AssignedMembers;
-        var uniqueMember = AssignedMemberArr.filter(function(elem, index, self) {
+        var uniqueMember     = AssignedMemberArr.filter(function(elem, index, self) {
                 return index == self.indexOf(elem);
             });
         reqst.body.assigned_members             =   uniqueMember;
@@ -97,10 +95,28 @@ exports.addJot = (reqst, respe) => {
         delete reqst.body.image;
     }
     
-    var Jotsave                                 =   new Jot(reqst.body);
+    var Jotsave   =   new Jot(reqst.body);
 
     Jotsave.save(function (err, result) {
         if(result){
+
+            /**************** Save notification ********************/
+              
+            var notificationData = {
+                title            :   "New "+reqst.body.jot_type +" jot :- "+reqst.body.jot_title,
+                description      :   reqst.body.jot_description,
+                from_user_id     :   reqst.body.user_id,
+                from_hotel       :   reqst.body.hotel_id,
+                type             :   "jot",
+                to_users         :   reqst.body.assigned_members, 
+                to_departments   :   reqst.body.assigned_departments, 
+              };
+              
+            var notificationDataSave    = new NotificationDB(notificationData);
+            notificationDataSave.save();
+
+            /**************** End notification ********************/
+
             return respe.json(response.success(result,'Jot Successfully Added.'));
         }else{
             return respe.json(response.errors(err,'Error in Jot Saved.'));
@@ -154,17 +170,17 @@ exports.updateJot = (reqst, respe) => {
     
     }
 
-    if(AssignedMembers){
-       
+    if(AssignedMembers && AssignedMembers.length > 0){       
         var AssignedMemberArr = AssignedMembers;
         var uniqueMember = AssignedMemberArr.filter(function(elem, index, self) {
                 return index == self.indexOf(elem);
-            });
-       
+            });       
         reqst.body.assigned_members                     =   uniqueMember;
+    }else{
+        delete reqst.body.assigned_members;
     }
 
-    if(AssignedDepartments.length > 0){
+    if(AssignedDepartments && AssignedDepartments.length > 0){
        
         var AssignedDeptArr         = AssignedDepartments;
         var uniqueDept              = AssignedDeptArr.filter(function(elem, index, self) {
@@ -182,10 +198,28 @@ exports.updateJot = (reqst, respe) => {
     if(!Jotid){
         var errors =    { jot_id: {'message':'Jot id is required.'}}
         return respe.json(response.errors(errors,"Error in Jot data."));
-    }else{
+
+    }else{       
         
         Jot.findByIdAndUpdate(Jotid,{$set:reqst.body}, {new: true, runValidators: true}, function(err, result) {
             if(result){
+
+            /**************** Save notification ********************/
+              
+            var notificationData = {
+                title            :   "Jot updated  :- "+result.jot_title,
+                description      :   result.jot_description,
+                from_user_id     :   result.user_id,
+                from_hotel       :   result.hotel_id,
+                type             :   "jot",
+                to_users         :   result.assigned_members, 
+                to_departments   :   result.assigned_departments, 
+              };                     
+            var notificationDataSave    = new NotificationDB(notificationData);
+            notificationDataSave.save();
+
+            /**************** End notification ********************/
+
                 return respe.json(response.success(result,'Jot Updated successfully.'));
             }else{
                 return respe.json(response.errors(err.errors,"Error In Jot Update."));
@@ -241,7 +275,8 @@ exports.listJot = (reqst, respe) => {
 
         User.findOne({'contact_number': assigned_to},{role: 1, email: 1, status: 1, hotel_id: 1 }, function (err, userdata) {
 
-            if(!_.isNull(userdata)){
+            if(!_.isNull(userdata)) 
+            {
 
                 var condition = '';
                 var UserRole  = userdata.role;
@@ -249,7 +284,8 @@ exports.listJot = (reqst, respe) => {
                                     "hotel_id": ObjectId(hotel_id),
                                     "jot_type": jot_type,
                 };
-                if(UserRole === 'staff'){             
+                if(UserRole === 'staff'){ 
+
                     Employee.findOne({contact_number: assigned_to,hotel_id: ObjectId(hotel_id) },{user_name: 1, contact_number: 1,departments: 1}, function (err, employee){
 
                         if(!_.isNull(employee)){

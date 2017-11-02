@@ -118,7 +118,8 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 		*************************************************/
 
 		$scope.step4FormSubmit = function(){
-			console.log($rootScope.nextStep);
+			$rootScope.hoteljotLoader = true;
+
 			var selectedEmployee = [];
 			angular.forEach($scope.stepsCtrl.selected_emp,function(value,key){
 				if($scope.stepsCtrl.selected_emp[key])
@@ -150,7 +151,7 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 					};
 
 				globalRequest.jotCRUD(request).then(function(response){	
-					
+					$rootScope.hoteljotLoader = false;	
 					if(response.status == 1)
 					{
 
@@ -176,15 +177,13 @@ app.controller('step4Controller', ['$scope','$rootScope','$routeParams','$locati
 									$location.path('/dashboard/hotel-setup');
 								}	
 							});
-						}						
-
-										
+						}			
 					}				
 
 				});
 
 			} else {
-				
+				$rootScope.hoteljotLoader = false;
 				var popup = {"message":"Please enter at least one employee.","class":""};
 				toastService.errors(popup);
 			}

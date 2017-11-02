@@ -237,6 +237,35 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 			});
 		},
 
+		getLostFoundCategory:function(){
+			var hotel   = localStorageService.get('hotel');
+			var request = {
+					url:window.__API_PATH.GET_LOST_FOUND_CATEGORY,
+					method:"GET",
+					params:{hotel_id: hotel._id}
+			};
+
+			return $http(request).then(function(response){
+				$rootScope.lostFoundCategoryList = response.data.result;
+			}, function(response){
+				$rootScope.lostFoundCategoryList = response.data.errors;				
+			});
+		},
+		getFacilityList:function(){
+			var hotel   = localStorageService.get('hotel');
+			var request = {
+					url:window.__API_PATH.GET_FACILITY,
+					method:"GET",
+					params:{hotel_id: hotel._id}
+			};
+
+			return $http(request).then(function(response){
+				$rootScope.facilityList = response.data.result;
+			}, function(response){
+				$rootScope.facilityList = response.data.errors;				
+			});
+		},
+
 		getFoundList:function(){
 				var hotel   = localStorageService.get('hotel');
 				var request = {
@@ -372,11 +401,16 @@ app.factory('globalRequest',['$http','localStorageService','$rootScope','Upload'
 		},
 		getNotification:function(){
 			var userDetail   = localStorageService.get('user');
+			var hotel   = localStorageService.get('hotel');
 			var getAlertRequest = {
 			            url:window.__API_PATH.GET_NOTIFICATION,
 			            method:"GET",
 			            params:{
-			            	user_id      	:  userDetail._id
+			            	user_id      	:  userDetail._id,
+			            	user_name      	:  userDetail.user_name,
+			            	contact_number  :  userDetail.contact_number,
+			            	hotels          :  userDetail.hotel_id,
+			            	
 			            }			            
 			          };
 			return $http(getAlertRequest).then(function(response){				

@@ -370,7 +370,7 @@
 
 
               <div class="room_edit_new" ng-if="commentList.length > 0">
-                <div class="addtxt">Activity</div>
+                <div class="addtxt">Activities & Comments</div>
                 <ul class="activity_list">
 
                   <li ng-repeat = "comment in commentList | orderBy:'_id':true">
@@ -384,7 +384,7 @@
                       <strong style="display: block;padding-bottom: 2px;">
                       {{comment.userdata[0].first_name}} {{comment.userdata[0].last_name}}
                       </strong>
-                      {{comment.message}}
+                      <span class="capitalize" ng-bind-html="comment.message"></span>
                     </div>
 
                     <div class="acti_text_img">

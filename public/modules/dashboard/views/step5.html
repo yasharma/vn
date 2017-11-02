@@ -1,86 +1,84 @@
 <div ng-controller="step5Controller as stepsCtrl">	
-<form name="step5Form" ng-submit="step5FormSubmit(step5Form.$valid)" novalidate ng-show="!forget">		
-	<div class="deprtment_list">	
-	<ul class="clearfix">
-			<li ng-repeat="room in addedRooms track by $index" style="margin-top: 0;">
-				<div class="yellowlay clearfix">
-					<div class="pull-left capitalize FULLMANE"> 
-						{{room.name}}
-					</div>					
-					<div class="pull-right right_check_lay">
-						<md-checkbox ng-model="stepsCtrl.selected_room[$index]"  aria-label="Checkbox 1" ng-true-value="{{room}}" ng-false-value="false" ng-checked="true" aria>
-		       			</md-checkbox>
-						<!-- <ng-md-icon icon="mode_edit" style="fill:#59c1f6" size="20"></ng-md-icon>  -->
-					</div>
+	<form name="step5Form" ng-submit="step5FormSubmit(step5Form.$valid)" novalidate ng-show="!forget">		
+		<div class="deprtment_list">	
+			<ul class="clearfix">
+					<li ng-repeat="room in addedRooms track by $index" style="margin-top: 0;    margin-bottom: 10px;">
+						<div class="yellowlay clearfix">
+							<div class="pull-left capitalize FULLMANE"> 
+								{{room.name}}
+							</div>					
+							<div class="pull-right right_check_lay">
+								<md-checkbox ng-model="stepsCtrl.selected_room[$index]"  aria-label="Checkbox 1" ng-true-value="{{room}}" ng-false-value="false" ng-checked="true" aria>
+				       			</md-checkbox>
+								<!-- <ng-md-icon icon="mode_edit" style="fill:#59c1f6" size="20"></ng-md-icon>  -->
+							</div>
 
-					<div class="clearfix"></div>
-					<ul class="emp_info_field emp_info_field_new clearfix">
-						<li ng-if="room.room_number"><span>Room Number:</span> {{room.room_number}} </li>
-						<li ng-if="room.capacity"><span>Capacity:</span> {{room.capacity}} </li>
-						<li ng-if="room.cost"><span>Cost:</span>  {{(room.cost)?room.cost:0 | currency}}</li>
-					</ul>
+							<div class="clearfix"></div>
+							<ul class="emp_info_field emp_info_field_new clearfix">
+								<li ng-if="room.room_number"><span>Room Number:</span> {{room.room_number}} </li>
+								<li ng-if="room.capacity"><span>Capacity:</span> {{room.capacity}} </li>
+								<li ng-if="room.cost"><span>Cost:</span>  {{(room.cost)?room.cost:0 | currency}}</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+
+
+			<div class="step_emp_tab">
+			<div class="step_emp_tab_content_inner">
+			<br>
+				<table class="step_emp_tab_table" cellpadding="0" cellspacing="0" border="0">
+					<thead>
+						<tr>  								
+							<th width="25%">Room Type</th>
+							<th width="25%">Room Number</th>
+							<th width="25%">Capacity</th>
+							<th width="25%">Cost</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr ng-init="newfield">
+							<td>
+							<md-input-container md-no-float class="md-block">
+								<input  ng-model="newfield.newfield_room_name" placeholder="Room Name" autocomplete="off">
+							</md-input-container>
+
+							</td>
+
+							<td>
+							<md-input-container md-no-float class="md-block">
+								<input  ng-model="newfield.newfield_room_number" placeholder="Room Number"  autocomplete="off">
+							</md-input-container>
+
+							
+							</td>
+
+
+							<td>
+							<md-input-container md-no-float class="md-block">
+								 <input  ng-model="newfield.newfield_capacity"  placeholder="Capacity"  autocomplete="off">
+							</md-input-container>
+							</td>
+							<td>
+								<md-input-container md-no-float class="md-block">
+							        <input  ng-model="newfield.newfield_cost" type="number" placeholder="Cost"  autocomplete="off">
+							    </md-input-container>	
+							</td>
+
+						</tr>					
+					</tbody>
+				</table>		
 				
 
+				<div class="chane_pass_btn">			
+					<a class="md-primary addyellobtn yellowbtn md-button md-ink-ripple" ng-click="addNewRoom()">Add</a> 
 				</div>
-			</li>
-		</ul>
-		</div>
-
-
-
-	<div class="step_emp_tab">
-	<div class="step_emp_tab_content_inner">
-	<br>
-		<table class="step_emp_tab_table" cellpadding="0" cellspacing="0" border="0">
-			<thead>
-				<tr>  								
-					<th width="25%">Room Type</th>
-					<th width="25%">Room Number</th>
-					<th width="25%">Capacity</th>
-					<th width="25%">Cost</th>
-				</tr>
-			</thead>
-			
-			<tbody>
-				<tr ng-init="newfield">
-					<td>
-					<md-input-container md-no-float class="md-block">
-						<input  ng-model="newfield.newfield_room_name" placeholder="Room Name" autocomplete="off">
-					</md-input-container>
-
-					</td>
-
-					<td>
-					<md-input-container md-no-float class="md-block">
-						<input  ng-model="newfield.newfield_room_number" placeholder="Room Number"  autocomplete="off">
-					</md-input-container>
-
-					
-					</td>
-
-
-					<td>
-					<md-input-container md-no-float class="md-block">
-						 <input  ng-model="newfield.newfield_capacity"  placeholder="Capacity"  autocomplete="off">
-					</md-input-container>
-					</td>
-					<td>
-						<md-input-container md-no-float class="md-block">
-					        <input  ng-model="newfield.newfield_cost" type="number" placeholder="Cost"  autocomplete="off">
-					    </md-input-container>	
-					</td>
-
-				</tr>					
-			</tbody>
-		</table>		
-		
-
-		<div class="chane_pass_btn">			
-			<a class="md-primary addyellobtn yellowbtn md-button md-ink-ripple" ng-click="addNewRoom()">Add</a> 
-		</div>
-	</div>			
-		
-	</div>
+			</div>			
+				
+			</div>
 	<div class="clearfix mar-top20"  style="text-align: right;">
 
 		<div class="chane_pass_btn">

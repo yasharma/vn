@@ -38,13 +38,15 @@ app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$locati
 		* Step1 submit to create the hotel
 		*************************************************/
 
-		$scope.step1FormSubmit = function(){
+		$scope.step1FormSubmit = function(){			
+			
 			var acceptTerm = $scope.terms;	
 			
 			$scope.hotelResult = {class:"",message:"",status:""};
 			if(acceptTerm)
 			{
-			
+				$rootScope.hoteljotLoader = true;
+
 
 				 var hotelDataObj = {
 				 		user_id     	   : $rootScope.currentUser._id,
@@ -77,26 +79,29 @@ app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$locati
 				}
 				
 				globalRequest.jotCRUD(request).then(function(response){
+
 					localStorageService.set('processingHotel',response.result);							
 					if(response.status == 1)
 					{	
 						var nextStep;
 						if($scope.image)
 						{
+							$rootScope.hoteljotLoader = false;
 							nextStep   = parseInt($routeParams.steps)+1;				
 						    $location.path('/dashboard/hotel-setup/'+nextStep);
 						} else{
 							if ($scope.uploaedImgage && $scope.uploaedImgage.length) 
 							{	
 								uploadCoverIMage(response.result._id);
-							} else {								
-								nextStep   = parseInt($routeParams.steps)+1;			
+							} else {	
+								$rootScope.hoteljotLoader = false;	
+								nextStep   = parseInt($routeParams.steps)+1;
 							    $location.path('/dashboard/hotel-setup/'+nextStep);
 							}
 						}
 						
 					}	else {						
-
+							$rootScope.hoteljotLoader = false;
 							var errors = '<ul class="mdToast-error-list">';
 							angular.forEach(response.errors,function(value,key){
 								errors += '<li>'+value.message+'</li>';
@@ -156,7 +161,7 @@ app.controller('step1Controller', ['$scope','$rootScope','$routeParams','$locati
 
 							processingHotel.image = response.result[0].filename;
 							localStorageService.set('processingHotel',processingHotel);
-
+							$rootScope.hoteljotLoader = false;
 							var nextStep   = parseInt($routeParams.steps)+1;
 						    $location.path('/dashboard/hotel-setup/'+nextStep);
 						}		

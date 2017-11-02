@@ -8,6 +8,9 @@ const  express 			= require('express'),
 		
 
 	app.use(jwt({ secret: config.secret}).unless({path: ['']}));
+
+	
+
 	/****************************************************************
 	* These are our base routes that will call simple prefixed by '/'
 	* eg. /login*****************************************************

@@ -1,8 +1,6 @@
 "use strict";
 
-app.factory('socket', function($rootScope) {
-
-    //var socket = io.connect('localhost:5040');
+app.factory('socket', ['$rootScope', function($rootScope) {
 
     var socket =io.connect('http://localhost:8020');
     return {
@@ -24,6 +22,9 @@ app.factory('socket', function($rootScope) {
                     }
                 });
             });
+        },
+        removeAllListeners: function (eventName, callback) {
+          socket.removeAllListeners();
         }
     };
-});
+}]);

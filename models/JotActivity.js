@@ -25,6 +25,10 @@ var JotActivity  = new Schema({
   post_date:{
     type: Number
   },
+  type:{
+    type: String,
+    enum: ['activity','comment'],
+  },
   status: {
     type: String,
     default: false

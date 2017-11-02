@@ -15,6 +15,7 @@
 		
 		<div class="circle_container" ng-repeat="hotel in hotels" 
 			             ng-click="redirectToJot(hotel)"   title="{{(hotel.step == 'completed')?'Manage your hotel':'Complete hotel setup process'}}">
+			
 			<div class="circle" style="background: url('{{(hotel.image)?'images/hotel/'+hotel._id+'/cover/'+hotel.image:'assets/images/default-hotel.png';}}') 0 0 no-repeat; background-size: cover;">
 			  <div class="circle__inner">
 			    <div class="circle__wrapper">

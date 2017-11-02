@@ -1,6 +1,6 @@
 'use strict';
 
-app.factory('cursorPosition', [function () {
+app.factory('cursorPosition', [ function () {
 	return{		
 		
 		GetCaretPosition: function(ctrl){
