@@ -6,22 +6,21 @@ services:
     container_name: hoteljot
     ports:
      - "3000:3000"
-     - "8080:8080"
     environment:
      - NODE_ENV=development
      - DB_1_PORT_27017_TCP_ADDR=db
     depends_on:
-     - db 
+     - db
     volumes_from:
      - web-data
   web-data:
     build: .
     entrypoint: /bin/true
     volumes:
-     - ./:/opt/hoteljot
-     - /opt/hoteljot/node_modules
-     - /opt/hoteljot/public
-     - /opt/hoteljot/uploads
+     - ./:/opt/mean.js
+     - /opt/mean.js/node_modules
+     - /opt/mean.js/public
+     - /opt/mean.js/uploads
   db:
     image: mongo:3.2
     restart: always

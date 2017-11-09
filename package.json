@@ -4,7 +4,7 @@
   "description": "Hotel jot mean project",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js"
+    "start": "node server.js"
   },
   "author": "yogesh",
   "license": "ISC",

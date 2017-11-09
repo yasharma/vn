@@ -49,7 +49,7 @@ RUN sudo apt-get install -yq nodejs \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install NODEJS Prerequisites
-RUN npm install --quiet -g gulp bower pm2 && npm cache clean
+RUN npm install --quiet -g pm2 && npm cache clean
 
 RUN mkdir -p /opt/hoteljot
 WORKDIR /opt/hoteljot
@@ -69,3 +69,6 @@ COPY . /opt/hoteljot
 
 # Run NODEJS server
 CMD npm install && npm start
+
+# To Run Using Docker PM2
+# CMD ["pm2-docker", "server.js"]
