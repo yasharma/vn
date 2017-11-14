@@ -69,3 +69,7 @@ footer{background-color: #ffffff;}
 .share-links ul li a {background-color: #d4d5d5;display: block;height: 25px;width: 25px;margin: 0 5px;text-align: center; border-radius: 3px;}
 .share-links ul li a:hover{background-color:#0a4ba8;}
 .share-links ul li a img{width:15px;}
+.input-group + .invalid-feedback {
+    display: block;
+  
+}

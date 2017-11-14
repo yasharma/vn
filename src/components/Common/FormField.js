@@ -1,80 +1,64 @@
-import React, { Component } from "react";
-import PropTypes from 'prop-types';
-import { FormGroup, FormControl, HelpBlock, Row, Col, ControlLabel } from "reactstrap";
+import React, { Component } from 'react';
+import { FormGroup, Label, Input, FormFeedback, InputGroupAddon, InputGroup } from 'reactstrap';
 import InputMask from 'react-input-mask';
 
-// Form field component
-export default class FormField extends Component {
-  // render
-  render() {
-    const {formGroupClassName, doValidate, meta} = this.props;
-    if (doValidate) {
-      return (
-        <FormGroup className={formGroupClassName}
-          validationState={!meta.touched ? null : (meta.error ? 'error' : null)}>
-          {this.content()}
-          {/*<FormControl.Feedback/>*/}
-          <HelpBlock>
-            {meta.touched && meta.error ? meta.error : null}
-          </HelpBlock>
-        </FormGroup>
-      );
-    } else {
-      return (
-        <FormGroup className={formGroupClassName}>
-          {this.content()}
-        </FormGroup>
-      );
-    }
-  }
-
-  // the field content
-  content() {
-    const {theme, label} = this.props;
-    if ('custom' === theme) {
-      return (
-        <div>
-        <ControlLabel>{label}</ControlLabel>
-        {this.field()}
-        </div>
-      );  
-    } else {
-      // default theme: 2col
-      return (
-        <Row>
-          <Col sm={3}>{label}</Col>
-          <Col sm={9}>{this.field()}</Col>
-        </Row>
-      );
-    }
-  }
-
-  // the field itself
-  field() {
-    const {input, componentClass, type, placeholder, children, className, mask} = this.props;
-    if(mask) {
-      return (
-        <InputMask {...input} type={type} placeholder={placeholder} className={`form-control ${className}`} mask="+1\ 999-999-9999" maskChar="_" />
-      );
-    } else {
-      return (
-        <FormControl {...input} componentClass={componentClass} type={type} placeholder={placeholder} className={className}>
-          {children}
-        </FormControl>
-      );  
-    }
-  }
+class FormField extends Component {
+	render() {
+		const {labelClassName, id, label, formGroupClassName, inputAddOn, inputAddOnText} = this.props;
+		if( inputAddOn ) {
+			return (
+				<FormGroup className={formGroupClassName}>
+					<Label className={labelClassName} for={id}>{label}</Label>
+					<InputGroup>
+			          	<InputGroupAddon>{inputAddOnText}</InputGroupAddon>
+			          	{this.renderInput()}
+		        	</InputGroup>
+		        	{this.FormFeedback()}
+		        </FormGroup>
+			);			
+		} else {
+			return (
+				<FormGroup className={formGroupClassName}>
+		          	<Label className={labelClassName} for={id}>{label}</Label>
+		          	{this.renderInput()}
+		          	{this.FormFeedback()}
+		        </FormGroup>
+	    	);
+		}
+    	
+	}
+	FormFeedback() {
+		const {meta, doValidate, maskInput} = this.props;
+		if( (doValidate && maskInput) || doValidate) {
+			return (<FormFeedback>{meta.touched && meta.error ? meta.error : null}</FormFeedback>);
+		} else {
+			return null
+		}
+	}
+	renderInput() {
+		const {meta, input, type, label, placeholder, labelClassName, className, doValidate, id, maskInput} = this.props;
+		if( doValidate && maskInput ) {
+			return ( <InputMask 
+				{...input} 
+				className={`form-control ${!meta.touched ? null : (meta.error ? 'is-invalid': null)}`} id={id} 
+				placeholder={placeholder || label} type={type} 
+				mask="999-999-9999" maskChar="_" /> 
+			);
+		} else if(doValidate) {
+			return ( <Input 
+				{...input} 
+				className={className} id={id} 
+				placeholder={placeholder || label} type={type} 
+				valid={!meta.touched ? null : (meta.error ? false: null)} /> 
+			);
+		} else {
+			return ( <Input 
+				{...input} 
+				className={className} id={id} 
+				placeholder={placeholder || label} type={type} />
+			);
+		}
+	}
 }
 
-// prop checks
-FormField.propTypes = {
-  meta: PropTypes.object,
-  input: PropTypes.object,
-  theme: PropTypes.string,  // 2col (default), etc
-  doValidate: PropTypes.bool, // true or false
-  label: PropTypes.any,  // the field text or a react component if we have html inside (empty string by default)
-  componentClass: PropTypes.string, // input (by default), textarea, select
-  type: PropTypes.string,   // input type: text (by default), password
-  placeholder: PropTypes.string,    // input placeholder (empty string by default)
-  className: PropTypes.string,  // the class name (empty string by default)
-}
+export default FormField;
