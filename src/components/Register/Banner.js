@@ -7,8 +7,8 @@ class Banner extends Component {
     	return (
      		<div className="App">
         		<div className="Banner">
-					<div class="Banner-tags text-center color-white">
-						<h2 class="text-uppercase">Become A Pilot School</h2>
+					<div className="Banner-tags text-center color-white">
+						<h2 className="text-uppercase">Become A Pilot School</h2>
 						<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit</span>
 					</div>	
 				</div>
