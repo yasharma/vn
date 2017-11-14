@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, FormFeedback, InputGroupAddon, InputGroup } from 'reactstrap';
 export class FormSelect extends Component {
 	render() {
-		const {labelClassName, id, label, formGroupClassName, input} = this.props;
+		const {labelClassName, id, label, formGroupClassName, input, type} = this.props;
 		return (
 			<FormGroup className={formGroupClassName}>
 	          	<Label className={labelClassName} for={id}>{label}</Label>
-	          	{this.empty()}
-	          	<Input {...input}>
+	          	<Input {...input} type={type}>
+	          		{this.empty()}
 		        	{this.options()}
 		        </Input>	
 	        </FormGroup>    
@@ -23,8 +23,8 @@ export class FormSelect extends Component {
 	}
 
 	empty() {
-		const {empty, label} = this.props;
-		return empty ? (<option value="">{label}</option>) : null;
+		const {empty, emptyText, label} = this.props;
+		return empty ? (<option value="">{emptyText || label}</option>) : null;
 	}
 }
 

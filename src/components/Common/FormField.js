@@ -36,7 +36,7 @@ class FormField extends Component {
 		}
 	}
 	renderInput() {
-		const {meta, input, type, label, placeholder, labelClassName, className, doValidate, id, maskInput} = this.props;
+		const {meta, input, type, label, placeholder, labelClassName, className, doValidate, id, maskInput, size} = this.props;
 		if( doValidate && maskInput ) {
 			return ( <InputMask 
 				{...input} 
@@ -54,6 +54,7 @@ class FormField extends Component {
 		} else {
 			return ( <Input 
 				{...input} 
+				size={size}
 				className={className} id={id} 
 				placeholder={placeholder || label} type={type} />
 			);
