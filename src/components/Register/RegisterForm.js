@@ -1,9 +1,10 @@
 /* global _ */
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
+import { Form } from 'reactstrap';
 import FormField from "../Common/FormField";
+import FormSelect from "../Common/FormSelect";
 import { Field, SubmissionError,reduxForm } from 'redux-form';
-import {Required, Email} from '../../lib/Validate';
+import {Required, Email, Number} from '../../lib/Validate';
 import './Register.css';
 
 class RegisterForm extends Component {
@@ -17,6 +18,10 @@ class RegisterForm extends Component {
 
   	render() {
   		const { error, handleSubmit, pristine, submitting, submitSucceeded} = this.props;
+  		const options = [
+			{key: 'email', value: 'Email Address'},
+			{key: 'mobile', value: 'Mobile Number'}
+		];
     	return (
      		<div className="App">
         		<div className="light-bg padding-50">
@@ -41,19 +46,19 @@ class RegisterForm extends Component {
               			        	placeholder="Contact title" validate={Required} doValidate={true}/>
               			        <Field 
               			        	component={FormField} type="email"
-              			        	name="email" label="Email Address*"
+              			        	name="email_address" label="Email Address*"
               			        	id="email" labelClassName="gradient-color"
               			        	placeholder="Enter email address" validate={[Required,Email]} doValidate={true}/>
 		                        <div class="form-row">
 		                        	<Field 
 		                        		component={FormField} type="text" formGroupClassName="col-md-6"
-		                        		name="contact_telephone_number" label="Contact Telephone Number*"
+		                        		name="contact_telephoneno" label="Contact Telephone Number*"
 		                        		id="ContactTelephoneNumber" labelClassName="gradient-color"
 		                        		placeholder="Enter email address"
 		                        		doValidate={true} maskInput={true} inputAddOn={true} inputAddOnText="+1"/>
 		                        	<Field 
 		                        		component={FormField} type="text" formGroupClassName="col-md-6"
-		                        		name="school_telephone_number" label="School Telephone Number"
+		                        		name="school_telephoneno" label="School Telephone Number"
 		                        		id="SchoolTelephoneNumber" labelClassName="gradient-color"
 		                        		placeholder="School Telephone Number"
 		                        		doValidate={true} maskInput={true} inputAddOn={true} inputAddOnText="+1"/>
@@ -70,18 +75,27 @@ class RegisterForm extends Component {
               			        	placeholder="Enter school address" validate={Required} doValidate={true}/>
 		                        
 		                        <div class="form-row">
-		                            <div className="form-group col-md-4">
-		                                <label className="gradient-color" for="inputEmail4">Total No. of Students</label>
-		                                <input type="text" class="form-control" placeholder="0" />
-		                            </div>
-		                            <div className="form-group col-md-4">
+		                            <Field 
+		                            	component={FormField} type="text" formGroupClassName="col-md-4"
+		                            	name="no_of_students" label="Total No. of Students"
+		                            	id="noOfStudents" labelClassName="gradient-color"
+		                            	doValidate={true} validate={Number}
+		                            	placeholder="0"/>
+
+		                            {/*<div className="form-group col-md-4">
 		                                <label className="gradient-color" for="inputPassword4">Type of School</label>
 		                                <select class="form-control">
 		                                    <option>Select type</option>
 		                                    <option>Select type</option>
 		                                    <option>Select type</option>
 		                                </select>
-		                            </div>
+		                            </div>*/}
+		                            <Field 
+		                            	component={FormSelect} formGroupClassName="col-md-4"
+		                            	name="type" type="select" label="Select" className="input_both" options={options}
+		                            	displayKey={"key"}
+		                            	displayLabel={"value"}
+		                            	placeholder="Select"/>
 		                            <div className="form-group col-md-4">
 		                                <label className="gradient-color" for="inputPassword5">School Levels</label>
 		                                <select class="form-control">
