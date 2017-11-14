@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 import Home from '../components/Home';
 import Register from '../components/Register/Register';
+import Login from '../components/Login/Login';
 import Header from '../components/partials/Header';
 import Footer from '../components/partials/Footer';
 export const Router = props => {
@@ -11,12 +12,13 @@ export const Router = props => {
 	return (
 		<ConnectedRouter history={history}>
 		<div>
-			<Header/>
+			{/* <Header/> */}
 			<Switch>
 				<Route path="/" exact={true} component={Home} />
 				<Route path="/signup" component={Register} />
+				<Route path="/login" component={Login} />
 		  	</Switch>
-		  	<Footer/>
+		  	{/* <Footer/> */}
 		 </div>	 	
 		</ConnectedRouter>
 	);	

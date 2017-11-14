@@ -59,6 +59,7 @@ li{list-style: none;}
 
 /*Header*/
 header{position: absolute;left: 0;right: 0;width: 100%;height: auto;z-index: 10;}
+
 /*Footer*/
 footer{background-color: #ffffff;}
 .footer-links .btn{color:#121619; font-size: 14px; cursor: pointer; text-decoration: none;}
