@@ -1,0 +1,51 @@
+@font-face {
+    font-family: 'gilroylight';
+    src: url('../../assets/fonts/gilroy-light.woff2') format('woff2'),
+         url('../../assets/fonts/gilroy-light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'gilroyextrabold';
+    src: url('../../assets/fonts/gilroy-extrabold.woff2') format('woff2'),
+         url('../../assets/fonts/gilroy-extrabold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+    font-family: 'gilroylight';
+}
+.btn-primary {
+    color: #fff;
+    background-color: #0a4cab;
+    border-color: #0a4cab;
+}
+
+.color-white{
+    color: #ffffff;
+}
+.light-bg{
+    background-color: #f7f7f9;
+}
+h1,h2,h3,h4,h5,h6{
+    padding: 0;
+    margin: 0;
+}
+h2{font-family: 'gilroyextrabold';}
+.sm-heading{font-family: 'gilroyextrabold'; margin-bottom: 15px;}
+.container{width: 1170px; margin: auto;}
+.padding-50{padding: 50px 0;}
+
+/*Header*/
+header{
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    z-index: 10;
+}
+/*Footer*/
+footer{background-color: #ffffff;}

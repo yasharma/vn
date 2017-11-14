@@ -30,7 +30,7 @@ let middleware = applyMiddleware(
 }*/
 
 // add the redux dev tools
-middleware = compose(middleware, window.devToolsExtension());
+middleware = compose(middleware);
 
 // create store
 const store = createStore(reducer, middleware);

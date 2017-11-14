@@ -1,0 +1,15 @@
+/*Banner*/
+.Banner{
+    background: url('../../assets/images/profile-banner.png');
+    width: 100%;
+    background-size: cover;
+}
+.Banner-tags{
+    padding: 200px 0 70px;
+}
+.Banner-tags h2{
+    font-size: 28px;
+}
+.Banner-tags span{
+    font-size: 16px;
+}
