@@ -3,7 +3,7 @@ services:
   web:
     restart: always
     build: .
-    container_name: hoteljot
+    container_name: virtual_notebook
     ports:
      - "3000:3000"
     environment:

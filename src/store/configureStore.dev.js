@@ -23,14 +23,14 @@ let middleware = applyMiddleware(
 );
 
 
-/*if (module.hot) {
+if (module.hot) {
 	module.hot.accept('../reducer', () => {
     	store.replaceReducer(reducer)
   	});
-}*/
+}
 
 // add the redux dev tools
-middleware = compose(middleware);
+middleware = compose(middleware, window.devToolsExtension());
 
 // create store
 const store = createStore(reducer, middleware);
